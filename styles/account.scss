@@ -1,0 +1,152 @@
+@import "./variable";
+
+.Account {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    background-color: #000000b8;
+    z-index: 5000;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+
+    &.open {
+        opacity: 1;
+        pointer-events: visible;
+    }
+
+    form {
+        width: 50%;
+        max-width: 450px;
+        min-width: 280px;
+        height: fit-content;
+        min-height: fit-content;
+        display: flex;
+        flex-direction: column;
+        padding-top: 20px;
+
+        .close_icon {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            border-radius: 40px;
+            background-color: rgba(175, 175, 175, 0.137);
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transform: scale(1);
+            transition: $bounce 0.3s;
+
+            &:active {
+                transform: scale(0.9);
+            }
+
+            svg {
+                width: 20px;
+                height: 20px;
+                display: flex;
+                fill: $defaultColor
+            }
+        }
+
+        &::before {
+            content: "";
+            align-self: center;
+            width: 50px;
+            height: 50px;
+            min-width: 50px;
+            min-height: 50px;
+            display: flex;
+            background-image: url(/images/logo.png);
+            background-position: center;
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+
+        .title {
+            width: 100%;
+            height: fit-content;
+            min-height: fit-content;
+            display: flex;
+            padding: 0 10px;
+            text-align: center;
+            justify-content: center;
+            color: white;
+            font-family: mon_bold;
+            font-size: 25px;
+        }
+
+        label {
+            width: fit-content;
+            height: fit-content;
+            min-height: fit-content;
+            display: flex;
+            padding: 0 50px;
+            color: $defaultColor;
+            font-family: mon_med;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .error {
+            width: 100%;
+            height: fit-content;
+            min-height: fit-content;
+            display: flex;
+            font-size: 11px;
+            color: #ef2a2a;
+            font-family: mon_med;
+            margin-top: 10px;
+        }
+
+        input {
+            width: 90%;
+            padding: 0 20px;
+            color: white;
+            height: 45px;
+            display: flex;
+            align-self: center;
+            background-color: #ffffff0f;
+        }
+
+        .submit_btn {
+            width: 200px;
+            height: 45px;
+            display: flex;
+            align-self: center;
+            line-height: 45px;
+            text-align: center;
+            justify-content: center;
+            font-family: mon_bold;
+            text-transform: uppercase;
+            margin: 20px 0 10px 0;
+            background-color: $defaultColor;
+            cursor: pointer;
+        }
+
+        .link {
+            width: 100%;
+            height: fit-content;
+            min-height: fit-content;
+            display: inline-block;
+            color: white;
+            justify-content: center;
+            text-align: center;
+            font-size: 13px;
+            margin: 3px 0;
+
+            a {
+                color: $defaultColor;
+                text-decoration: underline;
+                padding: 0 4px;
+            }
+        }
+    }
+}

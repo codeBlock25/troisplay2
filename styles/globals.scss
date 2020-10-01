@@ -1,0 +1,109 @@
+* {
+  padding: 0;
+  margin: 0;
+  position: relative;
+  border: none;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
+  text-decoration: none;
+  transition: all .4s;
+  font-family: mon;
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  overflow: hidden;
+}
+
+@font-face {
+  src: url(/fonts/Fredericka_the_Great/FrederickatheGreat-Regular.ttf) format("truetype");
+  font-family: free;
+}
+
+@font-face {
+  src: url(/fonts/Montserrat_Alternates/MontserratAlternates-Regular.ttf) format("truetype");
+  font-family: mon;
+}
+
+@font-face {
+  src: url(/fonts/Montserrat_Alternates/MontserratAlternates-Medium.ttf) format("truetype");
+  font-family: mon_med;
+}
+
+@font-face {
+  src: url(/fonts/Montserrat_Alternates/MontserratAlternates-MediumItalic.ttf) format("truetype");
+  font-family: mon_med_itl;
+}
+
+@font-face {
+  src: url(/fonts/Montserrat_Alternates/MontserratAlternates-SemiBold.ttf) format("truetype");
+  font-family: mon_semi;
+}
+
+@font-face {
+  src: url(/fonts/Montserrat_Alternates/MontserratAlternates-SemiBoldItalic.ttf) format("truetype");
+  font-family: mon_semi_bold;
+}
+
+@font-face {
+  src: url(/fonts/Montserrat_Alternates/MontserratAlternates-Thin.ttf) format("truetype");
+  font-family: mon_thin;
+}
+
+@font-face {
+  src: url(/fonts/Montserrat_Alternates/MontserratAlternates-ThinItalic.ttf) format("truetype");
+  font-family: mon_thin_itl;
+}
+
+@font-face {
+  src: url(/fonts/Montserrat_Alternates/MontserratAlternates-Bold.ttf) format("truetype");
+  font-family: mon_bold;
+}
+
+@font-face {
+  src: url(/fonts/Montserrat_Alternates/MontserratAlternates-BoldItalic.ttf) format("truetype");
+  font-family: mon_bold;
+}
+
+@font-face {
+  src: url(/fonts/Montserrat_Alternates/MontserratAlternates-ExtraBold.ttf) format("truetype");
+  font-family: mon_exa;
+}
+
+@font-face {
+  src: url(/fonts/Montserrat_Alternates/MontserratAlternates-ExtraBoldItalic.ttf) format("truetype");
+  font-family: mon_exa_itl;
+}
+
+@font-face {
+  src: url(/fonts/Montserrat_Alternates/MontserratAlternates-ExtraLight.ttf) format("truetype");
+  font-family: mon_exa_thin;
+}
+
+@font-face {
+  src: url(/fonts/Montserrat_Alternates/MontserratAlternates-ExtraLightItalic.ttf) format("truetype");
+  font-family: mon_exa_thin_itl;
+}
+
+@font-face {
+  src: url(/fonts/Montserrat_Alternates/MontserratAlternates-Italic.ttf) format("truetype");
+  font-family: mon_itl;
+}
+
+@font-face {
+  src: url(/fonts/Montserrat_Alternates/MontserratAlternates-Light.ttf) format("truetype");
+  font-family: mon_light;
+}
+
+@font-face {
+  src: url(/fonts/Montserrat_Alternates/MontserratAlternates-LightItalic.ttf) format("truetype");
+  font-family: mon_light_itl;
+}
+
+@font-face {
+  src: url(/fonts/Montserrat_Alternates/MontserratAlternates-Regular.ttf) format("truetype");
+  font-family: mon;
+}
