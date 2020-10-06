@@ -1,17 +1,91 @@
 import Head from "next/head";
-import { useCallback, useEffect, useRef } from "react";
+import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import Lottie from "lottie-web";
 import moment from "moment";
 import Link from "next/link";
+import { CloseIcon } from "../../icon";
+import Axios from "axios";
+import { useRouter } from "next/router";
+import { url } from "../../constant";
+import { MoonLoader } from "react-spinners";
 
 const choose = require("../../lottie/choose.json");
 const fund = require("../../lottie/fund.json");
 const money = require("../../lottie/money.json");
 
+export enum errorType {
+  used,
+  warning,
+  error,
+  non,
+}
+
 export default function Login() {
   const chooseContainerRef = useRef(null);
   const fundContainerRef = useRef(null);
   const moneyContainerRef = useRef(null);
+  const [loginOpen, setLoginState] = useState<boolean>(true);
+  const [phone_number, setPhone_number] = useState<string>("");
+  const [key, setKey] = useState<string>("");
+  const [phone_number_error, setPhone_number_error] = useState<errorType>(
+    errorType.non
+  );
+  const [phone_number2, setPhone_number2] = useState("");
+  const [phone_number_error2, setPhone_number_error2] = useState<errorType>(
+    errorType.non
+  );
+  const [key2, setKey2] = useState<string>("");
+  const [key_error, setKey_error] = useState<errorType>(errorType.non);
+  const [key_error2, setKey_error2] = useState<errorType>(errorType.non);
+  const { push } = useRouter();
+  const [refer_code, setRefer_code] = useState<string>("");
+  const [full_name, setFull_name] = useState<string>("");
+  const [loading, setloading] = useState<boolean>(false);
+  const [error_open, setErrorOpen] = useState<boolean>(false);
+
+  const handleSubmitLogin = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!(/^[0-9]*$/g.test(key) && key.length < 7)) return;
+    if (!/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/g.test(phone_number)) {
+      setPhone_number_error(errorType.warning);
+      return;
+    }
+    if (loading) return;
+    setloading(true);
+    await Axios({
+      method: "POST",
+      url: `${url}/account/login`,
+      data: {
+        phone_number,
+        key,
+      },
+    })
+      .then(({ data: { token, isPlayer } }) => {
+        localStorage.setItem("game_token", token);
+        localStorage.setItem("logged", isPlayer ? "old" : "new");
+        setTimeout(() => {
+          push("/game-play");
+        }, 500);
+      })
+      .catch((err) => {
+        if (err.message === "Request failed with status code 402") {
+          setPhone_number_error(errorType.used);
+          return;
+        }
+        if (err.message === "Request failed with status code 401") {
+          setKey_error(errorType.error);
+          return;
+        }
+        if (window.innerHeight < 650) {
+          //  toast.error("Opp's an error occured", { position: "bottom-right" });
+        } else {
+          //  toast.error("Opp's an error occured");
+        }
+      })
+      .finally(() => {
+        setloading(false);
+      });
+  };
   const loadAnimations = useCallback(() => {
     Lottie.loadAnimation({
       container: chooseContainerRef.current,
@@ -41,10 +115,80 @@ export default function Login() {
   return (
     <>
       <Head>
-        <title>The Number one stacking platform for joint games.</title>
+        <title>Login - Troisplay
+        </title>
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
       </Head>
-      <section className="Index over">
+      <section className={loginOpen ? "Account open" : "Account"}>
+        <form onSubmit={handleSubmitLogin}>
+          <button
+            type="button"
+            className="close_icon"
+            onClick={() => !loading && push("/")}
+          >
+            <CloseIcon />
+          </button>
+          <h3 className="title">Welcome Back to Troisplay.</h3>
+          <label htmlFor="tel">Phone Number *</label>
+          <input
+            type="tel"
+            id="tel"
+            required
+            value={phone_number}
+            placeholder="e.g 2349088866789"
+            onChange={({ target: { value } }) => {
+              if (phone_number_error !== errorType.non) {
+                setPhone_number_error(errorType.non);
+              }
+              setPhone_number(value);
+            }}
+          />
+          {phone_number_error === errorType.warning && (
+            <p className="error">No account found with this number.</p>
+          )}
+          {phone_number_error === errorType.error && (
+            <p className="error">Invalid phone number.</p>
+          )}
+          <label htmlFor="password">Betting Key *</label>
+          <input
+            type="password"
+            id="password"
+            required
+            maxLength={6}
+            value={key}
+            placeholder="SECRET"
+            onChange={({ target: { value } }) => {
+              if (key_error !== errorType.non) {
+                setKey_error(errorType.non);
+              }
+              setKey(value);
+            }}
+          />
+          {key.length !== 6 && (
+            <p className="error">Betting key should 6 digits long.</p>
+          )}
+          <button type="submit" className="submit_btn">
+            {loading ? <MoonLoader size="20px" color="white" /> : "login"}
+          </button>
+          <p className="link">
+            forget password
+            <Link href="/forgot">
+              <a>click here</a>
+            </Link>
+          </p>
+          <p className="link">
+            Don't have an account?
+            <Link href="/signup">
+              <a
+              >
+                click here
+              </a>
+            </Link>
+          </p>
+        </form>
+      </section>
+
+      <section className={loginOpen ? "Index over" : "Index"}>
         <header>
           <div className="left">
             <span className="logo" role="img" />
@@ -60,14 +204,16 @@ export default function Login() {
               <a className="link">How it works</a>
             </Link>
             <Link href="/#commission">
-              <span className="link">commission</span>
+              <a className="link">commission</a>
             </Link>
             <Link href="/#faq">
-              <span className="link">faq</span>
+              <a className="link">faq</a>
             </Link>
-            <Link href="/#signup">
-              <span className="link_">join</span>
-            </Link>
+            <span
+              className="link_"
+            >
+              join
+            </span>
           </div>
         </header>
         <section className="first">

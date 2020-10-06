@@ -1,17 +1,84 @@
 import Head from "next/head";
-import { useCallback, useEffect, useRef } from "react";
+import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import Lottie from "lottie-web";
 import moment from "moment";
 import Link from "next/link";
+import { CloseIcon } from "../../icon";
+import Axios from "axios";
+import { useRouter } from "next/router";
+import { url } from "../../constant";
+import { MoonLoader } from "react-spinners";
 
 const choose = require("../../lottie/choose.json");
 const fund = require("../../lottie/fund.json");
 const money = require("../../lottie/money.json");
 
+export enum errorType {
+  used,
+  warning,
+  error,
+  non,
+}
+
 export default function Signup() {
   const chooseContainerRef = useRef(null);
   const fundContainerRef = useRef(null);
   const moneyContainerRef = useRef(null);
+  const [signupOpen, setSignUpState] = useState<boolean>(true);
+  const [phone_number, setPhone_number] = useState<string>("");
+  const [key, setKey] = useState<string>("");
+  const [phone_number_error, setPhone_number_error] = useState<errorType>(
+    errorType.non
+  );
+  const [phone_number2, setPhone_number2] = useState("");
+  const [phone_number_error2, setPhone_number_error2] = useState<errorType>(
+    errorType.non
+  );
+  const [key2, setKey2] = useState<string>("");
+  const [key_error, setKey_error] = useState<errorType>(errorType.non);
+  const [key_error2, setKey_error2] = useState<errorType>(errorType.non);
+  const { push } = useRouter();
+  const [refer_code, setRefer_code] = useState<string>("");
+  const [full_name, setFull_name] = useState<string>("");
+  const [loading, setloading] = useState<boolean>(false);
+  const [error_open, setErrorOpen] = useState<boolean>(false);
+
+  const handleSubmitSignup = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (loading) return;
+    if (!(/^[0-9]*$/g.test(key2) && key2.length !== 6)) return;
+    if (!/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/g.test(phone_number2)) {
+      setPhone_number_error2(errorType.error);
+      return;
+    }
+    setloading(true);
+    await Axios({
+      method: "POST",
+      url: `${url}/account`,
+      data: {
+        full_name,
+        phone_number: phone_number2,
+        key: key2,
+        refer_code,
+      },
+    })
+      .then(() => {
+        setSignUpState(false);
+        setFull_name("");
+        setPhone_number2("");
+        setKey2("");
+        setRefer_code("");
+      })
+      .catch((err) => {
+        if (err.message === "Request failed with status code 400") {
+          setPhone_number_error2(errorType.used);
+          return;
+        }
+      })
+      .finally(() => {
+        setloading(false);
+      });
+  };
   const loadAnimations = useCallback(() => {
     Lottie.loadAnimation({
       container: chooseContainerRef.current,
@@ -41,10 +108,107 @@ export default function Signup() {
   return (
     <>
       <Head>
-        <title>The Number one stacking platform for joint games.</title>
+        <title>Signup - Troisplay
+        </title>
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
       </Head>
-      <section className="Index over">
+       <section className={"Account open"}>
+        <form onSubmit={handleSubmitSignup}>
+          <button
+            type="button"
+            className="close_icon"
+            onClick={() => !loading && push("/")}
+          >
+            <CloseIcon />
+          </button>
+          <h3 className="title">Welcome to Troisplay.</h3>
+          <label htmlFor="referal">Referal Code (optional)</label>
+          <input
+            type="text"
+            id="referal"
+            value={refer_code}
+            placeholder="code"
+            onChange={({ target: { value } }) => {
+              setRefer_code(value);
+            }}
+          />
+          <label htmlFor="full_name">Full Name *</label>
+          <input
+            type="text"
+            id="full_name"
+            required
+            value={full_name}
+            placeholder="John deo"
+            onChange={({ target: { value } }) => {
+              setFull_name(value);
+            }}
+          />
+          <label htmlFor="tel">Phone Number *</label>
+          <input
+            type="tel"
+            id="tel"
+            required
+            value={phone_number2}
+            placeholder="e.g 2349088866789"
+            onChange={({ target: { value } }) => {
+              if (phone_number_error2 !== errorType.non) {
+                setPhone_number_error2(errorType.non);
+              }
+              setPhone_number2(value);
+            }}
+          />
+          {phone_number_error2 === errorType.warning && (
+            <p className="error">No account found with this number.</p>
+          )}
+          {phone_number_error2 === errorType.error && (
+            <p className="error">Invalid phone number.</p>
+          )}
+          {phone_number_error2 === errorType.used && (
+            <p className="error">This phone number is already used.</p>
+          )}
+          <label htmlFor="password">Betting Key *</label>
+          <input
+            type="password"
+            id="password"
+            required
+            maxLength={6}
+            value={key2}
+            placeholder="SECRET"
+            onChange={({ target: { value } }) => {
+              if (key_error2 !== errorType.non) {
+                setKey_error2(errorType.non);
+              }
+              setKey2(value);
+            }}
+          />
+          {key2.length !== 6 && (
+            <p className="error">Betting key should 6 digits long.</p>
+          )}
+          {key_error2 === errorType.error && (
+            <p className="error">Invalid phone number.</p>
+          )}
+          <button type="submit" className="submit_btn">
+            {loading ? (
+              <MoonLoader size="20px" color="white" />
+            ) : (
+              "create Account"
+            )}
+          </button>
+          <p className="link">
+            already have an account?
+            <Link href="#signup">
+              <a
+                onClick={() => {
+                  push("/login")
+                }}
+              >
+                click here
+              </a>
+            </Link>
+          </p>
+        </form>
+      </section>
+      <section className={signupOpen ? "Index over" : "Index"}>
         <header>
           <div className="left">
             <span className="logo" role="img" />
@@ -60,14 +224,19 @@ export default function Signup() {
               <a className="link">How it works</a>
             </Link>
             <Link href="/#commission">
-              <span className="link">commission</span>
+              <a className="link">commission</a>
             </Link>
             <Link href="/#faq">
-              <span className="link">faq</span>
+              <a className="link">faq</a>
             </Link>
-            <Link href="/#signup">
-              <span className="link_">join</span>
-            </Link>
+            <span
+              className="link_"
+              onClick={() => {
+                setSignUpState(true);
+              }}
+            >
+              join
+            </span>
           </div>
         </header>
         <section className="first">
