@@ -311,16 +311,16 @@
                 display: flex;
                 margin: 0 20px;
                 flex-direction: column;
-                background-color: $defaultColor;
+                background-color: #222226;
                 border-radius: 10px;
                 align-items: center;
+                border: 3px solid $defaultColor;
                 box-shadow: 0px 10px 15px #00000085, 0px -6px 20px #0454111c;
 
                 .pic {
                     width: 60%;
                     height: 60%;
                     display: flex;
-                    background-image: url(/images/roshambo.png);
                     background-position: center;
                     background-size: contain;
                     background-repeat: no-repeat;
@@ -334,6 +334,7 @@
                     font-family: mon_exa;
                     font-size: 20px;
                     padding: 0 10px;
+                    color: white;
                 }
 
                 .txt {
@@ -343,6 +344,7 @@
                     display: flex;
                     font-size: 13px;
                     padding: 10px;
+                    color: #a9a9a9;
                 }
             }
         }
@@ -352,11 +354,13 @@
     .third {
         width: 100vw;
         height: fit-content;
-        min-height: 500px;
-        max-height: 600px;
+        min-height: 580px;
+        max-height: 680px;
         display: flex;
         flex-direction: column;
         padding-top: 50px;
+        overflow: hidden;
+        overflow-x: auto;
 
         &::before {
             content: "";
@@ -401,12 +405,14 @@
         }
 
         .table {
-            width: 100vw;
+            width: fit-content;
+            min-width: fit-content;
             padding: 0 20px;
             height: fit-content;
             min-height: fit-content;
             display: flex;
             flex-direction: column;
+            align-self: center;
 
             .thead {
                 width: 100%;

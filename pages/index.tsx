@@ -367,68 +367,79 @@ export default function Index() {
           <div className="container">
             <h3 className="title">Welcome to Troisplay Play</h3>
             <p className="txt">
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. In
-              aliquam veritatis accusamus nemo fugit facilis sed. Saepe tenetur
-              explicabo rerum.
+              Here is a platform that brings together our love for money and
+              passion for competition all in one place.
             </p>
-            <button className="join_btn">Join</button>
+            <button className="join_btn" onClick={() => setSignUpState(true)}>
+              Join
+            </button>
           </div>
         </section>
         <section className="second" id="games">
           <h3 className="title">Troisplay Games.</h3>
           <div className="container">
             <div className="game_view">
-              <span className="pic" role="img" />
-              <span className="name">Roshambo (Rock Paper Scrissors)</span>
+              <span
+                className="pic"
+                role="img"
+                style={{ backgroundImage: "url(/images/roshambo.png)" }}
+              />
+              <span className="name">Roshambo (Rock, Paper, Scrissors)</span>
               <p className="txt">
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iste,
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iste,
-                vero!
+                A game of Rock-Paper-Scrissors played between to parties to
+                stand a chance to win the stake amount in cash of the game.
               </p>
             </div>
             <div className="game_view">
-              <span className="pic" role="img" />
-              <span className="name">Roshambo (Rock Paper Scrissors)</span>
+              <span
+                className="pic"
+                role="img"
+                style={{ backgroundImage: "url(/images/penatly-shot.png)" }}
+              />
+              <span className="name">Penalty Shot</span>
               <p className="txt">
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iste,
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iste,
-                vero!
+                A game between two parties where one is the Penalty taker and
+                the other the goal keeper, the goal keeper try to stop the
+                penalty taker from soccering, both stande a chance to win their
+                stake amount in cash
               </p>
             </div>
             <div className="game_view">
-              <span className="pic" role="img" />
-              <span className="name">Roshambo (Rock Paper Scrissors)</span>
+              <span
+                className="pic"
+                role="img"
+                style={{ backgroundImage: "url(/images/guess-master.png)" }}
+              />
+              <span className="name">Guess master</span>
               <p className="txt">
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iste,
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iste,
-                vero!
+                A game of the mind where party two tries to guess the number
+                party has set standing a chance to win their stake amount in
+                cash.
               </p>
             </div>
             <div className="game_view">
-              <span className="pic" role="img" />
-              <span className="name">Roshambo (Rock Paper Scrissors)</span>
+              <span
+                className="pic"
+                role="img"
+                style={{ backgroundImage: "url(/images/guess-master.png)" }}
+              />
+              <span className="name">Lucky Geoge</span>
               <p className="txt">
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iste,
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iste,
-                vero!
+                This is a game set by the Game Master for players to win prices
+                after entering the game which is drawn at random.
               </p>
             </div>
             <div className="game_view">
-              <span className="pic" role="img" />
-              <span className="name">Roshambo (Rock Paper Scrissors)</span>
+              <span
+                className="pic"
+                role="img"
+                style={{ backgroundImage: "url(/images/guess-master.png)" }}
+              />
+              <span className="name">Room Games</span>
               <p className="txt">
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iste,
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iste,
-                vero!
-              </p>
-            </div>
-            <div className="game_view">
-              <span className="pic" role="img" />
-              <span className="name">Roshambo (Rock Paper Scrissors)</span>
-              <p className="txt">
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iste,
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iste,
-                vero!
+                This is a game for players to answer question after joining a
+                room to win cash prices ranging from $10 - $1000 pending on the
+                question and the room.
               </p>
             </div>
             <span
