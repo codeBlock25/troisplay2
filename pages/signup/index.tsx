@@ -4,9 +4,9 @@ import Lottie from "lottie-web";
 import moment from "moment";
 import Link from "next/link";
 
-const choose = require("../lottie/choose.json");
-const fund = require("../lottie/fund.json");
-const money = require("../lottie/money.json");
+const choose = require("../../lottie/choose.json");
+const fund = require("../../lottie/fund.json");
+const money = require("../../lottie/money.json");
 
 export default function Signup() {
   const chooseContainerRef = useRef(null);
