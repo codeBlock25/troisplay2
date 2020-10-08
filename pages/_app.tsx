@@ -1,6 +1,9 @@
 import "../styles/globals.scss";
 import "../styles/home.scss";
 import "../styles/account.scss";
+import "../styles/games.scss";
+import "../styles/gameworld.scss";
+import "../styles/notification.scss";
 import { Provider as ReduxProvider } from "react-redux";
 import { AppProps } from "next/app";
 import store from "../store";

@@ -1,0 +1,830 @@
+@import "./variable.scss";
+
+.gameworld {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 3500;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    * {
+        user-select: none;
+    }
+
+    &.dark-mode {
+        background-color: #00000075;
+
+        .world,
+        .container {
+            background-color: $darkNG;
+            color: white;
+
+            .title_ {
+                background-color: $darkNG;
+            }
+        }
+    }
+
+    &.light-mode {
+        background-color: #f6f6f699;
+
+        .world,
+        .container {
+            background-color: white;
+            color: #171717;
+        }
+    }
+
+    .container {
+        width: 50%;
+        min-width: 290px;
+        height: fit-content;
+        min-height: fit-content;
+        display: flex;
+        flex-wrap: wrap;
+        max-width: 800px;
+        max-height: 500px;
+        border-radius: 10px;
+        box-shadow: 0 0 30px #0000002e;
+        justify-content: space-evenly;
+
+        @media (max-width: 800px) {
+            width: 70%;
+        }
+
+        @media (max-width: 600px) {
+            width: 80%;
+        }
+
+        @media (max-width: 400px) {
+            width: 95%;
+        }
+
+        .title {
+            position: relative;
+            top: 0;
+            z-index: 100;
+            width: 100%;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            text-align: center;
+            align-items: center;
+            font-family: mon_bold;
+        }
+
+        .title_mark {
+            width: 100%;
+            height: fit-content;
+            min-height: fit-content;
+            display: flex;
+            justify-content: center;
+            text-align: center;
+            align-items: center;
+            font-size: 14px;
+            color: #828282;
+            font-family: mon !important;
+        }
+
+        .action {
+            width: 100%;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            justify-items: center;
+            margin: 10px 0 0 0;
+
+            .btn_ {
+                width: 30%;
+                min-width: 120px;
+                max-width: 320px;
+                height: 45px;
+                color: white;
+                margin: 0 10px;
+                display: flex;
+                line-height: 45px;
+                text-align: center;
+                align-items: center;
+                justify-content: center;
+
+                &:nth-of-type(1) {
+                    background-color: $defaultColor;
+                }
+
+                &:nth-of-type(2) {
+                    background-color: #202020;
+                }
+            }
+        }
+
+    }
+
+    .world {
+        width: 60%;
+        height: 85%;
+        min-width: 290px;
+        max-width: 700px;
+        min-height: 400px;
+        max-height: 600px;
+        display: flex;
+        border-radius: 10px;
+        flex-direction: column;
+        justify-content: center;
+
+        .close_btn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 37px;
+            height: 37px;
+            min-width: 37px;
+            min-height: 37px;
+            max-width: 37px;
+            max-height: 37px;
+            background-color: red;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            svg {
+                width: 20px;
+                height: 20px;
+                fill: currentColor;
+            }
+        }
+
+        &.custom {
+            justify-content: flex-start;
+            height: 85%;
+            min-height: 500px;
+            max-height: 600px;
+            overflow-y: auto;
+            padding-top: 20px;
+            padding-bottom: 50px;
+        }
+
+        &.view_game {
+            height: 55%;
+            min-height: 350px;
+            max-height: 500px;
+        }
+
+        &.demo_stuff {
+            height: 40vh;
+            min-height: 200px;
+            max-height: 300px;
+
+            .txt {
+                padding-left: 20px;
+                padding-right: 20px;
+                font-size: 15px;
+            }
+        }
+
+        .demo {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            min-width: 100%;
+            min-height: 100%;
+            display: flex;
+            z-index: 1000;
+            border-radius: 10px;
+            overflow: hidden;
+            overflow-y: auto;
+
+            &.dark-mode {
+                background-color: #1919199e;
+
+                &::before {
+                    background-color: #1919199e;
+                }
+            }
+
+            &.light-mode {
+                background-color: #f9f9f99e;
+
+                &::before {
+                    background-color: #f9f9f99e;
+                }
+            }
+
+            &::before {
+                content: "";
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                top: 0;
+                left: 0;
+                min-width: 100%;
+                min-height: 100%;
+                display: flex;
+                filter: blur(20px);
+                border-radius: 10px;
+            }
+
+            .title {
+                font-size: 15px;
+            }
+
+            &.penalty {
+                .demo_game .demo_round:nth-last-of-type(1) {
+                    .icon svg {
+                        transform: rotate(180deg);
+                    }
+                }
+            }
+
+            &.guess_master {
+                padding-top: 70px;
+
+                .demo_game .demo_round {
+                    width: 90%;
+
+                    .speech {
+                        justify-content: center;
+                        text-align: center;
+                        line-height: normal;
+                    }
+                }
+            }
+
+
+            .demo_game {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                padding-top: 20px;
+
+                .demo_round {
+                    width: 200px;
+                    height: 70px;
+                    display: flex;
+                    align-self: center;
+                    justify-content: space-between;
+                    margin: 20px 0;
+                    line-height: 70px;
+                    align-items: center;
+                    font-family: mon_bold;
+
+                    .final {
+                        font-size: 14px;
+                        text-transform: uppercase;
+                        font-family: mon_bold;
+                    }
+
+                    .icon {
+                        &::before {
+                            content: "Player 1";
+                            width: fit-content;
+                            min-width: 100px;
+                            height: 20px;
+                            display: flex;
+                            position: absolute;
+                            top: -20px;
+                            line-height: 20px;
+                            opacity: 0.8;
+                            font-size: 13px;
+                        }
+
+                        &:nth-of-type(2)::before {
+                            content: "Player 2";
+                        }
+                    }
+
+                    svg {
+                        width: 40px;
+                        height: 40px;
+                        display: flex;
+                        align-self: center;
+                        fill: $defaultColor
+                    }
+                }
+
+                .btn_demo {
+                    width: 160px;
+                    height: 45px;
+                    background-color: $defaultColor;
+                    color: white;
+                    align-self: center;
+                    line-height: 45px;
+                    text-align: center;
+                    align-items: center;
+                    justify-content: center;
+
+                    * {
+                        font-family: mon_bold;
+                    }
+                }
+            }
+        }
+
+        .title {
+            width: 100%;
+            height: fit-content;
+            display: flex;
+            justify-content: center;
+            padding: 0 10% 10px 10%;
+            text-align: center;
+            text-transform: uppercase;
+
+            &:nth-of-type(1) {
+                color: $defaultColor;
+            }
+
+            &:nth-of-type(2) {
+                font-size: 15px;
+                padding-bottom: 4px;
+            }
+        }
+
+        .txt {
+            width: 100%;
+            height: fit-content;
+            display: inline-block;
+            padding: 10px;
+            justify-content: center;
+            text-align: center;
+            font-size: 13px;
+
+            a {
+                width: fit-content;
+                height: fit-content;
+                display: inline-block;
+                text-transform: uppercase;
+                text-decoration: underline;
+            }
+
+            &.dark-mode {
+                color: #9c9c9c;
+
+                a {
+                    color: white;
+                }
+            }
+
+            &.light-mode {
+                color: #474747;
+
+                a {
+                    color: #202020;
+                }
+            }
+        }
+
+        form {
+            width: 100%;
+            height: fit-content;
+            display: flex;
+            flex-direction: column;
+
+            .inputBox {
+                width: 90%;
+                height: fit-content;
+                min-height: fit-content;
+                margin: 25px auto 0 auto;
+
+                &.dark-mode {
+                    * {
+                        color: white;
+                    }
+                }
+
+                &.light-mode {
+                    * {
+                        color: #231f1f;
+                    }
+                }
+
+                &:nth-of-type(1) {
+                    margin: 10px auto 0 auto;
+                }
+
+                &:nth-last-of-type(1) {
+                    margin-bottom: 20px;
+                }
+
+                * {
+                    font-family: mon_bold;
+                }
+
+                input,
+                textarea {
+                    padding: 13px 0;
+                    font-family: mon;
+                    font-size: 13px;
+                }
+
+                textarea {
+                    padding: 0;
+                }
+
+                .icon_ {
+                    color: #483737;
+                }
+            }
+
+            .btn {
+                width: 45%;
+                height: 50px;
+                margin: 15px auto 0 auto;
+                font-family: mon_bold;
+
+                &.dark-mode {
+                    background-color: #231f1f;
+                    color: white;
+                }
+
+                &.light-mode {
+                    color: #231f1f;
+                    background-color: white;
+                }
+
+                * {
+                    font-family: mon_bold;
+                    font-size: 13px;
+                }
+            }
+
+            .action_ {
+                width: 100%;
+                height: fit-content;
+                min-height: fit-content;
+                display: flex;
+                justify-content: space-between;
+                padding: 5px 10px;
+
+                .btn {
+                    width: 45%;
+                    color: white !important;
+
+                    &:nth-of-type(1) {
+                        background-color: rgb(79, 177, 109);
+                    }
+
+                    &:nth-of-type(2) {
+                        background-color: rgb(79, 118, 177);
+                    }
+                }
+            }
+
+        }
+
+        &.roshambo,
+        &.penalty {
+            .content {
+                width: 100%;
+                height: fit-content;
+                min-height: fit-content;
+                display: flex;
+                flex-direction: column;
+
+                .round {
+                    width: 100%;
+                    height: 50px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    margin: 5px 0;
+
+                    .name {
+                        font-family: mon_bold;
+                        margin: 0 10px;
+                    }
+
+                    .value {
+                        width: 30px;
+                        height: 30px;
+                        margin: 10px;
+                        display: flex;
+                        cursor: pointer;
+                        transform: rotate(360deg);
+
+                        &.left {
+                            transform: rotate(180deg);
+                        }
+
+                        @keyframes bouncingLoader {
+
+                            0%,
+                            100% {
+                                transform: translate3d(0);
+                            }
+
+                            50% {
+                                transform: translate3d(0, -3px, 0);
+                            }
+                        }
+
+                        svg {
+                            width: 100%;
+                            height: 100%;
+                            display: flex;
+                            fill: $defaultColor;
+                            animation: bouncingLoader 1.6s linear infinite normal;
+                        }
+                    }
+
+                    .btn_check {
+                        width: 100px;
+                        height: 30px;
+                        min-height: 30px;
+                        max-height: 30px;
+                        margin-left: 10px;
+                        line-height: 30px;
+                        text-align: center;
+                        align-items: center;
+                        justify-content: center;
+
+                        &.dark-mode {
+                            box-shadow: 0px 7px 10px #00000075, 0 0 10px #3f51b538;
+
+                            &:hover {
+                                background-color: $defaultColor;
+                            }
+
+                            span {
+                                color: #f9f9f9;
+                            }
+
+                            &.lost {
+                                background-color: #ec3d3d;
+                                color: white;
+
+                                * {
+                                    color: white !important;
+                                }
+                            }
+
+                            &.draw {
+                                background-color: #ffa500;
+                                color: white;
+
+                                * {
+                                    color: white !important;
+                                }
+                            }
+
+                            &.won {
+                                background-color: #58d23a;
+                                color: white;
+
+                                * {
+                                    color: white !important;
+                                }
+                            }
+                        }
+
+                        &.light-mode {
+                            box-shadow: 0px 7px 10px #eeeeee75, 0 0 10px #3f51b51a;
+
+                            span {
+                                color: #101010;
+                            }
+
+                            &.lost {
+                                background-color: #ec3d3d;
+                                color: white;
+
+                                * {
+                                    color: white !important;
+                                }
+                            }
+
+                            &.draw {
+                                background-color: #ffa500;
+                                color: white;
+
+                                * {
+                                    color: white !important;
+                                }
+                            }
+
+                            &.won {
+                                background-color: #58d23a;
+                                color: white;
+
+                                * {
+                                    color: white !important;
+                                }
+                            }
+                        }
+
+
+                        * {
+                            font-size: 12px;
+                            font-family: mon_bold !important;
+                        }
+                    }
+                }
+            }
+
+            .game_action {
+                width: 100%;
+                display: flex;
+                justify-content: center;
+
+                .btn_ {
+                    margin: 0 10px;
+                    box-shadow: none;
+                    line-height: 45px;
+                    text-align: center;
+                    border-radius: 5px;
+                    align-items: center;
+                    justify-content: center;
+                    box-shadow: 0px 7px 16px #00000042;
+                    cursor: pointer;
+                    transform: scale(1);
+                    transition: $bounce .3s;
+                    background-color: $defaultColor;
+                    color: white;
+                    font-family: mon_med;
+
+                    svg {
+                        top: 5px;
+                    }
+
+                    &:active {
+                        transform: scale(0.9);
+                    }
+                }
+            }
+        }
+
+        @media (max-width: 800px) {
+            width: 70%;
+        }
+
+        @media (max-width: 600px) {
+            width: 80%;
+        }
+
+        @media (max-width: 400px) {
+            width: 95%;
+        }
+
+        .spinner {
+            width: 200px;
+            height: 200px;
+            display: flex;
+            align-self: center;
+            margin: 20px 0;
+            animation: role 1s linear infinite normal forwards;
+
+            @keyframes role {
+                from {
+                    transform: rotate(0deg);
+                }
+
+                to {
+                    transform: rotate(360deg);
+                }
+            }
+
+            svg {
+                width: 100%;
+                height: 100%;
+                display: flex;
+            }
+        }
+
+        .prize {
+            width: 160px;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            align-self: center;
+            font-size: 40px;
+            font-family: mon_bold;
+        }
+
+        .btn_ {
+            width: 200px;
+            min-width: 200px;
+            height: 45px;
+            margin: 15px auto;
+            color: white;
+            line-height: 45px;
+            text-align: center;
+            align-items: center;
+            justify-content: center;
+
+            * {
+                font-size: 16px;
+                font-family: mon_bold;
+            }
+
+            &.dark-mode {
+                background-color: transparent;
+                box-shadow: -3px -6px 10px #ffffff08, 3px 6px 15px #00000047;
+                color: $defaultColor;
+            }
+
+            &.light-mode {
+                background-color: $defaultColor;
+                box-shadow: -3px -6px 10px #3f51b54a, 3px 6px 15px #00000042;
+            }
+        }
+
+        &.matcher {
+            .num {
+                width: 100%;
+                height: 100px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                span {
+                    width: 100px;
+                    height: 100px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    line-height: 100px;
+                    text-align: center;
+                    font-size: 40px;
+                    font-family: mon_bold;
+                }
+            }
+
+            .picker {
+                width: 100%;
+                height: fit-content;
+                justify-content: space-evenly;
+                padding: 10px 10%;
+                display: flex;
+                flex-wrap: wrap;
+
+                .btn_num {
+                    width: 45px;
+                    height: 45px;
+                    min-width: 45px;
+                    min-height: 45px;
+                    max-width: 45px;
+                    max-height: 45px;
+                    margin: 8px;
+                    background-color: #303030;
+                    color: white;
+                    transform: scale(1);
+                    transition: 0.4s;
+                    line-height: 45px;
+                    text-align: center;
+                    align-items: center;
+                    justify-content: center;
+
+                    @keyframes animate_out {
+
+                        0%,
+                        98% {
+                            position: relative;
+                            display: flex !important;
+                        }
+
+                        100% {
+                            position: absolute;
+                            display: none !important;
+                        }
+                    }
+
+                    &.out {
+                        transform: scale(0);
+                        animation: animate_out 0.4s linear 1 normal forwards;
+                    }
+
+                    &.light-mode {
+                        span {
+                            color: white;
+                        }
+
+                        box-shadow: 0px 5px 10px #00000091,
+                        1px -4px 10px #3f51b52b;
+                    }
+
+                    &.dark-mode {
+                        span {
+                            color: $defaultColor;
+                        }
+
+                        box-shadow: 0px 5px 10px #00000091,
+                        0px -3px 10px #b6c2ff1a;
+                    }
+
+                    * {
+                        font-family: mon_bold;
+                    }
+                }
+            }
+        }
+    }
+}
