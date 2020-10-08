@@ -240,16 +240,16 @@
     position: fixed;
     bottom: 30px;
     height: 50px;
-    width: 150px;
+    width: 180px;
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 600;
     align-self: center;
     left: calc(50vw - 65px);
-    background-color: #212121;
+    background-color: #090909;
     color: $defaultColor;
-    text-shadow: 0 0 10px $defaultColor;
+    text-shadow: 0 0 10px rgba($color: $defaultColor, $alpha: 0.5);
     border-radius: 60px;
     font-family: mon_bold;
     user-select: none;
@@ -517,6 +517,145 @@
             display: flex;
         }
     }
+
+}
+
+.game_content_view {
+    width: 32%;
+    min-width: 280px;
+    max-width: 380px;
+    height: 16vw;
+    min-height: 170px;
+    max-height: 280px;
+    background-color: #212121;
+    display: flex;
+    margin: 10px 15px;
+    border-radius: 5px;
+    overflow: hidden;
+    flex-direction: column;
+    padding: 15px;
+    box-shadow: 0 5px 15px #00000042;
+
+    &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        background-image: url(/images/pic4.jpg);
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        opacity: .1;
+    }
+
+    .name {
+        width: 100%;
+        height: fit-content;
+        min-height: fit-content;
+        min-width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        color: white;
+        font-family: mon_bold;
+        font-size: 18px;
+    }
+
+    .date {
+        width: 100%;
+        height: fit-content;
+        min-height: fit-content;
+        min-width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        color: #a2a2a2;
+        font-family: mon;
+        font-size: 12px;
+        padding: 5px 0 5px 10px;
+    }
+
+    .viewee {
+        width: 100%;
+        height: 55px;
+        display: flex;
+        justify-content: center;
+        padding-top: 15px;
+
+        span {
+            width: fit-content;
+            min-width: 70px;
+            height: 40px;
+            display: flex;
+            margin: 0 10px;
+            padding: 0 5px;
+            border-radius: 5px;
+            background-color: #000;
+            color: #fff;
+            text-shadow: 0 0 10px rgba($color: #fff, $alpha: 0.5);
+            font-family: mon_bold;
+            font-size: 12px;
+            line-height: 40px;
+            text-align: center;
+            justify-content: center;
+
+            svg {
+                top: 14px;
+            }
+
+            &::before {
+                content: attr(class);
+                width: fit-content;
+                height: fit-content;
+                min-width: fit-content;
+                min-height: fit-content;
+                display: flex;
+                position: absolute;
+                top: -15px;
+                font-size: 10px;
+                font-family: mon_bold;
+                line-height: normal;
+                color: $defaultColor;
+                text-shadow: 0 0 10px rgba($color: $defaultColor, $alpha: 0.5);
+            }
+        }
+    }
+
+    .action {
+        width: 100%;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        margin-top: 10px;
+
+        .btn {
+            width: 45%;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            line-height: 45px;
+            background-color: darken($color: $defaultColor, $amount: 20);
+            color: white;
+            border-radius: 60px;
+            font-family: mon_bold;
+            cursor: pointer;
+            transform: scale(1);
+            transition: cubic-bezier(0.075, 0.82, 0.165, 1) .3s;
+
+            &:active {
+                transform: scale(0.9);
+            }
+
+            &:nth-of-type(2) {
+                background-color: #101010;
+                color: #e21616;
+            }
+        }
+    }
 }
 
 .games_world_ {
@@ -738,6 +877,37 @@
             width: calc(100vw - 300px);
             min-height: fit-content;
             height: fit-content;
+            display: flex;
+            padding: 10px 15px;
+            flex-wrap: wrap;
+            flex-direction: column;
+            padding-top: 40px;
+
+            .title {
+                width: fit-content;
+                min-width: fit-content;
+                display: flex;
+                min-height: fit-content;
+                height: fit-content;
+                padding-left: 20px;
+                padding-right: 10px;
+                font-family: mon_bold;
+                font-size: 20px;
+                color: $defaultColor;
+                text-shadow: 0 0 10px rgba($color: $defaultColor, $alpha: 0.5);
+            }
+
+            .game_content {
+                width: 100%;
+                height: fit-content;
+                min-width: 100%;
+                min-height: fit-content;
+                display: flex;
+                flex-wrap: wrap;
+                padding-top: 20px;
+                padding-bottom: 50px;
+                justify-content: space-between;
+            }
         }
 
         .container_games {

@@ -37,6 +37,7 @@ import Penalty_card from "../components/games/penelty_card";
 import ToastContainer from "../components/toast";
 import  AppLoader from "../components/app_loader"
 import { useRouter } from "next/router";
+import GameView from "../components/game_view";
 
 export function getToken(): string {
   const token = window.localStorage.getItem("game_token");
@@ -226,7 +227,27 @@ export default function GamesScreen() {
       url: `${url}/default`,
     });
   });
-
+  const {
+    data: my_games,
+  }: QueryResult<AxiosResponse<{
+    games: {
+      date: Date;
+      gameDetail: string;
+      gameID: Games;
+      gameMemberCount: number;
+      gameType: Games;
+      members: string[];
+      playCount: number;
+      price_in_coin: number;
+      price_in_value: number;
+      _id: string;
+    }[];
+  }>> = useQuery("my_games", async () => {
+    let token = getToken();
+    return await Axios.get(`${url}/games/mine`, {
+      headers: { authorization: `Bearer ${token}` },
+    });
+  });
   return (
     <>
       <Head>
@@ -304,7 +325,7 @@ export default function GamesScreen() {
             <h3>Play - Win - Share.</h3>
           </div>
           <div className="action">
-            <span>game play</span>
+            <span>history</span>
             <span>log out</span>
           </div>
         </section>
@@ -600,6 +621,7 @@ export default function GamesScreen() {
           </div>
         </div>
       </div>
+
       <section
         className="games_world_"
         onClick={() => {
@@ -682,6 +704,7 @@ export default function GamesScreen() {
                 </span>
                 <div className="action">
                   <span className="btn">refer</span>
+                  <span className="btn">view referrals</span>
                 </div>
               </InView>
             </div>
@@ -697,7 +720,22 @@ export default function GamesScreen() {
           </div>
         </div>
         <div className="second">
-          <div className="container"></div>
+          <div className="container">
+            <h3 className="title">My Games</h3>
+            <div className="game_content">
+              {my_games?.data?.games.map(game => {
+                return (
+                  <GameView name={
+                    game.gameID === Games.roshambo ? "Roshambo" : 
+                    game.gameID === Games.penalth_card ? "Penelty Card" : 
+                    game.gameID === Games.matcher ? "Guess Master" : 
+                    "" 
+                  } date={game.date} id={game._id} cash={game.price_in_value} coin={game.price_in_coin} />
+
+                )
+              })}
+            </div>
+          </div>
           <div className="container_games">
             <div className="title">
               <span

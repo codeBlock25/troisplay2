@@ -80,6 +80,7 @@ export enum errorType {
   no_fund,
   unsuccessful,
   success,
+  fail
 }
 
 export enum PlayType {

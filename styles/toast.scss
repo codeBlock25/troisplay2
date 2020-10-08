@@ -19,8 +19,8 @@
     transition: $bounce .4s;
 
     &.open {
-        opacity: 1;
         right: 10px;
+        opacity: 1;
     }
 
     .icon {
@@ -31,10 +31,27 @@
         justify-content: center;
 
         span {
-            width: 40px;
-            height: 40px;
+            position: absolute;
+            width: 50px;
+            height: 50px;
             display: flex;
             align-self: center;
+            opacity: 0;
+            pointer-events: none;
+
+            svg {
+                transform: translate3d(0px, 0px, 0px) scale(1.2);
+            }
+
+            &:nth-of-type(2) {
+                svg {
+                    transform: translate3d(0px, 0px, 0px) scale(2) !important;
+                }
+            }
+
+            &.on {
+                opacity: 1;
+            }
         }
     }
 

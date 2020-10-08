@@ -1,14 +1,56 @@
-import React, { useEffect, useState } from "react";
+import Lottie from "lottie-web";
+import React, { memo, useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CloseIcon } from "../icon";
 import { toast } from "../store/action";
 import { errorType, modalType } from "../typescript/enum";
 import { reducerType } from "../typescript/interface";
 
-export default function ToastContainer() {
+const ToastContainer = memo( function () {
   const dispatch = useDispatch();
   const [gone, setGone] = useState(false);
   const [pause, setPause] = useState(false);
+  const successCon = useRef()
+  const errorCon = useRef()
+  const failCon = useRef()
+  const infoCon = useRef()
+
+  const loadLottie = useCallback(
+    () => {
+      Lottie.loadAnimation({
+        container: successCon.current,
+        renderer: "svg",
+        autoplay: true,
+        loop: true,
+        animationData: require("../lottie/success.json")
+      })
+      Lottie.loadAnimation({
+        container: errorCon.current,
+        renderer: "svg",
+        autoplay: true,
+        loop: true,
+        animationData: require("../lottie/error.json")
+      })
+      Lottie.loadAnimation({
+        container: infoCon.current,
+        renderer: "svg",
+        autoplay: true,
+        loop: true,
+        animationData: require("../lottie/info.json")
+      })
+      Lottie.loadAnimation({
+        container: failCon.current,
+        renderer: "svg",
+        autoplay: true,
+        loop: true,
+        animationData: require("../lottie/fail.json")
+      })
+    },
+    [],
+  )
+  useEffect(() => {
+    loadLottie()
+}, [loadLottie])
   const { toastData } = useSelector<
     reducerType,
     {
@@ -53,7 +95,22 @@ export default function ToastContainer() {
       }}
     >
       <div className="icon">
-        <span />
+        <span
+          ref={successCon}
+          className={`${toastData.error === errorType.success && "on"}`}
+        />
+        <span
+          ref={errorCon}
+          className={`${toastData.error === errorType.error && "on"}`}
+        />
+        <span
+          ref={infoCon}
+          className={`${toastData.error === errorType.warning && "on"}`}
+        />
+        <span
+          ref={failCon}
+          className={`${toastData.error === errorType.fail && "on"}`}
+        />
       </div>
       <p className="msg">{toastData.msg}</p>
       <div
@@ -65,3 +122,5 @@ export default function ToastContainer() {
     </div>
   );
 }
+);
+export default ToastContainer
