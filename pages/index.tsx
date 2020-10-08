@@ -45,7 +45,7 @@ export default function Index() {
   const handleSubmitSignup = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (loading) return;
-    if (!(/^[0-9]*$/g.test(key2) && key2.length !== 6)) return;
+      if (!(/^[0-9]*$/g.test(key2) && key2.length < 7)) return;
     if (!/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/g.test(phone_number2)) {
       setPhone_number_error2(errorType.error);
       return;
@@ -271,10 +271,10 @@ export default function Index() {
               setFull_name(value);
             }}
           />
-          <label htmlFor="tel">Phone Number *</label>
+          <label htmlFor="tel2">Phone Number *</label>
           <input
             type="tel"
-            id="tel"
+            id="tel2"
             required
             value={phone_number2}
             placeholder="e.g 2349088866789"
@@ -294,10 +294,10 @@ export default function Index() {
           {phone_number_error2 === errorType.used && (
             <p className="error">This phone number is already used.</p>
           )}
-          <label htmlFor="password">Betting Key *</label>
+          <label htmlFor="password2">Betting Key *</label>
           <input
             type="password"
-            id="password"
+            id="password2"
             required
             maxLength={6}
             value={key2}
@@ -309,8 +309,13 @@ export default function Index() {
               setKey2(value);
             }}
           />
-          {key2.length !== 6 && (
-            <p className="error">Betting key should 6 digits long.</p>
+
+          {!/^[0-9]*$/g.test(key2) ? (
+            <p className="error">Betting must be a number.</p>
+          ) : (
+            key2.length !== 6 && (
+              <p className="error">Betting key should 6 digits long.</p>
+            )
           )}
           {key_error2 === errorType.error && (
             <p className="error">Invalid phone number.</p>

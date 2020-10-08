@@ -78,27 +78,27 @@ export default function GamesScreen() {
   });
 
   const lottieLoader = useCallback(() => {
-    Lottie.loadAnimation({
-      container: coinRef.current,
-      autoplay: true,
-      loop: true,
-      renderer: "canvas",
-      animationData: require("../lottie/coin.json"),
-    });
-    Lottie.loadAnimation({
-      container: coinRef2.current,
-      autoplay: true,
-      loop: true,
-      renderer: "canvas",
-      animationData: require("../lottie/coin.json"),
-    });
-    Lottie.loadAnimation({
-      container: game_play.current,
-      autoplay: true,
-      loop: true,
-      renderer: "canvas",
-      animationData: require("../lottie/game_play.json"),
-    });
+      Lottie.loadAnimation({
+        container: coinRef.current,
+          autoplay: true,
+          loop: true,
+          renderer: "canvas",
+          animationData: require("../lottie/coin.json"),
+        });
+        Lottie.loadAnimation({
+          container: coinRef2.current,
+          autoplay: true,
+          loop: true,
+          renderer: "canvas",
+          animationData: require("../lottie/coin.json"),
+        });
+        Lottie.loadAnimation({
+          container: game_play.current,
+          autoplay: true,
+          loop: true,
+          renderer: "canvas",
+          animationData: require("../lottie/game_play.json"),
+        });
   }, []);
   useEffect(() => {
     lottieLoader();
@@ -227,20 +227,16 @@ export default function GamesScreen() {
     });
   });
 
-  if(app_loading) return (
-    <>
-      <Head>
-        <title>Games - Troisplay</title>
-      </Head>
-      <AppLoader runText={runText} />
-    </>
-  );
-
   return (
     <>
       <Head>
         <title>Games - Troisplay</title>
       </Head>
+      {app_loading && (
+        <>
+          <AppLoader runText={runText} />
+        </>
+      )}
       <Penalty_card />
       <Roshambo />
       <Notification />
@@ -657,7 +653,7 @@ export default function GamesScreen() {
                 <span className="time">{dateintime}</span>
                 <h3 className="title">Coin</h3>
                 <span className="price">
-                  <span ref={coinRef} className="icon" /> $
+                  <span ref={coinRef} className="icon" />
                   {record?.data?.wallet?.currentCoin.toLocaleString() ?? 0}
                 </span>
                 <div className="action">
