@@ -1,51 +1,27 @@
-import { Button, Fab } from "@material-ui/core";
-import { Album, Close, Forward } from "@material-ui/icons";
 import Axios, { AxiosResponse } from "axios";
 import { isEmpty } from "lodash";
 import { useState } from "react";
-import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { MoonLoader } from "react-spinners";
-import { toast } from "react-toastify";
 import { url } from "../../constant";
+import { CloseIcon, ForwardIcon, GoalPostIcon } from "../../icon";
+import { getToken } from "../../pages/games";
 import {
   notify,
-  setCashWalletCoin,
-  setExit,
-  setGame,
-  setGamepickerform,
-  setMyGames,
-  setSearchSpec,
-  setWalletCoin,
 } from "../../store/action";
-import {
-  eventReducerType,
-  gameType,
-  modalType,
-  NotiErrorType,
-} from "../../store/reducer/event";
-import { initialStateType } from "../../store/reducer/initial";
-import { PayType } from "../gamepicker";
-import { playerR } from "../gamepickerform";
-import { IniReducerType } from "../panel";
-import { CheckerType, PlayType } from "./roshambo";
+import { CheckerType, Games, PayType, PenaltyOption, PlayerType, PlayType } from "../../typescript/enum";
+import { reducerType } from "../../typescript/interface";
 
-enum PenaltyOption {
-  left,
-  right,
-  center,
-}
 
 export default function Penalty_card() {
-  const [{ token }] = useCookies(["token"]);
   const dispatch: Function = useDispatch();
   const [isDemoPlay, setDemoState] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(false);
-  const [round1knowState, setKnownState1] = useState<CheckerType>(2);
-  const [round2knowState, setKnownState2] = useState<CheckerType>(2);
-  const [round3knowState, setKnownState3] = useState<CheckerType>(2);
-  const [round4knowState, setKnownState4] = useState<CheckerType>(2);
-  const [round5knowState, setKnownState5] = useState<CheckerType>(2);
+  const [round1knowState, setKnownState1] = useState<CheckerType>(CheckerType.unknown);
+  const [round2knowState, setKnownState2] = useState<CheckerType>(CheckerType.unknown);
+  const [round3knowState, setKnownState3] = useState<CheckerType>(CheckerType.unknown);
+  const [round4knowState, setKnownState4] = useState<CheckerType>(CheckerType.unknown);
+  const [round5knowState, setKnownState5] = useState<CheckerType>(CheckerType.unknown);
   const [playStateLoad, setPlayStateLoading] = useState<boolean>(false);
   const [playType, setPlayType] = useState<PlayType>(PlayType.non);
   const [playCount, setPlayCount] = useState<number>(0);
@@ -85,84 +61,29 @@ export default function Penalty_card() {
     value: PenaltyOption.left,
   });
   const {
-    theme,
-    game,
-    gameID,
-    price,
-    games,
-    coin,
-    cash,
-    player,
-    defaults,
+    details
   } = useSelector<
+    reducerType,
     {
-      initial: initialStateType;
-      event: eventReducerType;
-    },
-    {
-      theme: string;
-      game: gameType;
-      gameID: string;
-      price: number;
-      coin: number;
-      cash: number;
-      games: {
-        _id?: string;
-        gameMemberCount?: number;
-        members?: string[];
-        priceType?: string;
-        price_in_coin?: number;
-        price_in_value?: number;
-        gameType?: string;
-        gameDetail?: string;
-        gameID?: gameType;
-        played?: boolean;
-        date?: Date;
-      }[];
-      defaults: {
-        commission_roshambo: {
-          value: number;
-          value_in: "$" | "c" | "%";
-        };
-        commission_penalty: {
-          value: number;
-          value_in: "$" | "c" | "%";
-        };
-        commission_guess_mater: {
-          value: number;
-          value_in: "$" | "c" | "%";
-        };
-        commission_custom_game: {
-          value: number;
-          value_in: "$" | "c" | "%";
-        };
-        cashRating: number;
-        min_stack_roshambo: number;
-        min_stack_penalty: number;
-        min_stack_guess_master: number;
-        min_stack_custom: number;
-        referRating: number;
+      details: {
+        price: number;
+        game: Games;
+        id?: string;
+        player: PlayerType;
       };
-      player: playerR;
     }
   >((state) => {
     return {
-      theme: state.initial.theme,
-      game: state.event.game,
-      gameID: state.event.gameID,
-      price: state.event.searchspec.price,
-      games: state.initial.my_games,
-      coin: state.initial.wallet.currentCoin,
-      cash: state.initial.cashwallet.currentCash,
-      player: state.event.play_as,
-      defaults: state.initial.defaults,
+      details: state.event.game_details
     };
   });
+  const theme = "dark-mode"
 
   const handleSubmit = async (payWith?: PayType) => {
     if (loading) return;
+    let token = getToken()
     setLoading(true);
-    if (isEmpty(gameID)) {
+    if (isEmpty(details.id)) {
       await Axios({
         method: "POST",
         url: `${url}/games/penalty`,
@@ -170,7 +91,7 @@ export default function Penalty_card() {
           authorization: `Bearer ${token}`,
         },
         data: {
-          price_in_cash: price,
+          price_in_cash: details.price,
           gameInPut: {
             round1: round1.value,
             round2: round2.value,
@@ -194,53 +115,25 @@ export default function Penalty_card() {
               price_in_value?: number;
               gameType?: string;
               gameDetail?: string;
-              gameID?: gameType;
+            gameID?: Games;
               played?: boolean;
               date?: Date;
             };
           }>) => {
-            dispatch(setSearchSpec({ game: gameType.non, price: 0 }));
-            dispatch(setGame(gameType.non, ""));
-            dispatch(setMyGames([game, ...games]));
-            if (payWith === PayType.cash) {
-              dispatch(setCashWalletCoin(cash - price));
-            }
-            if (payWith === PayType.coin) {
-              dispatch(setWalletCoin(coin - price * defaults.cashRating));
-            }
-            dispatch(setGamepickerform(modalType.close));
-            dispatch(
-              notify({
-                isOPen: modalType.open,
-                msg:
-                  "Congratulations!!!! You have successfully played a game, please wait for Player 2",
-                type: NotiErrorType.state,
-              })
-            );
+            // if (payWith === PayType.cash) {
+            //   dispatch(setCashWalletCoin(cash - price));
+            // }
+            // if (payWith === PayType.coin) {
+            //   dispatch(setWalletCoin(coin - price * defaults.cashRating));
+            // }
           }
         )
         .catch((err) => {
           if (err.message === "Request failed with status code 401") {
-            dispatch(setSearchSpec({ game: gameType.non, price: 0 }));
-            dispatch(setGame(gameType.non, ""));
-            dispatch(setGamepickerform(modalType.close));
-            if (window.innerWidth < 650) {
-              toast.dark("Insufficient Fund", { position: "bottom-right" });
-            } else {
-              toast.dark("Insufficient Fund");
-            }
+            // insuf fund
             return;
           }
-          if (window.innerWidth < 650) {
-            toast.error(
-              "An error occured please recheck your connection and try again",
-              { position: "bottom-right" }
-            );
-          } else {
-            toast.error(
-              "An error occured please recheck your connection and try again"
-            );
-          }
+          // true
         })
         .finally(() => {
           setLoading(false);
@@ -259,7 +152,7 @@ export default function Penalty_card() {
           authorization: `Bearer ${token}`,
         },
         data: {
-          id: gameID,
+          id: details.id,
           gameInPut: {
             round1: round1.value,
             round2: round2.value,
@@ -273,33 +166,11 @@ export default function Penalty_card() {
           ({
             data: { winner, price },
           }: AxiosResponse<{ winner: boolean; price: number }>) => {
-            dispatch(setSearchSpec({ game: gameType.non, price: 0 }));
-            dispatch(setGame(gameType.non, ""));
-            dispatch(setGamepickerform(modalType.close));
-            dispatch(setWalletCoin(coin + price));
-            dispatch(
-              notify({
-                isOPen: modalType.open,
-                msg: winner
-                  ? `Congratualations You just won this game and have gained $${price}`
-                  : "Sorry you lost.",
-                type: winner ? NotiErrorType.success : NotiErrorType.error,
-              })
-            );
+            // con won
           }
         )
         .catch((err) => {
-          console.log(err);
-          if (window.innerWidth < 650) {
-            toast.error(
-              "An error occured please recheck your connection and try again",
-              { position: "bottom-right" }
-            );
-          } else {
-            toast.error(
-              "An error occured please recheck your connection and try again"
-            );
-          }
+          // eiie
         })
         .finally(() => {
           setLoading(false);
@@ -313,10 +184,11 @@ export default function Penalty_card() {
     }
   };
 
-  const handleCheck = async (
+  const playSingleMatch = async (
     round: number,
     gameInPut: number
   ): Promise<void> => {
+    let token = getToken()
     if (playStateLoad) return;
     setPlayStateLoading(true);
     await Axios({
@@ -326,7 +198,7 @@ export default function Penalty_card() {
         authorization: `Bearer ${token}`,
       },
       data: {
-        id: gameID,
+        id: details.id,
         gameInPut,
         round,
       },
@@ -359,10 +231,8 @@ export default function Penalty_card() {
               return;
           }
           if (final) {
-            dispatch(setCashWalletCoin(cash + price));
             setLoading(false);
             setDemoState(true);
-            dispatch(setGame(gameType.non, ""));
             setKnownState1(CheckerType.unknown);
             setKnownState2(CheckerType.unknown);
             setKnownState3(CheckerType.unknown);
@@ -374,21 +244,9 @@ export default function Penalty_card() {
             setRound4({ round: 4, value: PenaltyOption.left });
             setRound5({ round: 5, value: PenaltyOption.left });
             if (price > 0) {
-              dispatch(
-                notify({
-                  isOPen: modalType.open,
-                  msg: `Congratualations You just won this game and have gained $${price}`,
-                  type: NotiErrorType.success,
-                })
-              );
+              // troes
             } else {
-              dispatch(
-                notify({
-                  isOPen: modalType.open,
-                  msg: `Ooooh sorry, you just lostthis game.`,
-                  type: NotiErrorType.error,
-                })
-              );
+              // lost
             }
           }
           setPlayCount((prev) => {
@@ -402,89 +260,88 @@ export default function Penalty_card() {
       });
   };
 
-  if (game === gameType.penalth_card)
+  if (details.game === Games.penalth_card)
     return (
       <div className={`gameworld theme ${theme}`}>
-        {playType === PlayType.non && player === playerR.second ? (
+        {playType === PlayType.non && details.player === PlayerType.second ? (
           <div className="container">
             <div className="content">
               <div className="action">
-                <Button
+                <div
                   className="btn_"
                   onClick={() => {
                     setPlayType(PlayType.one_by_one);
                   }}
                 >
                   Play
-                </Button>
-                <Button
+                </div>
+                <div
                   className="btn_"
                   onClick={() => {
                     setPlayType(PlayType.all);
-                    dispatch(setSearchSpec({ game: gameType.non, price: 0 }));
                   }}
                 >
                   Stimulate Play
-                </Button>
+                </div>
               </div>
             </div>
           </div>
         ) : (
           <div className="world spin penalty">
             {" "}
-            {!isEmpty(gameID) && (
-              <Fab
+            {!isEmpty(details.id) && (
+              <div
                 className="close_btn"
                 onClick={() => {
-                  dispatch(
-                    setExit({
-                      open: modalType.open,
-                      func: async () => {
-                        await Axios({
-                          method: "POST",
-                          url: `${url}/games/penalty/exit`,
-                          headers: {
-                            Authorization: `Bearer ${token}`,
-                          },
-                          data: {
-                            id: gameID,
-                          },
-                        })
-                          .then(() => {
-                            dispatch(setGame(gameType.non, ""));
-                            setLoading(false);
-                            setDemoState(true);
-                            setKnownState1(CheckerType.unknown);
-                            setKnownState2(CheckerType.unknown);
-                            setKnownState3(CheckerType.unknown);
-                            setKnownState4(CheckerType.unknown);
-                            setKnownState5(CheckerType.unknown);
-                            setRound1({ round: 1, value: PenaltyOption.left });
-                            setRound2({ round: 2, value: PenaltyOption.left });
-                            setRound3({ round: 3, value: PenaltyOption.left });
-                            setRound4({ round: 4, value: PenaltyOption.left });
-                            setRound5({ round: 5, value: PenaltyOption.left });
-                            dispatch(
-                              setSearchSpec({ game: gameType.non, price: 0 })
-                            );
-                            dispatch(setGamepickerform(modalType.close));
-                          })
-                          .catch(() => {
-                            toast.error("Network Error!.");
-                          });
-                      },
-                    })
-                  );
+                  // dispatch(
+                  //   setExit({
+                  //     open: modalType.open,
+                  //     func: async () => {
+                  //       await Axios({
+                  //         method: "POST",
+                  //         url: `${url}/games/penalty/exit`,
+                  //         headers: {
+                  //           Authorization: `Bearer ${token}`,
+                  //         },
+                  //         data: {
+                  //           id: details.id,
+                  //         },
+                  //       })
+                  //         .then(() => {
+                  //           dispatch(setGame(gameType.non, ""));
+                  //           setLoading(false);
+                  //           setDemoState(true);
+                  //           setKnownState1(CheckerType.unknown);
+                  //           setKnownState2(CheckerType.unknown);
+                  //           setKnownState3(CheckerType.unknown);
+                  //           setKnownState4(CheckerType.unknown);
+                  //           setKnownState5(CheckerType.unknown);
+                  //           setRound1({ round: 1, value: PenaltyOption.left });
+                  //           setRound2({ round: 2, value: PenaltyOption.left });
+                  //           setRound3({ round: 3, value: PenaltyOption.left });
+                  //           setRound4({ round: 4, value: PenaltyOption.left });
+                  //           setRound5({ round: 5, value: PenaltyOption.left });
+                  //           dispatch(
+                  //             setSearchSpec({ game: gameType.non, price: 0 })
+                  //           );
+                  //           dispatch(setGamepickerform(modalType.close));
+                  //         })
+                  //         .catch(() => {
+                  //           toast.error("Network Error!.");
+                  //         });
+                  //     },
+                  //   })
+                  // );
                 }}
               >
-                <Close />
-              </Fab>
+                <CloseIcon />
+              </div>
             )}
             <h3 className="title">
-              {isEmpty(gameID) ? "Taker" : "Goalkeeper"}
+              {isEmpty(details.id) ? "Taker" : "Goalkeeper"}
             </h3>
             <h3 className="title">
-              {player === playerR.second
+              {details.player === PlayerType.second
                 ? "Try to catch the ball by guessing Player one's shot direction"
                 : "Set your shot directions"}
             </h3>
@@ -523,22 +380,22 @@ export default function Penalty_card() {
                   }}
                 >
                   {round1.value === PenaltyOption.left ? (
-                    <Forward />
+                   details.player === PlayerType.first? <ForwardIcon /> : <GoalPostIcon/>
                   ) : round1.value === PenaltyOption.right ? (
-                    <Forward />
+                   details.player === PlayerType.first? <ForwardIcon /> : <GoalPostIcon/>
                   ) : (
                     <></>
                   )}
                 </span>
-                {!isEmpty(gameID) && playType === PlayType.one_by_one && (
-                  <Button
+                {!isEmpty(details.id) && playType === PlayType.one_by_one && (
+                  <div
                     style={{
                       filter: playStateLoad
                         ? "brightness(80%)"
                         : "brightness(100%)",
                       cursor: playStateLoad ? "not-allowed" : "pointer",
                     }}
-                    onClick={() => handleCheck(round1.round, round1.value)}
+                    onClick={() => playSingleMatch(round1.round, round1.value)}
                     className={`btn_check theme ${theme} ${
                       round1knowState === CheckerType.unknown
                         ? "play"
@@ -556,7 +413,7 @@ export default function Penalty_card() {
                       : round1knowState === CheckerType.lost
                       ? "lost"
                       : ""}
-                  </Button>
+                  </div>
                 )}
               </div>
               <div className="round">
@@ -589,22 +446,22 @@ export default function Penalty_card() {
                   }}
                 >
                   {round2.value === PenaltyOption.left ? (
-                    <Forward />
+                   details.player === PlayerType.first? <ForwardIcon /> : <GoalPostIcon/>
                   ) : round2.value === PenaltyOption.right ? (
-                    <Forward />
+                   details.player === PlayerType.first? <ForwardIcon /> : <GoalPostIcon/>
                   ) : (
                     <></>
                   )}
                 </span>
-                {!isEmpty(gameID) && playType === PlayType.one_by_one && (
-                  <Button
+                {!isEmpty(details.id) && playType === PlayType.one_by_one && (
+                  <div
                     style={{
                       filter: playStateLoad
                         ? "brightness(80%)"
                         : "brightness(100%)",
                       cursor: playStateLoad ? "not-allowed" : "pointer",
                     }}
-                    onClick={() => handleCheck(round2.round, round2.value)}
+                    onClick={() => playSingleMatch(round2.round, round2.value)}
                     className={`btn_check theme ${theme} ${
                       round2knowState === CheckerType.unknown
                         ? "play"
@@ -622,7 +479,7 @@ export default function Penalty_card() {
                       : round2knowState === CheckerType.lost
                       ? "lost"
                       : ""}
-                  </Button>
+                  </div>
                 )}
               </div>
               <div className="round">
@@ -655,22 +512,22 @@ export default function Penalty_card() {
                   }}
                 >
                   {round3.value === PenaltyOption.left ? (
-                    <Forward />
+                   details.player === PlayerType.first? <ForwardIcon /> : <GoalPostIcon/>
                   ) : round3.value === PenaltyOption.right ? (
-                    <Forward />
+                   details.player === PlayerType.first? <ForwardIcon /> : <GoalPostIcon/>
                   ) : (
                     <></>
                   )}
                 </span>
-                {!isEmpty(gameID) && playType === PlayType.one_by_one && (
-                  <Button
+                {!isEmpty(details.id) && playType === PlayType.one_by_one && (
+                  <div
                     style={{
                       filter: playStateLoad
                         ? "brightness(80%)"
                         : "brightness(100%)",
                       cursor: playStateLoad ? "not-allowed" : "pointer",
                     }}
-                    onClick={() => handleCheck(round3.round, round3.value)}
+                    onClick={() => playSingleMatch(round3.round, round3.value)}
                     className={`btn_check theme ${theme} ${
                       round3knowState === CheckerType.unknown
                         ? "play"
@@ -688,7 +545,7 @@ export default function Penalty_card() {
                       : round3knowState === CheckerType.lost
                       ? "lost"
                       : ""}
-                  </Button>
+                  </div>
                 )}
               </div>
               <div className="round">
@@ -721,22 +578,22 @@ export default function Penalty_card() {
                   }}
                 >
                   {round4.value === PenaltyOption.left ? (
-                    <Forward />
+                   details.player === PlayerType.first? <ForwardIcon /> : <GoalPostIcon/>
                   ) : round4.value === PenaltyOption.right ? (
-                    <Forward />
+                   details.player === PlayerType.first? <ForwardIcon /> : <GoalPostIcon/>
                   ) : (
                     <></>
                   )}
                 </span>
-                {!isEmpty(gameID) && playType === PlayType.one_by_one && (
-                  <Button
+                {!isEmpty(details.id) && playType === PlayType.one_by_one && (
+                  <div
                     style={{
                       filter: playStateLoad
                         ? "brightness(80%)"
                         : "brightness(100%)",
                       cursor: playStateLoad ? "not-allowed" : "pointer",
                     }}
-                    onClick={() => handleCheck(round4.round, round4.value)}
+                    onClick={() => playSingleMatch(round4.round, round4.value)}
                     className={`btn_check theme ${theme} ${
                       round4knowState === CheckerType.unknown
                         ? "play"
@@ -754,7 +611,7 @@ export default function Penalty_card() {
                       : round4knowState === CheckerType.lost
                       ? "lost"
                       : ""}
-                  </Button>
+                  </div>
                 )}
               </div>
               <div className="round">
@@ -787,22 +644,22 @@ export default function Penalty_card() {
                   }}
                 >
                   {round5.value === PenaltyOption.left ? (
-                    <Forward />
+                   details.player === PlayerType.first? <ForwardIcon /> : <GoalPostIcon/>
                   ) : round5.value === PenaltyOption.right ? (
-                    <Forward />
+                   details.player === PlayerType.first? <ForwardIcon /> : <GoalPostIcon/>
                   ) : (
                     <></>
                   )}
                 </span>
-                {!isEmpty(gameID) && playType === PlayType.one_by_one && (
-                  <Button
+                {!isEmpty(details.id) && playType === PlayType.one_by_one && (
+                  <div
                     style={{
                       filter: playStateLoad
                         ? "brightness(80%)"
                         : "brightness(100%)",
                       cursor: playStateLoad ? "not-allowed" : "pointer",
                     }}
-                    onClick={() => handleCheck(round5.round, round5.value)}
+                    onClick={() => playSingleMatch(round5.round, round5.value)}
                     className={`btn_check theme ${theme} ${
                       round5knowState === CheckerType.unknown
                         ? "play"
@@ -820,13 +677,13 @@ export default function Penalty_card() {
                       : round5knowState === CheckerType.lost
                       ? "lost"
                       : ""}
-                  </Button>
+                  </div>
                 )}
               </div>
             </div>
-            {isEmpty(gameID) ? (
+            {isEmpty(details.id) ? (
               <div className="game_action">
-                <Button
+                <div
                   className={`btn_ theme ${theme}`}
                   onClick={() => {
                     handleSubmit(PayType.cash);
@@ -837,8 +694,8 @@ export default function Penalty_card() {
                   ) : (
                     "Play with cash"
                   )}
-                </Button>
-                <Button
+                </div>
+                <div
                   className={`btn_ ${theme} theme`}
                   onClick={() => {
                     handleSubmit(PayType.coin);
@@ -849,14 +706,14 @@ export default function Penalty_card() {
                   ) : (
                     "Play with coin"
                   )}
-                </Button>
+                </div>
               </div>
             ) : playType === PlayType.all ? (
-              <Button
+              <div
                 className={`btn_ theme ${theme}`}
                 onClick={() => handleSubmit()}
               >
-                {isEmpty(gameID) ? (
+                {isEmpty(details.id) ? (
                   loading ? (
                     <MoonLoader size="20px" color={`white`} />
                   ) : (
@@ -867,7 +724,7 @@ export default function Penalty_card() {
                 ) : (
                   "challange"
                 )}
-              </Button>
+              </div>
             ) : (
               <></>
             )}

@@ -8,19 +8,17 @@ import Axios from "axios";
 import { useRouter } from "next/router";
 import { url } from "../../constant";
 import { MoonLoader } from "react-spinners";
+import { errorType, modalType } from "../../typescript/enum";
+import { useDispatch } from "react-redux";
+import { toast } from "../../store/action";
 
 const choose = require("../../lottie/choose.json");
 const fund = require("../../lottie/fund.json");
 const money = require("../../lottie/money.json");
 
-export enum errorType {
-  used,
-  warning,
-  error,
-  non,
-}
 
 export default function Signup() {
+  const dispatch = useDispatch();
   const chooseContainerRef = useRef(null);
   const fundContainerRef = useRef(null);
   const moneyContainerRef = useRef(null);
@@ -74,6 +72,12 @@ export default function Signup() {
           setPhone_number_error2(errorType.used);
           return;
         }
+        setSignUpState(false);
+        toast(dispatch, {
+          isOpen: modalType.open,
+          msg:
+            "Sorry, we could not communicate with the troisplay server please check you internet connection.",
+        }).error();
       })
       .finally(() => {
         setloading(false);

@@ -26,13 +26,17 @@ import Axios, { AxiosResponse } from "axios";
 import { url, url_media } from "../constant";
 import { QueryResult } from "react-query";
 import { Games, PayType, PlayerType, Viewing } from "../typescript/enum";
-import next from "next";
+import next, { GetStaticProps, GetStaticPropsContext } from "next";
 import { getPrice, isPlayable } from "../functions";
 import { MoonLoader } from "react-spinners";
 import Notification from "../components/notification";
 import Roshambo from "../components/games/roshambo";
 import { setGameDetails } from "../store/action";
 import { useDispatch } from "react-redux";
+import Penalty_card from "../components/games/penelty_card";
+import ToastContainer from "../components/toast";
+import  AppLoader from "../components/app_loader"
+import { useRouter } from "next/router";
 
 export function getToken(): string {
   const token = window.localStorage.getItem("game_token");
@@ -49,6 +53,7 @@ export default function GamesScreen() {
   const dispatch = useDispatch();
   const [viewing, setViewing] = useState<Viewing>(Viewing.current);
   const [dateintime, setDateintime] = useState("");
+  const [app_loading, setApp_loading] = useState<boolean>(true)
   const [gameViewOpen, setViewOpen] = useState<boolean>(false);
   const swRef: MutableRefObject<HTMLDivElement | null> = useRef();
   const coinRef: MutableRefObject<HTMLSpanElement | null> = useRef();
@@ -56,6 +61,8 @@ export default function GamesScreen() {
   const game_play: MutableRefObject<HTMLSpanElement | null> = useRef();
   const [playLoader, setPlayerLoader] = useState<boolean>(false);
   const [game_loading, setgameLoading] = useState<boolean>(false);
+  const [runText, setRunText] = useState("loading game components...")
+ const {push} = useRouter()
   const [spec, setSpec] = useState<{
     isOpen: boolean;
     manual: string;
@@ -107,6 +114,11 @@ export default function GamesScreen() {
   }, []);
   const {
     data: record,
+    isLoading,
+    isError,
+    isSuccess,
+    isFetchedAfterMount,
+    status
   }: QueryResult<AxiosResponse<{
     player: {
       userID: string;
@@ -159,6 +171,27 @@ export default function GamesScreen() {
       },
     });
   });
+  const checker = useCallback(() => {
+    if (isError) {
+      setRunText("Couldn't connect to troisplay game server... Try login again.")
+      setTimeout(() => {
+        push("/login")
+      }, 4000);
+      return
+    }
+    if (isLoading && !isFetchedAfterMount) {
+      setRunText("loading game components...");
+      setApp_loading(true)
+   return
+    }
+    if (isSuccess) {
+      setApp_loading(false)
+    }
+}, [isError, isLoading, isSuccess])
+
+  useEffect(() => {
+    checker()
+  }, [checker])
 
   const {
     data: defaults,
@@ -194,13 +227,24 @@ export default function GamesScreen() {
     });
   });
 
+  if(app_loading) return (
+    <>
+      <Head>
+        <title>Games - Troisplay</title>
+      </Head>
+      <AppLoader runText={runText} />
+    </>
+  );
+
   return (
     <>
       <Head>
         <title>Games - Troisplay</title>
       </Head>
-      <Notification />
+      <Penalty_card  />
       <Roshambo />
+      <Notification />
+      <ToastContainer/>
       <header className="game_header">
         <section className="top">
           <div className="theme_action">
@@ -522,7 +566,7 @@ export default function GamesScreen() {
         >
           <div
             className="img"
-            style={{ backgroundImage: `url(/images/roshambo.png)` }}
+            style={{ backgroundImage: `url(/images/custom.png)` }}
           />
           <div className="details">
             <span className="name">Custom Games</span>
@@ -547,7 +591,7 @@ export default function GamesScreen() {
         >
           <div
             className="img"
-            style={{ backgroundImage: `url(/images/roshambo.png)` }}
+            style={{ backgroundImage: `url(/images/lucky-geoge.png)` }}
           />
           <div className="details">
             <span className="name">Lucky Geoge</span>
@@ -561,7 +605,7 @@ export default function GamesScreen() {
         </div>
       </div>
       <section
-        className="games_world"
+        className="games_world_"
         onClick={() => {
           setViewOpen(false);
         }}

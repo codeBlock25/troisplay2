@@ -1,9 +1,8 @@
 import Axios, { AxiosResponse } from "axios";
 import { url } from "../constant";
 import { nextType } from "../pages/games";
-import { errorType } from "../pages/signup";
 import { setGameDetails } from "../store/action";
-import { Games, PayType, PlayerType } from "../typescript/enum";
+import { Games, PayType, PlayerType, errorType } from "../typescript/enum";
 import { ActionType } from "../typescript/interface";
 
 export function getPrice(

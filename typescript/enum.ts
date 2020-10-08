@@ -43,11 +43,28 @@ export enum RoshamboOption {
   scissors,
 }
 
+
+export enum PenaltyOption {
+  left,
+  right,
+  center,
+}
+
 export enum CheckerType {
   won,
   lost,
   unknown,
   draw,
+}
+
+export enum errorType {
+  used,
+  warning,
+  error,
+  non,
+  no_fund,
+  unsuccessful,
+  success,
 }
 
 export enum PlayType {

@@ -8,19 +8,16 @@ import Axios from "axios";
 import { useRouter } from "next/router";
 import { url } from "../../constant";
 import { MoonLoader } from "react-spinners";
+import { errorType, modalType } from "../../typescript/enum";
+import { useDispatch } from "react-redux";
+import { toast } from "../../store/action";
 
 const choose = require("../../lottie/choose.json");
 const fund = require("../../lottie/fund.json");
 const money = require("../../lottie/money.json");
 
-export enum errorType {
-  used,
-  warning,
-  error,
-  non,
-}
-
 export default function Login() {
+  const dispatch = useDispatch();
   const chooseContainerRef = useRef(null);
   const fundContainerRef = useRef(null);
   const moneyContainerRef = useRef(null);
@@ -64,7 +61,7 @@ export default function Login() {
         localStorage.setItem("game_token", token);
         localStorage.setItem("logged", isPlayer ? "old" : "new");
         setTimeout(() => {
-          push("/game-play");
+          push("/games");
         }, 500);
       })
       .catch((err) => {
@@ -76,11 +73,12 @@ export default function Login() {
           setKey_error(errorType.error);
           return;
         }
-        if (window.innerHeight < 650) {
-          //  toast.error("Opp's an error occured", { position: "bottom-right" });
-        } else {
-          //  toast.error("Opp's an error occured");
-        }
+        setLoginState(false);
+        toast(dispatch, {
+          isOpen: modalType.open,
+          msg:
+            "Sorry, we could not communicate with the troisplay server please check you internet connection.",
+        }).error();
       })
       .finally(() => {
         setloading(false);

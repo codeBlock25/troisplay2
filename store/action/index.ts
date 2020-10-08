@@ -1,4 +1,6 @@
+import { ClassType } from "react";
 import {
+  errorType,
   Games,
   modalType,
   NotiErrorType,
@@ -16,6 +18,7 @@ export const notify = (
 ): void => {
   dispatch({ type: "NOTIFICATION", payload });
 };
+
 export const setGameDetails = (
   dispatch: (t: ActionType) => void,
   payload: {
@@ -26,4 +29,34 @@ export const setGameDetails = (
   }
 ): void => {
   dispatch({ type: "GAME_DETAILS", payload });
+};
+
+export const toast = (
+  dispatch: (t: ActionType) => void,
+  payload: {
+    isOpen: modalType;
+    msg: string;
+  }
+): {
+  error: () => void;
+  success: () => void;
+  close: () => void;
+} => {
+  return {
+    error: () =>
+      dispatch({
+        type: "TOAST",
+        payload: { ...payload, error: errorType.error },
+      }),
+    success: () =>
+      dispatch({
+        type: "TOAST",
+        payload: { ...payload, error: errorType.success },
+      }),
+    close: () =>
+      dispatch({
+        type: "TOAST",
+        payload: { error: errorType.non, msg: "", isOpen: modalType.close },
+      }),
+  };
 };

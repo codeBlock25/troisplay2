@@ -1,4 +1,5 @@
-import { Games, modalType, NotiErrorType, PlayerType } from "./enum";
+
+import { Games, modalType, NotiErrorType, PlayerType, errorType } from "./enum";
 
 export interface eventReeducerType {
   notification: {
@@ -12,10 +13,15 @@ export interface eventReeducerType {
     id?: string;
     player: PlayerType;
   };
+  toastNotification: {
+    isOpen: modalType;
+    msg: string;
+    error: errorType;
+  };
 }
 
 export interface ActionType<T = any> {
-  type: "NOTIFICATION" | "GAME_DETAILS";
+  type: "NOTIFICATION" | "GAME_DETAILS" | "TOAST";
   payload: T;
 }
 

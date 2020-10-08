@@ -508,10 +508,10 @@
                         margin: 10px;
                         display: flex;
                         cursor: pointer;
-                        transform: rotate(360deg);
+                        transform: rotateY(360deg);
 
                         &.left {
-                            transform: rotate(180deg);
+                            transform: rotateY(180deg);
                         }
 
                         @keyframes bouncingLoader {

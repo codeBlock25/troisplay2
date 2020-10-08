@@ -2,6 +2,7 @@ import {
   Games,
   modalType,
   NotiErrorType,
+  errorType,
   PlayerType,
 } from "../../typescript/enum";
 import { ActionType, eventReeducerType } from "../../typescript/interface";
@@ -18,6 +19,11 @@ const initialState: eventReeducerType = {
     id: "",
     price: 0,
   },
+  toastNotification: {
+    isOpen: modalType.close,
+    msg: "",
+    error: errorType.non,
+  },
 };
 
 export const eventReducer = (
@@ -29,6 +35,8 @@ export const eventReducer = (
       return { ...state, notification: action.payload };
     case "GAME_DETAILS":
       return { ...state, game_details: action.payload };
+    case "TOAST":
+      return { ...state, toastNotification: action.payload };
     default:
       return { ...state };
   }

@@ -1,0 +1,72 @@
+@import "./variable";
+
+.toastContainer {
+    position: fixed;
+    right: -500px;
+    bottom: 10px;
+    display: flex;
+    width: 42vw;
+    min-width: 300px;
+    max-width: 420px;
+    height: fit-content;
+    min-height: fit-content;
+    z-index: 5000;
+    background-color: #0c0c0c;
+    border: 2px solid $defaultColor;
+    border-radius: 5px;
+    padding: 10px;
+    opacity: 0.8;
+    transition: $bounce .4s;
+
+    &.open {
+        opacity: 1;
+        right: 10px;
+    }
+
+    .icon {
+        width: 50px;
+        height: 70px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        span {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-self: center;
+        }
+    }
+
+    .msg {
+        flex: 1;
+        height: fit-content;
+        min-height: fit-content;
+        display: flex;
+        flex-wrap: wrap;
+        padding-right: 60px;
+        font-size: 13px;
+        color: #b9b9b9;
+    }
+
+    .close {
+        width: 32px;
+        height: 32px;
+        display: flex;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background-color: $defaultColor;
+        color: white;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+
+        svg {
+            width: 14px;
+            height: 14px;
+            fill: currentColor;
+            align-self: center;
+        }
+    }
+}
