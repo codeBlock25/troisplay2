@@ -2,7 +2,7 @@ import Axios, { AxiosResponse } from "axios";
 import { MouseEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { url } from "../../constant";
-import { notify, setGameDetails } from "../../store/action";
+import { notify, setGameDetails, toast } from "../../store/action";
 import {
   CloseIcon,
   GameCoin,
@@ -16,6 +16,8 @@ import {
   CheckerType,
   GameRec,
   Games,
+  modalType,
+  NotiErrorType,
   PayType,
   PlayerType,
   PlayType,
@@ -140,14 +142,24 @@ export default function Roshambo() {
               played?: boolean;
               date?: Date;
             };
-          }>) => {}
+          }>) => {
+                  setGameDetails(dispatch, {
+                    player: PlayerType.first,
+                    game: Games.non,
+                    id: undefined,
+                    price: 0,
+                  });
+            toast(dispatch, {
+              msg: `Congratulations!!!! You have successfully played a game, please wait for Player 2's challange.`,
+            }).success();
+          }
         )
         .catch((err) => {
           if (err.message === "Request failed with status code 401") {
-            // ins fund
+            toast(dispatch, {msg: `Insufficient Fund, please fund your ${payWith === PayType.cash?"cash wallet":"coin wallet"} to continue the game.`}).fail()
             return;
           }
-          // normal error
+          toast(dispatch, {msg: `An Error occured could not connect to troisplay game server please check you interner connection and Try Again.`}).error()
         })
         .finally(() => {
           setLoading(false);
@@ -181,15 +193,23 @@ export default function Roshambo() {
           },
         },
       })
-        .then(
-          ({
-            data: { winner, price },
-          }: AxiosResponse<{ winner: boolean; price: number }>) => {
-            // played
+      .then(
+        ({
+          data: { winner, price },
+        }: AxiosResponse<{ winner: boolean; price: number }>) => {
+          // played
+          if (winner) {
+            notify(dispatch, {type: NotiErrorType.success, msg: `Congratualation your have just won the game and earned $ ${price}. you can withdraw you cash price or use it to play more games.`,isOpen: modalType.open})
+          } else {
+            notify(dispatch, {type: NotiErrorType.error, msg: `Sorry your have just lost this game and lost $ ${price}. you can try other games for a better chance.`,isOpen: modalType.open})
+          }
           }
         )
         .catch((err) => {
-          // erro
+          toast(dispatch, {
+            msg:
+              "An Error occured could not connect to troisplay game server please check you interner connection and Try Again.",
+          }).error();
         })
         .finally(() => {
           setLoading(false);
@@ -236,8 +256,8 @@ export default function Roshambo() {
                 winner === GameRec.win
                   ? CheckerType.won
                   : winner === GameRec.lose
-                  ? CheckerType.lost
-                  : CheckerType.draw
+                    ? CheckerType.lost
+                    : CheckerType.draw
               );
               break;
             case 2:
@@ -245,8 +265,8 @@ export default function Roshambo() {
                 winner === GameRec.win
                   ? CheckerType.won
                   : winner === GameRec.lose
-                  ? CheckerType.lost
-                  : CheckerType.draw
+                    ? CheckerType.lost
+                    : CheckerType.draw
               );
               break;
             case 3:
@@ -254,8 +274,8 @@ export default function Roshambo() {
                 winner === GameRec.win
                   ? CheckerType.won
                   : winner === GameRec.lose
-                  ? CheckerType.lost
-                  : CheckerType.draw
+                    ? CheckerType.lost
+                    : CheckerType.draw
               );
               break;
             case 4:
@@ -263,8 +283,8 @@ export default function Roshambo() {
                 winner === GameRec.win
                   ? CheckerType.won
                   : winner === GameRec.lose
-                  ? CheckerType.lost
-                  : CheckerType.draw
+                    ? CheckerType.lost
+                    : CheckerType.draw
               );
               break;
             case 5:
@@ -272,8 +292,8 @@ export default function Roshambo() {
                 winner === GameRec.win
                   ? CheckerType.won
                   : winner === GameRec.lose
-                  ? CheckerType.lost
-                  : CheckerType.draw
+                    ? CheckerType.lost
+                    : CheckerType.draw
               );
               break;
             default:
@@ -293,6 +313,7 @@ export default function Roshambo() {
             setRound4({ round: 4, value: RoshamboOption.rock });
             setRound5({ round: 5, value: RoshamboOption.rock });
             if (finalWin === "draw") {
+              notify(dispatch, { type: NotiErrorType.state, msg: "This game was a tough one and ended in a draw, you game funds have been returned as a result of this.", isOpen: modalType.open });
               //   dispatch(
               //     notify({
               //       isOPen: modalType.open,
@@ -300,28 +321,17 @@ export default function Roshambo() {
               //       type: NotiErrorType.state,
               //     })
               //   );
-              // } else if (finalWin) {
-              //   dispatch(
-              //     notify({
-              //       isOPen: modalType.open,
-              //       msg: `Congratualations You just won this game and have gained $${price}`,
-              //       type: NotiErrorType.success,
-              //     })
-              //   );
-              // } else {
-              //   dispatch(
-              //     notify({
-              //       isOPen: modalType.open,
-              //       msg: `OOh sorry, You just lost this game and have lost $${price}`,
-              //       type: NotiErrorType.error,
-              //     })
-              //   );
-              // }
+            } else if (finalWin) {
+              notify(dispatch, { type: NotiErrorType.success, msg: `Congratualations You just won this game and have gained $ ${price}`, isOpen: modalType.open });
+            } else {
+              notify(dispatch, { type: NotiErrorType.error, msg: `Sorry your have just lost this game and lost $ ${price}. you can try other games for a better chance.`, isOpen: modalType.open });
+            
             }
-            setPlayCount((prev) => {
-              return prev + 1;
-            });
+            return
           }
+          setPlayCount((prev) => {
+            return prev + 1;
+          });
         }
       )
       .catch(console.error)

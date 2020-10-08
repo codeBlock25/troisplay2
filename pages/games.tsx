@@ -721,41 +721,50 @@ export default function GamesScreen() {
         </div>
         <div className="second">
           <div className="container">
-            <h3 className="title">My Games</h3>
-            <div className="game_content">
-              {my_games?.data?.games.map(game => {
-                return (
-                  <GameView name={
-                    game.gameID === Games.roshambo ? "Roshambo" : 
-                    game.gameID === Games.penalth_card ? "Penelty Card" : 
-                    game.gameID === Games.matcher ? "Guess Master" : 
-                    "" 
-                  } date={game.date} id={game._id} cash={game.price_in_value} coin={game.price_in_coin} />
-
-                )
-              })}
-            </div>
-          </div>
-          <div className="container_games">
             <div className="title">
+            <h3>My Games</h3>
+            <div className="title_tab">
               <span
                 className={`btn ${viewing === Viewing.current ? "on" : ""}`}
                 onClick={() => setViewing(Viewing.current)}
-              >
+                >
                 Current Games
               </span>
               <span
                 className={`btn ${viewing === Viewing.room ? "on" : ""}`}
                 onClick={() => setViewing(Viewing.room)}
-              >
+                >
                 Rooms
               </span>
               <span
                 className={`btn ${viewing === Viewing.lucky_geoge ? "on" : ""}`}
                 onClick={() => setViewing(Viewing.lucky_geoge)}
-              >
+                >
                 Lucky Geoge
               </span>
+            </div>
+              </div>
+            <div className="game_content">
+              {my_games?.data?.games.map((game) => {
+                return (
+                  <GameView
+                    name={
+                      game.gameID === Games.roshambo
+                        ? "Roshambo"
+                        : game.gameID === Games.penalth_card
+                        ? "Penelty Card"
+                        : game.gameID === Games.matcher
+                        ? "Guess Master"
+                        : ""
+                    }
+                    date={game.date}
+                    id={game._id}
+                    cash={game.price_in_value}
+                    coin={game.price_in_coin}
+                    game={game.gameID}
+                  />
+                );
+              })}
             </div>
           </div>
         </div>

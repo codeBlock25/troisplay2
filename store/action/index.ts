@@ -34,29 +34,38 @@ export const setGameDetails = (
 export const toast = (
   dispatch: (t: ActionType) => void,
   payload: {
-    isOpen: modalType;
     msg: string;
   }
 ): {
   error: () => void;
   success: () => void;
   close: () => void;
+  fail: () => void;
 } => {
   return {
     error: () =>
       dispatch({
         type: "TOAST",
-        payload: { ...payload, error: errorType.error },
+        payload: { ...payload, error: errorType.error, isOpen: modalType.open },
       }),
     success: () =>
       dispatch({
         type: "TOAST",
-        payload: { ...payload, error: errorType.success },
+        payload: {
+          ...payload,
+          error: errorType.success,
+          isOpen: modalType.open,
+        },
       }),
     close: () =>
       dispatch({
         type: "TOAST",
         payload: { error: errorType.non, msg: "", isOpen: modalType.close },
+      }),
+    fail: () =>
+      dispatch({
+        type: "TOAST",
+        payload: { ...payload, error: errorType.fail, isOpen: modalType.open },
       }),
   };
 };

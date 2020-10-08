@@ -2,19 +2,23 @@ import { AxiosResponse } from "axios";
 import moment from "moment";
 import { memo } from "react";
 import { queryCache, useQueryCache } from "react-query";
+import { getPrice } from "../functions";
 import { GameCoin } from "../icon";
+import { Games } from "../typescript/enum";
 
 const GameView = memo(function ({
   date,
   name,
   coin,
   cash,
+  game
 }: {
   name: string;
   date: Date;
   id: string;
   cash: number;
-  coin: number;
+    coin: number;
+  game: Games
 }) {
   const defaults: AxiosResponse<{
     default: {
@@ -49,7 +53,7 @@ const GameView = memo(function ({
       <span className="name">{name}</span>
       <span className="date">{moment(date).format("Do MMMM, YYYY")}</span>
       <div className="viewee">
-        <span className="cash">
+        <span className="stake">
           $ {cash.toLocaleString().slice(0, 7)}
           {cash.toString().length >= 6 ?? "+"}
         </span>
@@ -58,7 +62,7 @@ const GameView = memo(function ({
           {coin.toLocaleString().slice(0, 7)}
           {coin.toString().length >= 6 ?? "+"}
         </span>
-        <span className="earning"></span>
+        <span className="earning">$ {getPrice(game,cash,defaults?.data?.default)}</span>
       </div>
       <div className="action">
         <span className="btn">view</span>
