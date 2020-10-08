@@ -241,10 +241,10 @@ export default function GamesScreen() {
       <Head>
         <title>Games - Troisplay</title>
       </Head>
-      <Penalty_card  />
+      <Penalty_card />
       <Roshambo />
       <Notification />
-      <ToastContainer/>
+      <ToastContainer />
       <header className="game_header">
         <section className="top">
           <div className="theme_action">
@@ -315,7 +315,7 @@ export default function GamesScreen() {
       </header>
       <div
         className={`game_picker_view ${spec.isOpen ? "open" : ""}`}
-        onClick={(e) => {
+        onClick={(e: any) => {
           if (!e.target?.classList?.contains("game_picker_view")) {
             return;
           }
