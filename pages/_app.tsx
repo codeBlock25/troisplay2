@@ -5,6 +5,7 @@ import "../styles/games.scss";
 import "../styles/gameworld.scss";
 import "../styles/notification.scss";
 import "../styles/apploading.scss";
+import "../styles/forgot.scss";
 import "../styles/toast.scss";
 import { Provider as ReduxProvider } from "react-redux";
 import { AppProps } from "next/app";

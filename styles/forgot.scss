@@ -1,0 +1,271 @@
+@import "./variable.scss";
+
+.account {
+  position: fixed;
+  width: calc(100vw - 7px);
+  height: calc(100vh - 7px);
+  display: flex;
+  flex-wrap: wrap;
+  background-color: white;
+  border-radius: 10px;
+  align-self: center;
+  margin: 3.5px;
+  overflow: hidden;
+
+  &.signup .left {
+    &::before {
+      background-image: url(/bg1.jpg);
+    }
+  }
+
+  &.login .left {
+    &::before {
+      background-image: url(/bet1.jpeg);
+      filter: brightness(70%);
+    }
+  }
+
+  &.forgot .left {
+    &::before {
+      background-image: url(/images/pic3.jpeg);
+      filter: brightness(70%);
+    }
+  }
+
+  header {
+    .title {
+      position: absolute;
+      left: 50px;
+      color: white;
+      justify-content: center;
+
+      @media (max-width: 670px) {
+        color: #231f1f;
+        top: 3.5px;
+        left: 3.5px;
+        width: calc(100vw - 35px);
+        background-color: white;
+        border-radius: 5px 5px 0 0;
+      }
+    }
+  }
+
+  .left {
+    flex: 1;
+    height: 100vh;
+    display: flex;
+    background-color: #022d09;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    overflow-y: auto;
+
+    @media (max-width: 670px) {
+      display: none;
+    }
+
+    &::before {
+      position: absolute;
+      content: "";
+      width: 100%;
+      height: 100%;
+      display: flex;
+      background-position: center;
+      background-size: cover;
+      opacity: 0.4;
+    }
+
+    .content {
+      width: 95%;
+      height: 95%;
+      display: flex;
+      justify-content: center;
+      align-self: center;
+      flex-direction: column;
+      padding: 10px 20px;
+
+      .title {
+        width: fit-content;
+        height: fit-content;
+        display: flex;
+        font-size: 35px;
+        font-family: mon_bold;
+        color: rgba(255, 255, 255, 0.839);
+      }
+
+      .btn_ {
+        background-color: #231f1f;
+        color: white;
+        margin: 20px 0 0 0;
+        align-self: flex-start;
+      }
+    }
+  }
+
+
+  .right {
+    width: 40%;
+    min-width: 300px;
+    max-width: 500px;
+    height: 100%;
+    min-height: fit-content;
+    display: flex;
+    background-color: #1f1e1e;
+    padding: 0 20px;
+    overflow: hidden;
+    overflow-y: auto;
+    flex-direction: column;
+
+    @media (max-width: 670px) {
+      width: 100%;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    @media (max-height: 570px) {
+      padding-bottom: 150px;
+    }
+
+    .head {
+      width: 100%;
+      height: fit-content;
+      min-height: fit-content;
+      display: flex;
+      flex-direction: column;
+      padding: 70px 0 10px 0;
+
+      svg {
+        width: 30px;
+        height: 30px;
+        display: flex;
+        fill: $defaultColor;
+        transform: scale(0.8);
+        animation: grow 5s linear infinite normal forwards;
+
+        @keyframes grow {
+          0% {
+            transform: scale(0.8);
+          }
+
+          50% {
+            transform: scale(1);
+          }
+
+          100% {
+            transform: scale(0.8);
+          }
+        }
+      }
+
+      .main_txt {
+        width: 100%;
+        height: fit-content;
+        min-height: fit-content;
+        display: flex;
+        font-size: 20px;
+        text-transform: capitalize;
+        padding: 10px 0;
+        font-family: mon_bold;
+        color: #fff;
+      }
+
+      .sub_txt {
+        width: 100%;
+        height: fit-content;
+        min-height: fit-content;
+        display: flex;
+        font-size: 14px;
+        padding: 5px 0;
+        color: #efefef;
+      }
+    }
+
+    form {
+      width: 100%;
+      height: fit-content;
+      min-height: fit-content;
+      display: flex;
+      flex-wrap: wrap;
+
+      .inputBox {
+        width: 90%;
+        height: fit-content;
+        min-height: fit-content;
+        margin: 25px auto 0 auto;
+
+        &:nth-of-type(1) {
+          margin: 10px auto 0 auto;
+        }
+
+        &:nth-last-of-type(1) {
+          margin-bottom: 20px;
+        }
+
+        label {
+          color: $defaultColor;
+        }
+
+        * {
+          font-family: mon_bold;
+        }
+
+        input {
+          padding: 13px 0;
+          font-family: mon;
+          font-size: 13px;
+          color: white;
+        }
+
+        .icon_ {
+          color: $defaultColor;
+        }
+      }
+
+      .btn {
+        width: 45%;
+        height: 50px;
+        margin: 15px auto 0 auto;
+        font-family: mon_bold;
+
+        * {
+          font-family: mon_bold;
+          font-size: 13px;
+        }
+
+        &:nth-of-type(1) {
+          background-color: #231f1f;
+          color: white;
+        }
+
+        &:nth-of-type(2) {
+          background-color: $defaultColor;
+          color: white;
+        }
+
+        a {
+          width: 100%;
+          height: 100%;
+          justify-content: center;
+          align-items: center;
+          color: currentColor;
+        }
+      }
+
+      .link {
+        width: 100%;
+        display: inline-flex;
+        justify-content: center;
+        margin: 20px 0 0 0;
+        flex-wrap: wrap;
+        color: #a5a5a5;
+
+        a {
+          font-family: mon_bold;
+          color: $defaultColor;
+          margin: 0 5px;
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}

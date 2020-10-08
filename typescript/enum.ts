@@ -19,6 +19,21 @@ export enum PayType {
   coin,
 }
 
+
+export enum errorclasses {
+  not_found,
+  not_registered,
+  not_valid,
+  okay,
+}
+
+export enum sectionClasses {
+  phone_record,
+  question_confirm,
+  setter_key,
+}
+
+
 export enum NotiErrorType {
   warning,
   error,
