@@ -59,9 +59,9 @@ export default function Login() {
     })
       .then(({ data: { token, isPlayer } }) => {
         localStorage.setItem("game_token", token);
-        localStorage.setItem("logged", isPlayer ? "old" : "new");
+        localStorage.setItem("gamer", isPlayer ? "old" : "new");
         setTimeout(() => {
-          push("/games");
+          push( isPlayer ? "/games": "/launch");
         }, 500);
       })
       .catch((err) => {

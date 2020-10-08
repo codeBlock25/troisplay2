@@ -104,9 +104,9 @@ export default function Index() {
     })
       .then(({ data: { token, isPlayer } }) => {
         localStorage.setItem("game_token", token);
-        localStorage.setItem("logged", isPlayer ? "old" : "new");
+        localStorage.setItem("gamer", isPlayer ? "old" : "new");
         setTimeout(() => {
-          push("/games");
+          push(isPlayer ? "/games" : "/launch");
         }, 500);
       })
       .catch((err) => {
@@ -426,7 +426,7 @@ export default function Index() {
               <span
                 className="pic"
                 role="img"
-                style={{ backgroundImage: "url(/images/guess-master.png)" }}
+                style={{ backgroundImage: "url(/images/lucky-geoge.png)" }}
               />
               <span className="name">Lucky Geoge</span>
               <p className="txt">
@@ -438,7 +438,7 @@ export default function Index() {
               <span
                 className="pic"
                 role="img"
-                style={{ backgroundImage: "url(/images/guess-master.png)" }}
+                style={{ backgroundImage: "url(/images/custom.png)" }}
               />
               <span className="name">Room Games</span>
               <p className="txt">

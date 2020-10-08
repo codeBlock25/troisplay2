@@ -1,0 +1,226 @@
+@import "./variable.scss";
+
+
+.Setup {
+    width: 100vw;
+    background-color: #1f1f1f;
+    height: 100vh;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    overflow-y: auto;
+    padding-top: 100px;
+
+    &::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        background-image: url(/images/pic3.jpeg);
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        opacity: 0.1;
+    }
+
+    header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 80px;
+        padding-top: 25px;
+        padding-bottom: 5px;
+        display: flex;
+        z-index: 2000;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba($color: #000000, $alpha: 0.2);
+
+        .title {
+            width: 280px;
+            height: 100%;
+            display: flex;
+            line-height: 55px;
+            font-family: mon_bold;
+            color: white;
+
+            &::before {
+                content: "";
+                width: 120px;
+                height: 100%;
+                background-image: url(/images/logo_full2.png);
+                background-position: center;
+                background-size: contain;
+                background-repeat: no-repeat;
+                margin-right: 10px;
+            }
+        }
+    }
+
+    .first {
+        width: 90%;
+        height: fit-content;
+        min-height: fit-content;
+        padding-top: 270px;
+        display: flex;
+        flex-direction: column;
+        border-radius: 10px 10px 0 0;
+        align-self: center;
+
+        form {
+            width: 50%;
+            height: fit-content;
+            min-height: fit-content;
+            display: flex;
+            flex-direction: column;
+            min-width: 300px;
+            max-width: 450px;
+            align-self: center;
+            padding-bottom: 100px;
+
+            .image_picker {
+                position: absolute;
+                top: -240px;
+                width: 100%;
+                height: fit-content;
+                min-height: fit-content;
+                display: flex;
+                flex-direction: column;
+
+                .image_picker_view {
+                    width: 170px;
+                    height: 170px;
+                    margin: 0 auto;
+                    background-position: center;
+                    background-size: cover;
+                    justify-content: center;
+                    display: flex;
+                    border-radius: 50%;
+                    background-color: #ededed;
+                    overflow: hidden;
+
+                    svg {
+                        width: 80px;
+                        height: 80px;
+                        display: flex;
+                        align-self: center;
+                        fill: $defaultColor;
+                    }
+                }
+
+                .image_picker_input {
+                    position: absolute;
+                    opacity: 0;
+                }
+
+                .image_picker_btn {
+                    width: 170px;
+                    height: 40px;
+                    background-color: #404040;
+                    color: white;
+                    font-size: 12px;
+                    margin: 10px auto 5px auto;
+
+                    &:hover {
+                        background-color: #585858;
+                    }
+
+                    .image_picker_label {
+                        width: 100%;
+                        height: 100%;
+                        display: flex;
+                        justify-content: center;
+                        text-align: center;
+                        line-height: 30px;
+                        font-family: mon_bold;
+                    }
+                }
+            }
+
+            .inputBox {
+                margin-top: 20px;
+
+                label {
+                    font-family: mon_bold;
+                }
+
+                input,
+                textarea {
+                    padding-left: 10px;
+                }
+
+                &.dark-mode {
+                    label {
+                        color: white;
+                    }
+
+                    .icon_,
+                    input,
+                    textarea {
+                        color: white;
+                    }
+
+                }
+
+                &.light-mode {
+                    label {
+                        color: black;
+                    }
+
+                    .icon_,
+                    input,
+                    textarea {
+                        color: #303030;
+                    }
+                }
+
+                fieldset {
+                    border: 1px $defaultColor solid;
+                }
+            }
+
+            .policy {
+                width: 100%;
+                height: fit-content;
+                margin: 10px 0;
+
+                .MuiCheckbox-root {
+                    color: $defaultColor !important;
+                }
+
+                * {
+                    font-family: mon;
+                }
+
+                &.dark-mode {
+                    color: white;
+
+                }
+
+                &.light-mode {
+                    color: black;
+                }
+            }
+
+            .btn_ {
+                width: 50%;
+                min-width: 280px;
+                max-width: 350px;
+                height: 45px;
+                align-self: center;
+                background-color: $defaultColor;
+                margin-top: 10px;
+                color: white;
+
+                * {
+                    font-family: mon_bold;
+                }
+            }
+        }
+    }
+}
