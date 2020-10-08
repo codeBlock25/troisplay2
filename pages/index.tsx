@@ -213,8 +213,13 @@ export default function Index() {
               setKey(value);
             }}
           />
-          {key.length !== 6 && (
-            <p className="error">Betting key should 6 digits long.</p>
+
+          {!/^[0-9]*$/g.test(key) ? (
+            <p className="error">Betting must be a number.</p>
+          ) : (
+            key.length !== 6 && (
+              <p className="error">Betting key should 6 digits long.</p>
+            )
           )}
           <button type="submit" className="submit_btn">
             {loading ? <MoonLoader size="20px" color="white" /> : "login"}
