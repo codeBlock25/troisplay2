@@ -1,0 +1,49 @@
+.AppLoader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    background-color: #101010;
+    justify-content: center;
+    align-items: center;
+
+    .container {
+        width: 290px;
+        height: fit-content;
+        min-height: fit-content;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        .logo {
+            width: 200px;
+            height: 60px;
+            display: flex;
+            background-image: url(/images/logo_full2.png);
+            background-position: center;
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+
+        .txt {
+            width: 100%;
+            height: fit-content;
+            min-height: fit-content;
+            flex-wrap: wrap;
+            display: flex;
+            padding: 0 10px;
+            font-size: 16px;
+            font-family: mon_med;
+            justify-content: center;
+            text-align: center;
+            color: white;
+        }
+
+        .loader {
+            margin: 20px 0 10px 0;
+        }
+    }
+}
