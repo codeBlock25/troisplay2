@@ -638,6 +638,7 @@ const defaults: AxiosResponse<{
                         ? "Guess Master"
                         : ""
                     }
+                    key={game._id}
                     date={game.date}
                     id={game._id}
                     cash={game.price_in_value}

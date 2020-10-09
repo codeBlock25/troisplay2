@@ -1,11 +1,6 @@
 @import "./variable";
 
 .history {
-    * {
-        pointer-events: visible;
-        transform: scale(1);
-    }
-
     .container {
         flex-direction: column;
 

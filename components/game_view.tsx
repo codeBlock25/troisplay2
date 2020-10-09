@@ -46,8 +46,6 @@ const GameView = memo(function ({
       referRating: number;
     };
   }> = useQueryCache().getQueryData("defaults");
-
-  console.log("me");
   return (
     <div className="game_content_view">
       <span className="name">{name}</span>
