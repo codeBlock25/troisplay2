@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { MoonLoader } from "react-spinners";
 import { url } from "../../constant";
 import { CloseIcon, ForwardIcon, GoalPostIcon } from "../../icon";
-import { getToken } from "../../pages/games";
+import { getToken } from "../../functions";
 import {
   exitWin,
   notify, setGameDetails, toast,

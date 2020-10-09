@@ -21,13 +21,13 @@ import {
 } from "../../icon";
 import Lottie from "lottie-web";
 import moment from "moment";
-import { useQuery } from "react-query";
+import { useQuery, useQueryCache } from "react-query";
 import Axios, { AxiosResponse } from "axios";
 import { url, url_media } from "../../constant";
 import { QueryResult } from "react-query";
 import { Games, PayType, PlayerType, Viewing } from "../../typescript/enum";
 import next, { GetStaticProps, GetStaticPropsContext } from "next";
-import { getPrice, isPlayable } from "../../functions";
+import { getPrice, isPlayable, getToken } from "../../functions";
 import { MoonLoader } from "react-spinners";
 import Notification from "../../components/notification";
 import Roshambo from "../../components/games/roshambo";
@@ -39,17 +39,9 @@ import AppLoader from "../../components/app_loader";
 import { useRouter } from "next/router";
 import GameView from "../../components/game_view";
 import Exitwindow from "../../components/exitwindow";
+import Header from "../../components/header";
+import {nextType} from "../../typescript/enum"
 
-export function getToken(): string {
-  const token = window.localStorage.getItem("game_token");
-  return token;
-}
-
-export enum nextType {
-  player,
-  price,
-  exit,
-}
 
 export default function GamesScreen() {
   const dispatch = useDispatch();
@@ -114,14 +106,47 @@ export default function GamesScreen() {
       clearInterval(timecount);
     };
   }, []);
-  const {
-    data: record,
-    isLoading,
-    isError,
-    isSuccess,
-    isFetchedAfterMount,
-    status,
-  }: QueryResult<AxiosResponse<{
+  const my_games: AxiosResponse<{
+    games: {
+      date: Date;
+      gameDetail: string;
+      gameID: Games;
+      gameMemberCount: number;
+      gameType: Games;
+      members: string[];
+      playCount: number;
+      price_in_coin: number;
+      price_in_value: number;
+      _id: string;
+    }[];
+  }> = useQueryCache().getQueryData("my_games");
+const defaults: AxiosResponse<{
+  default: {
+    commission_roshambo: {
+      value: number;
+      value_in: "$" | "%" | "c";
+    };
+    commission_penalty: {
+      value: number;
+      value_in: "$" | "%" | "c";
+    };
+    commission_guess_mater: {
+      value: number;
+      value_in: "$" | "%" | "c";
+    };
+    commission_custom_game: {
+      value: number;
+      value_in: "$" | "%" | "c";
+    };
+    cashRating: number;
+    min_stack_roshambo: number;
+    min_stack_penalty: number;
+    min_stack_guess_master: number;
+    min_stack_custom: number;
+    referRating: number;
+  };
+}> = useQueryCache().getQueryData("defaults");
+  const record: AxiosResponse<{
     player: {
       userID: string;
       full_name: string;
@@ -163,94 +188,7 @@ export default function GamesScreen() {
       currentCash: number;
       pendingCash: number;
     };
-  }>> = useQuery("records", async () => {
-    let token = getToken();
-    return await Axios({
-      method: "GET",
-      url: `${url}/player/record`,
-      headers: {
-        authorization: `Bearer ${token}`,
-      },
-    });
-  });
-  const checker = useCallback(() => {
-    if (isError) {
-      setRunText(
-        "Couldn't connect to troisplay game server... Try login again."
-      );
-      setTimeout(() => {
-        push("/login");
-      }, 4000);
-      return;
-    }
-    if (isLoading && !isFetchedAfterMount) {
-      setRunText("loading game components...");
-      setApp_loading(true);
-      return;
-    }
-    if (isSuccess) {
-      setApp_loading(false);
-    }
-  }, [isError, isLoading, isSuccess]);
-
-  useEffect(() => {
-    checker();
-  }, [checker]);
-
-  const {
-    data: defaults,
-  }: QueryResult<AxiosResponse<{
-    default: {
-      commission_roshambo: {
-        value: number;
-        value_in: "$" | "%" | "c";
-      };
-      commission_penalty: {
-        value: number;
-        value_in: "$" | "%" | "c";
-      };
-      commission_guess_mater: {
-        value: number;
-        value_in: "$" | "%" | "c";
-      };
-      commission_custom_game: {
-        value: number;
-        value_in: "$" | "%" | "c";
-      };
-      cashRating: number;
-      min_stack_roshambo: number;
-      min_stack_penalty: number;
-      min_stack_guess_master: number;
-      min_stack_custom: number;
-      referRating: number;
-    };
-  }>> = useQuery("defaults", async () => {
-    return await Axios({
-      method: "GET",
-      url: `${url}/default`,
-    });
-  });
-  const {
-    data: my_games,
-  }: QueryResult<AxiosResponse<{
-    games: {
-      date: Date;
-      gameDetail: string;
-      gameID: Games;
-      gameMemberCount: number;
-      gameType: Games;
-      members: string[];
-      playCount: number;
-      price_in_coin: number;
-      price_in_value: number;
-      _id: string;
-    }[];
-  }>> = useQuery("my_games", async () => {
-    let token = getToken();
-    return await Axios.get(`${url}/games/mine`, {
-      headers: { authorization: `Bearer ${token}` },
-    });
-  });
+  }> = useQueryCache().getQueryData("records");
   return (
     <>
       <Head>
@@ -266,75 +204,8 @@ export default function GamesScreen() {
       <Exitwindow />
       <Notification />
       <ToastContainer />
-      <header className="game_header">
-        <section className="top">
-          <div className="theme_action">
-            <span className="dark" title="Dark Theme">
-              <DarkIcon />
-            </span>
-            <span className="light" title="Light Theme">
-              <LightIcon />
-            </span>
-          </div>
-          <div className="links">
-            <span className="link">Games</span>
-            <span className="link">Get Coin</span>
-            <span className="link">Game Tutorials</span>
-          </div>
-          <div className="social">
-            <a
-              href="https://troisplay2.vercel.app"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="sc"
-            >
-              <InternetIcon />
-            </a>
-            <a
-              href="https://fb.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="sc"
-            >
-              <FacebookIcon />
-            </a>
-            <a
-              href="https://instagram.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="sc"
-            >
-              <InstagramIcon />
-            </a>
-            <a
-              href="http://twitter.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="sc"
-            >
-              <TwitterIcon />
-            </a>
-          </div>
-        </section>
-        <section className="bottom">
-          <span
-            className="me_pic"
-            title="Account"
-            style={{
-              backgroundImage: `url(${url_media}${record?.data?.player?.playerpic})`,
-            }}
-          />
-          <span className="logo" />
-          <div className="macTxt">
-            <h3>Play - Win - Share.</h3>
-          </div>
-          <div className="action">
-            <span>history</span>
-            <span>log out</span>
-          </div>
-        </section>
-      </header>
-      <div
+      <Header setApp_loading={setApp_loading} setRunText={setRunText} />
+     <div
         className={`game_picker_view ${spec.isOpen ? "open" : ""}`}
         onClick={(e: any) => {
           if (!e.target?.classList?.contains("game_picker_view")) {

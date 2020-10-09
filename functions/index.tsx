@@ -1,8 +1,13 @@
 import Axios, { AxiosResponse } from "axios";
 import { url } from "../constant";
-import { nextType } from "../pages/games";
 import { setGameDetails } from "../store/action";
-import { Games, PayType, PlayerType, errorType } from "../typescript/enum";
+import {
+  Games,
+  PayType,
+  PlayerType,
+  errorType,
+  nextType,
+} from "../typescript/enum";
 import { ActionType } from "../typescript/interface";
 
 export function getPrice(
@@ -194,4 +199,9 @@ export async function isPlayable(
     .finally(() => {
       setLoader(false);
     });
+}
+
+export function getToken(): string {
+  const token = window.localStorage.getItem("game_token");
+  return token;
 }

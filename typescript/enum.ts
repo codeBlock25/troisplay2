@@ -14,6 +14,12 @@ export enum Viewing {
   lucky_geoge,
 }
 
+export enum nextType {
+  player,
+  price,
+  exit,
+}
+
 export enum PayType {
   cash,
   coin,

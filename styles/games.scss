@@ -218,7 +218,7 @@
                 width: 130px;
             }
 
-            span {
+            .btn {
                 width: calc(100% / 2);
                 height: 100%;
                 display: flex;
@@ -720,7 +720,8 @@
     }
 }
 
-.games_world_ {
+.games_world_,
+.history {
     width: 100vw;
     height: 100vh;
     min-height: fit-content;

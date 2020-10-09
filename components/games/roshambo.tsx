@@ -24,7 +24,7 @@ import {
   RoshamboOption,
 } from "../../typescript/enum";
 import { ActionType, reducerType } from "../../typescript/interface";
-import { getToken } from "../../pages/games";
+import { getToken } from "../../functions";
 
 export default function Roshambo() {
   const dispatch: (t: ActionType) => void = useDispatch();

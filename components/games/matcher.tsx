@@ -10,7 +10,7 @@ import { isEmpty } from "lodash";
 import { MoonLoader } from "react-spinners";
 import { Games, PlayerType } from "../../typescript/enum";
 import { reducerType } from "../../typescript/interface";
-import { getToken } from "../../pages/games";
+import { getToken } from "../../functions";
 import { CloseIcon } from "../../icon";
 
 export default function Matcher() {

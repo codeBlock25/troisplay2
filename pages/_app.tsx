@@ -8,6 +8,7 @@ import "../styles/apploading.scss";
 import "../styles/forgot.scss";
 import "../styles/launch.scss";
 import "../styles/exit.scss";
+import "../styles/history.scss";
 import "../styles/toast.scss";
 import { Provider as ReduxProvider } from "react-redux";
 import { AppProps } from "next/app";
