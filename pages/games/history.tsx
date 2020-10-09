@@ -307,7 +307,14 @@ const columns: ColDef[] = [
                   {record?.data?.wallet?.currentCoin.toLocaleString() ?? 0}
                 </span>
                 <div className="action">
-                  <span className="btn">get more</span>
+                  <span
+                    className="btn"
+                    onClick={() => {
+                      push("/games/get-coin");
+                    }}
+                  >
+                    get more
+                  </span>
                   <span className="btn">glory spin</span>
                 </div>
               </InView>

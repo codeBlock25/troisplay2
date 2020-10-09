@@ -205,7 +205,7 @@ const defaults: AxiosResponse<{
       <Notification />
       <ToastContainer />
       <Header setApp_loading={setApp_loading} setRunText={setRunText} />
-     <div
+      <div
         className={`game_picker_view ${spec.isOpen ? "open" : ""}`}
         onClick={(e: any) => {
           if (!e.target?.classList?.contains("game_picker_view")) {
@@ -558,7 +558,14 @@ const defaults: AxiosResponse<{
                   {record?.data?.wallet?.currentCoin.toLocaleString() ?? 0}
                 </span>
                 <div className="action">
-                  <span className="btn">get more</span>
+                  <span
+                    className="btn"
+                    onClick={() => {
+                      push("/games/get-coin");
+                    }}
+                  >
+                    get more
+                  </span>
                   <span className="btn">glory spin</span>
                 </div>
               </InView>

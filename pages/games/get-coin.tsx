@@ -142,7 +142,7 @@ export default function GetterScreen() {
     };
   }> = useQueryCache().getQueryData("records");
 
-  const data: {rows: any[], column: ColDef[]} = {
+  const data: { rows: any[]; column: ColDef[] } = {
     rows: [
       {
         id: 0,
@@ -152,6 +152,38 @@ export default function GetterScreen() {
         progress: 40,
         action: true,
       },
+      {
+        id: 1,
+        sn: 2,
+        name: "Glory Spin",
+        canGet: true,
+        progress: 40,
+        action: true,
+      },
+      {
+        id: 2,
+        sn: 3,
+        name: "Give Away",
+        canGet: false,
+        progress: 0,
+        action: true,
+      },
+      {
+        id: 3,
+        sn: 4,
+        name: "Daily Gain",
+        canGet: false,
+        progress: 40,
+        action: true,
+      },
+      {
+        id: 4,
+        sn: 5,
+        name: "Play Video",
+        canGet: false,
+        progress: 0,
+        action: true,
+      },
     ],
     column: [
       { field: "sn", headerName: "S/N", width: 70, sortable: true },
@@ -159,34 +191,36 @@ export default function GetterScreen() {
         field: "name",
         headerName: "Method",
         width: 140,
-        description: "The date the game was concluded",
+        description: "The method to get coin",
         sortable: true,
       },
       {
         field: "canGet",
         headerName: "Claimable",
         width: 130,
-        description: "The game you played",
+        description: "status check if the offered price can be collected now.",
         sortable: false,
         renderCell: ({ value }) => {
-          let val = value as unknown as boolean
-          return <span className={`viewer_status ${val? "yes":"no"} `}>
-            {!val ? <CloseViewIcon /> : <OpenViewIcon/>} {val? "can": "can't"}
-          </span>
-        }
+          let val = (value as unknown) as boolean;
+          return (
+            <span className={`viewer_status ${val ? "yes" : "no"} `}>
+              {!val ? <CloseViewIcon /> : <OpenViewIcon />}{" "}
+              {val ? "can" : "can't"}
+            </span>
+          );
+        },
       },
       {
         field: "progress",
         headerName: "Progress",
         width: 130,
-        description: "The result of the game",
+        description: "Progress bar to your next coin collection.",
         sortable: false,
       },
       {
         field: "action",
-        headerName: "Stake",
+        headerName: "collect",
         width: 130,
-        description: "The amount that was gained or lost",
       },
     ],
   };
@@ -293,7 +327,7 @@ export default function GetterScreen() {
               <DataGrid
                 rows={data.rows}
                 columns={data.column}
-                pageSize={8}
+                pageSize={5}
                 disableMultipleSelection
                 checkboxSelection={false}
               />
