@@ -31,7 +31,7 @@ export default function GamesScreen() {
   const [dateintime, setDateintime] = useState("");
   const [app_loading, setApp_loading] = useState<boolean>(true);
   const [gameViewOpen, setViewOpen] = useState<boolean>(false);
-  const swRef: MutableRefObject<HTMLDivElement | null> = useRef();
+  const swRef1: MutableRefObject<HTMLDivElement | null> = useRef();
   const coinRef: MutableRefObject<HTMLSpanElement | null> = useRef();
   const coinRef2: MutableRefObject<HTMLSpanElement | null> = useRef();
   const game_play: MutableRefObject<HTMLSpanElement | null> = useRef();
@@ -261,12 +261,12 @@ const columns: ColDef[] = [
             <span
               className="sw_btn"
               onClick={() => {
-                swRef.current.scrollTo(swRef.current.scrollLeft - 270, 0);
+                swRef1.current.scrollTo(swRef1.current.scrollLeft - 270, 0);
               }}
             >
               <BackIcon />
             </span>
-            <div className="container" ref={swRef}>
+            <div className="container" ref={swRef1}>
               <InView
                 as="div"
                 onChange={(inview, evt) => {
@@ -340,7 +340,7 @@ const columns: ColDef[] = [
             <span
               className="sw_btn"
               onClick={() => {
-                swRef.current.scrollTo(swRef.current.scrollLeft + 270, 0);
+                swRef1.current.scrollTo(swRef1.current.scrollLeft + 270, 0);
               }}
             >
               <NextIcon />

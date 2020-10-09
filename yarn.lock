@@ -1170,6 +1170,23 @@
     prop-types "^15.7.2"
     react-is "^16.8.0"
 
+"@material-ui/x-grid@^4.0.0-alpha.6":
+  version "4.0.0-alpha.6"
+  resolved "https://registry.yarnpkg.com/@material-ui/x-grid/-/x-grid-4.0.0-alpha.6.tgz#53d2a2f3452588c48dc66e0dca43a799ef74ead6"
+  integrity sha512-E4yCI/ZolmRmgLaLAjOX2JixJhaCeR4gYqvM8K8J0ff8x/z2U/bitp7HaaTjyV3Z64CmcAb4HifDkFOfnBJobw==
+  dependencies:
+    "@material-ui/x-license" "^4.0.0-alpha.6"
+    prop-types "^15.7.2"
+    tslib "^2.0.0"
+
+"@material-ui/x-license@^4.0.0-alpha.6":
+  version "4.0.0-alpha.6"
+  resolved "https://registry.yarnpkg.com/@material-ui/x-license/-/x-license-4.0.0-alpha.6.tgz#c4898efc3ddf3b1cd0767011a9b4332ef93343f1"
+  integrity sha512-AErIo3zLFbSWKPA09qrhaL0fPYIwm8SMuxQ1zbsvsGt9BVxLZCmTdEnCiq3DSpuQjlTfXKmr8/ClZhkhYXZs3w==
+  dependencies:
+    commander "^6.1.0"
+    esm "^3.2.25"
+
 "@next/react-dev-overlay@9.5.3":
   version "9.5.3"
   resolved "https://registry.yarnpkg.com/@next/react-dev-overlay/-/react-dev-overlay-9.5.3.tgz#3275301f08045ecc709e3273031973a1f5e81427"
@@ -2214,6 +2231,11 @@ commander@^2.20.0:
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.20.3.tgz#fd485e84c03eb4881c20722ba48035e8531aeb33"
   integrity sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==
 
+commander@^6.1.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/commander/-/commander-6.1.0.tgz#f8d722b78103141006b66f4c7ba1e97315ba75bc"
+  integrity sha512-wl7PNrYWd2y5mp1OK/LhTlv8Ff4kQJQRXXAvF+uU/TPNiVJUxZLRYGj/B0y/lPGAVcSbJqH2Za/cvHmrPMC8mA==
+
 commondir@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/commondir/-/commondir-1.0.1.tgz#ddd800da0c66127393cca5950ea968a3aaf1253b"
@@ -2821,6 +2843,11 @@ eslint-scope@^4.0.3:
   dependencies:
     esrecurse "^4.1.0"
     estraverse "^4.1.1"
+
+esm@^3.2.25:
+  version "3.2.25"
+  resolved "https://registry.yarnpkg.com/esm/-/esm-3.2.25.tgz#342c18c29d56157688ba5ce31f8431fbb795cc10"
+  integrity sha512-U1suiZ2oDVWv4zPO56S0NcR5QriEahGtdN2OR6FiOG4WJvcjBVFB0qI4+eKoWFH483PKGuLuu6V8Z4T5g63UVA==
 
 esrecurse@^4.1.0:
   version "4.3.0"

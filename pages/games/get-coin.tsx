@@ -20,15 +20,17 @@ import ToastContainer from "../../components/toast";
 import AppLoader from "../../components/app_loader";
 import { useRouter } from "next/router";
 import Header from "../../components/header";
-import { DataGrid, ColDef, ValueGetterParams } from "@material-ui/data-grid";
+import { DataGrid, ColDef, RowProps } from "@material-ui/data-grid";
 import { isArray } from "lodash";
+import {CloseViewIcon,OpenViewIcon} from "../../icon"
 
-export default function GetMoreScreen() {
+
+export default function GetterScreen() {
   const dispatch = useDispatch();
   const [dateintime, setDateintime] = useState("");
   const [app_loading, setApp_loading] = useState<boolean>(true);
   const [gameViewOpen, setViewOpen] = useState<boolean>(false);
-  const swRef: MutableRefObject<HTMLDivElement | null> = useRef();
+  const swRef2: MutableRefObject<HTMLDivElement | null> = useRef();
   const coinRef: MutableRefObject<HTMLSpanElement | null> = useRef();
   const coinRef2: MutableRefObject<HTMLSpanElement | null> = useRef();
   const game_play: MutableRefObject<HTMLSpanElement | null> = useRef();
@@ -140,94 +142,54 @@ export default function GetMoreScreen() {
     };
   }> = useQueryCache().getQueryData("records");
 
-  const columns: ColDef[] = [
-    { field: "sn", headerName: "S/N", width: 70, sortable: true },
-    {
-      field: "date_mark",
-      headerName: "Date",
-      width: 200,
-      type: "date",
-      description: "The date the game was concluded",
-      sortable: true,
-      valueFormatter: ({ value }) => {
-        return moment((value as unknown) as string).format("Do MMMM, YYYY");
+  const data: {rows: any[], column: ColDef[]} = {
+    rows: [
+      {
+        id: 0,
+        sn: 1,
+        name: "Referal",
+        canGet: false,
+        progress: 40,
+        action: true,
       },
-    },
-    {
-      field: "game",
-      headerName: "Game",
-      width: 130,
-      description: "The game you played",
-      sortable: false,
-      type: "number",
-      valueFormatter: ({ value }) => {
-        return ((value as unknown) as Games) === Games.roshambo
-          ? "Roshambo"
-          : ((value as unknown) as Games) === Games.penalth_card
-          ? "Penalty Card"
-          : ((value as unknown) as Games) === Games.matcher
-          ? "Guess Master"
-          : ((value as unknown) as Games) === Games.lucky_geoge
-          ? "Lucky Judge"
-          : ((value as unknown) as Games) === Games.custom_game
-          ? "Custom"
-          : "";
+    ],
+    column: [
+      { field: "sn", headerName: "S/N", width: 70, sortable: true },
+      {
+        field: "name",
+        headerName: "Method",
+        width: 140,
+        description: "The date the game was concluded",
+        sortable: true,
       },
-    },
-    {
-      field: "won",
-      headerName: "Game Result",
-      width: 130,
-      description: "The result of the game",
-      sortable: false,
-      valueFormatter: ({ value }) => {
-        return value === "no" ? "Lost" : value === "yes" ? "Won" : value;
+      {
+        field: "canGet",
+        headerName: "Claimable",
+        width: 130,
+        description: "The game you played",
+        sortable: false,
+        renderCell: ({ value }) => {
+          let val = value as unknown as boolean
+          return <span className={`viewer_status ${val? "yes":"no"} `}>
+            {!val ? <CloseViewIcon /> : <OpenViewIcon/>} {val? "can": "can't"}
+          </span>
+        }
       },
-    },
-    {
-      field: "earnings",
-      headerName: "Stake",
-      width: 130,
-      description: "The amount that was gained or lost",
-      sortable: true,
-      valueFormatter: ({ value }) => {
-        return `$ ${value}`;
+      {
+        field: "progress",
+        headerName: "Progress",
+        width: 130,
+        description: "The result of the game",
+        sortable: false,
       },
-    },
-  ];
-
-  const history: AxiosResponse<{
-    records: {
-      _id: string;
-      userID: string;
-      date_mark: Date;
-      game: Games;
-      won: string;
-      earnings: number;
-    }[];
-  }> = useQueryCache().getQueryData("history");
-  const [row, setRow] = useState<
-    {
-      sn: number;
-      id: string;
-      _id: string;
-      userID: string;
-      date_mark: Date;
-      game: Games;
-      won: string;
-      earnings: number;
-    }[]
-  >([]);
-  useEffect(() => {
-    let r = [];
-    if (isArray(history?.data?.records)) {
-      history.data.records.map((record, index) => {
-        r.push({ ...record, id: record._id, sn: index });
-      });
-      setRow(r);
-      r = [];
-    }
-  }, [history]);
+      {
+        field: "action",
+        headerName: "Stake",
+        width: 130,
+        description: "The amount that was gained or lost",
+      },
+    ],
+  };
   return (
     <>
       <Head>
@@ -250,7 +212,7 @@ export default function GetMoreScreen() {
         games <span className="icon" ref={game_play} />
       </span>
       <section
-        className={gameViewOpen ? "history blur" : "history"}
+        className={gameViewOpen ? "Get_coin blur" : "Get_coin"}
         onClick={() => {
           setViewOpen(false);
         }}
@@ -260,12 +222,12 @@ export default function GetMoreScreen() {
             <span
               className="sw_btn"
               onClick={() => {
-                swRef.current.scrollTo(swRef.current.scrollLeft - 270, 0);
+                swRef2.current.scrollTo(swRef2.current.scrollLeft - 270, 0);
               }}
             >
               <BackIcon />
             </span>
-            <div className="container" ref={swRef}>
+            <div className="container" ref={swRef2}>
               <InView
                 as="div"
                 onChange={(inview, evt) => {
@@ -284,7 +246,6 @@ export default function GetMoreScreen() {
                   {record?.data?.wallet?.currentCoin.toLocaleString() ?? 0}
                 </span>
                 <div className="action">
-                  <span className="btn">get more</span>
                   <span className="btn">glory spin</span>
                 </div>
               </InView>
@@ -308,7 +269,6 @@ export default function GetMoreScreen() {
                     0}
                 </span>
                 <div className="action">
-                  <span className="btn">refer</span>
                   <span className="btn">view referrals</span>
                 </div>
               </InView>
@@ -317,7 +277,7 @@ export default function GetMoreScreen() {
             <span
               className="sw_btn"
               onClick={() => {
-                swRef.current.scrollTo(swRef.current.scrollLeft + 270, 0);
+                swRef2.current.scrollTo(swRef2.current.scrollLeft + 270, 0);
               }}
             >
               <NextIcon />
@@ -331,8 +291,8 @@ export default function GetMoreScreen() {
             </div>
             <div className="history_content">
               <DataGrid
-                rows={row}
-                columns={columns}
+                rows={data.rows}
+                columns={data.column}
                 pageSize={8}
                 disableMultipleSelection
                 checkboxSelection={false}
@@ -344,3 +304,4 @@ export default function GetMoreScreen() {
     </>
   );
 }
+
