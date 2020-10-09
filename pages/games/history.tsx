@@ -18,27 +18,27 @@ import {
   LightIcon,
   NextIcon,
   TwitterIcon,
-} from "../icon";
+} from "../../icon";
 import Lottie from "lottie-web";
 import moment from "moment";
 import { useQuery } from "react-query";
 import Axios, { AxiosResponse } from "axios";
-import { url, url_media } from "../constant";
+import { url, url_media } from "../../constant";
 import { QueryResult } from "react-query";
-import { Games, PayType, PlayerType, Viewing } from "../typescript/enum";
+import { Games, PayType, PlayerType, Viewing } from "../../typescript/enum";
 import next, { GetStaticProps, GetStaticPropsContext } from "next";
-import { getPrice, isPlayable } from "../functions";
+import { getPrice, isPlayable } from "../../functions";
 import { MoonLoader } from "react-spinners";
-import Notification from "../components/notification";
-import Roshambo from "../components/games/roshambo";
-import { setGameDetails } from "../store/action";
+import Notification from "../../components/notification";
+import Roshambo from "../../components/games/roshambo";
+import { setGameDetails } from "../../store/action";
 import { useDispatch } from "react-redux";
-import Penalty_card from "../components/games/penelty_card";
-import ToastContainer from "../components/toast";
-import  AppLoader from "../components/app_loader"
+import Penalty_card from "../../components/games/penelty_card";
+import ToastContainer from "../../components/toast";
+import AppLoader from "../../components/app_loader";
 import { useRouter } from "next/router";
-import GameView from "../components/game_view";
-import Exitwindow from "../components/exitwindow";
+import GameView from "../../components/game_view";
+import Exitwindow from "../../components/exitwindow";
 
 export function getToken(): string {
   const token = window.localStorage.getItem("game_token");
@@ -55,7 +55,7 @@ export default function GamesScreen() {
   const dispatch = useDispatch();
   const [viewing, setViewing] = useState<Viewing>(Viewing.current);
   const [dateintime, setDateintime] = useState("");
-  const [app_loading, setApp_loading] = useState<boolean>(true)
+  const [app_loading, setApp_loading] = useState<boolean>(true);
   const [gameViewOpen, setViewOpen] = useState<boolean>(false);
   const swRef: MutableRefObject<HTMLDivElement | null> = useRef();
   const coinRef: MutableRefObject<HTMLSpanElement | null> = useRef();
@@ -63,8 +63,8 @@ export default function GamesScreen() {
   const game_play: MutableRefObject<HTMLSpanElement | null> = useRef();
   const [playLoader, setPlayerLoader] = useState<boolean>(false);
   const [game_loading, setgameLoading] = useState<boolean>(false);
-  const [runText, setRunText] = useState("loading game components...")
- const {push} = useRouter()
+  const [runText, setRunText] = useState("loading game components...");
+  const { push } = useRouter();
   const [spec, setSpec] = useState<{
     isOpen: boolean;
     manual: string;
@@ -80,27 +80,27 @@ export default function GamesScreen() {
   });
 
   const lottieLoader = useCallback(() => {
-      Lottie.loadAnimation({
-        container: coinRef.current,
-          autoplay: true,
-          loop: true,
-          renderer: "canvas",
-          animationData: require("../lottie/coin.json"),
-        });
-        Lottie.loadAnimation({
-          container: coinRef2.current,
-          autoplay: true,
-          loop: true,
-          renderer: "canvas",
-          animationData: require("../lottie/coin.json"),
-        });
-        Lottie.loadAnimation({
-          container: game_play.current,
-          autoplay: true,
-          loop: true,
-          renderer: "canvas",
-          animationData: require("../lottie/game_play.json"),
-        });
+    Lottie.loadAnimation({
+      container: coinRef.current,
+      autoplay: true,
+      loop: true,
+      renderer: "canvas",
+      animationData: require("../../lottie/coin.json"),
+    });
+    Lottie.loadAnimation({
+      container: coinRef2.current,
+      autoplay: true,
+      loop: true,
+      renderer: "canvas",
+      animationData: require("../../lottie/coin.json"),
+    });
+    Lottie.loadAnimation({
+      container: game_play.current,
+      autoplay: true,
+      loop: true,
+      renderer: "canvas",
+      animationData: require("../../lottie/game_play.json"),
+    });
   }, []);
   useEffect(() => {
     lottieLoader();
@@ -120,7 +120,7 @@ export default function GamesScreen() {
     isError,
     isSuccess,
     isFetchedAfterMount,
-    status
+    status,
   }: QueryResult<AxiosResponse<{
     player: {
       userID: string;
@@ -175,25 +175,27 @@ export default function GamesScreen() {
   });
   const checker = useCallback(() => {
     if (isError) {
-      setRunText("Couldn't connect to troisplay game server... Try login again.")
+      setRunText(
+        "Couldn't connect to troisplay game server... Try login again."
+      );
       setTimeout(() => {
-        push("/login")
+        push("/login");
       }, 4000);
-      return
+      return;
     }
     if (isLoading && !isFetchedAfterMount) {
       setRunText("loading game components...");
-      setApp_loading(true)
-   return
+      setApp_loading(true);
+      return;
     }
     if (isSuccess) {
-      setApp_loading(false)
+      setApp_loading(false);
     }
-}, [isError, isLoading, isSuccess])
+  }, [isError, isLoading, isSuccess]);
 
   useEffect(() => {
-    checker()
-  }, [checker])
+    checker();
+  }, [checker]);
 
   const {
     data: defaults,
@@ -489,143 +491,147 @@ export default function GamesScreen() {
         play game <span className="icon" ref={game_play} />
       </span>
       <div className={`games_view ${gameViewOpen && "open"}`}>
-        <div
-          className="game"
-          onClick={() => {
-            setViewOpen(false);
-            setSpec({
-              isOpen: true,
-              manual:
-                "A player who decides to play rock will beat another player who has chosen scissors (rock crushes scissors), but will lose to one who has played paper (paper covers rock); a play of paper will lose to a play of scissors (scissors cuts paper). If both players choose the same shape, the game is tied and is usually immediately replayed to break the tie.",
-              price: 0,
-              game: Games.roshambo,
-            });
-          }}
-        >
+        <div className="container">
           <div
-            className="img"
-            style={{ backgroundImage: `url(/images/roshambo.png)` }}
-          />
-          <div className="details">
-            <span className="name">Roshambo</span>
-            <span className="info">
-              <b>min stake:</b> $10
-            </span>
-            <span className="info">
-              <b>rating:</b> %90
-            </span>
+            className="game"
+            onClick={() => {
+              setViewOpen(false);
+              setSpec({
+                isOpen: true,
+                manual:
+                  "A player who decides to play rock will beat another player who has chosen scissors (rock crushes scissors), but will lose to one who has played paper (paper covers rock); a play of paper will lose to a play of scissors (scissors cuts paper). If both players choose the same shape, the game is tied and is usually immediately replayed to break the tie.",
+                price: 0,
+                game: Games.roshambo,
+              });
+            }}
+          >
+            <div
+              className="img"
+              style={{ backgroundImage: `url(/images/roshambo.png)` }}
+            />
+            <div className="details">
+              <span className="name">Roshambo</span>
+              <span className="info">
+                <b>min stake:</b> $10
+              </span>
+              <span className="info">
+                <b>rating:</b> %90
+              </span>
+            </div>
           </div>
-        </div>
-        <div
-          className="game"
-          onClick={() => {
-            setViewOpen(false);
-            setSpec({
-              isOpen: true,
-              manual:
-                "Just as penalty in the game of soccer, involves the taker and goal keeper. Taker aim is to score (choose opposite direction as the goal keeper) while the goal keeper is the catch the ball (go same direction as the taker).",
-              price: 0,
-              game: Games.penalth_card,
-            });
-          }}
-        >
           <div
-            className="img"
-            style={{ backgroundImage: `url(/images/penatly-shot.png)` }}
-          />
-          <div className="details">
-            <span className="name">Penalty Card</span>
-            <span className="info">
-              <b>min stake:</b> $10
-            </span>
-            <span className="info">
-              <b>rating:</b> %90
-            </span>
+            className="game"
+            onClick={() => {
+              setViewOpen(false);
+              setSpec({
+                isOpen: true,
+                manual:
+                  "Just as penalty in the game of soccer, involves the taker and goal keeper. Taker aim is to score (choose opposite direction as the goal keeper) while the goal keeper is the catch the ball (go same direction as the taker).",
+                price: 0,
+                game: Games.penalth_card,
+              });
+            }}
+          >
+            <div
+              className="img"
+              style={{ backgroundImage: `url(/images/penatly-shot.png)` }}
+            />
+            <div className="details">
+              <span className="name">Penalty Card</span>
+              <span className="info">
+                <b>min stake:</b> $10
+              </span>
+              <span className="info">
+                <b>rating:</b> %90
+              </span>
+            </div>
           </div>
-        </div>
-        <div
-          className="game"
-          onClick={() => {
-            setViewOpen(false);
-            setSpec({
-              isOpen: true,
-              manual:
-                "Player two has three chances to guess the number player 1 choose from number one to seven.",
-              price: 0,
-              game: Games.matcher,
-            });
-          }}
-        >
           <div
-            className="img"
-            style={{ backgroundImage: `url(/images/guess-master.png)` }}
-          />
-          <div className="details">
-            <span className="name">Guess Master</span>
-            <span className="info">
-              <b>min stake:</b> $10
-            </span>
-            <span className="info">
-              <b>rating:</b> %90
-            </span>
+            className="game"
+            onClick={() => {
+              setViewOpen(false);
+              setSpec({
+                isOpen: true,
+                manual:
+                  "Player two has three chances to guess the number player 1 choose from number one to seven.",
+                price: 0,
+                game: Games.matcher,
+              });
+            }}
+          >
+            <div
+              className="img"
+              style={{ backgroundImage: `url(/images/guess-master.png)` }}
+            />
+            <div className="details">
+              <span className="name">Guess Master</span>
+              <span className="info">
+                <b>min stake:</b> $10
+              </span>
+              <span className="info">
+                <b>rating:</b> %90
+              </span>
+            </div>
           </div>
-        </div>
-        <div
-          className="game"
-          onClick={() => {
-            setViewOpen(false);
-            setSpec({
-              isOpen: true,
-              manual:
-                "Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita in quidem natus, consectetur quia pariatur! Rem dolores maxime adipisci. Tempora earum, officia natus temporibus sit voluptas hic corrupti. Dolor, tempora.",
-              price: 0,
-              game: Games.custom_game,
-            });
-          }}
-        >
           <div
-            className="img"
-            style={{ backgroundImage: `url(/images/custom.png)` }}
-          />
-          <div className="details">
-            <span className="name">Custom Games</span>
-            <span className="info">
-              <b>min stake:</b> $10
-            </span>
-            <span className="info">
-              <b>rating:</b> %90
-            </span>
+            className="game"
+            onClick={() => {
+              setViewOpen(false);
+              setSpec({
+                isOpen: true,
+                manual:
+                  "Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita in quidem natus, consectetur quia pariatur! Rem dolores maxime adipisci. Tempora earum, officia natus temporibus sit voluptas hic corrupti. Dolor, tempora.",
+                price: 0,
+                game: Games.custom_game,
+              });
+            }}
+          >
+            <div
+              className="img"
+              style={{ backgroundImage: `url(/images/custom.png)` }}
+            />
+            <div className="details">
+              <span className="name">Custom Games</span>
+              <span className="info">
+                <b>min stake:</b> $10
+              </span>
+              <span className="info">
+                <b>rating:</b> %90
+              </span>
+            </div>
           </div>
-        </div>
-        <div
-          className="game"
-          onClick={() => {
-            setSpec({
-              isOpen: true,
-              manual: "",
-              price: 0,
-              game: Games.lucky_geoge,
-            });
-          }}
-        >
           <div
-            className="img"
-            style={{ backgroundImage: `url(/images/lucky-geoge.png)` }}
-          />
-          <div className="details">
-            <span className="name">Lucky Geoge</span>
-            <span className="info">
-              <b>min stake:</b> $10
-            </span>
-            <span className="info">
-              <b>rating:</b> %90
-            </span>
+            className="game"
+            onClick={() => {
+              setSpec({
+                isOpen: true,
+                manual: "",
+                price: 0,
+                game: Games.lucky_geoge,
+              });
+            }}
+          >
+            <div
+              className="img"
+              style={{ backgroundImage: `url(/images/lucky-geoge.png)` }}
+            />
+            <div className="details">
+              <span className="name">Lucky Geoge</span>
+              <span className="info">
+                <b>min stake:</b> $10
+              </span>
+              <span className="info">
+                <b>rating:</b> %90
+              </span>
+            </div>
           </div>
         </div>
       </div>
 
       <section
-        className="games_world_"
+        className={
+          gameViewOpen || spec.isOpen ? "games_world_ blur" : "games_world_"
+        }
         onClick={() => {
           setViewOpen(false);
         }}
