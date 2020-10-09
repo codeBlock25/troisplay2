@@ -227,7 +227,9 @@ const HeadFunc = memo(function ({
             backgroundImage: `url(${url_media}${record?.data?.player?.playerpic})`,
           }}
         />
-        <span className="logo" />
+        <Link href="/games">
+          <a className="logo" />
+        </Link>
         <div className="macTxt">
           <h3>Play - Win - Share.</h3>
         </div>

@@ -26,7 +26,7 @@ import Header from "../../components/header";
 import { DataGrid, ColDef, ValueGetterParams } from "@material-ui/data-grid";
 import {isArray} from "lodash"
 
-export default function GamesScreen() {
+export default function HistoryScreen() {
   const dispatch = useDispatch();
   const [dateintime, setDateintime] = useState("");
   const [app_loading, setApp_loading] = useState<boolean>(true);
@@ -142,66 +142,66 @@ export default function GamesScreen() {
       pendingCash: number;
     };
   }> = useQueryCache().getQueryData("records");
-  
-const columns: ColDef[] = [
-  { field: "sn", headerName: "S/N", width: 70, sortable: true },
-  {
-    field: "date_mark",
-    headerName: "Date",
-    width: 200,
-    type: "date",
-    description: "The date the game was concluded",
-    sortable: true,
-    valueFormatter: ({value}) => {
-      return moment(value as unknown as string).format("Do MMMM, YYYY")
-    }
-  },
-  {
-    field: "game",
-    headerName: "Game",
-    width: 130,
-    description: "The game you played",
-    sortable: false,
-    type: "number",
-    valueFormatter: ({value}) => {
-      return ((value as unknown) as Games) === Games.roshambo
-        ? "Roshambo"
-        : ((value as unknown) as Games) === Games.penalth_card
-        ? "Penalty Card"
-        : ((value as unknown) as Games) === Games.matcher
-        ? "Guess Master"
-        : ((value as unknown) as Games) === Games.lucky_geoge
-        ? "Lucky Judge"
-        : ((value as unknown) as Games) === Games.custom_game
-        ? "Custom"
-        : "";
-    }
-  },
-  {
-    field: "won",
-    headerName: "Game Result",
-    width: 130,
-    description: "The result of the game",
-    sortable: false,
-      valueFormatter: ({value})=> {
-    return value === "no"?"Lost": value==="yes"?"Won": value
-    }
-  },
-  {
-    field: "earnings",
-    headerName: "Stake",
-    width: 130,
-    description: "The amount that was gained or lost",
-    sortable: true,
-    valueFormatter: ({value}) => {
-      return `$ ${value}`
-    }
-  },
-];
+
+  const columns: ColDef[] = [
+    { field: "sn", headerName: "S/N", width: 70, sortable: true },
+    {
+      field: "date_mark",
+      headerName: "Date",
+      width: 200,
+      type: "date",
+      description: "The date the game was concluded",
+      sortable: true,
+      valueFormatter: ({ value }) => {
+        return moment((value as unknown) as string).format("Do MMMM, YYYY");
+      },
+    },
+    {
+      field: "game",
+      headerName: "Game",
+      width: 130,
+      description: "The game you played",
+      sortable: false,
+      type: "number",
+      valueFormatter: ({ value }) => {
+        return ((value as unknown) as Games) === Games.roshambo
+          ? "Roshambo"
+          : ((value as unknown) as Games) === Games.penalth_card
+          ? "Penalty Card"
+          : ((value as unknown) as Games) === Games.matcher
+          ? "Guess Master"
+          : ((value as unknown) as Games) === Games.lucky_geoge
+          ? "Lucky Judge"
+          : ((value as unknown) as Games) === Games.custom_game
+          ? "Custom"
+          : "";
+      },
+    },
+    {
+      field: "won",
+      headerName: "Game Result",
+      width: 130,
+      description: "The result of the game",
+      sortable: false,
+      valueFormatter: ({ value }) => {
+        return value === "no" ? "Lost" : value === "yes" ? "Won" : value;
+      },
+    },
+    {
+      field: "earnings",
+      headerName: "Stake",
+      width: 130,
+      description: "The amount that was gained or lost",
+      sortable: true,
+      valueFormatter: ({ value }) => {
+        return `$ ${value}`;
+      },
+    },
+  ];
 
   const history: AxiosResponse<{
     records: {
-      _id: string
+      _id: string;
       userID: string;
       date_mark: Date;
       game: Games;
@@ -209,26 +209,28 @@ const columns: ColDef[] = [
       earnings: number;
     }[];
   }> = useQueryCache().getQueryData("history");
-  const [row, setRow] = useState<{
-  sn: number
-      id: string
-      _id: string
+  const [row, setRow] = useState<
+    {
+      sn: number;
+      id: string;
+      _id: string;
       userID: string;
       date_mark: Date;
       game: Games;
       won: string;
-  earnings: number;
-      }[]> ([]) 
+      earnings: number;
+    }[]
+  >([]);
   useEffect(() => {
-    let r = []
+    let r = [];
     if (isArray(history?.data?.records)) {
       history.data.records.map((record, index) => {
-        r.push({...record, id: record._id, sn:index })
-      })
-      setRow(r)
-      r = []
+        r.push({ ...record, id: record._id, sn: index });
+      });
+      setRow(r);
+      r = [];
     }
-  },[history])
+  }, [history]);
   return (
     <>
       <Head>
