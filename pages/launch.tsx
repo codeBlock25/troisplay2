@@ -23,7 +23,7 @@ import { url } from "../constant";
 import { ScaleLoader } from "react-spinners";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
-import { getToken } from "./games";
+import { getToken } from "../functions";
 import { toast } from "../store/action";
 import { modalType } from "../typescript/enum";
 import AppLoader from "../components/app_loader";
@@ -89,7 +89,6 @@ export default function Launch() {
           push("/login");
         }
         toast(dispatch, {
-          isOpen: modalType.open,
           msg: "Opp's an error occured.",
         }).error();
       })
