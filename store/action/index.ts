@@ -30,6 +30,16 @@ export const setGameDetails = (
 ): void => {
   dispatch({ type: "GAME_DETAILS", payload });
 };
+export const exitWin = (
+  dispatch: (t: ActionType) => void,
+  payload: {
+    open: modalType;
+    func?: () => Promise<void>;
+    game?: Games;
+  }
+): void => {
+  dispatch({ type: "EXIT", payload });
+};
 
 export const toast = (
   dispatch: (t: ActionType) => void,

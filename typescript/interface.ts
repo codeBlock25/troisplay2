@@ -18,10 +18,15 @@ export interface eventReeducerType {
     msg: string;
     error: errorType;
   };
+  exit: {
+    open: modalType;
+    func?: () => Promise<void>;
+    game?: Games;
+  };
 }
 
 export interface ActionType<T = any> {
-  type: "NOTIFICATION" | "GAME_DETAILS" | "TOAST";
+  type: "NOTIFICATION" | "GAME_DETAILS" | "TOAST" | "EXIT";
   payload: T;
 }
 

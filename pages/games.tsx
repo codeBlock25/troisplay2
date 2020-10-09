@@ -38,6 +38,7 @@ import ToastContainer from "../components/toast";
 import  AppLoader from "../components/app_loader"
 import { useRouter } from "next/router";
 import GameView from "../components/game_view";
+import Exitwindow from "../components/exitwindow";
 
 export function getToken(): string {
   const token = window.localStorage.getItem("game_token");
@@ -260,6 +261,7 @@ export default function GamesScreen() {
       )}
       <Penalty_card />
       <Roshambo />
+      <Exitwindow />
       <Notification />
       <ToastContainer />
       <header className="game_header">
@@ -722,28 +724,30 @@ export default function GamesScreen() {
         <div className="second">
           <div className="container">
             <div className="title">
-            <h3>My Games</h3>
-            <div className="title_tab">
-              <span
-                className={`btn ${viewing === Viewing.current ? "on" : ""}`}
-                onClick={() => setViewing(Viewing.current)}
+              <h3>My Games</h3>
+              <div className="title_tab">
+                <span
+                  className={`btn ${viewing === Viewing.current ? "on" : ""}`}
+                  onClick={() => setViewing(Viewing.current)}
                 >
-                Current Games
-              </span>
-              <span
-                className={`btn ${viewing === Viewing.room ? "on" : ""}`}
-                onClick={() => setViewing(Viewing.room)}
+                  Current Games
+                </span>
+                <span
+                  className={`btn ${viewing === Viewing.room ? "on" : ""}`}
+                  onClick={() => setViewing(Viewing.room)}
                 >
-                Rooms
-              </span>
-              <span
-                className={`btn ${viewing === Viewing.lucky_geoge ? "on" : ""}`}
-                onClick={() => setViewing(Viewing.lucky_geoge)}
+                  Rooms
+                </span>
+                <span
+                  className={`btn ${
+                    viewing === Viewing.lucky_geoge ? "on" : ""
+                  }`}
+                  onClick={() => setViewing(Viewing.lucky_geoge)}
                 >
-                Lucky Geoge
-              </span>
-            </div>
+                  Lucky Geoge
+                </span>
               </div>
+            </div>
             <div className="game_content">
               {my_games?.data?.games.map((game) => {
                 return (

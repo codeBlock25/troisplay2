@@ -3,7 +3,7 @@ import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import Lottie from "lottie-web";
 import moment from "moment";
 import Link from "next/link";
-import { CloseIcon } from "../icon";
+import { CloseIcon, MenuIcon } from "../icon";
 import Axios from "axios";
 import { useRouter } from "next/router";
 import { url } from "../constant";
@@ -16,9 +16,10 @@ import { useDispatch } from "react-redux";
 const choose = require("../lottie/choose.json");
 const fund = require("../lottie/fund.json");
 const money = require("../lottie/money.json");
-
+ 
 export default function Index() {
   const dispatch = useDispatch();
+  const [nav_bar, setNarBar] = useState<boolean>(false);
   const chooseContainerRef = useRef(null);
   const fundContainerRef = useRef(null);
   const moneyContainerRef = useRef(null);
@@ -76,7 +77,6 @@ export default function Index() {
           return;
         }
         toast(dispatch, {
-          isOpen: modalType.open,
           msg:
             "Sorry, we could not communicate with the troisplay server please check you internet connection.",
         }).error();
@@ -120,7 +120,6 @@ export default function Index() {
         }
         setLoginState(true);
         toast(dispatch, {
-          isOpen: modalType.open,
           msg:
             "Sorry, we could not communicate with the troisplay server please check you internet connection.",
         }).error();
@@ -168,6 +167,42 @@ export default function Index() {
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
       </Head>
       <ToastContainer />
+
+      <div
+        className={nav_bar ? "window open" : "window"}
+        onClick={() => {
+          setNarBar(false);
+        }}
+      >
+        <Link href="/#games">
+          <span className="link">Games</span>
+        </Link>
+        <Link href="/#how-it-works">
+          <a className="link">How it works</a>
+        </Link>
+        <Link href="/#commission">
+          <a className="link">commission</a>
+        </Link>
+        <Link href="/#faq">
+          <a className="link">faq</a>
+        </Link>
+        <span
+          className="link_"
+          onClick={() => {
+            setSignUpState(true);
+          }}
+        >
+          join
+        </span>
+      </div>
+      <div
+        className="right_min"
+        onClick={() => {
+          setNarBar((prev) => !prev);
+        }}
+      >
+        <MenuIcon />
+      </div>
       <section className={loginOpen ? "Account open" : "Account"}>
         <form onSubmit={handleSubmitLogin}>
           <button
@@ -347,7 +382,9 @@ export default function Index() {
           </p>
         </form>
       </section>
-      <section className={loginOpen || signupOpen ? "Index over" : "Index"}>
+      <section
+        className={loginOpen || signupOpen || nav_bar ? "Index over" : "Index"}
+      >
         <header>
           <div className="left">
             <span className="logo" role="img" />
@@ -468,77 +505,79 @@ export default function Index() {
           <h4 className="title_sub">
             Earn as much in real cash playing on Troisplay
           </h4>
-          <div className="table">
-            <div className="thead">
-              <div className="tr">price</div>
-              <div className="tr">Cash</div>
-              <div className="tr">Roshambo</div>
-              <div className="tr">Guess Matcher</div>
-              <div className="tr">Penelty Shot</div>
-              <div className="tr">Rooms</div>
-              <div className="tr">Custom Game</div>
-              <div className="tr">Lucky Geoge</div>
-            </div>
-            <div className="tbody">
-              <div className="td">
-                <div className="tr">10$</div>
-                <div className="tr">19$</div>
-                <div className="tr">16$</div>
-                <div className="tr">17$</div>
-                <div className="tr">15$+</div>
-                <div className="tr">18$</div>
-                <div className="tr">8$+</div>
-                <div className="tr">8$+</div>
+          <div className="container">
+            <div className="table">
+              <div className="thead">
+                <div className="tr">price</div>
+                <div className="tr">Cash</div>
+                <div className="tr">Roshambo</div>
+                <div className="tr">Guess Matcher</div>
+                <div className="tr">Penelty Shot</div>
+                <div className="tr">Rooms</div>
+                <div className="tr">Custom Game</div>
+                <div className="tr">Lucky Geoge</div>
               </div>
-              <div className="td">
-                <div className="tr">20$</div>
-                <div className="tr">29$</div>
-                <div className="tr">26$</div>
-                <div className="tr">27$</div>
-                <div className="tr">25$+</div>
-                <div className="tr">28$</div>
-                <div className="tr">18$+</div>
-                <div className="tr">18$+</div>
-              </div>
-              <div className="td">
-                <div className="tr">30$</div>
-                <div className="tr">39$</div>
-                <div className="tr">36$</div>
-                <div className="tr">37$</div>
-                <div className="tr">35$+</div>
-                <div className="tr">38$</div>
-                <div className="tr">28$+</div>
-                <div className="tr">28$+</div>
-              </div>
-              <div className="td">
-                <div className="tr">50$</div>
-                <div className="tr">59$</div>
-                <div className="tr">56$</div>
-                <div className="tr">57$</div>
-                <div className="tr">55$+</div>
-                <div className="tr">58$</div>
-                <div className="tr">48$+</div>
-                <div className="tr">48$+</div>
-              </div>
-              <div className="td">
-                <div className="tr">100$</div>
-                <div className="tr">190$</div>
-                <div className="tr">160$</div>
-                <div className="tr">170$</div>
-                <div className="tr">150$+</div>
-                <div className="tr">180$</div>
-                <div className="tr">80$+</div>
-                <div className="tr">80$+</div>
-              </div>
-              <div className="td">
-                <div className="tr">200$</div>
-                <div className="tr">390$</div>
-                <div className="tr">360$</div>
-                <div className="tr">370$</div>
-                <div className="tr">350$+</div>
-                <div className="tr">380$</div>
-                <div className="tr">180$+</div>
-                <div className="tr">180$+</div>
+              <div className="tbody">
+                <div className="td">
+                  <div className="tr">10$</div>
+                  <div className="tr">19$</div>
+                  <div className="tr">16$</div>
+                  <div className="tr">17$</div>
+                  <div className="tr">15$+</div>
+                  <div className="tr">18$</div>
+                  <div className="tr">8$+</div>
+                  <div className="tr">8$+</div>
+                </div>
+                <div className="td">
+                  <div className="tr">20$</div>
+                  <div className="tr">29$</div>
+                  <div className="tr">26$</div>
+                  <div className="tr">27$</div>
+                  <div className="tr">25$+</div>
+                  <div className="tr">28$</div>
+                  <div className="tr">18$+</div>
+                  <div className="tr">18$+</div>
+                </div>
+                <div className="td">
+                  <div className="tr">30$</div>
+                  <div className="tr">39$</div>
+                  <div className="tr">36$</div>
+                  <div className="tr">37$</div>
+                  <div className="tr">35$+</div>
+                  <div className="tr">38$</div>
+                  <div className="tr">28$+</div>
+                  <div className="tr">28$+</div>
+                </div>
+                <div className="td">
+                  <div className="tr">50$</div>
+                  <div className="tr">59$</div>
+                  <div className="tr">56$</div>
+                  <div className="tr">57$</div>
+                  <div className="tr">55$+</div>
+                  <div className="tr">58$</div>
+                  <div className="tr">48$+</div>
+                  <div className="tr">48$+</div>
+                </div>
+                <div className="td">
+                  <div className="tr">100$</div>
+                  <div className="tr">190$</div>
+                  <div className="tr">160$</div>
+                  <div className="tr">170$</div>
+                  <div className="tr">150$+</div>
+                  <div className="tr">180$</div>
+                  <div className="tr">80$+</div>
+                  <div className="tr">80$+</div>
+                </div>
+                <div className="td">
+                  <div className="tr">200$</div>
+                  <div className="tr">390$</div>
+                  <div className="tr">360$</div>
+                  <div className="tr">370$</div>
+                  <div className="tr">350$+</div>
+                  <div className="tr">380$</div>
+                  <div className="tr">180$+</div>
+                  <div className="tr">180$+</div>
+                </div>
               </div>
             </div>
           </div>

@@ -29,6 +29,10 @@
         flex-direction: column;
         padding-top: 20px;
 
+        @media (max-width: 500px) {
+            width: 90%;
+        }
+
         .close_icon {
             position: absolute;
             top: 0px;

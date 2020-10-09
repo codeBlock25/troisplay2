@@ -7,14 +7,15 @@ import { url } from "../../constant";
 import { CloseIcon, ForwardIcon, GoalPostIcon } from "../../icon";
 import { getToken } from "../../pages/games";
 import {
-  notify,
+  exitWin,
+  notify, setGameDetails, toast,
 } from "../../store/action";
-import { CheckerType, Games, PayType, PenaltyOption, PlayerType, PlayType } from "../../typescript/enum";
+import { CheckerType, GameRec, Games, modalType, NotiErrorType, PayType, PenaltyOption, PlayerType, PlayType } from "../../typescript/enum";
 import { reducerType } from "../../typescript/interface";
 
 
 export default function Penalty_card() {
-  const dispatch: Function = useDispatch();
+  const dispatch = useDispatch();
   const [isDemoPlay, setDemoState] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(false);
   const [round1knowState, setKnownState1] = useState<CheckerType>(CheckerType.unknown);
@@ -115,25 +116,34 @@ export default function Penalty_card() {
               price_in_value?: number;
               gameType?: string;
               gameDetail?: string;
-            gameID?: Games;
+              gameID?: Games;
               played?: boolean;
               date?: Date;
             };
           }>) => {
-            // if (payWith === PayType.cash) {
-            //   dispatch(setCashWalletCoin(cash - price));
-            // }
-            // if (payWith === PayType.coin) {
-            //   dispatch(setWalletCoin(coin - price * defaults.cashRating));
-            // }
+            setGameDetails(dispatch, {
+              player: PlayerType.first,
+              game: Games.non,
+              id: undefined,
+              price: 0,
+            });
+            toast(dispatch, {
+              msg: `Congratulations!!!! You have successfully played a game, please wait for Player 2's challange.`,
+            }).success();
           }
         )
         .catch((err) => {
           if (err.message === "Request failed with status code 401") {
-            // insuf fund
+            toast(dispatch, {
+              msg: `Insufficient Fund, please fund your ${
+                payWith === PayType.cash ? "cash wallet" : "coin wallet"
+              } to continue the game.`,
+            }).fail();
             return;
           }
-          // true
+          toast(dispatch, {
+            msg: `An Error occured could not connect to troisplay game server please check you interner connection and Try Again.`,
+          }).error();
         })
         .finally(() => {
           setLoading(false);
@@ -166,11 +176,38 @@ export default function Penalty_card() {
           ({
             data: { winner, price },
           }: AxiosResponse<{ winner: boolean; price: number }>) => {
-            // con won
+            setGameDetails(dispatch, {
+            player: PlayerType.first,
+            game: Games.non,
+            id: undefined,
+            price: 0,
+          });
+            if (winner) {
+              notify(dispatch, {
+                type: NotiErrorType.success,
+                msg: `Congratualation your have just won the game and earned $ ${price}. you can withdraw you cash price or use it to play more games.`,
+                isOpen: modalType.open,
+              });
+            } else {
+              notify(dispatch, {
+                type: NotiErrorType.error,
+                msg: `Sorry your have just lost this game and lost $ ${price}. you can try other games for a better chance.`,
+                isOpen: modalType.open,
+              });
+            }
           }
         )
         .catch((err) => {
-          // eiie
+          setGameDetails(dispatch, {
+          player: PlayerType.first,
+          game: Games.non,
+          id: undefined,
+          price: 0,
+        });
+          toast(dispatch, {
+            msg:
+              "An Error occured could not connect to troisplay game server please check you interner connection and Try Again.",
+          }).error();
         })
         .finally(() => {
           setLoading(false);
@@ -205,11 +242,12 @@ export default function Penalty_card() {
     })
       .then(
         ({
-          data: { winner, final, price },
+          data: { winner, price, final, finalWin },
         }: AxiosResponse<{
-          winner: boolean;
+          winner: GameRec;
           final: boolean;
           price: number;
+          finalWin: boolean | string;
         }>) => {
           switch (round) {
             case 1:
@@ -243,18 +281,39 @@ export default function Penalty_card() {
             setRound3({ round: 3, value: PenaltyOption.left });
             setRound4({ round: 4, value: PenaltyOption.left });
             setRound5({ round: 5, value: PenaltyOption.left });
-            if (price > 0) {
-              // troes
-            } else {
-              // lost
-            }
+            setGameDetails(dispatch, {
+              player: PlayerType.first,
+              game: Games.non,
+              id: undefined,
+              price: 0,
+            });
+if (final) {
+     notify(dispatch, {
+       type: NotiErrorType.success,
+       msg: `Congratualations You just won this game and have gained $ ${price}`,
+       isOpen: modalType.open,
+     });
+           return
+} else {
+    notify(dispatch, {
+      type: NotiErrorType.error,
+      msg: `Sorry your have just lost this game and lost $ ${price}. you can try other games for a better chance.`,
+      isOpen: modalType.open,
+    });
+            return
+}
           }
           setPlayCount((prev) => {
             return prev + 1;
           });
         }
       )
-      .catch(console.error)
+      .catch(() => {
+        toast(dispatch, {
+          msg:
+            "An Error occured could not connect to troisplay game server please check you interner connection and Try Again.",
+        }).error();
+      })
       .finally(() => {
         setPlayStateLoading(false);
       });
@@ -288,55 +347,59 @@ export default function Penalty_card() {
           </div>
         ) : (
           <div className="world spin penalty">
-            {" "}
-            {!isEmpty(details.id) && (
               <div
                 className="close_btn"
                 onClick={() => {
-                  // dispatch(
-                  //   setExit({
-                  //     open: modalType.open,
-                  //     func: async () => {
-                  //       await Axios({
-                  //         method: "POST",
-                  //         url: `${url}/games/penalty/exit`,
-                  //         headers: {
-                  //           Authorization: `Bearer ${token}`,
-                  //         },
-                  //         data: {
-                  //           id: details.id,
-                  //         },
-                  //       })
-                  //         .then(() => {
-                  //           dispatch(setGame(gameType.non, ""));
-                  //           setLoading(false);
-                  //           setDemoState(true);
-                  //           setKnownState1(CheckerType.unknown);
-                  //           setKnownState2(CheckerType.unknown);
-                  //           setKnownState3(CheckerType.unknown);
-                  //           setKnownState4(CheckerType.unknown);
-                  //           setKnownState5(CheckerType.unknown);
-                  //           setRound1({ round: 1, value: PenaltyOption.left });
-                  //           setRound2({ round: 2, value: PenaltyOption.left });
-                  //           setRound3({ round: 3, value: PenaltyOption.left });
-                  //           setRound4({ round: 4, value: PenaltyOption.left });
-                  //           setRound5({ round: 5, value: PenaltyOption.left });
-                  //           dispatch(
-                  //             setSearchSpec({ game: gameType.non, price: 0 })
-                  //           );
-                  //           dispatch(setGamepickerform(modalType.close));
-                  //         })
-                  //         .catch(() => {
-                  //           toast.error("Network Error!.");
-                  //         });
-                  //     },
-                  //   })
-                  // );
+                  
+                if (isEmpty(details.id)) {
+                  setGameDetails(dispatch, {
+                    player: PlayerType.first,
+                    game: Games.non,
+                    id: undefined,
+                    price: 0,
+                  });
+                  return;
+                }
+                exitWin(dispatch, {
+                  open: modalType.close,
+                  func: async () => {
+                    let token = getToken();
+                    await Axios({
+                      method: "POST",
+                      url: `${url}/games/penalty/exit`,
+                      headers: {
+                        Authorization: `Bearer ${token}`,
+                      },
+                      data: {
+                        id: details.id,
+                      },
+                    })
+                      .then(() => {
+                        setLoading(false);
+                        setDemoState(true);
+                        setKnownState1(CheckerType.unknown);
+                        setKnownState2(CheckerType.unknown);
+                        setKnownState3(CheckerType.unknown);
+                        setKnownState4(CheckerType.unknown);
+                        setKnownState5(CheckerType.unknown);
+                        setRound1({ round: 1, value: PenaltyOption.left });
+                        setRound2({ round: 2, value: PenaltyOption.left });
+                        setRound3({ round: 3, value: PenaltyOption.left });
+                        setRound4({ round: 4, value: PenaltyOption.left });
+                        setRound5({ round: 5, value: PenaltyOption.left });
+                      })
+                      .catch(() => {
+                        toast(dispatch, {
+                          msg: "Oops, An error occured.",
+                        }).error();
+                      });
+                  },
+                });
+              
                 }}
               >
                 <CloseIcon />
               </div>
-            )}
             <h3 className="title">
               {isEmpty(details.id) ? "Taker" : "Goalkeeper"}
             </h3>

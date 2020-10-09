@@ -2,7 +2,7 @@ import Axios, { AxiosResponse } from "axios";
 import { MouseEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { url } from "../../constant";
-import { notify, setGameDetails, toast } from "../../store/action";
+import { exitWin, notify, setGameDetails, toast } from "../../store/action";
 import {
   CloseIcon,
   GameCoin,
@@ -197,12 +197,17 @@ export default function Roshambo() {
         ({
           data: { winner, price },
         }: AxiosResponse<{ winner: boolean; price: number }>) => {
-          // played
           if (winner) {
             notify(dispatch, {type: NotiErrorType.success, msg: `Congratualation your have just won the game and earned $ ${price}. you can withdraw you cash price or use it to play more games.`,isOpen: modalType.open})
           } else {
             notify(dispatch, {type: NotiErrorType.error, msg: `Sorry your have just lost this game and lost $ ${price}. you can try other games for a better chance.`,isOpen: modalType.open})
           }
+          setGameDetails(dispatch, {
+            player: PlayerType.first,
+            game: Games.non,
+            id: undefined,
+            price: 0,
+          });
           }
         )
         .catch((err) => {
@@ -313,19 +318,29 @@ export default function Roshambo() {
             setRound4({ round: 4, value: RoshamboOption.rock });
             setRound5({ round: 5, value: RoshamboOption.rock });
             if (finalWin === "draw") {
+               setGameDetails(dispatch, {
+                 player: PlayerType.first,
+                 game: Games.non,
+                 id: undefined,
+                 price: 0,
+               });
               notify(dispatch, { type: NotiErrorType.state, msg: "This game was a tough one and ended in a draw, you game funds have been returned as a result of this.", isOpen: modalType.open });
-              //   dispatch(
-              //     notify({
-              //       isOPen: modalType.open,
-              //       msg: `This game was a tough one and ended in a draw, you game funds have been returned as a result of this.`,
-              //       type: NotiErrorType.state,
-              //     })
-              //   );
             } else if (finalWin) {
+               setGameDetails(dispatch, {
+                 player: PlayerType.first,
+                 game: Games.non,
+                 id: undefined,
+                 price: 0,
+               });
               notify(dispatch, { type: NotiErrorType.success, msg: `Congratualations You just won this game and have gained $ ${price}`, isOpen: modalType.open });
             } else {
+              setGameDetails(dispatch, {
+                player: PlayerType.first,
+                game: Games.non,
+                id: undefined,
+                price: 0,
+              });
               notify(dispatch, { type: NotiErrorType.error, msg: `Sorry your have just lost this game and lost $ ${price}. you can try other games for a better chance.`, isOpen: modalType.open });
-            
             }
             return
           }
@@ -378,46 +393,43 @@ export default function Roshambo() {
                     id: undefined,
                     price: 0,
                   });
+                  return;
                 }
-                // dispatch(
-                //   setExit({
-                //     open: modalType.open,
-                //     func: async () => {
-                //       await Axios({
-                //         method: "POST",
-                //         url: `${url}/games/roshambo/exit`,
-                //         headers: {
-                //           Authorization: `Bearer ${token}`,
-                //         },
-                //         data: {
-                //           id: gameID,
-                //         },
-                //       })
-                //         .then(() => {
-                //           dispatch(setGame(gameType.non, ""));
-                //           setLoading(false);
-                //           setDemoState(true);
-                //           setKnownState1(CheckerType.unknown);
-                //           setKnownState2(CheckerType.unknown);
-                //           setKnownState3(CheckerType.unknown);
-                //           setKnownState4(CheckerType.unknown);
-                //           setKnownState5(CheckerType.unknown);
-                //           setRound1({ round: 1, value: RoshamboOption.rock });
-                //           setRound2({ round: 2, value: RoshamboOption.rock });
-                //           setRound3({ round: 3, value: RoshamboOption.rock });
-                //           setRound4({ round: 4, value: RoshamboOption.rock });
-                //           setRound5({ round: 5, value: RoshamboOption.rock });
-                //           dispatch(
-                //             setSearchSpec({ game: gameType.non, price: 0 })
-                //           );
-                //           dispatch(setGamepickerform(modalType.close));
-                //         })
-                //         .catch(() => {
-                //           toast.error("Network Error!.");
-                //         });
-                //     },
-                //   })
-                // );
+                exitWin(dispatch, {
+                  open: modalType.close,
+                  func: async () => {
+                    let token = getToken();
+                    await Axios({
+                      method: "POST",
+                      url: `${url}/games/roshambo/exit`,
+                      headers: {
+                        Authorization: `Bearer ${token}`,
+                      },
+                      data: {
+                        id: details.id,
+                      },
+                    })
+                      .then(() => {
+                        setLoading(false);
+                        setDemoState(true);
+                        setKnownState1(CheckerType.unknown);
+                        setKnownState2(CheckerType.unknown);
+                        setKnownState3(CheckerType.unknown);
+                        setKnownState4(CheckerType.unknown);
+                        setKnownState5(CheckerType.unknown);
+                        setRound1({ round: 1, value: RoshamboOption.rock });
+                        setRound2({ round: 2, value: RoshamboOption.rock });
+                        setRound3({ round: 3, value: RoshamboOption.rock });
+                        setRound4({ round: 4, value: RoshamboOption.rock });
+                        setRound5({ round: 5, value: RoshamboOption.rock });
+                      })
+                      .catch(() => {
+                        toast(dispatch, {
+                          msg: "Oops, An error occured.",
+                        }).error();
+                      });
+                  },
+                });
               }}
             >
               <CloseIcon />
