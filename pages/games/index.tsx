@@ -471,31 +471,6 @@ const defaults: AxiosResponse<{
               </span>
             </div>
           </div>
-          <div
-            className="game"
-            onClick={() => {
-              setSpec({
-                isOpen: true,
-                manual: "",
-                price: 0,
-                game: Games.lucky_geoge,
-              });
-            }}
-          >
-            <div
-              className="img"
-              style={{ backgroundImage: `url(/images/lucky-geoge.png)` }}
-            />
-            <div className="details">
-              <span className="name">Lucky Geoge</span>
-              <span className="info">
-                <b>min stake:</b> $10
-              </span>
-              <span className="info">
-                <b>rating:</b> %90
-              </span>
-            </div>
-          </div>
         </div>
       </div>
 

@@ -66,7 +66,6 @@ export default function Forgot() {
             return;
           }
           toast(dispatch, {
-            isOpen: modalType.open,
             msg: "Opp's an error occured",
           }).error();
         })
@@ -94,7 +93,6 @@ export default function Forgot() {
             return;
           }
           toast(dispatch, {
-            isOpen: modalType.open,
             msg: "Opp's an error occured",
           }).error();
         })
@@ -116,7 +114,6 @@ export default function Forgot() {
       })
         .then(() => {
           toast(dispatch, {
-            isOpen: modalType.open,
             msg: "Successfull",
           }).success();
           setTimeout(() => {
@@ -129,7 +126,6 @@ export default function Forgot() {
             return;
           }
           toast(dispatch, {
-            isOpen: modalType.open,
             msg: "Opp's an error occured",
           }).error();
         })
