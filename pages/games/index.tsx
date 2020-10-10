@@ -612,9 +612,9 @@ const defaults: AxiosResponse<{
                 <h3 className="title">Earnings</h3>
                 <span className="price">
                   <span ref={coinRef2} className="icon" />{" "}
-                  {record?.data?.referal?.inactiveReferal ??
-                    0 * defaults?.data?.default?.referRating ??
-                    0}
+                  {(record?.data?.referal?.inactiveReferal ??
+                    0) * (defaults?.data?.default?.referRating ??
+                    0)}
                 </span>
                 <div className="action">
                   <span className="btn">refer</span>
