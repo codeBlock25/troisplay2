@@ -16,8 +16,11 @@ const GameView = memo(function ({
   btn1func,
   btn2func,
   btn1view,
-  btn2view
+  btn2view,v1,v2,v3
 }: {
+    v1?: number | string;
+  v2?: number | string
+  v3?: number | string
   name: string;
   date: Date;
   id: string;
@@ -25,7 +28,7 @@ const GameView = memo(function ({
     coin: number;
   game: Games
   type:"game_view"|"normal" | "lucky",
-  btn1func?:()=>Promise<void>
+    btn1func?: () => Promise<void>
   btn1view?: JSX.Element
   btn2func?:()=>Promise<void>
   btn2view?: JSX.Element
@@ -61,16 +64,30 @@ const GameView = memo(function ({
       <span className="name">{name}</span>
       <span className="date">{moment(date).format("Do MMMM, YYYY")}</span>
       <div className="viewee">
-        <span className="stake">
-          $ {cash.toLocaleString().slice(0, 7)}
-          {cash.toString().length >= 6 ?? "+"}
-        </span>
-        <span className="coin">
-          <GameCoin width={10} height={10} />
-          {coin.toLocaleString().slice(0, 7)}
-          {coin.toString().length >= 6 ?? "+"}
-        </span>
-        <span className="earning">$ {getPrice(game,cash,defaults?.data?.default)}</span>
+        {
+          type === "lucky" ? (
+            <>
+            <span className="stake">$ {v1 ?? 0}
+            </span>
+            <span className="coin">
+              <GameCoin width={10} height={10} /> {v2 ?? 0}
+            </span>
+              <span className="Win">$ {v3 ?? 0}</span>
+              </>
+        ):(
+        <>
+          <span className="stake">
+            $ {cash.toLocaleString().slice(0, 7)}
+            {cash.toString().length >= 6 ?? "+"}
+          </span>
+          <span className="coin">
+            <GameCoin width={10} height={10} />
+            {coin.toLocaleString().slice(0, 7)}
+            {coin.toString().length >= 6 ?? "+"}
+          </span>
+          <span className="earning">$ {getPrice(game,cash,defaults?.data?.default)}</span>
+        </>
+        )}
       </div>
       {
         type==="normal"?

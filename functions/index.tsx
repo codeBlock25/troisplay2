@@ -81,6 +81,39 @@ export function getPrice(
   }
 }
 
+export async function PlayLuckyGeogeGame(
+  payWith: PayType,
+  loader: boolean,
+  setLoader: (t: boolean) => void,
+  gameID: string,
+  dispatch: (ActionType)=>void,
+  title: string
+) {
+  let token = getToken();
+    if (loader) return;
+    setLoader(true);
+    await Axios({
+      method: "POST",
+      url: `${url}/games/lucky-geoge/play`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: {
+        id: gameID,
+        payWith,
+      },
+    })
+      .then(({ data: { price } }: AxiosResponse<{ price: number; }>) => {
+        toast(dispatch, {msg: `You have successfully joined ${title} with $ ${price}`}).success()
+      })
+      .catch((err) => {
+        toast(dispatch, {msg: `An Error occured could not connect to troisplay game server please check you interner connection and Try Again.`}).error()
+      })
+      .finally(() => {
+        setLoader(false);
+      });
+}
+
 export async function PlayGame(
   payWith: PayType,
   loader: boolean,

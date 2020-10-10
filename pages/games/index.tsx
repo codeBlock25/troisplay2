@@ -27,7 +27,7 @@ import { url, url_media } from "../../constant";
 import { QueryResult } from "react-query";
 import { Games, PayType, PlayerType, Viewing } from "../../typescript/enum";
 import next, { GetStaticProps, GetStaticPropsContext } from "next";
-import { getPrice, isPlayable, getToken } from "../../functions";
+import { getPrice, isPlayable, getToken, PlayLuckyGeogeGame } from "../../functions";
 import { SyncLoader } from "react-spinners";
 import Notification from "../../components/notification";
 import Roshambo from "../../components/games/roshambo";
@@ -51,6 +51,7 @@ export default function GamesScreen() {
   const [viewing, setViewing] = useState<Viewing>(Viewing.current);
   const [dateintime, setDateintime] = useState("");
   const [app_loading, setApp_loading] = useState<boolean>(true);
+  const [runText, setRunText] = useState("loading game components...");
   const [gameViewOpen, setViewOpen] = useState<boolean>(false);
   const swRef: MutableRefObject<HTMLDivElement | null> = useRef();
   const coinRef: MutableRefObject<HTMLSpanElement | null> = useRef();
@@ -59,7 +60,6 @@ export default function GamesScreen() {
   const [playLoader, setPlayerLoader] = useState<boolean>(false);
   const [game_loading, setgameLoading] = useState<boolean>(false);
   const [p2, setP2] = useState<boolean>(false);
-  const [runText, setRunText] = useState("loading game components...");
   const { push } = useRouter();
   const [spec, setSpec] = useState<{
     isOpen: boolean;
@@ -695,8 +695,13 @@ const defaults: AxiosResponse<{
                     date={game.date}
                     id={game._id}
                     cash={game.price_in_value}
+                    v1={game.price_in_value}
+                    v2={game.price_in_value * (defaults?.data.default.cashRating ?? 0)}
                     coin={game.battleScore.player1.winnerCount}
+                    v3={game.battleScore.player1.winnerCount}
                     game={game.gameID}
+                    btn1func={async ()=> await PlayLuckyGeogeGame(PayType.cash, game_loading, setgameLoading, game._id,dispatch, game.battleScore.player1.title )}
+                    btn2func={async ()=> await PlayLuckyGeogeGame(PayType.coin, game_loading, setgameLoading, game._id,dispatch, game.battleScore.player1.title )}
                   />
                 );
               })):""

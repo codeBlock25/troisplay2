@@ -1,10 +1,17 @@
 @import "./variable";
 
 .Settings {
-    padding-top: 100px;
-    padding-bottom: 50px;
-    flex-direction: row;
-    flex-wrap: wrap;
+    .second_ {
+        padding-top: 20px;
+        padding-bottom: 50px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        width: 100%;
+        min-width: 100%;
+        height: fit-content;
+        min-height: fit-content;
+        display: flex;
+    }
 
     .setting_body {
         width: calc(100% - 300px);
@@ -38,13 +45,13 @@
                 width: 100%;
                 height: 100%;
                 display: block;
-                background-image: url(/bg1.jpg);
+                background-image: url(/images/pic5.jpg);
                 background-position: center;
                 background-size: cover;
                 background-repeat: no-repeat;
                 border-radius: 10px 10px 10px 10px;
                 opacity: 0.8;
-                box-shadow: 0 9px 10px #415bed12;
+                box-shadow: 0 9px 10px #0000004d;
                 opacity: 0.7;
             }
 
@@ -120,7 +127,7 @@
                     display: block;
                     padding: 0 0 0 20px;
                     line-height: 40px;
-                    font-family: exep_bold;
+                    font-family: mon_bold;
                     font-weight: bolder;
                     color: $defaultColor;
                     text-transform: capitalize;
@@ -220,19 +227,13 @@
                         font-size: 14px;
                         text-transform: capitalize;
                         color: $defaultColor;
+                        font-family: mon_bold;
                     }
 
                     &.value {
                         font-size: 12px;
                         text-transform: uppercase;
-
-                        &.dark-mode {
-                            color: #f9f9f9;
-                        }
-
-                        &.light-mode {
-                            color: #323535;
-                        }
+                        color: #f9f9f9;
                     }
                 }
             }
@@ -350,7 +351,7 @@
                         align-self: left !important;
 
                         input {
-                            background-color: rgba($color: $defaultColor,
+                            background-color: rgba($color: #000,
                                     $alpha: 0.2) !important;
                         }
 
@@ -384,8 +385,8 @@
                     margin: 10px auto;
 
                     input {
-                        background-color: #f7f7f7;
-                        color: #7e7e7e;
+                        background-color: rgba($color: #000000, $alpha: 0.2);
+                        color: #bebebe;
                     }
 
                     fieldset {
@@ -393,7 +394,9 @@
                     }
 
                     label {
-                        color: #25348a;
+                        color: $defaultColor;
+                        font-family: mon_med;
+                        font-size: 14px;
                     }
                 }
 
@@ -445,16 +448,8 @@
                 align-self: center;
                 box-shadow: -2px 4px 13px #00000029;
                 z-index: 10;
-
-                &.dark-mode {
-                    background-color: $darkBG;
-                    color: white;
-                }
-
-                &.light-mode {
-                    background-color: white;
-                    color: black;
-                }
+                background-color: $darkBG;
+                color: white;
             }
 
             .name {
@@ -463,7 +458,7 @@
                 height: 100%;
                 justify-content: center;
                 align-items: center;
-                font-family: exep_bold;
+                font-family: mon_bold;
             }
         }
 
@@ -479,20 +474,8 @@
                 height: 45px;
                 align-self: center;
                 margin: 5px auto;
-
-                &.dark-mode {
-                    color: white;
-                    background-color: lighten($color: $darkBG, $amount: 10);
-                }
-
-                &.light-mode {
-                    color: $defaultColor;
-                    background-color: white;
-
-                    a {
-                        color: black !important;
-                    }
-                }
+                color: white;
+                background-color: lighten($color: $darkBG, $amount: 10);
 
                 a {
                     width: 100%;
@@ -504,7 +487,7 @@
                     text-align: center;
                     display: flex;
                     font-size: 13px;
-                    font-family: exep;
+                    font-family: mon;
                     color: currentColor;
                 }
             }
