@@ -8,7 +8,15 @@
     background-color: transparent;
     z-index: -100;
     opacity: 0;
-    top: 400vh;
+    top: 50vh;
+    pointer-events: none;
+
+    &.open {
+        top: 0;
+        opacity: 1;
+        z-index: 5000;
+        pointer-events: visible;
+    }
 
     &::before {
         content: "";
@@ -21,61 +29,58 @@
     }
 
     &.error {
-        top: 0;
-        opacity: 1;
-        z-index: 5000;
 
         .txt {
             color: white !important;
         }
-
+        
         &::before {
             background-image: radial-gradient(rgba(0, 0, 0, 0.19) 17%, rgba(255, 23, 23, 0.95) 55%);
         }
     }
-
+    
     &.success {
-        top: 0;
-        opacity: 1;
-        z-index: 5000;
-
+        
+        .txt {
+            color: white !important;
+        }
         &::before {
             background-image: radial-gradient(rgba(0, 0, 0, 0.19) 17%, #0f882ff2 55%);
         }
     }
-
+    
     &.dark-mode.state {
-        top: 0;
-        opacity: 1;
-        z-index: 5000;
-
+        
+        .txt {
+            color: white !important;
+        }
         &::before {
             background-image: radial-gradient(rgba(0, 0, 0, 0.19) 17%, rgba(47, 46, 47, 0.95) 55%);
         }
-
+        
         .txt {
             color: rgb(255, 255, 255) !important;
         }
     }
-
+    
     &.light-mode.state {
-        top: 0;
-        opacity: 1;
-        z-index: 5000;
-
+        
+        .txt {
+            color: white !important;
+        }
         &::before {
             background-image: radial-gradient(rgba(0, 0, 0, 0.19) 17%, rgba(222, 222, 222, 0.95) 55%);
         }
-
+        
         .txt {
             color: rgb(37, 35, 35) !important;
         }
     }
-
+    
     &.warning {
-        top: 0;
-        opacity: 1;
-        z-index: 5000;
+                    .txt {
+                        color: white !important;
+                    }
 
         &::before {
             background-image: radial-gradient(rgba(0, 0, 0, 0.19) 17%, rgba(241, 255, 23, 0.95) 55%);

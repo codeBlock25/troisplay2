@@ -10,6 +10,7 @@ import "../styles/launch.scss";
 import "../styles/exit.scss";
 import "../styles/history.scss";
 import "../styles/get-coin.scss";
+import "../styles/pickerplayer2.scss";
 import "../styles/toast.scss";
 import { Provider as ReduxProvider } from "react-redux";
 import { AppProps } from "next/app";

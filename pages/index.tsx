@@ -7,7 +7,7 @@ import { CloseIcon, MenuIcon } from "../icon";
 import Axios from "axios";
 import { useRouter } from "next/router";
 import { url } from "../constant";
-import { MoonLoader } from "react-spinners";
+import { SyncLoader } from "react-spinners";
 import ToastContainer from "../components/toast";
 import { errorType, modalType } from "../typescript/enum";
 import { toast } from "../store/action";
@@ -249,6 +249,9 @@ export default function Index() {
             }}
           />
 
+          {key_error === errorType.error && (
+            <p className="error">Incorrect betting key.</p>
+          )}
           {!/^[0-9]*$/g.test(key) ? (
             <p className="error">Betting must be a number.</p>
           ) : (
@@ -257,7 +260,7 @@ export default function Index() {
             )
           )}
           <button type="submit" className="submit_btn">
-            {loading ? <MoonLoader size="20px" color="white" /> : "login"}
+            {loading ? <SyncLoader size="10px" color="white" /> : "login"}
           </button>
           <p className="link">
             forget password
@@ -362,7 +365,7 @@ export default function Index() {
           )}
           <button type="submit" className="submit_btn">
             {loading ? (
-              <MoonLoader size="20px" color="white" />
+              <SyncLoader size="10px" color="white" />
             ) : (
               "create Account"
             )}

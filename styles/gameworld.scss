@@ -104,12 +104,16 @@
                 min-width: 120px;
                 max-width: 320px;
                 height: 45px;
+                font-size: 14px;
+                cursor: pointer;
+                font-family: mon_bold;
                 color: white;
                 margin: 0 10px;
                 display: flex;
                 line-height: 45px;
                 text-align: center;
                 align-items: center;
+                border-radius: 10px;
                 justify-content: center;
 
                 &:nth-of-type(1) {
@@ -546,9 +550,11 @@
                         text-align: center;
                         align-items: center;
                         justify-content: center;
+                        border-radius: 5px;
+                        cursor: pointer;
 
                         &.dark-mode {
-                            box-shadow: 0px 7px 10px #00000075, 0 0 10px #3f51b538;
+                            box-shadow: 0px 7px 10px #00000075, 0 0 10px rgba($color: $defaultColor, $alpha: 0.2);
 
                             &:hover {
                                 background-color: $defaultColor;
@@ -562,6 +568,10 @@
                                 background-color: #ec3d3d;
                                 color: white;
 
+                                &:hover {
+                                    background-color: #ec3d3d;
+                                }
+
                                 * {
                                     color: white !important;
                                 }
@@ -571,6 +581,10 @@
                                 background-color: #ffa500;
                                 color: white;
 
+                                &:hover {
+                                    background-color: #ffa500;
+                                }
+
                                 * {
                                     color: white !important;
                                 }
@@ -579,6 +593,10 @@
                             &.won {
                                 background-color: #58d23a;
                                 color: white;
+
+                                &:hover {
+                                    background-color: #58d23a;
+                                }
 
                                 * {
                                     color: white !important;
@@ -714,6 +732,7 @@
             width: 200px;
             min-width: 200px;
             height: 45px;
+            cursor: pointer;
             margin: 15px auto;
             color: white;
             line-height: 45px;
@@ -775,6 +794,7 @@
                     max-width: 45px;
                     max-height: 45px;
                     margin: 8px;
+                    border-radius: 10px;
                     background-color: #303030;
                     color: white;
                     transform: scale(1);
@@ -783,6 +803,7 @@
                     text-align: center;
                     align-items: center;
                     justify-content: center;
+                    cursor: pointer;
 
                     @keyframes animate_out {
 
@@ -817,8 +838,7 @@
                             color: $defaultColor;
                         }
 
-                        box-shadow: 0px 5px 10px #00000091,
-                        0px -3px 10px #b6c2ff1a;
+                        box-shadow: 0px 5px 10px #0000005c, 0px -3px 10px #00651026;
                     }
 
                     * {

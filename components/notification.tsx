@@ -1,11 +1,12 @@
-import React, { MutableRefObject, useEffect, useRef } from "react";
+import React, { memo, MutableRefObject, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { notify } from "../store/action";
 import { CloseIcon, CupIcon, RefereeIcon, RefereeWarnIcon } from "../icon";
 import { reducerType } from "../typescript/interface";
 import { modalType, NotiErrorType } from "../typescript/enum";
 
-export default function Notification() {
+
+const Notification = memo(function () {
   const audio1: MutableRefObject<HTMLAudioElement> = useRef(null);
   const audio2: MutableRefObject<HTMLAudioElement> = useRef(null);
   const dispatch = useDispatch();
@@ -29,10 +30,11 @@ export default function Notification() {
     } else {
     }
   }, [notification]);
-  if (notification.isOpen === modalType.open) return <></>;
   return (
     <div
-      className={`Notifiaction ${theme} ${
+      className={`Notifiaction ${
+        notification.isOpen !== modalType.close && "open"
+      } ${theme} ${
         notification.type === NotiErrorType.success
           ? "success"
           : notification.type === NotiErrorType.state
@@ -77,3 +79,6 @@ export default function Notification() {
     </div>
   );
 }
+);
+
+export default Notification

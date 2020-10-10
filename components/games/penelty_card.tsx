@@ -2,7 +2,7 @@ import Axios, { AxiosResponse } from "axios";
 import { isEmpty } from "lodash";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { MoonLoader } from "react-spinners";
+import { SyncLoader } from "react-spinners";
 import { url } from "../../constant";
 import { CloseIcon, ForwardIcon, GoalPostIcon } from "../../icon";
 import { getToken } from "../../functions";
@@ -287,7 +287,7 @@ export default function Penalty_card() {
               id: undefined,
               price: 0,
             });
-if (final) {
+if (price >0) {
      notify(dispatch, {
        type: NotiErrorType.success,
        msg: `Congratualations You just won this game and have gained $ ${price}`,
@@ -358,6 +358,18 @@ if (final) {
                     id: undefined,
                     price: 0,
                   });
+                  setLoading(false);
+                  setDemoState(true);
+                  setKnownState1(CheckerType.unknown);
+                  setKnownState2(CheckerType.unknown);
+                  setKnownState3(CheckerType.unknown);
+                  setKnownState4(CheckerType.unknown);
+                  setKnownState5(CheckerType.unknown);
+                  setRound1({ round: 1, value: PenaltyOption.left });
+                  setRound2({ round: 2, value: PenaltyOption.left });
+                  setRound3({ round: 3, value: PenaltyOption.left });
+                  setRound4({ round: 4, value: PenaltyOption.left });
+                  setRound5({ round: 5, value: PenaltyOption.left });
                   return;
                 }
                 exitWin(dispatch, {
@@ -753,7 +765,7 @@ if (final) {
                   }}
                 >
                   {loading ? (
-                    <MoonLoader size="20px" color={`white`} />
+                    <SyncLoader size="10px" color={`white`} />
                   ) : (
                     "Play with cash"
                   )}
@@ -765,7 +777,7 @@ if (final) {
                   }}
                 >
                   {loading ? (
-                    <MoonLoader size="20px" color={`white`} />
+                    <SyncLoader size="10px" color={`white`} />
                   ) : (
                     "Play with coin"
                   )}
@@ -778,12 +790,12 @@ if (final) {
               >
                 {isEmpty(details.id) ? (
                   loading ? (
-                    <MoonLoader size="20px" color={`white`} />
+                    <SyncLoader size="10px" color={`white`} />
                   ) : (
                     "Play"
                   )
                 ) : loading ? (
-                  <MoonLoader size="20px" color={`white`} />
+                  <SyncLoader size="10px" color={`white`} />
                 ) : (
                   "challange"
                 )}

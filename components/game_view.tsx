@@ -11,7 +11,12 @@ const GameView = memo(function ({
   name,
   coin,
   cash,
-  game
+  game,
+  type="normal",
+  btn1func,
+  btn2func,
+  btn1view,
+  btn2view
 }: {
   name: string;
   date: Date;
@@ -19,6 +24,11 @@ const GameView = memo(function ({
   cash: number;
     coin: number;
   game: Games
+  type:"game_view"|"normal",
+  btn1func?:()=>Promise<void>
+  btn1view?: JSX.Element
+  btn2func?:()=>Promise<void>
+  btn2view?: JSX.Element
 }) {
   const defaults: AxiosResponse<{
     default: {
@@ -62,10 +72,19 @@ const GameView = memo(function ({
         </span>
         <span className="earning">$ {getPrice(game,cash,defaults?.data?.default)}</span>
       </div>
-      <div className="action">
-        <span className="btn">view</span>
-        <span className="btn">cancel</span>
+      {
+        type==="normal"?
+       (
+          <div className="action">
+        <span className="btn">{btn1view ?? "view"}</span>
+        <span className="btn">{btn2view ??"cancel"}</span>
       </div>
+      ): (
+          <div className="action">
+        <span className="btn" onClick={btn1func}>{btn1view ??"play with $"}</span>
+        <span className="btn" onClick={btn2func}>{btn2view ?? <>play with <GameCoin/></>}</span>
+      </div>
+      )}
     </div>
   );
 });

@@ -1,20 +1,22 @@
 import Axios, { AxiosResponse } from "axios";
-import { MouseEvent, useEffect, useState } from "react";
+import { memo, MouseEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { url } from "../../constant";
 import {
-  notify,
+  exitWin,
+  notify, setGameDetails, toast,
 } from "../../store/action";
 import Link from "next/link";
 import { isEmpty } from "lodash";
-import { MoonLoader } from "react-spinners";
-import { Games, PlayerType } from "../../typescript/enum";
+import { SyncLoader } from "react-spinners";
+import { Games, modalType, PlayerType } from "../../typescript/enum";
 import { reducerType } from "../../typescript/interface";
 import { getToken } from "../../functions";
 import { CloseIcon } from "../../icon";
 
-export default function Matcher() {
-  const dispatch: Function = useDispatch();
+
+const GuessMaster = memo(function () {
+  const dispatch = useDispatch();
   const [prize, setPrice] = useState<number>(0);
   const [playCount, setPlaycount] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
@@ -203,62 +205,67 @@ const theme = "dark-mode"
     return (
       <div className={`gameworld ${theme}`}>
         <div className="world matcher">
-          {" "}
-          {!isEmpty(details.id) && (
             <div
               className="close_btn"
               onClick={() => {
-                // dispatch(
-                //   setExit({
-                //     open: modalType.open,
-                //     func: async () => {
-                //       await Axios({
-                //         method: "POST",
-                //         url: `${url}/games/roshambo/exit`,
-                //         headers: {
-                //           Authorization: `Bearer ${token}`,
-                //         },
-                //         data: {
-                //           id: gameID,
-                //         },
-                //       })
-                //         .then(() => {
-                //           dispatch(
-                //             setSearchSpec({ game: gameType.non, price: 0 })
-                //           );
-                //           dispatch(setGame(gameType.non, ""));
-                //           dispatch(setGamepickerform(modalType.close));
-                //           dispatch(setWalletCoin(coin + price));
-                //           dispatch(
-                //             setP2game({
-                //               isOpen: modalType.close,
-                //               games: [],
-                //               game: gameType.non,
-                //             })
-                //           );
-                //           setPlaycount(1);
-                //           setView1(true);
-                //           setView2(true);
-                //           setView3(true);
-                //           setView4(true);
-                //           setView5(true);
-                //           setView6(true);
-                //           setView7(true);
-                //           setNum(1);
-                //           dispatch(setGame(gameType.non, ""));
-                //           setLoading(false);
-                //         })
-                //         .catch(() => {
-                //           toast.error("Network Error!.");
-                //         });
-                //     },
-                //   })
-                // );
+                if (isEmpty(details.id)) {
+                  setGameDetails(dispatch, {
+                    player: PlayerType.first,
+                    game: Games.non,
+                    id: undefined,
+                    price: 0,
+                  });
+                  setLoading(false);
+                  setPlaycount(1);
+                  setView1(true);
+                  setView2(true);
+                  setView3(true);
+                  setView4(true);
+                  setView5(true);
+                  setView6(true);
+                  setView7(true);
+                  setNum(1);
+                  setPlayed([]);
+                  return;
+                }
+                exitWin(dispatch, {
+                  open: modalType.close,
+                  func: async () => {
+                    let token = getToken();
+                    await Axios({
+                      method: "POST",
+                      url: `${url}/games/roshambo/exit`,
+                      headers: {
+                        Authorization: `Bearer ${token}`,
+                      },
+                      data: {
+                        id: details.id,
+                      },
+                    })
+                      .then(() => {
+                        setLoading(false);
+                        setPlaycount(1);
+                        setView1(true);
+                        setView2(true);
+                        setView3(true);
+                        setView4(true);
+                        setView5(true);
+                        setView6(true);
+                        setView7(true);
+                        setNum(1);
+                        setPlayed([]);
+                      })
+                      .catch(() => {
+                        toast(dispatch, {
+                          msg: "Oops, An error occured.",
+                        }).error();
+                      });
+                  },
+                });
               }}
             >
               <CloseIcon />
             </div>
-          )}
           <h3 className="title">Pick A number</h3>
           <p className={`txt theme ${theme}`}>
             NOTE: You Pick your moves by clicking/tapping the icons to each
@@ -326,10 +333,12 @@ const theme = "dark-mode"
             </div>
           </div>
           <div className={`btn_ theme ${theme}`} onClick={matchPlay}>
-            {loading ? <MoonLoader size="20px" color={`white`} /> : "play"}
+            {loading ? <SyncLoader size="10px" color={`white`} /> : "play"}
           </div>
         </div>
       </div>
     );
   else return <></>;
 }
+);
+export default GuessMaster

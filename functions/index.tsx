@@ -1,6 +1,6 @@
 import Axios, { AxiosResponse } from "axios";
 import { url } from "../constant";
-import { setGameDetails } from "../store/action";
+import { setGameDetails, toast } from "../store/action";
 import {
   Games,
   PayType,
@@ -189,13 +189,19 @@ export async function isPlayable(
             id: undefined,
             game: spec.game,
           });
+        } else {
+          toast(dispatch, {msg: ""}).close()
+          toast(dispatch, {msg: "This game has already been played, try searching for the game as player 2 to continue."}).fail()
         }
       }
     )
     .catch((error) => {
       console.log(error);
+      toast(dispatch, {
+        msg: `An Error occured could not connect to troisplay game server please check you interner connection and Try Again.`,
+      }).error();
       return errorType.error;
-    })
+        })
     .finally(() => {
       setLoader(false);
     });

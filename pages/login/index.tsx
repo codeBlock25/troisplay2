@@ -7,7 +7,7 @@ import { CloseIcon } from "../../icon";
 import Axios from "axios";
 import { useRouter } from "next/router";
 import { url } from "../../constant";
-import { MoonLoader } from "react-spinners";
+import { SyncLoader } from "react-spinners";
 import { errorType, modalType } from "../../typescript/enum";
 import { useDispatch } from "react-redux";
 import { toast } from "../../store/action";
@@ -112,8 +112,7 @@ export default function Login() {
   return (
     <>
       <Head>
-        <title>Login - Troisplay
-        </title>
+        <title>Login - Troisplay</title>
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
       </Head>
       <section className={loginOpen ? "Account open" : "Account"}>
@@ -161,11 +160,14 @@ export default function Login() {
               setKey(value);
             }}
           />
+          {key_error === errorType.error && (
+            <p className="error">Incorrect betting key.</p>
+          )}
           {key.length !== 6 && (
             <p className="error">Betting key should 6 digits long.</p>
           )}
           <button type="submit" className="submit_btn">
-            {loading ? <MoonLoader size="20px" color="white" /> : "login"}
+            {loading ? <SyncLoader size="10px" color="white" /> : "login"}
           </button>
           <p className="link">
             forget password
@@ -176,10 +178,7 @@ export default function Login() {
           <p className="link">
             Don't have an account?
             <Link href="/signup">
-              <a
-              >
-                click here
-              </a>
+              <a>click here</a>
             </Link>
           </p>
         </form>
@@ -206,11 +205,7 @@ export default function Login() {
             <Link href="/#faq">
               <a className="link">faq</a>
             </Link>
-            <span
-              className="link_"
-            >
-              join
-            </span>
+            <span className="link_">join</span>
           </div>
         </header>
         <section className="first">

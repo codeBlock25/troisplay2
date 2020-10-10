@@ -1,7 +1,7 @@
 import { Button } from "@material-ui/core";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { MoonLoader } from "react-spinners";
+import { SyncLoader } from "react-spinners";
 import { exitWin } from "../store/action";
 import { Games, modalType } from "../typescript/enum";
 import { reducerType } from "../typescript/interface";
@@ -47,7 +47,7 @@ export default function Exitwindow() {
             }}
           >
             {loading ? (
-              <MoonLoader size="20px" color={"white"} />
+              <SyncLoader size="10px" color={"white"} />
             ) : exit.game === Games.custom_game ? (
               "reject"
             ) : (

@@ -148,12 +148,15 @@ export default function HistoryScreen() {
     {
       field: "date_mark",
       headerName: "Date",
-      width: 200,
+      width: 220,
       type: "date",
       description: "The date the game was concluded",
       sortable: true,
       valueFormatter: ({ value }) => {
-        return moment((value as unknown) as string).format("Do MMMM, YYYY");
+        return moment((value as unknown) as string).format(
+          "Do MM, YYYY - hh:mm a"
+        
+        );
       },
     },
     {

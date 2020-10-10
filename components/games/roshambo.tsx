@@ -11,7 +11,7 @@ import {
   ScissorIcon,
 } from "../../icon";
 import { defaults, isEmpty } from "lodash";
-import { MoonLoader } from "react-spinners";
+import { SyncLoader } from "react-spinners";
 import {
   CheckerType,
   GameRec,
@@ -251,7 +251,7 @@ export default function Roshambo() {
           data: { winner, price, final, finalWin },
         }: AxiosResponse<{
           winner: GameRec;
-          final: boolean;
+          final: "draw"|"won"|"lost" | "no";
           price: number;
           finalWin: boolean | string;
         }>) => {
@@ -304,7 +304,7 @@ export default function Roshambo() {
             default:
               return;
           }
-          if (final) {
+          if (final !== "no") {
             setLoading(false);
             setDemoState(true);
             setKnownState1(CheckerType.unknown);
@@ -317,7 +317,7 @@ export default function Roshambo() {
             setRound3({ round: 3, value: RoshamboOption.rock });
             setRound4({ round: 4, value: RoshamboOption.rock });
             setRound5({ round: 5, value: RoshamboOption.rock });
-            if (finalWin === "draw") {
+            if (final === "draw") {
                setGameDetails(dispatch, {
                  player: PlayerType.first,
                  game: Games.non,
@@ -325,7 +325,7 @@ export default function Roshambo() {
                  price: 0,
                });
               notify(dispatch, { type: NotiErrorType.state, msg: "This game was a tough one and ended in a draw, you game funds have been returned as a result of this.", isOpen: modalType.open });
-            } else if (finalWin) {
+            } else if (final==="won") {
                setGameDetails(dispatch, {
                  player: PlayerType.first,
                  game: Games.non,
@@ -365,12 +365,12 @@ export default function Roshambo() {
                 <div
                   className="btn_"
                   onClick={() => {
-                    setPlayType(PlayType.one_by_one);
-                  }}
+                   setPlayType(PlayType.one_by_one);
+                  }}        
                 >
                   Play
                 </div>
-                <div
+                <div    
                   className="btn_"
                   onClick={() => {
                     setPlayType(PlayType.all);
@@ -381,7 +381,7 @@ export default function Roshambo() {
               </div>
             </div>
           </div>
-        ) : (
+        ) :(
           <div className="world spin roshambo">
             <div
               className="close_btn"
@@ -393,6 +393,18 @@ export default function Roshambo() {
                     id: undefined,
                     price: 0,
                   });
+                  setLoading(false);
+                  setDemoState(true);
+                  setKnownState1(CheckerType.unknown);
+                  setKnownState2(CheckerType.unknown);
+                  setKnownState3(CheckerType.unknown);
+                  setKnownState4(CheckerType.unknown);
+                  setKnownState5(CheckerType.unknown);
+                  setRound1({ round: 1, value: RoshamboOption.rock });
+                  setRound2({ round: 2, value: RoshamboOption.rock });
+                  setRound3({ round: 3, value: RoshamboOption.rock });
+                  setRound4({ round: 4, value: RoshamboOption.rock });
+                  setRound5({ round: 5, value: RoshamboOption.rock });
                   return;
                 }
                 exitWin(dispatch, {
@@ -436,7 +448,7 @@ export default function Roshambo() {
             </div>
             <h3 className="title">Player {isEmpty(details.id) ? "1" : "2"}</h3>
             <h3 className="title">Set your moves</h3>
-            <p className={`txt theme ${theme}`}>
+            <p className={`txt them ${theme}`}>
               NOTE: You Pick your moves by clicking/tapping the icons to each
               option, hit play when your okay with your set pattern.
             </p>
@@ -507,7 +519,7 @@ export default function Roshambo() {
                       : round1knowState === CheckerType.won
                       ? "won"
                       : round1knowState === CheckerType.lost
-                      ? "lost"
+                        ? "lost"
                       : round1knowState === CheckerType.draw
                       ? "draw"
                       : ""}
@@ -615,9 +627,9 @@ export default function Roshambo() {
                             : RoshamboOption.rock,
                       };
                     });
-                  }}
+                   }} 
                 >
-                  {round3.value === RoshamboOption.rock ? (
+                   { round3.value === RoshamboOption.rock ? (
                     <RockIcon />
                   ) : round3.value === RoshamboOption.paper ? (
                     <PaperIcon />
@@ -725,7 +737,7 @@ export default function Roshambo() {
                   >
                     {round4knowState === CheckerType.unknown
                       ? "play"
-                      : round4knowState === CheckerType.won
+                        : round4knowState === CheckerType.won
                       ? "won"
                       : round4knowState === CheckerType.lost
                       ? "lost"
@@ -818,12 +830,12 @@ export default function Roshambo() {
               >
                 {isEmpty(details.id) ? (
                   loading ? (
-                    <MoonLoader size="20px" color={`white`} />
+                    <SyncLoader size="10px" color={`white`} />
                   ) : (
                     "Play All"
                   )
                 ) : loading ? (
-                  <MoonLoader size="20px" color={`white`} />
+                  <SyncLoader size="10px" color={`white`} />
                 ) : (
                   "Challange All"
                 )}
@@ -839,7 +851,7 @@ export default function Roshambo() {
                   }}
                 >
                   {loading ? (
-                    <MoonLoader size="20px" color={`white`} />
+                    <SyncLoader size="10px" color={`white`} />
                   ) : (
                     "Play with $"
                   )}
@@ -851,7 +863,7 @@ export default function Roshambo() {
                   }}
                 >
                   {loading ? (
-                    <MoonLoader size="20px" color={`white`} />
+                    <SyncLoader size="10px" color={`white`} />
                   ) : (
                     <>
                       play with <GameCoin />

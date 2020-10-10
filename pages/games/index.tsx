@@ -28,7 +28,7 @@ import { QueryResult } from "react-query";
 import { Games, PayType, PlayerType, Viewing } from "../../typescript/enum";
 import next, { GetStaticProps, GetStaticPropsContext } from "next";
 import { getPrice, isPlayable, getToken } from "../../functions";
-import { MoonLoader } from "react-spinners";
+import { SyncLoader } from "react-spinners";
 import Notification from "../../components/notification";
 import Roshambo from "../../components/games/roshambo";
 import { setGameDetails } from "../../store/action";
@@ -41,6 +41,8 @@ import GameView from "../../components/game_view";
 import Exitwindow from "../../components/exitwindow";
 import Header from "../../components/header";
 import {nextType} from "../../typescript/enum"
+import PickerPlayer2 from "../../components/gamepicker_player2";
+import GuessMaster from "../../components/games/matcher";
 
 
 export default function GamesScreen() {
@@ -55,6 +57,7 @@ export default function GamesScreen() {
   const game_play: MutableRefObject<HTMLSpanElement | null> = useRef();
   const [playLoader, setPlayerLoader] = useState<boolean>(false);
   const [game_loading, setgameLoading] = useState<boolean>(false);
+  const [p2, setP2] = useState<boolean>(false);
   const [runText, setRunText] = useState("loading game components...");
   const { push } = useRouter();
   const [spec, setSpec] = useState<{
@@ -203,6 +206,14 @@ const defaults: AxiosResponse<{
       <Roshambo />
       <Exitwindow />
       <Notification />
+      <GuessMaster/>
+      <PickerPlayer2 
+      game={spec.game} 
+      isOpen={p2} 
+      my={record?.data.player} 
+      close={()=>setP2(false)} 
+      spec={spec}
+      specfunc={setSpec} />
       <ToastContainer />
       <Header setApp_loading={setApp_loading} setRunText={setRunText} />
       <div
@@ -275,7 +286,7 @@ const defaults: AxiosResponse<{
               }}
             >
               {playLoader ? (
-                <MoonLoader size="25px" color="white" />
+                <SyncLoader size="10px" color="white" />
               ) : (
                 "play with $"
               )}
@@ -303,7 +314,7 @@ const defaults: AxiosResponse<{
               }}
             >
               {playLoader ? (
-                <MoonLoader size="25px" color="white" />
+                <SyncLoader size="10px" color="white" />
               ) : (
                 <>
                   play with <GameCoin />
@@ -328,7 +339,10 @@ const defaults: AxiosResponse<{
               >
                 {spec.game === Games.penalth_card ? "Taker" : "Player 1"}
               </div>
-              <div className="btn">
+              <div className="btn" onClick={()=>{
+                setSpec(prev =>{
+                  return {...prev, isOpen: false}})
+                setP2(true)}}>
                 {spec.game === Games.penalth_card ? "Keeper" : "Player 2"}
               </div>
             </div>
@@ -611,6 +625,7 @@ const defaults: AxiosResponse<{
               {my_games?.data?.games.map((game) => {
                 return (
                   <GameView
+                  type="normal"
                     name={
                       game.gameID === Games.roshambo
                         ? "Roshambo"
