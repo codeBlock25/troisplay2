@@ -4,11 +4,10 @@ import { NextRouter, useRouter } from "next/router";
 import React, { MutableRefObject, useCallback, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import openSocket from "socket.io-client";
-import { socket_url } from "../../constant";
-import { reducer } from "../dashboard/rooms";
+import { socket_url } from "../../../constant";
 import socketIO, { Socket } from "socket.io-client";
-import { useCookies } from "react-cookie";
 import { isEmpty, parseInt } from "lodash";
+import { getToken } from "../../../functions";
 
 export var socket: typeof Socket;
 
@@ -24,30 +23,25 @@ const createMessageWindow = (msg: string): HTMLDivElement => {
   let msgWindow = document.createElement("div");
   msgWindow.classList.add("content");
   msgWindow.innerHTML = `
-            <div class="message">
-              <span class="from">Game Admin</span>
-              ${msg}
-            </div>`;
+    <div class="message">
+      <span class="from">Game Admin</span>
+      ${msg}
+    </div>`;
   return msgWindow;
 };
 
 export default function Index() {
-  const [{ token }] = useCookies(["token"]);
   const { query, push, events }: NextRouter = useRouter();
   const messageContainer: MutableRefObject<
     HTMLDivElement | undefined
   > = useRef();
-  const { theme } = useSelector<reducer, { theme: string }>((state) => {
-    return {
-      theme: state.initial.theme,
-    };
-  });
+  const theme = "dark-mode"
 
   const load = useCallback(() => {
     socket = socketIO(socket_url);
     if (!isEmpty(query)) {
       socket.emit("joinRoom", {
-        token,
+        token: getToken(),
         room: query.room,
         payWith: parseInt(
           typeof query.payWith === "string" ? query.payWith : "0"
@@ -68,7 +62,7 @@ export default function Index() {
         messageContainer.current.appendChild(createMessageWindow(msg));
       });
     }
-  }, [query, token]);
+  }, [query]);
   useEffect(() => {
     load();
   }, [load]);
