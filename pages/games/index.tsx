@@ -1,6 +1,7 @@
 import Head from "next/head";
 import Link from "next/link";
 import { InView } from "react-intersection-observer";
+import {useFlutterwave} from "flutterwave-react-v3"
 import React, {
   MutableRefObject,
   useCallback,
@@ -23,7 +24,7 @@ import Lottie from "lottie-web";
 import moment from "moment";
 import { useQuery, useQueryCache } from "react-query";
 import Axios, { AxiosResponse } from "axios";
-import { url, url_media } from "../../constant";
+import { config, url, url_media } from "../../constant";
 import { QueryResult } from "react-query";
 import { Games, PayType, PlayerType, Viewing } from "../../typescript/enum";
 import next, { GetStaticProps, GetStaticPropsContext } from "next";
@@ -116,7 +117,8 @@ export default function GamesScreen() {
     currentTime: Date,
     gameTime:Date,
     isPlayable: boolean,
-  },}> = useQueryCache().getQueryData("spins")
+    },
+  }> = useQueryCache().getQueryData("spins")
   const lottieLoader = useCallback(() => {
     Lottie.loadAnimation({
       container: coinRef.current,
@@ -192,7 +194,11 @@ const defaults: AxiosResponse<{
     referRating: number;
   };
 }> = useQueryCache().getQueryData("defaults");
-  const record: AxiosResponse<{
+  const record: AxiosResponse<{ 
+    user: {
+      full_name: string;
+      phone_number: string;
+    }
     player: {
       userID: string;
       full_name: string;
@@ -235,6 +241,16 @@ const defaults: AxiosResponse<{
       pendingCash: number;
     };
   }> = useQueryCache().getQueryData("records");
+
+  const callFlutter = useFlutterwave({
+    ...config,
+    customer: {
+      email: record?.data.player.email,
+      phonenumber: record?.data.player.phone_number,
+      name: record?.data.player.full_name,
+    }
+  })
+
   return (
     <>
       <Head>
@@ -532,7 +548,7 @@ const defaults: AxiosResponse<{
         </div>
       </div>
 
-      <section
+      <section 
         className={
           gameViewOpen || spec.isOpen ? "games_world_ blur" : "games_world_"
         }
@@ -569,7 +585,12 @@ const defaults: AxiosResponse<{
                   {record?.data?.cashwallet?.currentCash.toLocaleString() ?? 0}
                 </span>
                 <div className="action">
-                  <span className="btn">fund</span>
+                  <span className="btn" onClick={()=> callFlutter({
+            callback: (response) => {
+              console.log(response);
+            },
+            onClose: () => {},
+          })}>fund</span>
                   <span className="btn">withdraw</span>
                 </div>
               </InView>

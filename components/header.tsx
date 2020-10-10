@@ -280,13 +280,15 @@ const HeadFunc = memo(function ({
         </div>
       </section>
       <section className="bottom">
-        <span
+        <Link href="/games/settings">
+        <a
           className="me_pic"
           title="Account"
           style={{
             backgroundImage: `url(${url_media}${record?.data?.player?.playerpic})`,
           }}
         />
+            </Link>
         <Link href="/games">
           <a className="logo" />
         </Link>
