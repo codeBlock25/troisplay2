@@ -67,6 +67,22 @@ const HeadFunc = memo(function ({
   });
   
   const {
+    data: rooms,
+  }: QueryResult<AxiosResponse<{
+    rooms: {
+      _id: string;
+      room_name: string;
+      date: Date;
+      last_changed: Date;
+      entry_price: number;
+      key_time: number;
+      player_limit: number;
+      addedBy: string;
+      activeMember: number;
+      players: [string];
+    }[];
+  }>> = useQuery("rooms", async () => await Axios.get(`${url}/rooms`));
+  const {
     data: my_games,
   }: QueryResult<AxiosResponse<{
     games: {

@@ -27,7 +27,7 @@ const GameView = memo(function ({
   cash: number;
     coin: number;
   game: Games
-  type:"game_view"|"normal" | "lucky",
+  type:"game_view"|"normal" | "lucky" | "room",
     btn1func?: () => Promise<void>
   btn1view?: JSX.Element
   btn2func?:()=>Promise<void>
@@ -74,7 +74,18 @@ const GameView = memo(function ({
             </span>
               <span className="Win">$ {v3 ?? 0}</span>
               </>
-        ):(
+        ):
+          type === "room" ? (
+            <>
+            <span className="entry ($)">$ {v1 ?? 0}
+            </span>
+            <span className="entry (coin)">
+              <GameCoin width={10} height={10} /> {v2 ?? 0}
+            </span>
+              <span className="Members">{v3 ?? 0}</span>
+              </>
+              )
+        :(
         <>
           <span className="stake">
             $ {cash.toLocaleString().slice(0, 7)}

@@ -97,15 +97,26 @@ export default function GamesScreen() {
       _id: string;
     }[]
   }> = useQueryCache().getQueryData("lucky-games")
-  
+  const rooms: AxiosResponse<{
+    rooms: {
+      _id: string;
+      room_name: string;
+      date: Date;
+      last_changed: Date;
+      entry_price: number;
+      key_time: number;
+      player_limit: number;
+      addedBy: string;
+      activeMember: number;
+      players: [string];
+    }[];
+  }> = useQueryCache().getQueryData("rooms")
   const spins: AxiosResponse<{
     spin_details: {
     currentTime: Date,
     gameTime:Date,
     isPlayable: boolean,
   },}> = useQueryCache().getQueryData("spins")
-
-console.log(lucky_games)
   const lottieLoader = useCallback(() => {
     Lottie.loadAnimation({
       container: coinRef.current,
@@ -684,7 +695,8 @@ const defaults: AxiosResponse<{
                     game={game.gameID}
                   />
                 );
-             })) : viewing === Viewing.lucky_geoge ?
+             })) :
+                  viewing === Viewing.lucky_geoge ?
                     (lucky_games?.data?.games.map((game) => {
                 return (
                   <GameView
@@ -703,8 +715,29 @@ const defaults: AxiosResponse<{
                     btn1func={async ()=> await PlayLuckyGeogeGame(PayType.cash, game_loading, setgameLoading, game._id,dispatch, game.battleScore.player1.title )}
                     btn2func={async ()=> await PlayLuckyGeogeGame(PayType.coin, game_loading, setgameLoading, game._id,dispatch, game.battleScore.player1.title )}
                   />
+                  );
+                    })) :
+                    viewing === Viewing.room ? 
+                      (rooms?.data?.rooms.map((game) => {
+                        return (
+                          <GameView
+                            type="room"
+                            name={game.room_name}
+                            key={game._id}
+                            date={game.date}
+                            id={game._id}
+                            cash={game.entry_price}
+                            v1={game.entry_price}
+                            v2={game.entry_price * (defaults?.data.default.cashRating ?? 0)}
+                            coin={game.player_limit}
+                            v3={game.activeMember}
+                            game={Games.non}
+                            btn1func={async () => await PlayLuckyGeogeGame(PayType.cash, game_loading, setgameLoading, game._id, dispatch, game.room_name )}
+                            btn2func={async () => await PlayLuckyGeogeGame(PayType.coin, game_loading, setgameLoading, game._id, dispatch, game.room_name)}
+                          />
+                        
                 );
-              })):""
+              })) :""
             }
             </div>
           </div>
