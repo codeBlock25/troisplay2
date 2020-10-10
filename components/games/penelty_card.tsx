@@ -373,7 +373,7 @@ if (price >0) {
                   return;
                 }
                 exitWin(dispatch, {
-                  open: modalType.close,
+                  open: modalType.open,
                   func: async () => {
                     let token = getToken();
                     await Axios({
@@ -399,6 +399,12 @@ if (price >0) {
                         setRound3({ round: 3, value: PenaltyOption.left });
                         setRound4({ round: 4, value: PenaltyOption.left });
                         setRound5({ round: 5, value: PenaltyOption.left });
+                        setGameDetails(dispatch, {
+                          player: PlayerType.first,
+                          game: Games.non,
+                          id: undefined,
+                          price: 0,
+                        });
                       })
                       .catch(() => {
                         toast(dispatch, {

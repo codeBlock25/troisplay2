@@ -70,7 +70,7 @@ const Notification = memo(function () {
         <div
           className="close_btn"
           onClick={() => {
-            notify(dispatch, { ...notification, isOpen: modalType.close });
+            notify(dispatch, { ...notification, isOpen: modalType.close, type: NotiErrorType.non });
           }}
         >
           <CloseIcon />

@@ -233,7 +233,7 @@ export default function Roshambo() {
   ): Promise<void> => {
     let token = getToken();
     if (playStateLoad) return;
-    setPlayStateLoading(true);
+    // setPlayStateLoading(true);
     await Axios({
       method: "POST",
       url: `${url}/games/roshambo/challange/one-on-one`,
@@ -408,7 +408,7 @@ export default function Roshambo() {
                   return;
                 }
                 exitWin(dispatch, {
-                  open: modalType.close,
+                  open: modalType.open,
                   func: async () => {
                     let token = getToken();
                     await Axios({
@@ -434,6 +434,12 @@ export default function Roshambo() {
                         setRound3({ round: 3, value: RoshamboOption.rock });
                         setRound4({ round: 4, value: RoshamboOption.rock });
                         setRound5({ round: 5, value: RoshamboOption.rock });
+                        setGameDetails(dispatch, {
+                          player: PlayerType.first,
+                          game: Games.non,
+                          id: undefined,
+                          price: 0,
+                        });
                       })
                       .catch(() => {
                         toast(dispatch, {

@@ -24,6 +24,28 @@ const HeadFunc = memo(function ({
 }) {
   const { push } = useRouter();
   const {
+    data: lucky_games,
+  }: QueryResult<AxiosResponse<{
+    games: {
+      date: Date;
+      gameDetail: string;
+      gameID: Games;
+      gameMemberCount: number;
+      gameType: Games;
+      members: string[];
+      playCount: number;
+      price_in_coin: number;
+      price_in_value: number;
+      _id: string;
+    }[];
+  }>> = useQuery("lucky-games", async () => {
+    let token = getToken();
+    return await Axios.get(`${url}/games/lucky-geoge`, {
+      headers: { authorization: `Bearer ${token}` },
+    });
+  });
+  
+  const {
     data: my_games,
   }: QueryResult<AxiosResponse<{
     games: {
@@ -44,6 +66,7 @@ const HeadFunc = memo(function ({
       headers: { authorization: `Bearer ${token}` },
     });
   });
+  
   const {
     data: record,
     isLoading,

@@ -46,6 +46,7 @@ export enum NotiErrorType {
   success,
   state,
   ok,
+  non
 }
 export enum modalType {
   open,

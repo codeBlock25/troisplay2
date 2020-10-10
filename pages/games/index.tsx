@@ -74,6 +74,29 @@ export default function GamesScreen() {
     next: nextType.player,
   });
 
+  const lucky_games: AxiosResponse<{
+    games: {
+      battleScore: {
+        player1: {
+          description: string
+          title: string
+          winnerCount: number
+      }}
+      date: Date
+      gameDetail: string
+      gameID: Games
+      gameMemberCount: number
+      gameType: string
+      isComplete: boolean
+      members: string[]
+      playCount: number
+      played: boolean
+      price_in_coin: number
+      price_in_value: number
+      _id: string;
+    }[]
+  }> = useQueryCache().getQueryData("lucky-games")
+console.log(lucky_games)
   const lottieLoader = useCallback(() => {
     Lottie.loadAnimation({
       container: coinRef.current,
@@ -622,7 +645,9 @@ const defaults: AxiosResponse<{
               </div>
             </div>
             <div className="game_content">
-              {my_games?.data?.games.map((game) => {
+              {
+                viewing === Viewing.current ?
+             ( my_games?.data?.games.map((game) => {
                 return (
                   <GameView
                   type="normal"
@@ -643,7 +668,23 @@ const defaults: AxiosResponse<{
                     game={game.gameID}
                   />
                 );
-              })}
+             })) : viewing === Viewing.lucky_geoge ?
+                    (lucky_games?.data?.games.map((game) => {
+                return (
+                  <GameView
+                  type="lucky"
+                    name={game.battleScore.player1.title
+                    }
+                    key={game._id}
+                    date={game.date}
+                    id={game._id}
+                    cash={game.price_in_value}
+                    coin={game.battleScore.player1.winnerCount}
+                    game={game.gameID}
+                  />
+                );
+              })):""
+            }
             </div>
           </div>
         </div>

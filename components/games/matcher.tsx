@@ -9,10 +9,10 @@ import {
 import Link from "next/link";
 import { isEmpty } from "lodash";
 import { SyncLoader } from "react-spinners";
-import { Games, modalType, PlayerType } from "../../typescript/enum";
+import { Games, modalType, PayType, PlayerType } from "../../typescript/enum";
 import { reducerType } from "../../typescript/interface";
 import { getToken } from "../../functions";
-import { CloseIcon } from "../../icon";
+import { CloseIcon, GameCoin } from "../../icon";
 
 
 const GuessMaster = memo(function () {
@@ -60,16 +60,15 @@ const GuessMaster = memo(function () {
   }, [isStarted, details]);
 
   const matchPlay = async (
-    e: MouseEvent<HTMLButtonElement | HTMLDivElement | HTMLElement>
+    payWith: PayType
   ): Promise<void> => {
-    e.preventDefault();
     let token = getToken()
     if (loading || num === 0) return;
     setLoading(true);
     if (isEmpty(details.id)) {
       await Axios({
         method: "POST",
-        url: `${url}/games/matcher`,
+        url: `${url}/games/guess-master`,
         headers: {
           authorization: `Bearer ${token}`,
         },
@@ -96,14 +95,24 @@ const GuessMaster = memo(function () {
               date?: Date;
             };
           }>) => {
-// won
-          })
-        .catch((err) => {
-          if (err.message === "Request failed with status code 401") {
-          // fund  
-          }
-        // normal error  
-        })
+            setGameDetails(dispatch, {
+            player: PlayerType.first,
+            game: Games.non,
+            id: undefined,
+            price: 0,
+          });
+    toast(dispatch, {
+      msg: `Congratulations!!!! You have successfully played a game, please wait for Player 2's challange.`,
+    }).success();
+  }
+)
+.catch((err) => {
+  if (err.message === "Request failed with status code 401") {
+    toast(dispatch, {msg: `Insufficient Fund, please fund your ${payWith === PayType.cash?"cash wallet":"coin wallet"} to continue the game.`}).fail()
+    return;
+  }
+  toast(dispatch, {msg: `An Error occured could not connect to troisplay game server please check you interner connection and Try Again.`}).error()
+})
         .finally(() => {
           setLoading(false);
           setNum(0);
@@ -229,7 +238,7 @@ const theme = "dark-mode"
                   return;
                 }
                 exitWin(dispatch, {
-                  open: modalType.close,
+                  open: modalType.open,
                   func: async () => {
                     let token = getToken();
                     await Axios({
@@ -254,6 +263,12 @@ const theme = "dark-mode"
                         setView7(true);
                         setNum(1);
                         setPlayed([]);
+                        setGameDetails(dispatch, {
+                          player: PlayerType.first,
+                          game: Games.non,
+                          id: undefined,
+                          price: 0,
+                        });
                       })
                       .catch(() => {
                         toast(dispatch, {
@@ -332,8 +347,11 @@ const theme = "dark-mode"
               7
             </div>
           </div>
-          <div className={`btn_ theme ${theme}`} onClick={matchPlay}>
-            {loading ? <SyncLoader size="10px" color={`white`} /> : "play"}
+          <div className={`btn_ theme ${theme}`} onClick={()=>matchPlay(PayType.cash)}>
+            {loading ? <SyncLoader size="10px" color={`white`} /> : <>play  wiht $</>}
+          </div>
+          <div className={`btn_ theme ${theme}`} onClick={()=>matchPlay(PayType.coin)}>
+            {loading ? <SyncLoader size="10px" color={`white`} /> : <>play with <GameCoin /></>}
           </div>
         </div>
       </div>

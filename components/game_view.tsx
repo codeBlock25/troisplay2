@@ -24,7 +24,7 @@ const GameView = memo(function ({
   cash: number;
     coin: number;
   game: Games
-  type:"game_view"|"normal",
+  type:"game_view"|"normal" | "lucky",
   btn1func?:()=>Promise<void>
   btn1view?: JSX.Element
   btn2func?:()=>Promise<void>
