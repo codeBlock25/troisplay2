@@ -209,7 +209,7 @@ const GuessMaster = memo(function () {
         });
     }
   };
-const theme = "dark-mode"
+  const theme = "dark-mode"
   if (details.game === Games.matcher)
     return (
       <div className={`gameworld ${theme}`}>
@@ -286,6 +286,12 @@ const theme = "dark-mode"
             NOTE: You Pick your moves by clicking/tapping the icons to each
             option, hit play when yo have made you choice.
           </p>
+          {
+            details.player === PlayerType.second || !isEmpty(details.id) && (
+              <p className={`sub_txt theme ${theme}`}>
+                You have used {playCount -1} out your 3 trials
+              </p>)
+          }
           <div className="num">
             <span>{num}</span>
           </div>

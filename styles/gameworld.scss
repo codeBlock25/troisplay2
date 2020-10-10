@@ -353,6 +353,20 @@
             }
         }
 
+        .sub_txt {
+            width: 100%;
+            min-width: 100%;
+            height: fit-content;
+            min-height: fit-content;
+            display: flex;
+            padding: 0 10px;
+            font-size: 13px;
+            color:  $defaultColor;
+            font-family: mon_med;
+            justify-content: center;
+            text-align: center;
+        }
+        
         .txt {
             width: 100%;
             height: fit-content;
