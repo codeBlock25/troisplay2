@@ -31,7 +31,7 @@ import { getPrice, isPlayable, getToken } from "../../functions";
 import { SyncLoader } from "react-spinners";
 import Notification from "../../components/notification";
 import Roshambo from "../../components/games/roshambo";
-import { setGameDetails } from "../../store/action";
+import { setGameDetails, toast } from "../../store/action";
 import { useDispatch } from "react-redux";
 import Penalty_card from "../../components/games/penelty_card";
 import ToastContainer from "../../components/toast";
@@ -43,6 +43,7 @@ import Header from "../../components/header";
 import {nextType} from "../../typescript/enum"
 import PickerPlayer2 from "../../components/gamepicker_player2";
 import GuessMaster from "../../components/games/matcher";
+import Gloryspin from "../../components/games/gloryspin";
 
 
 export default function GamesScreen() {
@@ -96,6 +97,14 @@ export default function GamesScreen() {
       _id: string;
     }[]
   }> = useQueryCache().getQueryData("lucky-games")
+  
+  const spins: AxiosResponse<{
+    spin_details: {
+    currentTime: Date,
+    gameTime:Date,
+    isPlayable: boolean,
+  },}> = useQueryCache().getQueryData("spins")
+
 console.log(lucky_games)
   const lottieLoader = useCallback(() => {
     Lottie.loadAnimation({
@@ -228,6 +237,7 @@ const defaults: AxiosResponse<{
       <Penalty_card />
       <Roshambo />
       <Exitwindow />
+      <Gloryspin />
       <Notification />
       <GuessMaster/>
       <PickerPlayer2 
@@ -578,7 +588,13 @@ const defaults: AxiosResponse<{
                   >
                     get more
                   </span>
-                  <span className="btn">glory spin</span>
+                  <span className="btn" onClick={() => {
+                    if (spins?.data?.spin_details.isPlayable) {
+                      setGameDetails(dispatch,{player: PlayerType.first, game: Games.glory_spin, price: 0, id: undefined})
+                    } else {
+                      toast(dispatch, {msg: "Sorry glory spin can only be used once a day."}).fail()
+                    }
+                  }}>glory spin</span>
                 </div>
               </InView>
               <InView

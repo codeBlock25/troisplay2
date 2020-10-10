@@ -207,6 +207,10 @@ export async function isPlayable(
     });
 }
 
+export async function canSpin() {
+  
+} 
+
 export function getToken(): string {
   const token = window.localStorage.getItem("game_token");
   return token;

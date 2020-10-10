@@ -713,6 +713,11 @@
             align-self: center;
             margin: 20px 0;
             animation: role 1s linear infinite normal forwards;
+            animation-play-state: running;
+
+            &.off {
+                animation-play-state: paused;
+            }
 
             @keyframes role {
                 from {

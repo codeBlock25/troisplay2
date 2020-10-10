@@ -44,6 +44,27 @@ const HeadFunc = memo(function ({
       headers: { authorization: `Bearer ${token}` },
     });
   });
+  const {
+    data: spins,
+  }: QueryResult<AxiosResponse<{
+    games: {
+      date: Date;
+      gameDetail: string;
+      gameID: Games;
+      gameMemberCount: number;
+      gameType: Games;
+      members: string[];
+      playCount: number;
+      price_in_coin: number;
+      price_in_value: number;
+      _id: string;
+    }[];
+  }>> = useQuery("spins", async () => {
+    let token = getToken();
+    return await Axios.get(`${url}/games/spin/check-time`, {
+      headers: { authorization: `Bearer ${token}` },
+    });
+  });
   
   const {
     data: my_games,
