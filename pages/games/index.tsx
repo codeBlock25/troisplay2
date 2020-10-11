@@ -45,6 +45,7 @@ import {nextType} from "../../typescript/enum"
 import PickerPlayer2 from "../../components/gamepicker_player2";
 import GuessMaster from "../../components/games/matcher";
 import Gloryspin from "../../components/games/gloryspin";
+import Bottompanel from "../../components/bottompanel";
 
 export default function GamesScreen() {
   const dispatch = useDispatch();
@@ -62,7 +63,7 @@ export default function GamesScreen() {
   const [p2, setP2] = useState<boolean>(false);
   const [fundTp, setFund] = useState<number>(0)
   const [action, setAction]  = useState<ReasonType>(ReasonType.non)
-  const { push } = useRouter();
+  const { push, beforePopState } = useRouter();
   const [time, setTime] = useState<string>("00:00");
   const spin: AxiosResponse<{
     spin_details: {
@@ -256,6 +257,14 @@ const defaults: AxiosResponse<{
     };
   }> = useQueryCache().getQueryData("records");
 
+  
+  useEffect(() => {
+    beforePopState(({ url, as, options }) => {
+      alert("Are you sure you want to leave this page?.")
+      return true
+    })
+  }, [])
+
   const callFlutter = useFlutterwave({
     ...config,
     amount: fundTp,
@@ -281,7 +290,8 @@ const defaults: AxiosResponse<{
       <Exitwindow />
       <Gloryspin />
       <Notification />
-      <GuessMaster/>
+      <GuessMaster />
+      <Bottompanel/>
       <PickerPlayer2 
       game={spec.game} 
       isOpen={p2} 
