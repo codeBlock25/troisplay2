@@ -48,6 +48,13 @@ export enum NotiErrorType {
   ok,
   non
 }
+
+export enum ReasonType {
+  fund,
+  withdraw,
+  non
+}
+
 export enum modalType {
   open,
   close,

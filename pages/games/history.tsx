@@ -65,14 +65,27 @@ export default function HistoryScreen() {
     lottieLoader();
   }, [lottieLoader]);
 
-  useEffect(() => {
-    let timecount = setInterval(() => {
-      setDateintime(moment(new Date()).format("hh:mm:ss a"));
-    }, 300);
+  const spin: AxiosResponse<{
+    spin_details: {
+      currentTime: Date,
+      gameTime: Date,
+      isPlayable: boolean,
+    },}> = useQueryCache().getQueryData("spins")
+  const timmer = useCallback(() => {
+    let countdownEvt = setInterval(() => {
+      let time = moment(
+        moment(spin?.data?.spin_details.gameTime?? new Date()).diff(new Date())
+      ).format("HH:MM:ss");
+      setDateintime(time);
+    }, 200);
     return () => {
-      clearInterval(timecount);
+      clearInterval(countdownEvt);
     };
-  }, []);
+  }, [spin]);
+  useEffect(() => {
+    timmer();
+  }, [timmer]);
+
   const defaults: AxiosResponse<{
     default: {
       commission_roshambo: {
@@ -283,7 +296,7 @@ export default function HistoryScreen() {
                 }}
                 className="sw"
               >
-                <span className="time">{dateintime}</span>
+                <span className="time">Next Spin {dateintime}</span>
                 <h3 className="title">Cash</h3>
                 <span className="price">
                   ${" "}
@@ -305,7 +318,7 @@ export default function HistoryScreen() {
                 }}
                 className="sw"
               >
-                <span className="time">{dateintime}</span>
+                <span className="time">Next Spin {dateintime}</span>
                 <h3 className="title">Coin</h3>
                 <span className="price">
                   <span ref={coinRef} className="icon" />
@@ -334,7 +347,7 @@ export default function HistoryScreen() {
                 }}
                 className="sw"
               >
-                <span className="time">{dateintime}</span>
+                <span className="time">Next Spin {dateintime}</span>
                 <h3 className="title">Earnings</h3>
                 <span className="price">
                   <span ref={coinRef2} className="icon" />{" "}

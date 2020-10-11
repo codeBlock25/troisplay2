@@ -8,6 +8,7 @@ import { socket_url } from "../../../constant";
 import socketIO, { Socket } from "socket.io-client";
 import { isEmpty, parseInt } from "lodash";
 import { getToken } from "../../../functions";
+import Head from "next/head";
 
 export var socket: typeof Socket;
 
@@ -19,19 +20,26 @@ export enum exitReason {
   insufficient_fund,
 }
 
-const createMessageWindow = (msg: string): HTMLDivElement => {
+export enum fromType {
+  me,
+  server,
+  people
+}
+
+
+const createMessageWindow = (msg: string, author: string, from: fromType ): HTMLDivElement => {
   let msgWindow = document.createElement("div");
   msgWindow.classList.add("content");
   msgWindow.innerHTML = `
-    <div class="message">
-      <span class="from">Game Admin</span>
+    <div class=${from === fromType.server? "message":"message me"}>
+      <span class="from">${author}</span>
       ${msg}
     </div>`;
   return msgWindow;
 };
 
 export default function Index() {
-  const { query, push, events }: NextRouter = useRouter();
+  const { query, push, events,beforePopState }: NextRouter = useRouter();
   const messageContainer: MutableRefObject<
     HTMLDivElement | undefined
   > = useRef();
@@ -48,25 +56,35 @@ export default function Index() {
         ),
       });
       socket.on("out", ({ exit, reason }) => {
-        // push("/dashboard/games")
-        console.log(reason, "k");
+        messageContainer.current.appendChild(createMessageWindow(reason, "Game Police", fromType.people));
+        setTimeout(() => {
+          push("/games")
+        }, 5000);
       });
-      socket.on("message", (msg: string) => {
-        console.log(msg, "lll");
+      socket.on("message", (obj: {msg: string, author: string}) => {
+        messageContainer.current.appendChild(createMessageWindow(obj.msg, obj.author, fromType.people));
       });
-      socket.on("game_message", (game_msg: any) => {
-        console.log(game_msg, "lll");
+      socket.on("game_message", (msg: any) => {
+        messageContainer.current.appendChild(createMessageWindow(msg, "Room Question", fromType.server));
       });
       socket.on("admin", (msg: string) => {
         console.log(msg);
-        messageContainer.current.appendChild(createMessageWindow(msg));
+        messageContainer.current.appendChild(createMessageWindow(msg, "Game Admin", fromType.server));
       });
     }
   }, [query]);
+  
+  useEffect(() => {
+    beforePopState(({ url, as, options }) => {
+      alert("Leaving this room will not pause you Room time or Game are you sure you want to leave?.")
+      return false
+    })
+  }, [])
   useEffect(() => {
     load();
   }, [load]);
   return (
+    <>
     <section className={`Game_Room_World ${theme}`}>
       <section className={`world ${theme}`}>
         <div className="head">
@@ -103,6 +121,7 @@ export default function Index() {
         </div>
       </section>
     </section>
+    </>
   );
 }
  

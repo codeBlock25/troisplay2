@@ -26,7 +26,7 @@ import { useQuery, useQueryCache } from "react-query";
 import Axios, { AxiosResponse } from "axios";
 import { config, url, url_media } from "../../constant";
 import { QueryResult } from "react-query";
-import { Games, PayType, PlayerType, Viewing } from "../../typescript/enum";
+import { Games, PayType, PlayerType, Viewing, ReasonType } from "../../typescript/enum";
 import next, { GetStaticProps, GetStaticPropsContext } from "next";
 import { getPrice, isPlayable, getToken, PlayLuckyGeogeGame } from "../../functions";
 import { SyncLoader } from "react-spinners";
@@ -46,7 +46,6 @@ import PickerPlayer2 from "../../components/gamepicker_player2";
 import GuessMaster from "../../components/games/matcher";
 import Gloryspin from "../../components/games/gloryspin";
 
-
 export default function GamesScreen() {
   const dispatch = useDispatch();
   const [viewing, setViewing] = useState<Viewing>(Viewing.current);
@@ -61,7 +60,31 @@ export default function GamesScreen() {
   const [playLoader, setPlayerLoader] = useState<boolean>(false);
   const [game_loading, setgameLoading] = useState<boolean>(false);
   const [p2, setP2] = useState<boolean>(false);
+  const [fundTp, setFund] = useState<number>(0)
+  const [action, setAction]  = useState<ReasonType>(ReasonType.non)
   const { push } = useRouter();
+  const [time, setTime] = useState<string>("00:00");
+  const spin: AxiosResponse<{
+    spin_details: {
+      currentTime: Date,
+      gameTime: Date,
+      isPlayable: boolean,
+    },}> = useQueryCache().getQueryData("spins")
+  const timmer = useCallback(() => {
+    let countdownEvt = setInterval(() => {
+      let time = moment(
+        moment(spin?.data?.spin_details.gameTime?? new Date()).diff(new Date())
+      ).format("HH:MM:ss");
+      setDateintime(time);
+    }, 200);
+    return () => {
+      clearInterval(countdownEvt);
+    };
+  }, [spin]);
+  useEffect(() => {
+    timmer();
+  }, [timmer]);
+
   const [spec, setSpec] = useState<{
     isOpen: boolean;
     manual: string;
@@ -146,14 +169,6 @@ export default function GamesScreen() {
     lottieLoader();
   }, [lottieLoader]);
 
-  useEffect(() => {
-    let timecount = setInterval(() => {
-      setDateintime(moment(new Date()).format("hh:mm:ss a"));
-    }, 300);
-    return () => {
-      clearInterval(timecount);
-    };
-  }, []);
   const my_games: AxiosResponse<{
     games: {
       date: Date;
@@ -244,6 +259,7 @@ const defaults: AxiosResponse<{
 
   const callFlutter = useFlutterwave({
     ...config,
+    amount: fundTp,
     customer: {
       email: record?.data.player.email,
       phonenumber: record?.data.player.phone_number,
@@ -276,6 +292,65 @@ const defaults: AxiosResponse<{
       specfunc={setSpec} />
       <ToastContainer />
       <Header setApp_loading={setApp_loading} setRunText={setRunText} />
+      <div
+        className={`game_picker_view ${action !== ReasonType.non ? "open" : ""}`}
+        onClick={(e: any) => {
+          if (!e.target?.classList?.contains("game_picker_view")) {
+            return;
+          }
+          setAction(ReasonType.non)
+        }}
+      >
+        {action !== ReasonType.non && (
+          <div className="container_price">
+            <h3 className="title">Troisplay E wallet form.</h3>
+            <p className="txt">
+              {
+                ((fundTp> (record?.data?.cashwallet.currentCash??0)) && action === ReasonType.withdraw) && `Can't withdraw more than your avalible balance`
+              }
+            </p>
+            <div className="inputBox">
+              <label htmlFor="number">Account</label>
+              <input
+                type="number"
+                value={fundTp}
+                onChange={(e) => {
+                  e.persist();
+                  setFund(parseInt(e.target.value, 10));
+                }}
+                id="funds"
+                placeholder="in ($)"
+              />
+            </div>
+            <span
+              className="btn"
+              onClick={async () => {
+                if (action === ReasonType.fund) {
+                  callFlutter({
+                    callback: (response) => {
+                    console.log(response);
+                  },
+                  onClose: () => {
+                    setFund(0);
+                    setAction(ReasonType.non);
+                  },
+                });
+                } else {
+                  return;
+              }
+              }}
+              >
+              {playLoader ? (
+                <SyncLoader size="10px" color="white" />
+              ) : action === ReasonType.withdraw ?
+                  "Withdraw" :
+                  action === ReasonType.fund ? "Fund":""
+              }
+            </span>
+          </div>
+        )}
+      </div>
+     
       <div
         className={`game_picker_view ${spec.isOpen ? "open" : ""}`}
         onClick={(e: any) => {
@@ -578,20 +653,15 @@ const defaults: AxiosResponse<{
                 }}
                 className="sw"
               >
-                <span className="time">{dateintime}</span>
+                <span className="time">Next Spin {dateintime}</span>
                 <h3 className="title">Cash</h3>
                 <span className="price">
                   ${" "}
                   {record?.data?.cashwallet?.currentCash.toLocaleString() ?? 0}
                 </span>
                 <div className="action">
-                  <span className="btn" onClick={()=> callFlutter({
-            callback: (response) => {
-              console.log(response);
-            },
-            onClose: () => {},
-          })}>fund</span>
-                  <span className="btn">withdraw</span>
+                  <span className="btn" onClick={()=>setAction(ReasonType.fund) }>fund</span>
+                  <span className="btn" onClick={()=>setAction(ReasonType.withdraw)}>withdraw</span>
                 </div>
               </InView>
               <InView
@@ -605,7 +675,7 @@ const defaults: AxiosResponse<{
                 }}
                 className="sw"
               >
-                <span className="time">{dateintime}</span>
+                <span className="time">Next Spin{dateintime}</span>
                 <h3 className="title">Coin</h3>
                 <span className="price">
                   <span ref={coinRef} className="icon" />
@@ -640,7 +710,7 @@ const defaults: AxiosResponse<{
                 }}
                 className="sw"
               >
-                <span className="time">{dateintime}</span>
+                <span className="time">Next Spin{dateintime}</span>
                 <h3 className="title">Earnings</h3>
                 <span className="price">
                   <span ref={coinRef2} className="icon" />{" "}

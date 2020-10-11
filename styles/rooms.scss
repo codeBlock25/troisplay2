@@ -1,0 +1,104 @@
+@import "./variable";
+
+.Room {
+    padding-top: 100px;
+    padding-bottom: 50px;
+
+    .container {
+        width: calc(100% - 230px);
+        height: fit-content;
+        margin-left: 10px;
+        min-height: fit-content;
+        display: flex;
+        padding: 20px 10px;
+
+        .view {
+            width: 200px;
+            height: 230px;
+            min-width: 200px;
+            min-height: 230px;
+            display: flex;
+            flex-direction: column;
+            background-color: #f7f6f5;
+            margin: 10px 20px;
+            box-shadow: 0 10px 20px #00000014, 0 0 10px #7d7d7d14;
+            border-radius: 7px;
+
+            svg {
+                width: 100px;
+                height: 100px;
+                display: flex;
+                align-self: center;
+                opacity: 0.8;
+                margin: 20px 0 10px 0;
+            }
+
+            .details {
+                width: 100%;
+                height: 130px;
+                display: flex;
+                flex-direction: column;
+                padding: 4px 10px;
+
+                .name {
+                    width: 100%;
+                    height: fit-content;
+                    min-height: fit-content;
+                    display: flex;
+                    padding: 4px 0 2px 0;
+                    color: $defaultColor;
+                    font-size: 14px;
+                    font-family: exep_bold;
+                }
+
+                .dd {
+                    width: 100%;
+                    height: fit-content;
+                    min-height: fit-content;
+                    display: inline-block;
+                    padding: 2px 0;
+                    font-size: 13px;
+
+                    b {
+                        font-family: exep_bold;
+                    }
+
+                }
+
+                p {
+                    width: 100%;
+                    height: fit-content;
+                    min-height: fit-content;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-size: 11px;
+                    margin: 3px 0;
+                }
+
+                .action {
+                    width: 100%;
+                    height: 50px;
+                    display: flex;
+                    justify-content: space-evenly;
+
+                    .btn {
+                        width: 45%;
+                        height: 30px;
+                        min-height: 30px;
+                        background-color: #FF9800;
+
+                        &:nth-of-type(2) {
+                            background-color: #2196F3;
+                        }
+
+                        * {
+                            font-size: 12px;
+                            color: white;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
