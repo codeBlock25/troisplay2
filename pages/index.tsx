@@ -12,7 +12,6 @@ import ToastContainer from "../components/toast";
 import { errorType, modalType } from "../typescript/enum";
 import { toast } from "../store/action";
 import { useDispatch } from "react-redux";
-import Flutterwave from "flutterwave-node-v3"
 
 const choose = require("../lottie/choose.json");
 const fund = require("../lottie/fund.json");
@@ -20,7 +19,6 @@ const money = require("../lottie/money.json");
  
 export default function Index() {
   const dispatch = useDispatch();
-const flw = new Flutterwave(PUBLIC_KEY, SECRET_KEY);
   const [nav_bar, setNarBar] = useState<boolean>(false);
   const chooseContainerRef = useRef(null);
   const fundContainerRef = useRef(null);
