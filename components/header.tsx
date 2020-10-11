@@ -23,18 +23,6 @@ const HeadFunc = memo(function ({
   setApp_loading: (T: boolean) => void;
 }) {
   const { push } = useRouter();
-  const { data: country } = useQuery("countries", async () => {
-    let t;
-    await Axios.get(`https://api.flutterwave.com/v3/banks/NG`, {
-      headers: {
-        Authorization: `Bearer FLWPUBK_TEST-c23352ac95b93d00886fac974599402b-X`,
-      }
-    }).then((re) => {
-      t = re
-    })
-    return t 
-  })
-  console.log(country)
   const {
     data: lucky_games,
   }: QueryResult<AxiosResponse<{

@@ -24,7 +24,7 @@ import Lottie from "lottie-web";
 import moment from "moment";
 import { useQuery, useQueryCache } from "react-query";
 import Axios, { AxiosResponse } from "axios";
-import { config, url, url_media } from "../../constant";
+import { config, PUBLIC_KEY, SECRET_KEY, url, url_media } from "../../constant";
 import { QueryResult } from "react-query";
 import { Games, PayType, PlayerType, Viewing, ReasonType } from "../../typescript/enum";
 import next, { GetStaticProps, GetStaticPropsContext } from "next";
@@ -70,20 +70,19 @@ export default function GamesScreen() {
       gameTime: Date,
       isPlayable: boolean,
     },}> = useQueryCache().getQueryData("spins")
-  const timmer = useCallback(() => {
+  useEffect(() => {
     let countdownEvt = setInterval(() => {
-      let time = moment(
-        moment(spin?.data?.spin_details.gameTime?? new Date()).diff(new Date())
-      ).format("HH:MM:ss");
-      setDateintime(time);
-    }, 200);
-    return () => {
-      clearInterval(countdownEvt);
+    if (spin) {
+        let time = moment(
+          moment(spin?.data?.spin_details.gameTime?? new Date()).diff(new Date())
+          ).format("HH:MM:ss");
+          setDateintime(spin.data.spin_details.isPlayable ? "00:00:00":time);
+        }
+        }, 200);
+        return () => {
+          clearInterval(countdownEvt);
     };
   }, [spin]);
-  useEffect(() => {
-    timmer();
-  }, [timmer]);
 
   const [spec, setSpec] = useState<{
     isOpen: boolean;
@@ -823,10 +822,13 @@ const defaults: AxiosResponse<{
                             coin={game.player_limit}
                             v3={game.activeMember}
                             game={Games.non}
-                            btn1func={async () => await PlayLuckyGeogeGame(PayType.cash, game_loading, setgameLoading, game._id, dispatch, game.room_name )}
-                            btn2func={async () => await PlayLuckyGeogeGame(PayType.coin, game_loading, setgameLoading, game._id, dispatch, game.room_name)}
-                          />
-                        
+                            btn1func={() => {
+                              push(`/games/rooms/${game.room_name}?payWith=${PayType.cash}`);
+                            }}
+                            btn2func={() => {
+                              push(`/games/rooms/${game.room_name}?payWith=${PayType.cash}`)
+                            }}
+                        />
                 );
               })) :""
             }

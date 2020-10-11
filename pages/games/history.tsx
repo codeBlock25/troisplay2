@@ -64,27 +64,25 @@ export default function HistoryScreen() {
   useEffect(() => {
     lottieLoader();
   }, [lottieLoader]);
-
   const spin: AxiosResponse<{
     spin_details: {
       currentTime: Date,
       gameTime: Date,
       isPlayable: boolean,
     },}> = useQueryCache().getQueryData("spins")
-  const timmer = useCallback(() => {
+  useEffect(() => {
     let countdownEvt = setInterval(() => {
-      let time = moment(
-        moment(spin?.data?.spin_details.gameTime?? new Date()).diff(new Date())
-      ).format("HH:MM:ss");
-      setDateintime(time);
-    }, 200);
-    return () => {
-      clearInterval(countdownEvt);
+    if (spin) {
+        let time = moment(
+          moment(spin?.data?.spin_details.gameTime?? new Date()).diff(new Date())
+          ).format("HH:MM:ss");
+          setDateintime(spin.data.spin_details.isPlayable ? "00:00:00":time);
+        }
+        }, 200);
+        return () => {
+          clearInterval(countdownEvt);
     };
   }, [spin]);
-  useEffect(() => {
-    timmer();
-  }, [timmer]);
 
   const defaults: AxiosResponse<{
     default: {

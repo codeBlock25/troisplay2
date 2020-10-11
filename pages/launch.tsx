@@ -1,8 +1,12 @@
 import {
   Button,
   Checkbox,
+  FormControl,
   FormControlLabel,
   InputAdornment,
+  InputLabel,
+  MenuItem,
+  Select,
   TextField,
 } from "@material-ui/core";
 import { FormEvent, useEffect, useState } from "react";
@@ -19,7 +23,7 @@ import ImagePicker from "../functions/imagepicker";
 import Head from "next/head";
 import FormMake from "form-data";
 import Axios from "axios";
-import { url } from "../constant";
+import { banks, url } from "../constant";
 import { ScaleLoader } from "react-spinners";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
@@ -161,26 +165,18 @@ export default function Launch() {
               ),
             }}
           />
-          <TextField
-            placeholder="Bank associated with your account number."
-            label="Bank Name"
-            variant="outlined"
-            type="text"
-            id="bank_name"
-            required
-            value={bank_name}
-            onChange={(e) => {
-              setBank_name(e.target.value);
-            }}
-            className="inputBox dark-mode"
-            InputProps={{
-              startAdornment: (
-                <InputAdornment className="icon_" position="start">
-                  <AccountBalance />
-                </InputAdornment>
-              ),
-            }}
-          />
+          <FormControl className="inputBox dark-mode" required>
+            <InputLabel htmlFor="bank name">Bank Name</InputLabel>
+            <Select variant="outlined" inputProps={{id: "bank name"}} value={bank_name} onChange={(e) => {
+              setBank_name(e.target.value as string)
+            }}>
+              {banks.map(bank => {
+                return (
+                  <MenuItem key={bank.id} value={bank.code}>{bank.name}</MenuItem>
+              )
+            })}
+            </Select>
+          </FormControl>
           <TextField
             placeholder="Your funds will be placed with this account."
             label="Account Number"

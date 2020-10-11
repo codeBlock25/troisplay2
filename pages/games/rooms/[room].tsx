@@ -56,20 +56,20 @@ export default function Index() {
         ),
       });
       socket.on("out", ({ exit, reason }) => {
-        messageContainer.current.appendChild(createMessageWindow(reason, "Game Police", fromType.people));
+        messageContainer.current?.appendChild(createMessageWindow(reason, "Game Police", fromType.people));
         setTimeout(() => {
           push("/games")
         }, 5000);
       });
       socket.on("message", (obj: {msg: string, author: string}) => {
-        messageContainer.current.appendChild(createMessageWindow(obj.msg, obj.author, fromType.people));
+        messageContainer.current?.appendChild(createMessageWindow(obj.msg, obj.author, fromType.people));
       });
       socket.on("game_message", (msg: any) => {
-        messageContainer.current.appendChild(createMessageWindow(msg, "Room Question", fromType.server));
+        messageContainer.current?.appendChild(createMessageWindow(msg, "Room Question", fromType.server));
       });
       socket.on("admin", (msg: string) => {
         console.log(msg);
-        messageContainer.current.appendChild(createMessageWindow(msg, "Game Admin", fromType.server));
+        messageContainer.current?.appendChild(createMessageWindow(msg, "Game Admin", fromType.server));
       });
     }
   }, [query]);
@@ -77,7 +77,7 @@ export default function Index() {
   useEffect(() => {
     beforePopState(({ url, as, options }) => {
       alert("Leaving this room will not pause you Room time or Game are you sure you want to leave?.")
-      return false
+      return true
     })
   }, [])
   useEffect(() => {

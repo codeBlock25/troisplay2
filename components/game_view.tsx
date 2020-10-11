@@ -28,9 +28,9 @@ const GameView = memo(function ({
     coin: number;
   game: Games
   type:"game_view"|"normal" | "lucky" | "room",
-    btn1func?: () => Promise<void>
+  btn1func?: () => Promise<void> | void | boolean
   btn1view?: JSX.Element
-  btn2func?:()=>Promise<void>
+  btn2func?: () => Promise<void> | void | boolean
   btn2view?: JSX.Element
 }) {
   const defaults: AxiosResponse<{
