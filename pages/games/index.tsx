@@ -24,7 +24,7 @@ import Lottie from "lottie-web";
 import moment from "moment";
 import { useQuery, useQueryCache } from "react-query";
 import Axios, { AxiosResponse } from "axios";
-import { config, PUBLIC_KEY, SECRET_KEY, url, url_media } from "../../constant";
+import { config, url, url_media } from "../../constant";
 import { QueryResult } from "react-query";
 import { Games, PayType, PlayerType, Viewing, ReasonType } from "../../typescript/enum";
 import next, { GetStaticProps, GetStaticPropsContext } from "next";
