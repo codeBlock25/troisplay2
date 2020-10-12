@@ -46,6 +46,7 @@ import PickerPlayer2 from "../../components/gamepicker_player2";
 import GuessMaster from "../../components/games/matcher";
 import Gloryspin from "../../components/games/gloryspin";
 import Bottompanel from "../../components/bottompanel";
+import BackWindow from "../../components/backwindow";
 
 export default function GamesScreen() {
   const dispatch = useDispatch();
@@ -291,7 +292,8 @@ const defaults: AxiosResponse<{
       <Gloryspin />
       <Notification />
       <GuessMaster />
-      <Bottompanel/>
+      <Bottompanel />
+      <BackWindow/>
       <PickerPlayer2 
       game={spec.game} 
       isOpen={p2} 
@@ -359,7 +361,6 @@ const defaults: AxiosResponse<{
           </div>
         )}
       </div>
-     
       <div
         className={`game_picker_view ${spec.isOpen ? "open" : ""}`}
         onClick={(e: any) => {
@@ -432,7 +433,7 @@ const defaults: AxiosResponse<{
               {playLoader ? (
                 <SyncLoader size="10px" color="white" />
               ) : (
-                "play with $"
+                `stake $${spec.price}`
               )}
             </span>
             <span
@@ -461,7 +462,7 @@ const defaults: AxiosResponse<{
                 <SyncLoader size="10px" color="white" />
               ) : (
                 <>
-                  play with <GameCoin />
+                  stake <GameCoin /> {spec.price * (defaults?.data?.default?.cashRating ?? 1)}
                 </>
               )}
             </span>
@@ -753,13 +754,13 @@ const defaults: AxiosResponse<{
                   className={`btn ${viewing === Viewing.current ? "on" : ""}`}
                   onClick={() => setViewing(Viewing.current)}
                 >
-                  Current Games
+                  Played Games
                 </span>
                 <span
                   className={`btn ${viewing === Viewing.room ? "on" : ""}`}
                   onClick={() => setViewing(Viewing.room)}
                 >
-                  Rooms
+                  Request
                 </span>
                 <span
                   className={`btn ${
@@ -767,7 +768,7 @@ const defaults: AxiosResponse<{
                   }`}
                   onClick={() => setViewing(Viewing.lucky_geoge)}
                 >
-                  Lucky Geoge
+                  Invitation
                 </span>
               </div>
             </div>

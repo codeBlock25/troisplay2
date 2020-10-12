@@ -23,10 +23,16 @@ export interface eventReeducerType {
     func?: () => Promise<void>;
     game?: Games;
   };
+  back: {
+    msg: "",
+    open: modalType;
+    func?: () => Promise<void>;
+    game?: Games;
+  };
 }
 
 export interface ActionType<T = any> {
-  type: "NOTIFICATION" | "GAME_DETAILS" | "TOAST" | "EXIT";
+  type: "NOTIFICATION" | "GAME_DETAILS" | "TOAST" | "EXIT" | "BACK";
   payload: T;
 }
 

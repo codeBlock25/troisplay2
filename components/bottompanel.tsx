@@ -138,7 +138,7 @@ export default function Bottompanel() {
     
     return (
         <div className={isOpen ? "bottompanel open" : "bottompanel"}>
-            <Fab className="btn_star" onClick={()=>setIsopen(true)}><Star/></Fab>
+            <Fab className="btn_star" onClick={()=>setIsopen(true)}>VTU</Fab>
             <Button className="back_btn" onClick={() => {
                 setIsopen(false)
             }}>back</Button>

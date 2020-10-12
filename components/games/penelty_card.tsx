@@ -324,6 +324,7 @@ if (price >0) {
       <div className={`gameworld theme ${theme}`}>
         {playType === PlayType.non && details.player === PlayerType.second ? (
           <div className="container">
+          <h3 className="title">Play format.</h3>
             <div className="content">
               <div className="action">
                 <div

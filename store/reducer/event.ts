@@ -29,6 +29,12 @@ const initialState: eventReeducerType = {
     func: undefined,
     game: Games.non,
   },
+  back: {
+    msg: "",
+    open: modalType.close,
+    func: undefined,
+    game: Games.non,
+  },
 };
 
 export const eventReducer = (
@@ -44,6 +50,8 @@ export const eventReducer = (
       return { ...state, toastNotification: action.payload };
     case "EXIT":
       return { ...state, exit: action.payload };
+    case "BACK":
+      return { ...state, back: action.payload };
     default:
       return { ...state };
   }

@@ -259,8 +259,6 @@ const GuessMaster = memo(function () {
                         setView3(true);
                         setView4(true);
                         setView5(true);
-                        setView6(true);
-                        setView7(true);
                         setNum(1);
                         setPlayed([]);
                         setGameDetails(dispatch, {
@@ -335,22 +333,6 @@ const GuessMaster = memo(function () {
               }}
             >
               5
-            </div>
-            <div
-              className={`btn_num theme ${theme} ${view6 ? "" : "out"}`}
-              onClick={() => {
-                setNum(6);
-              }}
-            >
-              6
-            </div>
-            <div
-              className={`btn_num theme ${theme} ${view7 ? "" : "out"}`}
-              onClick={() => {
-                setNum(7);
-              }}
-            >
-              7
             </div>
           </div>
           <div className={`btn_ theme ${theme}`} onClick={()=>matchPlay(PayType.cash)}>

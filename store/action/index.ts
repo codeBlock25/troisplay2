@@ -30,6 +30,7 @@ export const setGameDetails = (
 ): void => {
   dispatch({ type: "GAME_DETAILS", payload });
 };
+
 export const exitWin = (
   dispatch: (t: ActionType) => void,
   payload: {
@@ -39,6 +40,18 @@ export const exitWin = (
   }
 ): void => {
   dispatch({ type: "EXIT", payload });
+};
+
+export const backWin = (
+  dispatch: (t: ActionType) => void,
+  payload: {
+    open: modalType;
+    func?: () => Promise<void>;
+    game?: Games;
+    msg: string
+  }
+): void => {
+  dispatch({ type: "BACK", payload });
 };
 
 export const toast = (
