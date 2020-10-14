@@ -301,15 +301,16 @@
 
 .games_view {
     position: absolute;
-    bottom: -70vh;
+    bottom: -100vh;
     left: 0;
     width: 100vw;
-    height: 50vh;
-    min-height: 370px;
+    height: calc(100vh - 75px);
+    min-height: calc(100vh - 75px);
     z-index: 1000;
     background-color: #131513;
-    padding-top: 70px;
+    padding-top: 5px;
     display: flex;
+    flex-direction: column;
     transition: cubic-bezier(0.075, 0.82, 0.165, 1) .5s;
 
     &.open {
@@ -318,29 +319,47 @@
 
 
     &::before {
-        position: absolute;
-        top: 10px;
-        left: 50%;
-        transform: translateX(-50%);
+        align-self: center;
+        justify-content: center;
+        text-align: center;
         content: "Games";
-        width: fit-content;
-        min-width: fit-content;
-        min-height: fit-content;
-        height: fit-content;
+        width: 100%;
+        min-width: 100%;
+        height: 50px;
+        line-height: 50px;
+        min-height: 50px;
+        max-height: 50px;
         display: flex;
         font-size: 16px;
         font-family: mon_bold;
         color: $defaultColor;
     }
 
+    .btn_close {
+        top: 10px;
+        left: 10px;
+        z-index: 1000;
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        background-color: #090909;
+        color: white;
+
+        &:hover {
+            background-color: #131513;
+        }
+    }
+
     .container {
         width: 100%;
         min-width: 100%;
-        height: 100%;
+        height: calc(100% - 50px);
         display: flex;
         overflow: hidden;
-        overflow-x: auto;
+        overflow-y: auto;
+        flex-wrap: wrap;
         padding: 0 50px;
+        justify-content: space-evenly;
 
         &::-webkit-scrollbar {
             width: 0;
@@ -355,7 +374,7 @@
         .game {
             width: 220px;
             min-width: 220px;
-            margin: 0 15px;
+            margin: 10px 15px;
             height: 280px;
             min-height: 280px;
             display: flex;
@@ -415,19 +434,16 @@
     }
 
     @media (max-width: 700px) {
-        height: 40vh;
-        min-height: 250px;
-        padding-top: 50px;
-
         .container {
             padding: 0 20px;
 
             .game {
-                width: 170px;
-                min-width: 170px;
-                margin: 0 15px;
-                height: 90%;
-                min-height: 180px;
+                width: 98%;
+                min-width: 270px;
+                margin: 10px 15px;
+                height: 25vh;
+                min-height: 200px;
+                max-height: 250px;
 
                 .details {
                     padding: 2px 10px;

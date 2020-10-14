@@ -47,6 +47,8 @@ import GuessMaster from "../../components/games/matcher";
 import Gloryspin from "../../components/games/gloryspin";
 import Bottompanel from "../../components/bottompanel";
 import BackWindow from "../../components/backwindow";
+import { Fab } from "@material-ui/core";
+import { Close } from "@material-ui/icons";
 
 export default function GamesScreen() {
   const dispatch = useDispatch();
@@ -521,6 +523,11 @@ const defaults: AxiosResponse<{
         play game <span className="icon" ref={game_play} />
       </span>
       <div className={`games_view ${gameViewOpen && "open"}`}>
+        <Fab className="btn_close" onClick={() => {
+          setViewOpen(false);
+        }}>
+          <Close />
+        </Fab>
         <div className="container">
           <div
             className="game"
