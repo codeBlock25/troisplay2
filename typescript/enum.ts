@@ -6,6 +6,7 @@ export enum Games {
   matcher,
   non,
   lucky_geoge,
+  rooms
 }
 
 export enum Viewing {

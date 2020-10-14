@@ -614,6 +614,34 @@ const defaults: AxiosResponse<{
             className="game"
             onClick={() => {
               setViewOpen(false);
+              setP2(true)
+              setSpec({
+                isOpen: false,
+                manual:
+                  "A player who decides to play rock will beat another player who has chosen scissors (rock crushes scissors), but will lose to one who has played paper (paper covers rock); a play of paper will lose to a play of scissors (scissors cuts paper). If both players choose the same shape, the game is tied and is usually immediately replayed to break the tie.",
+                price: 0,
+                game: Games.lucky_geoge,
+              });
+            }}
+          >
+            <div
+              className="img"
+              style={{ backgroundImage: `url(/images/lucky-geoge.png)` }}
+            />
+            <div className="details">
+              <span className="name">Lucky Geoge</span>
+              <span className="info">
+                <b>min stake:</b> Geoge based
+              </span>
+              <span className="info">
+                <b>rating:</b> 100%+s
+              </span>
+            </div>
+          </div>
+          <div
+            className="game"
+            onClick={() => {
+              setViewOpen(false);
               setSpec({
                 isOpen: true,
                 manual:
@@ -637,6 +665,35 @@ const defaults: AxiosResponse<{
               </span>
             </div>
           </div>
+          <div
+            className="game"
+            onClick={() => {
+              setViewOpen(false);
+              setP2(true)
+              setSpec({
+                isOpen: false,
+                manual:
+                  "A player who decides to play rock will beat another player who has chosen scissors (rock crushes scissors), but will lose to one who has played paper (paper covers rock); a play of paper will lose to a play of scissors (scissors cuts paper). If both players choose the same shape, the game is tied and is usually immediately replayed to break the tie.",
+                price: 0,
+                game: Games.rooms,
+              });
+            }}
+          >
+            <div
+              className="img"
+              style={{ backgroundImage: `url(/images/rooms.png)` }}
+            />
+            <div className="details">
+              <span className="name">Rooms</span>
+              <span className="info">
+                <b>min stake:</b> room based
+              </span>
+              <span className="info">
+                <b>rating:</b> 90%+
+              </span>
+            </div>
+          </div>
+         
         </div>
       </div>
 
@@ -783,21 +840,28 @@ const defaults: AxiosResponse<{
               {
                 viewing === Viewing.current ?
              ( my_games?.data?.games.map((game) => {
-                return (
-                  <GameView
-                  type="normal"
-                    name={
-                      game.gameID === Games.roshambo
-                        ? "Roshambo"
-                        : game.gameID === Games.penalth_card
-                        ? "Penelty Card"
-                        : game.gameID === Games.matcher
-                        ? "Guess Master"
-                        : ""
-                    }
-                    key={game._id}
-                    date={game.date}
-                    id={game._id}
+               return (
+                 <GameView
+                   type={game.gameID === Games.rooms? "room": "normal"}
+                   name={
+                     game.gameID === Games.roshambo
+                       ? "Roshambo"
+                       : game.gameID === Games.penalth_card
+                         ? "Penelty Card"
+                         : game.gameID === Games.matcher
+                           ? "Guess Master"
+                           : game.gameID === Games.lucky_geoge
+                             ? "Lucky Geoge"
+                             : game.gameID === Games.rooms
+                               ? (`${game.gameDetail} room` ?? "")
+                               : ""
+                   }
+                   key={game._id}
+                   date={game.date}
+                   v1={game.price_in_value * (defaults?.data.default?.cashRating ?? 1)}
+                   v2={game.price_in_value}
+                   v3={game.gameMemberCount}
+                   id={game._id}
                     cash={game.price_in_value}
                     coin={game.price_in_coin}
                     game={game.gameID}

@@ -525,7 +525,6 @@ export default function HistoryScreen() {
       r_ = [];
     }
   }, [history]);
-  console.log(row_)
   const theme = "dark-mode"
   return (
     <>
