@@ -868,51 +868,8 @@ const defaults: AxiosResponse<{
                   />
                 );
              })) :
-                  viewing === Viewing.lucky_geoge ?
-                    (lucky_games?.data?.games.map((game) => {
-                return (
-                  <GameView
-                  type="lucky"
-                    name={game.battleScore.player1.title
-                    }
-                    key={game._id}
-                    date={game.date}
-                    id={game._id}
-                    cash={game.price_in_value}
-                    v1={game.price_in_value}
-                    v2={game.price_in_value * (defaults?.data.default.cashRating ?? 0)}
-                    coin={game.battleScore.player1.winnerCount}
-                    v3={game.battleScore.player1.winnerCount}
-                    game={game.gameID}
-                    btn1func={async ()=> await PlayLuckyGeogeGame(PayType.cash, game_loading, setgameLoading, game._id,dispatch, game.battleScore.player1.title )}
-                    btn2func={async ()=> await PlayLuckyGeogeGame(PayType.coin, game_loading, setgameLoading, game._id,dispatch, game.battleScore.player1.title )}
-                  />
-                  );
-                    })) :
-                    viewing === Viewing.room ? 
-                      (rooms?.data?.rooms.map((game) => {
-                        return (
-                          <GameView
-                            type="room"
-                            name={game.room_name}
-                            key={game._id}
-                            date={game.date}
-                            id={game._id}
-                            cash={game.entry_price}
-                            v1={game.entry_price}
-                            v2={game.entry_price * (defaults?.data.default.cashRating ?? 0)}
-                            coin={game.player_limit}
-                            v3={game.activeMember}
-                            game={Games.non}
-                            btn1func={() => {
-                              push(`/games/rooms/${game.room_name}?payWith=${PayType.cash}`);
-                            }}
-                            btn2func={() => {
-                              push(`/games/rooms/${game.room_name}?payWith=${PayType.cash}`)
-                            }}
-                        />
-                );
-              })) :""
+                  viewing === Viewing.lucky_geoge ? null :
+                    viewing === Viewing.room ? null : null
             }
             </div>
           </div>
