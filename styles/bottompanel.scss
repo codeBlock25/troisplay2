@@ -27,6 +27,7 @@
         font-size: 16px;
         font-family: mon_bold;
     }
+
     .btn_star {
         position: absolute;
         bottom: 10px;
@@ -73,6 +74,7 @@
             min-width: fit-content;
             min-height: fit-content;
             display: flex;
+            align-self: center;
             
             .sw_btn {
                 position: absolute;
