@@ -87,7 +87,6 @@
 
                 &:nth-of-type(1) {
                     color: $defaultColor;
-                    text-shadow: 0 0 5px $defaultColor;
                 }
             }
         }
@@ -261,7 +260,6 @@
     left: calc(50vw - 65px);
     background-color: #090909;
     color: $defaultColor;
-    text-shadow: 0 0 10px rgba($color: $defaultColor, $alpha: 0.5);
     border-radius: 60px;
     font-family: mon_bold;
     user-select: none;
@@ -333,7 +331,6 @@
         font-size: 16px;
         font-family: mon_bold;
         color: $defaultColor;
-        text-shadow: 0 0 10px $defaultColor;
     }
 
     .container {
@@ -396,7 +393,6 @@
                     font-size: 16px;
                     font-family: mon_bold;
                     color: $defaultColor;
-                    text-shadow: 0 0 10px rgba($color: $defaultColor, $alpha: 0.5);
                 }
 
                 .info {
@@ -528,7 +524,6 @@
                 font-size: 14px;
                 font-family: mon_bold;
                 color: $defaultColor;
-                text-shadow: 0 0 10px rgba($color: $defaultColor, $alpha: 0.5);
                 margin: 0 5px;
                 margin-bottom: 5px;
             }
@@ -676,7 +671,6 @@
                 font-family: mon_bold;
                 line-height: normal;
                 color: $defaultColor;
-                text-shadow: 0 0 10px rgba($color: $defaultColor, $alpha: 0.5);
             }
         }
     }
@@ -729,7 +723,7 @@
     overflow: hidden;
     overflow-y: auto;
     padding-top: 60px;
-    background-color: #1a1d1a;
+    background-color: $body;
 
     * {
         pointer-events: visible;
@@ -761,7 +755,7 @@
         min-height: 350px;
         max-height: 400px;
         display: flex;
-        background-color: #222522;
+        background-color: $win;
         justify-content: center;
         align-items: center;
         overflow: hidden;
@@ -881,7 +875,6 @@
                         height: fit-content;
                         display: flex;
                         color: $defaultColor;
-                        text-shadow: 0 0 10px $defaultColor;
                         font-family: mon_med;
                     }
 
@@ -996,7 +989,6 @@
                     font-family: mon_bold;
                     font-size: 20px;
                     color: $defaultColor;
-                    text-shadow: 0 0 10px rgba($color: $defaultColor, $alpha: 0.5);
                 }
 
                 .title_tab {
@@ -1017,7 +1009,6 @@
                         color: #909090;
                         font-size: 11px;
                         padding: 0 7px;
-                        text-shadow: 0 0 10px rgba($color: #000000, $alpha: 0);
                         cursor: pointer;
 
                         &:hover {
@@ -1027,7 +1018,6 @@
                         &.on {
                             color: $defaultColor;
                             font-size: 13px;
-                            text-shadow: 0 0 10px rgba($color: $defaultColor, $alpha: 0.7);
                         }
                     }
                 }

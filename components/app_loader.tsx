@@ -8,7 +8,7 @@ export default function AppLoader({ runText }: { runText: string }) {
         <div className="logo" />
         <p className="txt">{runText}</p>
         <div className="loader">
-          <MoonLoader size="30px" color="#29DA45" />
+          <MoonLoader size="30px" color="#2196F3" />
         </div>
       </div>
     </section>

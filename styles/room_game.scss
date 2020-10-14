@@ -73,7 +73,6 @@
                 padding-left: 30px;
                 align-items: center;
                 color: $defaultColor;
-                text-shadow: 0 0 10px rgba($color: $defaultColor, $alpha: 0.5);
                 text-transform: capitalize;
                 font-family: mon_bold;
             }
@@ -116,7 +115,6 @@
                     font-size: 12px;
                     font-family: mon_bold;
                     color: $defaultColor;
-                    text-shadow: rgba($color: $defaultColor, $alpha: 0.5);
                 }
 
                 &me {

@@ -163,7 +163,7 @@ export default function GamesScreen() {
       autoplay: true,
       loop: true,
       renderer: "canvas",
-      animationData: require("../../lottie/game_play.json"),
+      animationData: require("../../lottie/game.json"),
     });
   }, []);
   useEffect(() => {
@@ -768,7 +768,7 @@ const defaults: AxiosResponse<{
                   }`}
                   onClick={() => setViewing(Viewing.lucky_geoge)}
                 >
-                  Invitation
+                  Notification
                 </span>
               </div>
             </div>
