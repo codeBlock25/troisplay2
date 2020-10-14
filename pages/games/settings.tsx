@@ -128,7 +128,7 @@ export default function SettingScreen () {
       autoplay: true,
       loop: true,
       renderer: "canvas",
-      animationData: require("../../lottie/game_play.json"),
+      animationData: require("../../lottie/game.json"),
     });
   }, []);
   useEffect(() => {

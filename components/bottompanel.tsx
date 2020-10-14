@@ -1,5 +1,5 @@
 import React, { MutableRefObject, useCallback, useEffect, useRef, useState } from 'react'
-import { BackIcon, MAincon, MDicon, NextIcon } from '../icon';
+import { BackIcon, BillIcon, MAincon, MDicon, NextIcon } from '../icon';
 import {InView} from "react-intersection-observer"
 import { Games } from '../typescript/enum';
 import { AxiosResponse } from 'axios';
@@ -7,7 +7,7 @@ import { useQueryCache } from 'react-query';
 import moment from "moment"
 import Lottie from 'lottie-web';
 import { Button, Fab } from '@material-ui/core';
-import { Home, Settings, Star } from '@material-ui/icons';
+import { CreditCard, Home, Settings, Star } from '@material-ui/icons';
 
 export default function Bottompanel() {
     const swRef: MutableRefObject<HTMLDivElement | null> = useRef();
@@ -36,7 +36,7 @@ export default function Bottompanel() {
             autoplay: true,
             loop: true,
             renderer: "canvas",
-            animationData: require("../lottie/game_play.json"),
+            animationData: require("../lottie/game.json"),
         });
     }, [])
       useEffect(() => {
@@ -236,14 +236,14 @@ export default function Bottompanel() {
                     </Button>
                     <Button className="btn">
                         <span className="at">
-                            <Home/>
-                            <span>Main</span>
+                            <BillIcon />
+                            <span>Pay Bill</span>
                         </span>
                     </Button>
                     <Button className="btn">
                         <span className="at">
-                            <Settings/>
-                            <span>Setting</span>
+                            <CreditCard />
+                            <span>Transfer</span>
                         </span>
                     </Button>
                     <Button className="btn">

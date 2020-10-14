@@ -24,7 +24,246 @@ import AppLoader from "../../components/app_loader";
 import { useRouter } from "next/router";
 import Header from "../../components/header";
 import { DataGrid, ColDef, ValueGetterParams } from "@material-ui/data-grid";
-import {isArray} from "lodash"
+import {isArray, find, findIndex} from "lodash"
+import { Equalizer, TableChart } from "@material-ui/icons";
+import { Box, Button, TableBody, TableCell, TableHead, TableRow, Tooltip, Typography } from "@material-ui/core";
+import { Area, AreaChart, CartesianGrid, Legend, ResponsiveContainer, XAxis, YAxis, Tooltip as ChartTooltip } from "recharts";
+
+
+
+enum Active {
+  table,
+  graph,
+}
+
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: any;
+  value: any;
+}
+
+
+const data: {
+  name: string;
+  wins: number;
+  losses: number;
+  earnings: number;
+}[] = [
+  {
+    name: moment().subtract(30, "days").format("Do"),
+    wins: 0,
+    losses: 0,
+    earnings: 0,
+  },
+  {
+    name: moment().subtract(29, "days").format("Do"),
+    wins: 0,
+    losses: 0,
+    earnings: 0,
+  },
+  {
+    name: moment().subtract(28, "days").format("Do"),
+    wins: 0,
+    losses: 0,
+    earnings: 0,
+  },
+  {
+    name: moment().subtract(27, "days").format("Do"),
+    wins: 0,
+    losses: 0,
+    earnings: 0,
+  },
+  {
+    name: moment().subtract(26, "days").format("Do"),
+    wins: 0,
+    losses: 0,
+    earnings: 0,
+  },
+  {
+    name: moment().subtract(25, "days").format("Do"),
+    wins: 0,
+    losses: 0,
+    earnings: 0,
+  },
+  {
+    name: moment().subtract(24, "days").format("Do"),
+    wins: 0,
+    losses: 0,
+    earnings: 0,
+  },
+  {
+    name: moment().subtract(23, "days").format("Do"),
+    wins: 0,
+    losses: 0,
+    earnings: 0,
+  },
+  {
+    name: moment().subtract(22, "days").format("Do"),
+    wins: 0,
+    losses: 0,
+    earnings: 0,
+  },
+  {
+    name: moment().subtract(21, "days").format("Do"),
+    wins: 0,
+    losses: 0,
+    earnings: 0,
+  },
+  {
+    name: moment().subtract(20, "days").format("Do"),
+    wins: 0,
+    losses: 0,
+    earnings: 0,
+  },
+  {
+    name: moment().subtract(19, "days").format("Do"),
+    wins: 0,
+    losses: 0,
+    earnings: 0,
+  },
+  {
+    name: moment().subtract(18, "days").format("Do"),
+    wins: 0,
+    losses: 0,
+    earnings: 0,
+  },
+  {
+    name: moment().subtract(17, "days").format("Do"),
+    wins: 0,
+    losses: 0,
+    earnings: 0,
+  },
+  {
+    name: moment().subtract(16, "days").format("Do"),
+    wins: 0,
+    losses: 0,
+    earnings: 0,
+  },
+  {
+    name: moment().subtract(15, "days").format("Do"),
+    wins: 0,
+    losses: 0,
+    earnings: 0,
+  },
+  {
+    name: moment().subtract(14, "days").format("Do"),
+    wins: 0,
+    losses: 0,
+    earnings: 0,
+  },
+  {
+    name: moment().subtract(13, "days").format("Do"),
+    wins: 0,
+    losses: 0,
+    earnings: 0,
+  },
+  {
+    name: moment().subtract(12, "days").format("Do"),
+    wins: 0,
+    losses: 0,
+    earnings: 0,
+  },
+  {
+    name: moment().subtract(11, "days").format("Do"),
+    wins: 0,
+    losses: 0,
+    earnings: 0,
+  },
+  {
+    name: moment().subtract(10, "days").format("Do"),
+    wins: 0,
+    losses: 0,
+    earnings: 0,
+  },
+  {
+    name: moment().subtract(9, "days").format("Do"),
+    wins: 0,
+    losses: 0,
+    earnings: 0,
+  },
+  {
+    name: moment().subtract(8, "days").format("Do"),
+    wins: 0,
+    losses: 0,
+    earnings: 0,
+  },
+  {
+    name: moment().subtract(7, "days").format("Do"),
+    wins: 0,
+    losses: 0,
+    earnings: 0,
+  },
+  {
+    name: moment().subtract(6, "days").format("Do"),
+    wins: 0,
+    losses: 0,
+    earnings: 0,
+  },
+  {
+    name: moment().subtract(5, "days").format("Do"),
+    wins: 0,
+    losses: 0,
+    earnings: 0,
+  },
+  {
+    name: moment().subtract(4, "days").format("Do"),
+    wins: 0,
+    losses: 0,
+    earnings: 0,
+  },
+  {
+    name: moment().subtract(3, "days").format("Do"),
+    wins: 0,
+    losses: 0,
+    earnings: 0,
+  },
+  {
+    name: moment().subtract(2, "days").format("Do"),
+    wins: 0,
+    losses: 0,
+    earnings: 0,
+  },
+  {
+    name: moment().subtract(1, "days").format("Do"),
+    wins: 15,
+    losses: 0,
+    earnings: 0,
+  },
+  {
+    name: moment().subtract(1, "days").format("Do"),
+    wins: 10,
+    losses: 0,
+    earnings: 0,
+  },
+  {
+    name: moment().format("Do"),
+    wins: 0,
+    losses: 0,
+    earnings: 0,
+  },
+];
+
+function TabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+  const theme = "dark-mode";
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`tabpanel-${index}`}
+      aria-labelledby={`tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box className={`main theme ${theme}`} p={2}>
+          {children}
+        </Box>
+      )}
+    </div>
+  );
+}
+
+
 
 export default function HistoryScreen() {
   const dispatch = useDispatch();
@@ -35,6 +274,7 @@ export default function HistoryScreen() {
   const coinRef: MutableRefObject<HTMLSpanElement | null> = useRef();
   const coinRef2: MutableRefObject<HTMLSpanElement | null> = useRef();
   const game_play: MutableRefObject<HTMLSpanElement | null> = useRef();
+  const [activeTab, setActiveTap] = useState<Active>(Active.table);
   const [runText, setRunText] = useState("loading game components...");
   const { push } = useRouter();
 
@@ -58,7 +298,7 @@ export default function HistoryScreen() {
       autoplay: true,
       loop: true,
       renderer: "canvas",
-      animationData: require("../../lottie/game_play.json"),
+      animationData: require("../../lottie/game.json"),
     });
   }, []);
   useEffect(() => {
@@ -234,17 +474,59 @@ export default function HistoryScreen() {
       won: string;
       earnings: number;
     }[]
-  >([]);
+    >([]);
+  const [row_, setRow_] = useState<
+    {
+      _id: string;
+      mark: string;
+      game: string;
+      earnings: number;
+    }[]
+    >([]);
   useEffect(() => {
-    let r = [];
+    let r : {
+      sn: number;
+      id: string;
+      _id: string;
+      userID: string;
+      date_mark: Date;
+      game: Games;
+      won: string;
+      earnings: number;
+    }[] = [];
+    let r_: {
+      _id: string;
+      mark: string;
+      game: string;
+      earnings: number;
+    }[] = [];
+    let r_f = [];
     if (isArray(history?.data?.records)) {
       history.data.records.map((record, index) => {
         r.push({ ...record, id: record._id, sn: index });
+        let ind = findIndex(r_, { mark: moment(record.date_mark).format("Do")})
+        r_.push( ind !== -1 ? {
+        ...r_[ind],earnings: r_[ind].earnings + record.earnings
+        }:{
+          _id: record._id,
+          mark: moment(record.date_mark).format("Do"),
+          game:
+            record.game === Games.roshambo ? "Roshambo"
+            : record.game === Games.penalth_card ? "Penalty Card"
+            : record.game === Games.lucky_geoge ? "Lucky Geoge"
+            : record.game === Games.matcher ? "Guess master"
+            : record.game === Games.glory_spin ? "Glory spin":"",
+          earnings: record.earnings
+        });
       });
       setRow(r);
+      setRow_(r_);
       r = [];
+      r_ = [];
     }
   }, [history]);
+  console.log(row_)
+  const theme = "dark-mode"
   return (
     <>
       <Head>
@@ -258,6 +540,9 @@ export default function HistoryScreen() {
       <Notification />
       <ToastContainer />
       <Header setApp_loading={setApp_loading} setRunText={setRunText} />
+     
+      
+      
       <span
         className="new_game"
         onClick={() => {
@@ -375,15 +660,112 @@ export default function HistoryScreen() {
             <div className="title">
               <h3>Games History</h3>
             </div>
-            <div className="history_content">
-              <DataGrid
-                rows={row}
-                columns={columns}
-                pageSize={8}
-                disableMultipleSelection
-                checkboxSelection={false}
-              />
+            <div className="action">
+              <Button
+                className={
+                  activeTab === Active.table
+                    ? `btn_ active theme ${theme}`
+                    : `btn_ theme ${theme}`
+                }
+                onClick={() => {
+                  setActiveTap(Active.table);
+                }}
+              >
+                <TableChart />
+                table
+              </Button>
+              <Button
+                className={
+                  activeTab === Active.graph
+                    ? `btn_ active active theme ${theme}`
+                    : `btn_ theme ${theme}`
+                }
+                onClick={() => {
+                  setActiveTap(Active.graph);
+                }}
+              >
+                <Equalizer />
+                graph
+              </Button>
             </div>
+            <TabPanel value={activeTab} index={0}>
+              {row.length >= 1 ? (
+                <div className="history_content">
+                  <DataGrid
+                    rows={row}
+                    columns={columns}
+                    pageSize={8}
+                    disableMultipleSelection
+                    checkboxSelection={false}
+                  />
+                </div>
+              ) : (
+              <Typography variant="body2" style={{color: "whitesmoke"}}>No Data too display.</Typography>
+                )}
+          </TabPanel>
+          <TabPanel value={activeTab} index={1}>
+            <div className={`container_map theme ${theme}`}>
+              <div className="main_head">
+                <h3 className="title_">
+                  <strong>Your</strong>Game analysis
+                </h3>
+                <div className="selector">
+                  <Button className="oo active">last 30 day</Button>
+                </div>
+                <span className="query">today</span>
+              </div>
+              <ResponsiveContainer
+                width="100%"
+                height={350}
+                minWidth={500}
+                minHeight={300}
+                maxHeight={450}
+              >
+                <AreaChart
+                  data={row_}
+                  margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+                >
+                  <defs>
+                    <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
+                      <stop
+                        offset="65%"
+                        stopColor="#f9f9f9"
+                        stopOpacity={0.8}
+                      />
+                      <stop offset="95%" stopColor="#f9f9f9" stopOpacity={0} />
+                    </linearGradient>
+                    <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+                      <stop
+                        offset="65%"
+                        stopColor="#2196F3"
+                        stopOpacity={0.8}
+                      />
+                      <stop offset="95%" stopColor="#2196F3" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <XAxis dataKey="mark" />
+                  <YAxis dataKey="earnings" />
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <ChartTooltip label="Details" />
+                  <Legend verticalAlign="top" height={36} />
+                  <Area
+                    type="monotone"
+                    dataKey="losses"
+                    stroke="#2196F3"
+                    fillOpacity={1}
+                    fill="url(#colorUv)"
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="earnings"
+                    stroke="#111"
+                    fillOpacity={1}
+                    fill="url(#colorPv)"
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          </TabPanel>
           </div>
         </div>
       </section>

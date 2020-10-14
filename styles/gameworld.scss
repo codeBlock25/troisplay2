@@ -129,12 +129,10 @@
     }
 
     .world {
-        width: 60%;
-        height: 85%;
+        width: 100vw;
+        height: 100vh;
         min-width: 290px;
-        max-width: 700px;
         min-height: 400px;
-        max-height: 600px;
         display: flex;
         border-radius: 10px;
         flex-direction: column;
