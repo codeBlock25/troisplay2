@@ -101,44 +101,7 @@ export default function GamesScreen() {
     game: Games.non,
     next: nextType.player,
   });
-
-  const lucky_games: AxiosResponse<{
-    games: {
-      battleScore: {
-        player1: {
-          description: string
-          title: string
-          winnerCount: number
-      }}
-      date: Date
-      gameDetail: string
-      gameID: Games
-      gameMemberCount: number
-      gameType: string
-      isComplete: boolean
-      members: string[]
-      playCount: number
-      played: boolean
-      price_in_coin: number
-      price_in_value: number
-      _id: string;
-    }[]
-  }> = useQueryCache().getQueryData("lucky-games")
-  const rooms: AxiosResponse<{
-    rooms: {
-      _id: string;
-      room_name: string;
-      date: Date;
-      last_changed: Date;
-      entry_price: number;
-      key_time: number;
-      player_limit: number;
-      addedBy: string;
-      activeMember: number;
-      players: [string];
-    }[];
-  }> = useQueryCache().getQueryData("rooms")
-  const spins: AxiosResponse<{
+ const spins: AxiosResponse<{
     spin_details: {
     currentTime: Date,
     gameTime:Date,

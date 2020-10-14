@@ -20,10 +20,11 @@ import { url, url_media } from "../constant";
 import { BounceLoader, SyncLoader, PulseLoader } from "react-spinners";
 import moment from "moment";
 import { Games, modalType, nextType, PayType, PlayerType } from "../typescript/enum";
-import { getPrice, getToken } from "../functions";
+import { getPrice, getToken, PlayLuckyGeogeGame } from "../functions";
 import { setGameDetails, toast } from "../store/action";
 import { useQueryCache } from "react-query";
 import GameView from "./game_view";
+import { useRouter } from "next/router";
 
 export default function PickerPlayer2({
   game: game_to_play,
@@ -66,6 +67,7 @@ export default function PickerPlayer2({
   const [loading, setLoading] = useState<boolean>(false);
   const [btn_loading, setBtnLoading] = useState<boolean>(false);
   const [loadingL, setLoadingL] = useState<boolean>(false);
+  const { push } = useRouter()
   const [open_games, setOpenGame] = useState<
     {
       _id: string;
@@ -85,7 +87,43 @@ export default function PickerPlayer2({
       };
     }[]
   >([]);
-
+  const lucky_games: AxiosResponse<{
+    games: {
+      battleScore: {
+        player1: {
+          description: string
+          title: string
+          winnerCount: number
+      }}
+      date: Date
+      gameDetail: string
+      gameID: Games
+      gameMemberCount: number
+      gameType: string
+      isComplete: boolean
+      members: string[]
+      playCount: number
+      played: boolean
+      price_in_coin: number
+      price_in_value: number
+      _id: string;
+    }[]
+  }> = useQueryCache().getQueryData("lucky-games")
+  const rooms: AxiosResponse<{
+    rooms: {
+      _id: string;
+      room_name: string;
+      date: Date;
+      last_changed: Date;
+      entry_price: number;
+      key_time: number;
+      player_limit: number;
+      addedBy: string;
+      activeMember: number;
+      players: [string];
+    }[];
+  }> = useQueryCache().getQueryData("rooms")
+ 
   const defaults: AxiosResponse<{
     default: {
       commission_roshambo: {
@@ -238,7 +276,55 @@ export default function PickerPlayer2({
       <div className="container">
         <h3 className="title">Games</h3>
         <div className="list_games" style={{ paddingBottom: "60px" }}>
-          {open_games.length <= 0 ? (
+          {
+            game_to_play === Games.lucky_geoge ?
+              (lucky_games?.data?.games.map((game) => {
+                return (
+                  <GameView
+                    type="lucky"
+                    name={game.battleScore.player1.title
+                    }
+                    key={game._id}
+                    date={game.date}
+                    id={game._id}
+                    cash={game.price_in_value}
+                    v1={game.price_in_value}
+                    v2={game.price_in_value * (defaults?.data.default.cashRating ?? 0)}
+                    coin={game.battleScore.player1.winnerCount}
+                    v3={game.battleScore.player1.winnerCount}
+                    game={game.gameID}
+                    btn1func={async () => await PlayLuckyGeogeGame(PayType.cash, btn_loading, setBtnLoading, game._id, dispatch, game.battleScore.player1.title)}
+                    btn2func={async () => await PlayLuckyGeogeGame(PayType.coin, btn_loading, setBtnLoading, game._id, dispatch, game.battleScore.player1.title)}
+                  />
+                );
+              }))
+              :
+              game_to_play === Games.rooms ?
+                (rooms?.data?.rooms.map((game) => {
+                  return (
+                    <GameView
+                      type="room"
+                      name={game.room_name}
+                      key={game._id}
+                      date={game.date}
+                      id={game._id}
+                      cash={game.entry_price}
+                      v1={game.entry_price}
+                      v2={game.entry_price * (defaults?.data.default.cashRating ?? 0)}
+                      coin={game.player_limit}
+                      v3={game.activeMember}
+                      game={Games.non}
+                      btn1func={() => {
+                        push(`/games/rooms/${game.room_name}?payWith=${PayType.cash}`);
+                      }}
+                      btn2func={() => {
+                        push(`/games/rooms/${game.room_name}?payWith=${PayType.cash}`)
+                      }}
+                  />
+                );
+              }))
+              :
+            open_games.length <= 0 ? (
             <>
               <span className="txt">No avaliable games.</span>
             </>
@@ -287,6 +373,7 @@ export default function PickerPlayer2({
             required
             placeholder="min price"
             type="number"
+            disabled={game_to_play === Games.rooms||game_to_play===Games.lucky_geoge ? true: false}
             value={min}
             onChange={(evt) => {
               if (!parseInt(evt.target.value, 10) || min >= max + 5) return;
@@ -307,6 +394,7 @@ export default function PickerPlayer2({
             placeholder="min price"
             className={`inputBox theme ${theme}`}
             value={max}
+            disabled={game_to_play === Games.rooms||game_to_play===Games.lucky_geoge ? true: false}
             type="number"
             onChange={(evt) => {
               if (!parseInt(evt.target.value, 10) || max <= min - 5) return;
@@ -320,7 +408,7 @@ export default function PickerPlayer2({
               ),
             }}
           />
-          <Fab className="srch" onClick={LoadData}>
+          <Fab className="srch" onClick={LoadData} disabled={game_to_play === Games.rooms||game_to_play===Games.lucky_geoge ? true:false}>
             <Search />
           </Fab>
         </div>
