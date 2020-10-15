@@ -9,10 +9,11 @@ import {
 import Link from "next/link";
 import { isEmpty } from "lodash";
 import { SyncLoader } from "react-spinners";
-import { Games, modalType, PayType, PlayerType } from "../../typescript/enum";
+import { Games, modalType, NotiErrorType, PayType, PlayerType } from "../../typescript/enum";
 import { reducerType } from "../../typescript/interface";
-import { getToken } from "../../functions";
+import { getPrice, getToken } from "../../functions";
 import { CloseIcon, GameCoin } from "../../icon";
+import { useQueryCache } from "react-query";
 
 
 const GuessMaster = memo(function () {
@@ -45,6 +46,33 @@ const GuessMaster = memo(function () {
       details: state.event.game_details,
     };
   });
+  const defaults: AxiosResponse<{
+    default: {
+      commission_roshambo: {
+        value: number;
+        value_in: "$" | "%" | "c";
+      };
+      commission_penalty: {
+        value: number;
+        value_in: "$" | "%" | "c";
+      };
+      commission_guess_mater: {
+        value: number;
+        value_in: "$" | "%" | "c";
+      };
+      commission_custom_game: {
+        value: number;
+        value_in: "$" | "%" | "c";
+      };
+      cashRating: number;
+      min_stack_roshambo: number;
+      min_stack_penalty: number;
+      min_stack_guess_master: number;
+      min_stack_custom: number;
+      referRating: number;
+    };
+  }> = useQueryCache().getQueryData("defaults");
+   
   const [isStarted, setStarted] = useState<boolean>(true);
   useEffect(() => {
     if (isStarted) {
@@ -144,7 +172,7 @@ const GuessMaster = memo(function () {
             setPlaycount((prev) => prev + 1);
             if (!winner) {
               if (playCount === 3) {
-                // played
+                notify(dispatch, {type: NotiErrorType.error, msg: "Sorry you lost this game you can try other games for a better chances.", isOpen: modalType.open})
                 setView1(true);
                 setView2(true);
                 setView3(true);
@@ -154,6 +182,12 @@ const GuessMaster = memo(function () {
                 setView7(true);
                 setNum(1);
                 setPlayed([]);
+                setGameDetails(dispatch, {
+                player: PlayerType.first,
+                game: Games.non,
+                id: undefined,
+                price: 0,
+              });
                 return;
               } else {
                 // !counting
@@ -186,7 +220,7 @@ const GuessMaster = memo(function () {
               }
               return;
             }
-         // done
+            notify(dispatch, {isOpen: modalType.open, type: NotiErrorType.success,  msg: `Congratulations!!!! You have successfully played a game, please wait for Player 2's challange.`});
             setPlaycount(1);
             setView1(true);
             setView2(true);
@@ -197,12 +231,17 @@ const GuessMaster = memo(function () {
             setView7(true);
             setNum(1);
             setPlayed([]);
-          // !played during 3
+            setGameDetails(dispatch, {
+            player: PlayerType.first,
+            game: Games.non,
+            id: undefined,
+            price: 0,
+          });
           }
         )
         .catch((err) => {
           console.log(err);
-        // !normal error  
+          toast(dispatch, {msg: "Communication error."}).error()
         })
         .finally(() => {
           setLoading(false);
@@ -336,10 +375,10 @@ const GuessMaster = memo(function () {
             </div>
           </div>
           <div className={`btn_ theme ${theme}`} onClick={()=>matchPlay(PayType.cash)}>
-            {loading ? <SyncLoader size="10px" color={`white`} /> : <>play  wiht $</>}
+            {loading ? <SyncLoader size="10px" color={`white`} /> : <>stake ₦ {getPrice(details.game, details.price, defaults.data.default)}</>}
           </div>
           <div className={`btn_ theme ${theme}`} onClick={()=>matchPlay(PayType.coin)}>
-            {loading ? <SyncLoader size="10px" color={`white`} /> : <>play with <GameCoin /></>}
+            {loading ? <SyncLoader size="10px" color={`white`} /> : <> stake <GameCoin /> {getPrice(details.game, details.price, defaults.data.default) * (defaults?.data.default.cashRating ?? 0)}</>}
           </div>
         </div>
       </div>

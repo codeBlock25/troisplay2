@@ -4,14 +4,15 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { SyncLoader } from "react-spinners";
 import { url } from "../../constant";
-import { CloseIcon, ForwardIcon, GoalPostIcon } from "../../icon";
-import { getToken } from "../../functions";
+import { CloseIcon, ForwardIcon, GameCoin, GoalPostIcon } from "../../icon";
+import { getPrice, getToken } from "../../functions";
 import {
   exitWin,
   notify, setGameDetails, toast,
 } from "../../store/action";
 import { CheckerType, GameRec, Games, modalType, NotiErrorType, PayType, PenaltyOption, PlayerType, PlayType } from "../../typescript/enum";
 import { reducerType } from "../../typescript/interface";
+import { useQueryCache } from "react-query";
 
 
 export default function Penalty_card() {
@@ -26,6 +27,33 @@ export default function Penalty_card() {
   const [playStateLoad, setPlayStateLoading] = useState<boolean>(false);
   const [playType, setPlayType] = useState<PlayType>(PlayType.non);
   const [playCount, setPlayCount] = useState<number>(0);
+  const defaults: AxiosResponse<{
+    default: {
+      commission_roshambo: {
+        value: number;
+        value_in: "$" | "%" | "c";
+      };
+      commission_penalty: {
+        value: number;
+        value_in: "$" | "%" | "c";
+      };
+      commission_guess_mater: {
+        value: number;
+        value_in: "$" | "%" | "c";
+      };
+      commission_custom_game: {
+        value: number;
+        value_in: "$" | "%" | "c";
+      };
+      cashRating: number;
+      min_stack_roshambo: number;
+      min_stack_penalty: number;
+      min_stack_guess_master: number;
+      min_stack_custom: number;
+      referRating: number;
+    };
+  }> = useQueryCache().getQueryData("defaults");
+   
   const [round1, setRound1] = useState<{
     round: number;
     value: PenaltyOption;
@@ -765,31 +793,33 @@ if (price >0) {
             </div>
             {isEmpty(details.id) ? (
               <div className="game_action">
-                <div
-                  className={`btn_ theme ${theme}`}
-                  onClick={() => {
-                    handleSubmit(PayType.cash);
-                  }}
-                >
-                  {loading ? (
-                    <SyncLoader size="10px" color={`white`} />
-                  ) : (
-                    "Play with cash"
-                  )}
-                </div>
-                <div
-                  className={`btn_ ${theme} theme`}
-                  onClick={() => {
-                    handleSubmit(PayType.coin);
-                  }}
-                >
-                  {loading ? (
-                    <SyncLoader size="10px" color={`white`} />
-                  ) : (
-                    "Play with coin"
-                  )}
-                </div>
+              <div
+                className={`btn_ theme ${theme}`}
+                onClick={() => {
+                  handleSubmit(PayType.cash);
+                }}
+              >
+                {loading ? (
+                  <SyncLoader size="10px" color={`white`} />
+                ) : (
+                  `stake ₦ ${getPrice(details.game, details.price, defaults.data.default)}`
+                )}
               </div>
+              <div
+                className={`btn_ theme ${theme}`}
+                onClick={() => {
+                  handleSubmit(PayType.coin);
+                }}
+              >
+                {loading ? (
+                  <SyncLoader size="10px" color={`white`} />
+                ) : (
+                  <>
+                    stake <GameCoin /> {getPrice(details.game, details.price, defaults.data.default) * (defaults?.data.default.cashRating ?? 0)}
+                  </>
+                )}
+              </div>
+            </div>
             ) : playType === PlayType.all ? (
               <div
                 className={`btn_ theme ${theme}`}

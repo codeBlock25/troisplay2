@@ -364,63 +364,44 @@ const defaults: AxiosResponse<{
                 placeholder="in ($)"
               />
             </div>
-            <span
+           <span
               className="btn"
-              onClick={async () => {
-                await isPlayable(
-                  playLoader,
-                  setPlayerLoader,
-                  spec.price,
-                  spec.game,
-                  dispatch,
-                  spec
-                ).finally(() => {
-                  setSpec((prev) => {
-                    return {
-                      ...prev,
-                      isOpen: false,
-                      game: Games.non,
-                      next: nextType.player,
-                    };
-                  });
+              onClick={() => {
+                if (spec.price <
+                  (spec.game === Games.roshambo ? defaults.data.default.min_stack_roshambo :
+                  spec.game === Games.penalth_card ? defaults.data.default.min_stack_penalty :
+                  spec.game === Games.matcher ? defaults.data.default.min_stack_guess_master
+                    : 0)
+                ) {
+                  toast(dispatch, {msg: `Can't play ${spec.game === Games.roshambo ?  "Roshambo" :
+                    spec.game === Games.penalth_card ? "Penalty Card" :
+                    spec.game === Games.matcher ? "Guess Master"
+                      : ""} game below the minimum price bar. Please stake something higher than ₦ ${spec.game === Games.roshambo ? defaults.data.default.min_stack_roshambo :
+                        spec.game === Games.penalth_card ? defaults.data.default.min_stack_penalty :
+                        spec.game === Games.matcher ? defaults.data.default.min_stack_guess_master
+                          : 0} to continue`}).error()
+                return
+                }
+              toast(dispatch, {msg: ""}).close()
+              setGameDetails(dispatch, {
+                price: spec.price,
+                player: PlayerType.first,
+                id: undefined,
+                game: spec.game,
+              });
+              setSpec((prev) => {
+                  return {
+                    ...prev,
+                    isOpen: false,
+                    game: Games.non,
+                    next: nextType.player,
+                  };
                 });
               }}
             >
               {playLoader ? (
                 <SyncLoader size="10px" color="white" />
-              ) : (
-                `stake $${spec.price}`
-              )}
-            </span>
-            <span
-              className="btn"
-              onClick={async () => {
-                await isPlayable(
-                  playLoader,
-                  setPlayerLoader,
-                  spec.price,
-                  spec.game,
-                  dispatch,
-                  spec
-                ).finally(() => {
-                  setSpec((prev) => {
-                    return {
-                      ...prev,
-                      isOpen: false,
-                      game: Games.non,
-                      next: nextType.player,
-                    };
-                  });
-                });
-              }}
-            >
-              {playLoader ? (
-                <SyncLoader size="10px" color="white" />
-              ) : (
-                <>
-                  stake <GameCoin /> {spec.price * (defaults?.data?.default?.cashRating ?? 1)}
-                </>
-              )}
+              ) : "stake" }
             </span>
           </div>
         ) : spec.next === nextType.player ? (

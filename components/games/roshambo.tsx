@@ -24,7 +24,8 @@ import {
   RoshamboOption,
 } from "../../typescript/enum";
 import { ActionType, reducerType } from "../../typescript/interface";
-import { getToken } from "../../functions";
+import { getPrice, getToken } from "../../functions";
+import { useQueryCache } from "react-query";
 
 export default function Roshambo() {
   const dispatch: (t: ActionType) => void = useDispatch();
@@ -100,7 +101,33 @@ export default function Roshambo() {
       details: state.event.game_details,
     };
   });
-
+  const defaults: AxiosResponse<{
+    default: {
+      commission_roshambo: {
+        value: number;
+        value_in: "$" | "%" | "c";
+      };
+      commission_penalty: {
+        value: number;
+        value_in: "$" | "%" | "c";
+      };
+      commission_guess_mater: {
+        value: number;
+        value_in: "$" | "%" | "c";
+      };
+      commission_custom_game: {
+        value: number;
+        value_in: "$" | "%" | "c";
+      };
+      cashRating: number;
+      min_stack_roshambo: number;
+      min_stack_penalty: number;
+      min_stack_guess_master: number;
+      min_stack_custom: number;
+      referRating: number;
+    };
+  }> = useQueryCache().getQueryData("defaults");
+   
   const theme = "dark-mode";
   const handleSubmit = async (payWith?: PayType) => {
     let token = getToken();
@@ -860,7 +887,7 @@ export default function Roshambo() {
                   {loading ? (
                     <SyncLoader size="10px" color={`white`} />
                   ) : (
-                    "Play with $"
+                    `stake ₦  ${getPrice(details.game, details.price, defaults.data.default)}`
                   )}
                 </div>
                 <div
@@ -873,7 +900,7 @@ export default function Roshambo() {
                     <SyncLoader size="10px" color={`white`} />
                   ) : (
                     <>
-                      play with <GameCoin />
+                      stake <GameCoin /> {getPrice(details.game, details.price, defaults.data.default) * (defaults?.data.default.cashRating ?? 0)}
                     </>
                   )}
                 </div>
