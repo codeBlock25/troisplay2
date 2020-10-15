@@ -16,6 +16,73 @@
         left: 0;
     }
 
+    .form {
+        position: absolute;
+        bottom: 100px;
+        width: 100%;
+        height: fit-content;
+        min-height: fit-content;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        background-color: #444444;
+        align-items: center;
+        padding: 30px 10px 20px 10px;
+        pointer-events: none;
+        opacity: 0;
+        transition: $bounce .4s;
+        
+        &.open {
+            opacity: 1;
+            bottom: 200px;
+            pointer-events: visible;
+        }
+
+        &::before {
+            content: attr(data-title);
+            position: absolute;
+            top: 5px;
+            width: fit-content;
+            height: fit-content;
+            align-self: center;
+            justify-content: center;
+            text-align: center;
+            line-height: 30px;
+            font-family: mon_bold;
+            color: white;
+            letter-spacing: 2px;
+        }
+
+        .inputBox {
+            width: 45%;
+            max-width: 400px;
+            min-width: 300px;
+            margin: 5px 15px;
+            input {
+                color: whitesmoke;
+            }
+            label {
+                color: rgb(0, 0, 0);
+                font-family: mon_med;
+                font-size: 14px;
+            }
+            &.amount {
+                input {
+                    text-align: right;
+                }
+            }
+        }
+        .btn {
+            width: 180px;
+            height: 45px;
+            background-color: #0d0e0d;
+            color: white;
+            *{
+                font-family: mon_bold;
+            }
+        }
+    }
+
     .title {
         width: 100%;
         height: 50px;
@@ -30,7 +97,7 @@
 
     .btn_star {
         position: absolute;
-        bottom: 70px;
+        bottom: 20px;
         right: -45px;
         width: 45px;
         height: 45px;

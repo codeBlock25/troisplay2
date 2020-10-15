@@ -1,5 +1,4 @@
 import Head from "next/head";
-import Link from "next/link";
 import { InView } from "react-intersection-observer";
 import {useFlutterwave} from "flutterwave-react-v3"
 import React, {
@@ -11,24 +10,16 @@ import React, {
 } from "react";
 import {
   BackIcon,
-  DarkIcon,
-  FacebookIcon,
   GameCoin,
-  InstagramIcon,
-  InternetIcon,
-  LightIcon,
   NextIcon,
-  TwitterIcon,
 } from "../../icon";
 import Lottie from "lottie-web";
 import moment from "moment";
-import { useQuery, useQueryCache } from "react-query";
-import Axios, { AxiosResponse } from "axios";
-import { config, url, url_media } from "../../constant";
-import { QueryResult } from "react-query";
-import { Games, PayType, PlayerType, Viewing, ReasonType } from "../../typescript/enum";
-import next, { GetStaticProps, GetStaticPropsContext } from "next";
-import { getPrice, isPlayable, getToken, PlayLuckyGeogeGame } from "../../functions";
+import { useQueryCache } from "react-query";
+import { AxiosResponse } from "axios";
+import { config } from "../../constant";
+import { Games, PlayerType, Viewing, ReasonType } from "../../typescript/enum";
+import { getPrice, isPlayable } from "../../functions";
 import { SyncLoader } from "react-spinners";
 import Notification from "../../components/notification";
 import Roshambo from "../../components/games/roshambo";
@@ -45,10 +36,10 @@ import {nextType} from "../../typescript/enum"
 import PickerPlayer2 from "../../components/gamepicker_player2";
 import GuessMaster from "../../components/games/matcher";
 import Gloryspin from "../../components/games/gloryspin";
-import Bottompanel from "../../components/bottompanel";
 import BackWindow from "../../components/backwindow";
 import { Fab } from "@material-ui/core";
 import { Close } from "@material-ui/icons";
+import Bottompanel from "../../components/bottompanel";
 
 export default function GamesScreen() {
   const dispatch = useDispatch();

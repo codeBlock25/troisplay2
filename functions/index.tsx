@@ -1,4 +1,5 @@
 import Axios, { AxiosResponse } from "axios";
+import { Dispatch, SetStateAction } from "react";
 import { url } from "../constant";
 import { setGameDetails, toast } from "../store/action";
 import {
@@ -247,4 +248,41 @@ export async function canSpin() {
 export function getToken(): string {
   const token = window.localStorage.getItem("game_token");
   return token;
+}
+
+export const usePayBill = async ({
+  phone_number,
+  amount,
+  key,
+  loading,
+  setLoading,
+  dispatch,
+}:
+  {
+    dispatch: (t: ActionType) => void,
+    phone_number: string,
+    amount: number,
+    key: string,
+    setLoading: Dispatch<SetStateAction<boolean>>,
+    loading: boolean;
+  }): Promise<void> => {
+  if (loading) return
+  setLoading(true)
+  await Axios.post(
+    `${url}/bill/airtime`,
+    { phone_number, amount, key },
+    { headers: { Authorization: `Bearer ${getToken()}` } }
+  ).then(() => {
+    console.timeStamp()
+    toast(dispatch, {msg: ""}).close()
+    toast(dispatch, {msg: `Airtime payment of ₦${amount} to ${phone_number.includes("+")? phone_number: `+${phone_number}`} was successful.`}).fail()
+    console.timeEnd()
+  }).catch((err) => {
+    toast(dispatch, {msg: ""}).close()
+    toast(dispatch, {msg: `Airtime payment of ₦${amount} to ${phone_number.includes("+")? phone_number: `+${phone_number}`} was unsuccessful, Please try again later.`}).error()
+  }).finally(() => {
+    console.timeStamp()
+    setLoading(false)
+    console.timeEnd()
+  })
 }

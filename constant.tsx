@@ -12,6 +12,7 @@ export const url: string = isDev ? dev_url : server_url;
 export const url_media: string = isDev ? dev_url_media : server_url_media;
 export const PUBLIC_KEY = "FLWPUBK_TEST-601c62ddd83726d50ebdbfb3c07b3ed9-X"
 export const SECRET_KEY = "FLWSECK_TEST-067e4c8c2041fcff8d4dcb14c8fcbf1e-X"
+export const NAIRA =()=>(<b>&#8358;</b>)
 export const banks: {id: number, name: string,  code: string}[] =  [
   { id: 132, code: '560', name: 'Page MFBank' },
   { id: 133, code: '304', name: 'Stanbic Mobile Money' },
