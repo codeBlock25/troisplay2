@@ -46,7 +46,7 @@ export const backWin = (
   dispatch: (t: ActionType) => void,
   payload: {
     open: modalType;
-    func?: () => Promise<void>;
+    func?: () => Promise<void> | void | boolean;
     game?: Games;
     msg: string
   }

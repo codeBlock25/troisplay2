@@ -39,7 +39,7 @@ export default function BackWindow() {
               setLoading(true);
               await back_.func().finally(() => {
                 setLoading(false);
-                exitWin(dispatch, { open: modalType.close, func: null });
+                backWin(dispatch, {...back_, open: modalType.close, msg: "",});
               });
             }}
           >

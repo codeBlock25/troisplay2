@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 import moment from "moment";
-import { memo } from "react";
+import { Dispatch, memo, SetStateAction } from "react";
 import { queryCache, useQueryCache } from "react-query";
 import { getPrice } from "../functions";
 import { GameCoin } from "../icon";
@@ -28,9 +28,9 @@ const GameView = memo(function ({
     coin: number;
   game: Games
   type:"game_view"|"normal" | "lucky" | "room",
-  btn1func?: () => Promise<void> | void | boolean
+  btn1func?: () => Promise<void> | void | boolean | Dispatch<SetStateAction<any>>
   btn1view?: JSX.Element
-  btn2func?: () => Promise<void> | void | boolean
+  btn2func?: () => Promise<void> | void | boolean | Dispatch<SetStateAction<any>>
   btn2view?: JSX.Element
 }) {
   const defaults: AxiosResponse<{

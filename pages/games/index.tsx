@@ -18,13 +18,13 @@ import moment from "moment";
 import { useQueryCache } from "react-query";
 import { AxiosResponse } from "axios";
 import { config } from "../../constant";
-import { Games, PlayerType, Viewing, ReasonType } from "../../typescript/enum";
+import { Games, PlayerType, Viewing, ReasonType, modalType } from "../../typescript/enum";
 import { getPrice, isPlayable } from "../../functions";
 import { SyncLoader } from "react-spinners";
 import Notification from "../../components/notification";
 import Roshambo from "../../components/games/roshambo";
-import { setGameDetails, toast } from "../../store/action";
-import { useDispatch } from "react-redux";
+import { backWin, setGameDetails, toast } from "../../store/action";
+import { useDispatch, useSelector } from "react-redux";
 import Penalty_card from "../../components/games/penelty_card";
 import ToastContainer from "../../components/toast";
 import AppLoader from "../../components/app_loader";
@@ -40,9 +40,26 @@ import BackWindow from "../../components/backwindow";
 import { Fab } from "@material-ui/core";
 import { Close } from "@material-ui/icons";
 import Bottompanel from "../../components/bottompanel";
+import { reducerType } from "../../typescript/interface";
 
 export default function GamesScreen() {
   const dispatch = useDispatch();
+  
+  const { details } = useSelector<
+    reducerType,
+    {
+      details: {
+        price: number;
+        game: Games;
+        id?: string;
+        player: PlayerType;
+      };
+    }
+  >((state) => {
+    return {
+      details: state.event.game_details,
+    };
+  });
   const [viewing, setViewing] = useState<Viewing>(Viewing.current);
   const [dateintime, setDateintime] = useState("");
   const [app_loading, setApp_loading] = useState<boolean>(true);
@@ -217,8 +234,17 @@ const defaults: AxiosResponse<{
   
   useEffect(() => {
     beforePopState(({ url, as, options }) => {
-      alert("Are you sure you want to leave this page?.")
-      return true
+      console.log(url, as, options)
+      // if (details.game !== Games.non) {
+        backWin(dispatch, {
+          open: modalType.open,
+          msg: "Are you sure you want to leave this game.",
+          func: () => {
+            return true;
+          }, game: details.game
+        })
+      // }
+      return false
     })
   }, [])
 
