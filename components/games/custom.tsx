@@ -31,13 +31,15 @@ import { url } from "../../constant";
 import { reducerType } from "../../typescript/interface";
 import { getToken } from "../../functions";
 import { Games, PlayerType } from "../../typescript/enum";
+import { CloseIcon } from "../../icon";
+import { isEmpty } from "lodash";
 
 export enum choice {
   at_stated_timed,
   immediately,
 }
 
-export default function Custom_Game(): JSX.Element {
+export default function CustomGame(): JSX.Element {
   const dispatch = useDispatch();
   const [player2Username, setPlayer2Username] = useState<string>("");
   const [player2Username_error, setPlayer2Username_error] = useState<boolean>(
@@ -109,15 +111,14 @@ export default function Custom_Game(): JSX.Element {
             date?: Date;
           };
         }>) => {
-          // NOTE RESET
+          setGameDetails(dispatch, {player: PlayerType.first, price: 0, id: "", game: Games.non})
           setDescription("");
           setTitle("");
           setAnswer("");
           setEndGameTime(new Date());
           setEndDate(new Date());
           setPlayer2Username("");
-           // NOTE: "Congratulations!!!! You have successfully set you custom game, please wait for Player 2 provide his/her answer.",
-         
+          toast(dispatch, {msg: "Congratulations!!!! You have successfully set you custom game, please wait for Player 2 provide his/her answer."}).success()
         }
       )
       .catch((err) => {
@@ -160,15 +161,38 @@ export default function Custom_Game(): JSX.Element {
         }}
       >
         <div className="world spin custom">
+        <div
+              className="close_btn"
+              onClick={() => {
+                if (isEmpty(details.id)) {
+                  setGameDetails(dispatch, {
+                    player: PlayerType.first,
+                    game: Games.non,
+                    id: undefined,
+                    price: 0,
+                  });
+                  setLoading(false);
+                  setDescription("");
+                  setTitle("");
+                  setAnswer("");
+                  setEndGameTime(new Date());
+                  setEndDate(new Date());
+                  setPlayer2Username("");
+                  setPlayer2Username_error(false)
+                  return;
+                }
+              }}
+            >
+              <CloseIcon />
+            </div>
           <h3 className="title">Set your game</h3>
           <form onSubmit={handleSubmit}>
             <TextField
               className={`inputBox theme ${theme}`}
-              required
               variant="outlined"
               value={player2Username}
               label="Player 2 username"
-              placeholder="A troisplay player"
+              placeholder="A troisplay player (Leave blank to make public)"
               error={player2Username_error}
               helperText={
                 player2Username_error ? "Invalid Player username" : ""

@@ -5,7 +5,7 @@
     top: 0;
     left: 0;
     right: 0;
-    z-index: 3500;
+    z-index: 1100;
     width: 100vw;
     height: 100vh;
     display: flex;
@@ -148,6 +148,7 @@
             min-height: 37px;
             max-width: 37px;
             max-height: 37px;
+            z-index: 100;
             background-color: red;
             color: white;
             border-radius: 50%;
@@ -157,17 +158,15 @@
             cursor: pointer;
 
             svg {
-                width: 20px;
-                height: 20px;
+                width: 15px;
+                height: 15px;
                 fill: currentColor;
             }
         }
 
         &.custom {
             justify-content: flex-start;
-            height: 85%;
-            min-height: 500px;
-            max-height: 600px;
+            height: 100%;
             overflow-y: auto;
             padding-top: 20px;
             padding-bottom: 50px;

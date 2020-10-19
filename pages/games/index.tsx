@@ -35,6 +35,7 @@ import Header from "../../components/header";
 import {nextType} from "../../typescript/enum"
 import PickerPlayer2 from "../../components/gamepicker_player2";
 import GuessMaster from "../../components/games/matcher";
+import CustomGame from "../../components/games/custom";
 import Gloryspin from "../../components/games/gloryspin";
 import BackWindow from "../../components/backwindow";
 import { Fab } from "@material-ui/core";
@@ -273,6 +274,7 @@ const defaults: AxiosResponse<{
       <Roshambo />
       <Exitwindow />
       <Gloryspin />
+      <CustomGame />
       <Notification />
       <GuessMaster />
       <Bottompanel />
@@ -439,6 +441,10 @@ const defaults: AxiosResponse<{
                 className="btn"
                   onClick={() => {
                     if (spec.game === Games.custom_game) {
+                     console.log("prrr")
+                     setSpec(prev=>{
+                       return {...prev, isOpen: false}
+                     })
                       setGameDetails(dispatch, {player: PlayerType.first, game: Games.custom_game, id: "", price: spec.price})
                       return
                     }
