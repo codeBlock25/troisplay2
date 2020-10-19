@@ -227,7 +227,9 @@ export default function DetailScreen() {
                     </span>
                     <div className="action">
                         <span className="btn" onClick={Share}>refer</span>
-                        <span className="btn">view referrals</span>
+                        <span className="btn" onClick={()=>{
+                          push("/games/referal")
+                        }}>view referrals</span>
                     </div>
                 </InView>
             </div>

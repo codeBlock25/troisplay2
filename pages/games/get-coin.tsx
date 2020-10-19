@@ -57,7 +57,7 @@ export default function GetterScreen() {
       autoplay: true,
       loop: true,
       renderer: "canvas",
-      animationData: require("../../lottie/game_play.json"),
+      animationData: require("../../lottie/game.json"),
     });
   }, []);
   useEffect(() => {
