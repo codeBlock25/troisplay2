@@ -232,7 +232,7 @@ export default function Bottompanel() {
           </div>
             <div className="action">
             <Button className="btn" onClick={() => {
-                  setOpen(BillPayment.airtime)
+                  setOpen(prev => prev === BillPayment.airtime? BillPayment.non: BillPayment.airtime)
                     }}>
                         <span className="at">
                             <MAincon/>
@@ -240,7 +240,7 @@ export default function Bottompanel() {
                         </span>
                     </Button>
                     <Button className="btn"  onClick={() => {
-                      setOpen(BillPayment.data)
+                      setOpen(prev => prev === BillPayment.data? BillPayment.non: BillPayment.data)
                     }}>
                         <span className="at">
                             <MDicon/>
@@ -248,7 +248,7 @@ export default function Bottompanel() {
                         </span>
                     </Button>
                     <Button className="btn"  onClick={() => {
-                        setOpen(BillPayment.bill)
+                        setOpen(prev => prev === BillPayment.bill? BillPayment.non: BillPayment.bill)
                     }}>
                         <span className="at">
                             <BillIcon />
@@ -256,7 +256,7 @@ export default function Bottompanel() {
                         </span>
                     </Button>
                     <Button className="btn"  onClick={() => {
-                      setOpen(BillPayment.transfer)
+                      setOpen(prev => prev === BillPayment.transfer ? BillPayment.non: BillPayment.transfer)
                     }}>
                         <span className="at">
                             <CreditCard />

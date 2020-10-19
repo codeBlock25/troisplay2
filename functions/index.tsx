@@ -260,11 +260,11 @@ export const usePayBill = async ({
 }:
   {
     dispatch: (t: ActionType) => void,
+    setLoading: Dispatch<SetStateAction<boolean>>,
+    loading: boolean;
     phone_number: string,
     amount: number,
     key: string,
-    setLoading: Dispatch<SetStateAction<boolean>>,
-    loading: boolean;
   }): Promise<void> => {
   if (loading) return
   setLoading(true)
@@ -285,4 +285,60 @@ export const usePayBill = async ({
     setLoading(false)
     console.timeEnd()
   })
-}
+};
+
+export const useTransfer = async (
+  {
+  username, 
+  amount, 
+  key, 
+  loading,
+  setLoading,
+  dispatch,
+  setUsernameError,
+  setKey_error
+}:{
+  username: string, 
+  amount: number, 
+  key: string,
+  dispatch: (t: ActionType) => void,
+  setLoading: Dispatch<SetStateAction<boolean>>,
+  loading: boolean;
+  setUsernameError: Dispatch<SetStateAction<errorType>>,
+  setKey_error:  Dispatch<SetStateAction<errorType>>
+  }) => {
+    if(loading) return;
+    await Axios.post(
+      `${url}/bill/transfer`, 
+      {username, amount, key},
+      {headers: {Authorization: `Bearer ${getToken()}`}
+  }).then(()=>{
+    toast(dispatch, {msg: `The transfer of ₦ ${amount} to ${username} was successful.`}).success()
+  }).catch(err=>{
+    if (err.message === "Request failed with status code 403") {
+      toast(dispatch, {msg: ""}).close()
+      setKey_error(errorType.error)
+      toast(dispatch, {msg: `The transfer of ₦ ${amount} to ${username} was unsuccessful due to incorrect key. Please try again later.`}).fail()
+      return
+    }
+    if (err.message === "Request failed with status code 401") {
+      toast(dispatch, {msg: ""}).close()
+      toast(dispatch, {msg: `The transfer of ₦ ${amount} to ${username} was unsuccessful due to insufficient fund. Fund your account and try again later.`}).fail()
+      return
+    }
+    if (err.message === "Request failed with status code 404") {
+      toast(dispatch, {msg: ""}).close()
+      setUsernameError(errorType.fail)
+      toast(dispatch, {msg: `Invalid username. Please try again later.`}).fail()
+      return
+    }
+    toast(dispatch, {msg: ""}).close()
+    toast(dispatch, {msg: `Unable to communication with the Troisplay Server please check your Internet connection and try again.`}).error()
+  }).finally(()=>{
+    setLoading(false)
+  })
+};
+
+/*
+
+*/

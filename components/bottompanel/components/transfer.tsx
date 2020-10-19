@@ -3,12 +3,12 @@ import React, { useState } from 'react'
 import { NAIRA } from '../../../constant';
 import { useDispatch } from 'react-redux';
 import { BillPayment, errorType } from '../../../typescript/enum';
-import { usePayBill } from '../../../functions';
+import { usePayBill, useTransfer } from '../../../functions';
 
 export default function Transfer({open}:{open: BillPayment}) {
     const dispatch = useDispatch()
     const [phone_number, setPhone_number] = useState<string>()
-    const [phone_number_error, setPhone_number_error] = useState<errorType>(
+    const [username_error, setUsernameError] = useState<errorType>(
         errorType.non
     );
     const [loading, setLoading] = useState<boolean>(false)
@@ -19,7 +19,7 @@ export default function Transfer({open}:{open: BillPayment}) {
     return (
         <form className={open === BillPayment.transfer? "form open": "form"} onSubmit={(e) => {
             e.preventDefault()
-            usePayBill({phone_number,amount, key,loading, setLoading, dispatch})
+            useTransfer({username, amount, key,loading, setLoading, dispatch, setUsernameError, setKey_error})
           }} data-title="Transfer Form">
             <TextField
               variant="filled"
@@ -32,8 +32,8 @@ export default function Transfer({open}:{open: BillPayment}) {
               onChange={({ target: { value } }) => {
                 setUsernamer(value);
               }}
-              error={phone_number_error === errorType.warning || phone_number_error === errorType.error}
-              helperText={phone_number_error === errorType.warning? "No account found with this number.": phone_number_error === errorType.error?"Invalid phone number.":""}
+              error={username_error === errorType.fail}
+              helperText={username_error === errorType.fail? "No account found with this username.": ""}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">{"  "}</InputAdornment>
