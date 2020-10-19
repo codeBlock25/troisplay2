@@ -9,6 +9,15 @@ export enum Games {
   rooms
 }
 
+
+export enum BillPayment {
+  non,
+  airtime, data,
+  bill,
+  transfer,
+}
+
+
 export enum Viewing {
   current,
   room,

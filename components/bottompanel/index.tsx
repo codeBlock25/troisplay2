@@ -1,44 +1,28 @@
 import React, { MutableRefObject, useCallback, useEffect, useRef, useState } from 'react'
 import { BackIcon, BillIcon, MAincon, MDicon, NextIcon } from '../../icon';
 import {InView} from "react-intersection-observer"
-import { errorType, Games } from '../../typescript/enum';
+import { BillPayment, errorType, Games } from '../../typescript/enum';
 import { AxiosResponse } from 'axios';
 import { useQueryCache } from 'react-query';
 import moment from "moment"
 import Lottie from 'lottie-web';
-import { Button, Fab, FormControl, InputAdornment, InputLabel, MenuItem, Select, TextField } from '@material-ui/core';
-import { CreditCard, Home, Settings, Star } from '@material-ui/icons';
-import { toNumber } from 'lodash';
-import { NAIRA } from '../../constant';
-import { usePayBill } from '../../functions';
-import { useDispatch } from 'react-redux';
-
-export enum BillPayment {
-  non,
-  airtime, data,
-  bill,
-  transfer,
-}
+import { Button, Fab } from '@material-ui/core';
+import { CreditCard } from '@material-ui/icons';
+import Airtime from './components/airtime';
+import Data from './components/data';
+import Transfer from "./components/transfer"
+import { useRouter } from 'next/router';
 
 
 export default function Bottompanel() {
-  const dispatch = useDispatch()
-    const swRef: MutableRefObject<HTMLDivElement | null> = useRef();
-    const coinRef: MutableRefObject<HTMLSpanElement | null> = useRef();
-    const coinRef2: MutableRefObject<HTMLSpanElement | null> = useRef();
-    const gameRef2: MutableRefObject<HTMLSpanElement | null> = useRef();
+  const swRef: MutableRefObject<HTMLDivElement | null> = useRef();
+  const coinRef: MutableRefObject<HTMLSpanElement | null> = useRef();
+  const coinRef2: MutableRefObject<HTMLSpanElement | null> = useRef();
+  const gameRef2: MutableRefObject<HTMLSpanElement | null> = useRef();
   const [dateintime, setDateintime] = useState("");
-    const [phone_number, setPhone_number] = useState<string>()
-    const [username, setUsernamer] = useState<string>("")
-    const [phone_number_error, setPhone_number_error] = useState<errorType>(
-      errorType.non
-  );
-  const [loading, setLoading] = useState<boolean>(false)
-  const [key, setKey] = useState<string>("")
   const [open, setOpen] = useState<BillPayment>(BillPayment.airtime)
-  const [amount, setAmount] = useState<number>()
-  const [key_error, setKey_error] = useState<errorType>(errorType.non);
-    const [isOpen, setIsopen] = useState(false)
+  const [isOpen, setIsopen] = useState(false)
+  const { push } = useRouter()
     const lottieLoader = useCallback(() => {
         Lottie.loadAnimation({
             container: coinRef.current,
@@ -161,191 +145,10 @@ export default function Bottompanel() {
     
     return (
       <div className={isOpen ? "bottompanel open" : "bottompanel"}>
-         <form className={open === BillPayment.transfer? "form open": "form"} onSubmit={(e) => {
-          e.preventDefault()
-          usePayBill({phone_number,amount, key,loading, setLoading, dispatch})
-        }} data-title="Transfer Form">
-          <TextField
-            variant="filled"
-            label="username"
-            className="inputBox"
-            type="tel"
-            required
-            value={username}
-            placeholder="eg troisgamer (must have a troisplay account)."
-            onChange={({ target: { value } }) => {
-              setUsernamer(value);
-            }}
-            error={phone_number_error === errorType.warning || phone_number_error === errorType.error}
-            helperText={phone_number_error === errorType.warning? "No account found with this number.": phone_number_error === errorType.error?"Invalid phone number.":""}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">{"  "}</InputAdornment>
-            )
-          }} 
-          />
-          <TextField
-            variant="filled"
-            label="Amount"
-            className="inputBox amount"
-            type="number"
-            required
-            value={amount}
-            placeholder="00.00"
-            onChange={({ target: { value } }) => {
-              setAmount(parseFloat(value));
-            }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start" style={{fontFamily: "mon_bold"}}>
-                  $
-                </InputAdornment>
-              )
-            }}
-            />
-          <TextField
-            variant="filled"
-            label="Betting Key"
-            className="inputBox"
-            required
-            type="password"
-            value={key}
-            placeholder="Your 6 digit betting key"
-            onChange={({ target: { value } }) => {
-              if (key_error !== errorType.non) {
-                setKey_error(errorType.non);
-              }
-              setKey(value);
-            }}
-            error={key_error === errorType.error || key.length !== 6}
-            helperText={key_error === errorType.error? "Incorrect betting key." :key.length !== 6 ? "Betting key should 6 digits long." : ""}
-          />
-          <Button type="submit" className="btn">Buy</Button>
-        </form>
-         <form className={open === BillPayment.data? "form open": "form"} onSubmit={(e) => {
-          e.preventDefault()
-          usePayBill({phone_number,amount, key,loading, setLoading, dispatch})
-        }} data-title="Data Form">
-          <TextField
-            variant="filled"
-            label="Phone Number"
-            className="inputBox"
-            type="tel"
-            required
-            value={phone_number}
-            placeholder="Country code include."
-            onChange={({ target: { value } }) => {
-              if (phone_number_error !== errorType.non) {
-                setPhone_number_error(errorType.non);
-              }
-              setPhone_number(value);
-            }}
-            error={phone_number_error === errorType.warning || phone_number_error === errorType.error}
-            helperText={phone_number_error === errorType.warning? "No account found with this number.": phone_number_error === errorType.error?"Invalid phone number.":""}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start" >{"  "}</InputAdornment>
-            )
-          }} 
-          />
-          <TextField
-            variant="filled"
-            label="Amount"
-            className="inputBox amount"
-            type="number"
-            required
-            value={amount}
-            placeholder="00.00"
-            onChange={({ target: { value } }) => {
-              setAmount(parseFloat(value));
-            }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start" style={{fontFamily: "mon_bold"}}>
-                  MB
-                </InputAdornment>
-              )
-            }}
-            />
-          <TextField
-            variant="filled"
-            label="Betting Key"
-            className="inputBox"
-            required
-            type="password"
-            value={key}
-            placeholder="Your 6 digit betting key"
-            onChange={({ target: { value } }) => {
-              if (key_error !== errorType.non) {
-                setKey_error(errorType.non);
-              }
-              setKey(value);
-            }}
-            error={key_error === errorType.error || key.length !== 6}
-            helperText={key_error === errorType.error? "Incorrect betting key." :key.length !== 6 ? "Betting key should 6 digits long." : ""}
-          />
-          <Button type="submit" className="btn">Buy</Button>
-        </form>
-         <form data-title="Airtime form" className={open === BillPayment.airtime ? "form open" : "form"} onSubmit={(e) => {
-          e.preventDefault()
-          usePayBill({phone_number,amount, key,loading, setLoading, dispatch})
-        }}>
-          <TextField
-            variant="filled"
-            label="Phone Number"
-            className="inputBox"
-            type="tel"
-            required
-            value={phone_number}
-            placeholder="Country code include."
-            onChange={({ target: { value } }) => {
-              if (phone_number_error !== errorType.non) {
-                setPhone_number_error(errorType.non);
-              }
-              setPhone_number(value);
-            }}
-            error={phone_number_error === errorType.warning || phone_number_error === errorType.error}
-            helperText={phone_number_error === errorType.warning? "No account found with this number.": phone_number_error === errorType.error?"Invalid phone number.":""}
-            />
-          <TextField
-            variant="filled"
-            label="Amount"
-            className="inputBox amount"
-            type="number"
-            required
-            value={amount}
-            placeholder="00.00"
-            onChange={({ target: { value } }) => {
-              setAmount(parseFloat(value));
-            }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <NAIRA/>
-                </InputAdornment>
-              )
-            }}
-            />
-          <TextField
-            variant="filled"
-            label="Betting Key"
-            className="inputBox"
-            required
-            type="password"
-            value={key}
-            placeholder="Your 6 digit betting key"
-            onChange={({ target: { value } }) => {
-              if (key_error !== errorType.non) {
-                setKey_error(errorType.non);
-              }
-              setKey(value);
-            }}
-            error={key_error === errorType.error || key.length !== 6}
-            helperText={key_error === errorType.error? "Incorrect betting key." :key.length !== 6 ? "Betting key should 6 digits long." : ""}
-          />
-          <Button type="submit" className="btn">Buy</Button>
-        </form>
-        <Fab className="btn_star" onClick={() => { setIsopen(true); setOpen(BillPayment.non)}}>VTU</Fab>
+        <Data open={open} />
+        <Transfer open={open} />
+        <Airtime open={open} />
+        <Fab className="btn_star" onClick={() => { setIsopen(true); setOpen(BillPayment.non); }}>VTU</Fab>
             <Button className="back_btn" onClick={() => {
                 setIsopen(false)
             }}>back</Button>
@@ -460,7 +263,9 @@ export default function Bottompanel() {
                             <span>Transfer</span>
                         </span>
                     </Button>
-                    <Button className="btn">
+            <Button className="btn" onClick={() => {
+              push("/games")
+                    }}>
                         <span className="at">
                             <span ref={gameRef2} />
                             <span>Games</span>

@@ -41,6 +41,7 @@ import { Fab } from "@material-ui/core";
 import { Close } from "@material-ui/icons";
 import Bottompanel from "../../components/bottompanel";
 import { reducerType } from "../../typescript/interface";
+import DetailScreen from "../../components/DetailScreen";
 
 export default function GamesScreen() {
   const dispatch = useDispatch();
@@ -436,7 +437,11 @@ const defaults: AxiosResponse<{
             <div className="action">
               <div
                 className="btn"
-                onClick={() => {
+                  onClick={() => {
+                    if (spec.game === Games.custom_game) {
+                      setGameDetails(dispatch, {player: PlayerType.first, game: Games.custom_game, id: "", price: spec.price})
+                      return
+                    }
                   setSpec((prev) => {
                     return {
                       ...prev,
@@ -667,108 +672,7 @@ const defaults: AxiosResponse<{
         }}
       >
         <div className="first">
-          <div className="cover">
-            <span
-              className="sw_btn"
-              onClick={() => {
-                swRef.current.scrollTo(swRef.current.scrollLeft - 270, 0);
-              }}
-            >
-              <BackIcon />
-            </span>
-            <div className="container" ref={swRef}>
-              <InView
-                as="div"
-                onChange={(inview, evt) => {
-                  if (inview) {
-                    evt.target.classList.add("inview");
-                  } else {
-                    evt.target.classList.remove("inview");
-                  }
-                }}
-                className="sw"
-              >
-                <span className="time">Next Spin {dateintime}</span>
-                <h3 className="title">Cash</h3>
-                <span className="price">
-                  ${" "}
-                  {record?.data?.cashwallet?.currentCash.toLocaleString() ?? 0}
-                </span>
-                <div className="action">
-                  <span className="btn" onClick={()=>setAction(ReasonType.fund) }>fund</span>
-                  <span className="btn" onClick={()=>setAction(ReasonType.withdraw)}>withdraw</span>
-                </div>
-              </InView>
-              <InView
-                as="div"
-                onChange={(inview, evt) => {
-                  if (inview) {
-                    evt.target.classList.add("inview");
-                  } else {
-                    evt.target.classList.remove("inview");
-                  }
-                }}
-                className="sw"
-              >
-                <span className="time">Next Spin{dateintime}</span>
-                <h3 className="title">Coin</h3>
-                <span className="price">
-                  <span ref={coinRef} className="icon" />
-                  {record?.data?.wallet?.currentCoin.toLocaleString() ?? 0}
-                </span>
-                <div className="action">
-                  <span
-                    className="btn"
-                    onClick={() => {
-                      push("/games/get-coin");
-                    }}
-                  >
-                    get more
-                  </span>
-                  <span className="btn" onClick={() => {
-                    if (spins?.data?.spin_details.isPlayable) {
-                      setGameDetails(dispatch,{player: PlayerType.first, game: Games.glory_spin, price: 0, id: undefined})
-                    } else {
-                      toast(dispatch, {msg: "Sorry glory spin can only be used once a day."}).fail()
-                    }
-                  }}>glory spin</span>
-                </div>
-              </InView>
-              <InView
-                as="div"
-                onChange={(inview, evt) => {
-                  if (inview) {
-                    evt.target.classList.add("inview");
-                  } else {
-                    evt.target.classList.remove("inview");
-                  }
-                }}
-                className="sw"
-              >
-                <span className="time">Next Spin{dateintime}</span>
-                <h3 className="title">Earnings</h3>
-                <span className="price">
-                  <span ref={coinRef2} className="icon" />{" "}
-                  {(record?.data?.referal?.inactiveReferal ??
-                    0) * (defaults?.data?.default?.referRating ??
-                    0)}
-                </span>
-                <div className="action">
-                  <span className="btn">refer</span>
-                  <span className="btn">view referrals</span>
-                </div>
-              </InView>
-            </div>
-
-            <span
-              className="sw_btn"
-              onClick={() => {
-                swRef.current.scrollTo(swRef.current.scrollLeft + 270, 0);
-              }}
-            >
-              <NextIcon />
-            </span>
-          </div>
+          <DetailScreen />
         </div>
         <div className="second">
           <div className="container">

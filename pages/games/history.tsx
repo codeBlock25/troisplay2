@@ -28,6 +28,7 @@ import {isArray, find, findIndex} from "lodash"
 import { Equalizer, TableChart } from "@material-ui/icons";
 import { Box, Button, TableBody, TableCell, TableHead, TableRow, Tooltip, Typography } from "@material-ui/core";
 import { Area, AreaChart, CartesianGrid, Legend, ResponsiveContainer, XAxis, YAxis, Tooltip as ChartTooltip } from "recharts";
+import DetailScreen from "../../components/DetailScreen";
 
 
 
@@ -66,32 +67,14 @@ function TabPanel(props: TabPanelProps) {
 
 export default function HistoryScreen() {
   const dispatch = useDispatch();
-  const [dateintime, setDateintime] = useState("");
   const [app_loading, setApp_loading] = useState<boolean>(true);
   const [gameViewOpen, setViewOpen] = useState<boolean>(false);
-  const swRef1: MutableRefObject<HTMLDivElement | null> = useRef();
-  const coinRef: MutableRefObject<HTMLSpanElement | null> = useRef();
-  const coinRef2: MutableRefObject<HTMLSpanElement | null> = useRef();
-  const game_play: MutableRefObject<HTMLSpanElement | null> = useRef();
-  const [activeTab, setActiveTap] = useState<Active>(Active.table);
+  const [activeTab, setActiveTap] = useState<Active>(Active.graph);
   const [runText, setRunText] = useState("loading game components...");
   const { push } = useRouter();
-
+  const game_play: MutableRefObject<HTMLSpanElement | null> = useRef();
+  
   const lottieLoader = useCallback(() => {
-    Lottie.loadAnimation({
-      container: coinRef.current,
-      autoplay: true,
-      loop: true,
-      renderer: "canvas",
-      animationData: require("../../lottie/coin.json"),
-    });
-    Lottie.loadAnimation({
-      container: coinRef2.current,
-      autoplay: true,
-      loop: true,
-      renderer: "canvas",
-      animationData: require("../../lottie/coin.json"),
-    });
     Lottie.loadAnimation({
       container: game_play.current,
       autoplay: true,
@@ -103,25 +86,6 @@ export default function HistoryScreen() {
   useEffect(() => {
     lottieLoader();
   }, [lottieLoader]);
-  const spin: AxiosResponse<{
-    spin_details: {
-      currentTime: Date,
-      gameTime: Date,
-      isPlayable: boolean,
-    },}> = useQueryCache().getQueryData("spins")
-  useEffect(() => {
-    let countdownEvt = setInterval(() => {
-    if (spin) {
-        let time = moment(
-          moment(spin?.data?.spin_details.gameTime?? new Date()).diff(new Date())
-          ).format("HH:MM:ss");
-          setDateintime(spin.data.spin_details.isPlayable ? "00:00:00":time);
-        }
-        }, 200);
-        return () => {
-          clearInterval(countdownEvt);
-    };
-  }, [spin]);
 
   const defaults: AxiosResponse<{
     default: {
@@ -356,156 +320,15 @@ export default function HistoryScreen() {
         }}
       >
         <div className="first">
-          <div className="cover">
-            <span
-              className="sw_btn"
-              onClick={() => {
-                swRef1.current.scrollTo(swRef1.current.scrollLeft - 270, 0);
-              }}
-            >
-              <BackIcon />
-            </span>
-            <div className="container" ref={swRef1}>
-              <InView
-                as="div"
-                onChange={(inview, evt) => {
-                  if (inview) {
-                    evt.target.classList.add("inview");
-                  } else {
-                    evt.target.classList.remove("inview");
-                  }
-                }}
-                className="sw"
-              >
-                <span className="time">Next Spin {dateintime}</span>
-                <h3 className="title">Cash</h3>
-                <span className="price">
-                  ${" "}
-                  {record?.data?.cashwallet?.currentCash.toLocaleString() ?? 0}
-                </span>
-                <div className="action">
-                  <span className="btn">fund</span>
-                  <span className="btn">withdraw</span>
-                </div>
-              </InView>
-              <InView
-                as="div"
-                onChange={(inview, evt) => {
-                  if (inview) {
-                    evt.target.classList.add("inview");
-                  } else {
-                    evt.target.classList.remove("inview");
-                  }
-                }}
-                className="sw"
-              >
-                <span className="time">Next Spin {dateintime}</span>
-                <h3 className="title">Coin</h3>
-                <span className="price">
-                  <span ref={coinRef} className="icon" />
-                  {record?.data?.wallet?.currentCoin.toLocaleString() ?? 0}
-                </span>
-                <div className="action">
-                  <span
-                    className="btn"
-                    onClick={() => {
-                      push("/games/get-coin");
-                    }}
-                  >
-                    get more
-                  </span>
-                  <span className="btn">glory spin</span>
-                </div>
-              </InView>
-              <InView
-                as="div"
-                onChange={(inview, evt) => {
-                  if (inview) {
-                    evt.target.classList.add("inview");
-                  } else {
-                    evt.target.classList.remove("inview");
-                  }
-                }}
-                className="sw"
-              >
-                <span className="time">Next Spin {dateintime}</span>
-                <h3 className="title">Earnings</h3>
-                <span className="price">
-                  <span ref={coinRef2} className="icon" />{" "}
-                  {record?.data?.referal?.inactiveReferal ??
-                    0 * defaults?.data?.default?.referRating ??
-                    0}
-                </span>
-                <div className="action">
-                  <span className="btn">refer</span>
-                  <span className="btn">view referrals</span>
-                </div>
-              </InView>
-            </div>
-
-            <span
-              className="sw_btn"
-              onClick={() => {
-                swRef1.current.scrollTo(swRef1.current.scrollLeft + 270, 0);
-              }}
-            >
-              <NextIcon />
-            </span>
-          </div>
+        <DetailScreen />
         </div>
         <div className="second">
           <div className="container">
-            <div className="title">
-              <h3>Games History</h3>
-            </div>
-            <div className="action">
-              <Button
-                className={
-                  activeTab === Active.table
-                    ? `btn_ active theme ${theme}`
-                    : `btn_ theme ${theme}`
-                }
-                onClick={() => {
-                  setActiveTap(Active.table);
-                }}
-              >
-                <TableChart />
-                table
-              </Button>
-              <Button
-                className={
-                  activeTab === Active.graph
-                    ? `btn_ active active theme ${theme}`
-                    : `btn_ theme ${theme}`
-                }
-                onClick={() => {
-                  setActiveTap(Active.graph);
-                }}
-              >
-                <Equalizer />
-                graph
-              </Button>
-            </div>
-            <TabPanel value={activeTab} index={0}>
-              {row.length >= 1 ? (
-                <div className="history_content">
-                  <DataGrid
-                    rows={row}
-                    columns={columns}
-                    pageSize={8}
-                    disableMultipleSelection
-                    checkboxSelection={false}
-                  />
-                </div>
-              ) : (
-              <Typography variant="body2" style={{color: "whitesmoke"}}>No Data too display.</Typography>
-                )}
-          </TabPanel>
           <TabPanel value={activeTab} index={1}>
             <div className={`container_map theme ${theme}`}>
               <div className="main_head">
                 <h3 className="title_">
-                  <strong>Your</strong>Game analysis
+                  <strong>Your</strong>Game History
                 </h3>
                 <div className="selector">
                   <Button className="oo active">last 30 day</Button>
@@ -527,7 +350,7 @@ export default function HistoryScreen() {
                     <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
                       <stop
                         offset="65%"
-                        stopColor="#f9f9f9"
+                        stopColor="#2196F3"
                         stopOpacity={0.8}
                       />
                       <stop offset="95%" stopColor="#f9f9f9" stopOpacity={0} />
