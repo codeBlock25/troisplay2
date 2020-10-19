@@ -263,8 +263,10 @@ export default function Bottompanel() {
                             <span>Transfer</span>
                         </span>
                     </Button>
-            <Button className="btn" onClick={() => {
-              push("/games")
+                    <Button className="btn" onClick={() => { 
+                      setIsopen(false)
+                      setOpen(BillPayment.non)
+                      push("/games")
                     }}>
                         <span className="at">
                             <span ref={gameRef2} />
