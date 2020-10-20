@@ -23,7 +23,7 @@ export default function Transfer({open}:{open: BillPayment}) {
           }} data-title="Transfer Form">
             <TextField
               variant="filled"
-              label="username"
+              label="Account Number"
               className="inputBox"
               type="tel"
               required
@@ -54,7 +54,7 @@ export default function Transfer({open}:{open: BillPayment}) {
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start" style={{fontFamily: "mon_bold"}}>
-                    $
+                    <NAIRA />
                   </InputAdornment>
                 )
               }}

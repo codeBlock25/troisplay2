@@ -12,26 +12,6 @@ import { useDispatch } from 'react-redux';
 
 export default function DetailScreen() {
     const dispatch = useDispatch()
-    const Share = async () => {
-        if (navigator.share) {
-          await navigator
-            .share({
-              title: "Troisplay",
-              text:
-                "Check out the best playform to have fun and get paid",
-              url: "https://troisplay.vercel.app/",
-            })
-            .then(() => console.log("Share was successful."))
-            .catch((error) => console.log("Sharing failed", error));
-        } else {
-          if (navigator.clipboard) {
-            await navigator.clipboard.writeText(
-              "Check out the best playform to have fun and get paid at: https://troisplay.vercel.app/"
-              );
-              toast(dispatch, {msg: "Your Link has been copied, paste anywhere and share to gain more coins."}).success()
-          }
-        }
-    }
     const swRef1: MutableRefObject<HTMLDivElement | null> = useRef();
     const coinRef: MutableRefObject<HTMLSpanElement | null> = useRef();
     const coinRef2: MutableRefObject<HTMLSpanElement | null> = useRef();
@@ -106,7 +86,28 @@ export default function DetailScreen() {
           pendingCash: number;
         };
       }> = useQueryCache().getQueryData("records");
-    const lottieLoader = useCallback(() => {
+    
+      const Share = async () => {
+        if (navigator.share) {
+          await navigator
+            .share({
+              title: "Troisplay",
+              text:
+                "Check out the best playform to have fun and get paid",
+              url: `https://troisplay2.vercel.app/signup/${record?.data.referal?.refer_code}`,
+            })
+            .then(() => console.log("Share was successful."))
+            .catch((error) => console.log("Sharing failed", error));
+        } else {
+          if (navigator.clipboard) {
+            await navigator.clipboard.writeText(
+              `Check out the best playform to have fun and get paid at: https://troisplay.vercel.app/signup/${record?.data.referal?.refer_code}`
+              );
+              toast(dispatch, {msg: "Your Link has been copied, paste anywhere and share to gain more coins."}).success()
+          }
+        }
+    }
+      const lottieLoader = useCallback(() => {
         Lottie.loadAnimation({
         container: coinRef.current,
         autoplay: true,
