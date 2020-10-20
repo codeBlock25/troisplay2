@@ -319,9 +319,6 @@ export default function HistoryScreen() {
           setViewOpen(false);
         }}
       >
-        <div className="first">
-        <DetailScreen />
-        </div>
         <div className="second">
           <div className="container">
           <TabPanel value={activeTab} index={1}>
