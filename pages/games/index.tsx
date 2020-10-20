@@ -233,20 +233,11 @@ const defaults: AxiosResponse<{
     };
   }> = useQueryCache().getQueryData("records");
 
-  
   useEffect(() => {
     beforePopState(({ url, as, options }) => {
+      window.location.href = as
       console.log(url, as, options)
-      // if (details.game !== Games.non) {
-        backWin(dispatch, {
-          open: modalType.open,
-          msg: "Are you sure you want to leave this game.",
-          func: () => {
-            return true;
-          }, game: details.game
-        })
-      // }
-      return false
+      return confirm("Are you sure you want to leave this game?")
     })
   }, [])
 
@@ -287,7 +278,7 @@ const defaults: AxiosResponse<{
       spec={spec}
       specfunc={setSpec} />
       <ToastContainer />
-      <Header setApp_loading={setApp_loading} setRunText={setRunText} />
+       <Header setApp_loading={setApp_loading} setRunText={setRunText} />
       <div
         className={`game_picker_view ${action !== ReasonType.non ? "open" : ""}`}
         onClick={(e: any) => {
@@ -375,6 +366,14 @@ const defaults: AxiosResponse<{
                     defaults?.data?.default
                   )}`}{" "}
             </p>
+            <p className="txt">
+              or Stake At{" "}
+              {getPrice(spec.game, spec.price, defaults?.data?.default) <= 0
+                ? "0"
+                : <span style={{marginLeft: 5, display:"flex", marginRight: 5}}>
+                {"  "} <GameCoin/>{" "}
+                {`${defaults?.data?.default.cashRating * spec.price}`}</span>}
+            </p>
             <div className="inputBox">
               <label htmlFor="number">Price</label>
               <input
@@ -440,14 +439,6 @@ const defaults: AxiosResponse<{
               <div
                 className="btn"
                   onClick={() => {
-                    if (spec.game === Games.custom_game) {
-                     console.log("prrr")
-                     setSpec(prev=>{
-                       return {...prev, isOpen: false}
-                     })
-                      setGameDetails(dispatch, {player: PlayerType.first, game: Games.custom_game, id: "", price: spec.price})
-                      return
-                    }
                   setSpec((prev) => {
                     return {
                       ...prev,

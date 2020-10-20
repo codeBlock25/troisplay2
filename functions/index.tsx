@@ -309,7 +309,7 @@ export const useTransfer = async (
   }) => {
     if(loading) return;
     await Axios.post(
-      `${url}/bill/transfer`, 
+      `${url}/bill/transfer/direct`, 
       {username, amount, key},
       {headers: {Authorization: `Bearer ${getToken()}`}
   }).then(()=>{

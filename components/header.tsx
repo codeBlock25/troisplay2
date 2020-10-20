@@ -220,6 +220,12 @@ const HeadFunc = memo(function ({
       headers: { authorization: `Bearer ${token}` },
     });
   });
+  const { data: requests } = useQuery("requests", async () => {
+    let token = getToken();
+    return await Axios.get(`${url}/games/custom-game/games`, {
+      headers: { authorization: `Bearer ${token}` },
+    });
+  });
 
   return (
     <header className="game_header">

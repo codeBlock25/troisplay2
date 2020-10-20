@@ -321,7 +321,7 @@ export default function GetterScreen() {
         <div className="second">
           <div className="container">
             <div className="title">
-              <h3>Games History</h3>
+              <h3>Get Games</h3>
             </div>
             <div className="history_content">
               <DataGrid

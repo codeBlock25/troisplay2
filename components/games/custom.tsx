@@ -50,6 +50,7 @@ export default function CustomGame(): JSX.Element {
   const [description, setDescription] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [endDate, setEndDate] = useState<Date>(new Date());
+  const [maxDate, setmaxDate] = useState<Date>(new Date());
   const [endGameTime, setEndGameTime] = useState<Date>(new Date());
   const [choice_, setChoice] = useState<choice>(choice.at_stated_timed);
   /*
@@ -301,8 +302,35 @@ export default function CustomGame(): JSX.Element {
                 <MenuItem value={choice.immediately}>immediately</MenuItem>
               </Select>
             </FormControl>
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <KeyboardDatePicker
+                disableToolbar
+                variant="inline"
+                required
+                inputVariant="outlined"
+                className={`inputBox theme ${theme}`}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment className="icon_" position="start">
+                      <EventNote />
+                    </InputAdornment>
+                  ),
+                }}
+                format="MM/dd/yyyy"
+                margin="normal"
+                id="game-end-date"
+                label="Max Join Date"
+                value={maxDate}
+                onChange={(date) => {
+                  setmaxDate(date);
+                }}
+                KeyboardButtonProps={{
+                  "aria-label": "change date",
+                }}
+              />
+              // NOTE: Timer
             {choice_ === choice.at_stated_timed && (
-              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <>
                 <KeyboardDatePicker
                   disableToolbar
                   variant="inline"
@@ -352,8 +380,9 @@ export default function CustomGame(): JSX.Element {
                     "aria-label": "change time",
                   }}
                 />
-              </MuiPickersUtilsProvider>
-            )}
+                </>
+                )}
+                </MuiPickersUtilsProvider>
             <Button type="submit" className={`btn theme ${theme}`}>
               {loading ? <MoonLoader size="20px" color="white" /> : "set game"}
             </Button>
