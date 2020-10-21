@@ -1,5 +1,12 @@
 
-import { Games, modalType, NotiErrorType, PlayerType, errorType } from "./enum";
+import {
+  Games,
+  modalType,
+  NotiErrorType,
+  PlayerType,
+  errorType,
+  choices,
+} from "./enum";
 
 export interface eventReeducerType {
   notification: {
@@ -13,6 +20,32 @@ export interface eventReeducerType {
     id?: string;
     player: PlayerType;
   };
+  customWindow: {
+    isOpen: modalType;
+    request?: {
+      date: Date;
+      gameDetail: string;
+      gameID: Games;
+      gameMemberCount: number;
+      gameType: Games;
+      members: string[];
+      playCount: number;
+      price_in_coin: number;
+      price_in_value: number;
+      _id: string;
+      battleScore: {
+        player1: {
+          endDate: Date;
+          title: string;
+          description: string;
+          answer: string;
+          endGameTime: Date;
+          choice: choices;
+        };
+        player2?: {};
+      };
+    };
+  };
   toastNotification: {
     isOpen: modalType;
     msg: string;
@@ -24,7 +57,7 @@ export interface eventReeducerType {
     game?: Games;
   };
   back: {
-    msg: "",
+    msg: "";
     open: modalType;
     func?: () => Promise<void>;
     game?: Games;
@@ -32,7 +65,13 @@ export interface eventReeducerType {
 }
 
 export interface ActionType<T = any> {
-  type: "NOTIFICATION" | "GAME_DETAILS" | "TOAST" | "EXIT" | "BACK";
+  type:
+    | "NOTIFICATION"
+    | "GAME_DETAILS"
+    | "TOAST"
+    | "EXIT"
+    | "BACK"
+    | "CUSTOMWINDOW";
   payload: T;
 }
 

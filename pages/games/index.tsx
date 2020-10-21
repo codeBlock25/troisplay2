@@ -16,14 +16,14 @@ import {
 import Lottie from "lottie-web";
 import moment from "moment";
 import { useQueryCache } from "react-query";
-import { AxiosResponse } from "axios";
-import { config } from "../../constant";
+import Axios, { AxiosResponse } from "axios";
+import { config, url } from "../../constant";
 import { Games, PlayerType, Viewing, ReasonType, modalType } from "../../typescript/enum";
-import { getPrice, isPlayable } from "../../functions";
+import { getPrice, getToken, isPlayable } from "../../functions";
 import { SyncLoader } from "react-spinners";
 import Notification from "../../components/notification";
 import Roshambo from "../../components/games/roshambo";
-import { backWin, setGameDetails, toast } from "../../store/action";
+import { backWin, exitWin, setCustomWindow, setGameDetails, toast } from "../../store/action";
 import { useDispatch, useSelector } from "react-redux";
 import Penalty_card from "../../components/games/penelty_card";
 import ToastContainer from "../../components/toast";
@@ -32,7 +32,7 @@ import { useRouter } from "next/router";
 import GameView from "../../components/game_view";
 import Exitwindow from "../../components/exitwindow";
 import Header from "../../components/header";
-import {nextType} from "../../typescript/enum"
+import {nextType, choices} from "../../typescript/enum"
 import PickerPlayer2 from "../../components/gamepicker_player2";
 import GuessMaster from "../../components/games/matcher";
 import CustomGame from "../../components/games/custom";
@@ -43,6 +43,7 @@ import { Close } from "@material-ui/icons";
 import Bottompanel from "../../components/bottompanel";
 import { reducerType } from "../../typescript/interface";
 import DetailScreen from "../../components/DetailScreen";
+import CustomWindow from "../../components/customWindow";
 
 export default function GamesScreen() {
   const dispatch = useDispatch();
@@ -159,6 +160,31 @@ export default function GamesScreen() {
       _id: string;
     }[];
   }> = useQueryCache().getQueryData("my_games");
+  const requests: AxiosResponse<{
+    requests: {
+      date: Date;
+      gameDetail: string;
+      gameID: Games;
+      gameMemberCount: number;
+      gameType: Games;
+      members: string[];
+      playCount: number;
+      price_in_coin: number;
+      price_in_value: number;
+      _id: string;
+      battleScore: {
+        player1: {
+          endDate: Date;
+          title: string;
+          description: string;
+          answer: string;
+          endGameTime: Date;
+          choice: choices;
+        }
+      }
+    }[];
+  }> = useQueryCache().getQueryData("requests");
+  console.log(requests)
 const defaults: AxiosResponse<{
   default: {
     commission_roshambo: {
@@ -270,6 +296,7 @@ const defaults: AxiosResponse<{
       <GuessMaster />
       <Bottompanel />
       <BackWindow/>
+      <CustomWindow />
       <PickerPlayer2 
       game={spec.game} 
       isOpen={p2} 
@@ -484,7 +511,7 @@ const defaults: AxiosResponse<{
         }}
       >
         play game <span className="icon" ref={game_play} />
-      </span>
+      </span> 
       <div className={`games_view ${gameViewOpen && "open"}`}>
         <Fab className="btn_close" onClick={() => {
           setViewOpen(false);
@@ -683,16 +710,16 @@ const defaults: AxiosResponse<{
                   Played Games
                 </span>
                 <span
-                  className={`btn ${viewing === Viewing.room ? "on" : ""}`}
-                  onClick={() => setViewing(Viewing.room)}
+                  className={`btn ${viewing === Viewing.request ? "on" : ""}`}
+                  onClick={() => setViewing(Viewing.request)}
                 >
                   Request
                 </span>
                 <span
                   className={`btn ${
-                    viewing === Viewing.lucky_geoge ? "on" : ""
+                    viewing === Viewing.notification ? "on" : ""
                   }`}
-                  onClick={() => setViewing(Viewing.lucky_geoge)}
+                  onClick={() => setViewing(Viewing.notification)}
                 >
                   Notification
                 </span>
@@ -730,9 +757,29 @@ const defaults: AxiosResponse<{
                   />
                 );
              })) :
-                  viewing === Viewing.lucky_geoge ? null :
-                    viewing === Viewing.room ? null : null
-            }
+                  viewing === Viewing.notification ? <p>jhgfdsdfghjhgfdfgh</p> :
+                    viewing === Viewing.request ? 
+                    requests.data.requests.map(request=>{
+                      return (
+                        <GameView
+                          type="custom"
+                          name={request?.battleScore?.player1?.title}
+                          key={request._id}
+                          date={request.date}
+                          v1={request.price_in_value * (defaults?.data.default?.cashRating ?? 1)}
+                          v2={request.price_in_value}
+                          v3={request.gameMemberCount}
+                          id={request._id}
+                          btn1func={()=>setCustomWindow(dispatch,{ isOpen: modalType.open, request})}
+                          btn2func={()=> exitWin(dispatch, {open: modalType.open, func: async ()=> Axios.post(`${url}/games/custom/game`, {id: request._id},{headers: {authorization: `Bearer ${getToken()}`}}), game: Games.custom_game})}
+                          cash={request.price_in_value}
+                          coin={request.price_in_coin}
+                          game={request.gameID}
+                        /> 
+                      )
+                    })
+                      : null
+                    }
             </div>
           </div>
         </div>

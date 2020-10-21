@@ -18,10 +18,16 @@ export enum BillPayment {
 }
 
 
+export enum choices {
+  at_stated_timed,
+  immediately,
+}
+
+
 export enum Viewing {
   current,
-  room,
-  lucky_geoge,
+  request,
+  notification,
 }
 
 export enum nextType {

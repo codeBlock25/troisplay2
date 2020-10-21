@@ -191,6 +191,7 @@ const defaults: AxiosResponse<{
         </div>
         <div className="container_first theme">
           <span className="title">Referal Earnings</span>
+          <span className="title">Your Referal code <b>{record?.data?.referal?.refer_code}</b></span>
           <div className="content">
             <span className="icon" />
             <span className="count">
@@ -232,6 +233,7 @@ const defaults: AxiosResponse<{
         </div>
         <div className="container_first theme">
           <span className="title">Referal Record</span>
+          <span className="title">Your Referal code <b>{record?.data?.referal?.refer_code}</b></span>
           <div className="content">
             <span className="icon" />
             <span className="count">

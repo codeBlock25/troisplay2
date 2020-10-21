@@ -16,7 +16,7 @@ const GameView = memo(function ({
   btn1func,
   btn2func,
   btn1view,
-  btn2view,v1,v2,v3
+  btn2view,v1,v2,v3 
 }: {
     v1?: number | string;
   v2?: number | string
@@ -27,8 +27,8 @@ const GameView = memo(function ({
   cash: number;
     coin: number;
   game: Games
-  type:"game_view"|"normal" | "lucky" | "room",
-  btn1func?: () => Promise<void> | void | boolean | Dispatch<SetStateAction<any>>
+  type:"game_view"|"normal" | "lucky" | "room" | "custom",
+  btn1func?: () => Promise<void> |  void | boolean | Dispatch<SetStateAction<any>>
   btn1view?: JSX.Element
   btn2func?: () => Promise<void> | void | boolean | Dispatch<SetStateAction<any>>
   btn2view?: JSX.Element
@@ -106,6 +106,13 @@ const GameView = memo(function ({
           <div className="action">
         <span className="btn">{btn1view ?? "view"}</span>
         <span className="btn">{btn2view ??"cancel"}</span>
+      </div>
+       ):
+        type==="custom"?
+       (
+          <div className="action">
+        <span className="btn" onClick={btn1func}>{btn1view ?? "view"}</span>
+        <span className="btn" onClick={btn2func}>{btn2view ??"reject"}</span>
       </div>
       ): (
           <div className="action">

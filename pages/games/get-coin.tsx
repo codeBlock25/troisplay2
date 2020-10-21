@@ -23,6 +23,9 @@ import Header from "../../components/header";
 import { DataGrid, ColDef, RowProps } from "@material-ui/data-grid";
 import { isArray } from "lodash";
 import {CloseViewIcon,OpenViewIcon} from "../../icon"
+import { Button } from "@material-ui/core";
+import Picker from "../../components/picker";
+import { toast } from "../../store/action";
 
 
 export default function GetterScreen() {
@@ -141,88 +144,29 @@ export default function GetterScreen() {
       pendingCash: number;
     };
   }> = useQueryCache().getQueryData("records");
-
-  const data: { rows: any[]; column: ColDef[] } = {
-    rows: [
-      {
-        id: 0,
-        sn: 1,
-        name: "Referal",
-        canGet: false,
-        progress: 40,
-        action: true,
-      },
-      {
-        id: 1,
-        sn: 2,
-        name: "Glory Spin",
-        canGet: true,
-        progress: 40,
-        action: true,
-      },
-      {
-        id: 2,
-        sn: 3,
-        name: "Give Away",
-        canGet: false,
-        progress: 0,
-        action: true,
-      },
-      {
-        id: 3,
-        sn: 4,
-        name: "Daily Gain",
-        canGet: false,
-        progress: 40,
-        action: true,
-      },
-      {
-        id: 4,
-        sn: 5,
-        name: "Play Video",
-        canGet: false,
-        progress: 0,
-        action: true,
-      },
-    ],
-    column: [
-      { field: "sn", headerName: "S/N", width: 70, sortable: true },
-      {
-        field: "name",
-        headerName: "Method",
-        width: 140,
-        description: "The method to get coin",
-        sortable: true,
-      },
-      {
-        field: "canGet",
-        headerName: "Claimable",
-        width: 130,
-        description: "status check if the offered price can be collected now.",
-        sortable: false,
-        renderCell: ({ value }) => {
-          let val = (value as unknown) as boolean;
-          return (
-            <span className={`viewer_status ${val ? "yes" : "no"} `}>
-              {!val ? <CloseViewIcon /> : <OpenViewIcon />}{" "}
-              {val ? "can" : "can't"}
-            </span>
-          );
-        },
-      },
-      {
-        field: "progress",
-        headerName: "Progress",
-        width: 130,
-        description: "Progress bar to your next coin collection.",
-        sortable: false,
-      },
-      {
-        field: "action",
-        headerName: "collect",
-        width: 130,
-      },
-    ],
+  const referuser = async () => {
+    if (navigator.share) {
+      await navigator
+        .share({
+          title: "Troisplay",
+          text: "Check out the best playform to have fun and get paid.",
+          url: `https://troisplay.vercel.app/signup/${
+            record?.data?.referal?.refer_code ?? ""
+          }`,
+        })
+        .then(() => console.log("share succesful"))
+        .catch((error) => console.log("Sharing failed", error));
+    } else {
+      if (navigator.clipboard) {
+        await navigator.clipboard.writeText(
+          `Check out the best playform to have fun and get paid at: https://troisplay.vercel.app/signup/${
+            record?.data?.referal?.refer_code ?? ""
+          }`
+        ).finally(()=>{
+          toast(dispatch, {msg: "Link Copied, share your link to gain referals."}).success()
+        });
+      }
+    }
   };
   return (
     <>
@@ -251,86 +195,13 @@ export default function GetterScreen() {
           setViewOpen(false);
         }}
       >
-        <div className="first">
-          <div className="cover">
-            <span
-              className="sw_btn"
-              onClick={() => {
-                swRef2.current.scrollTo(swRef2.current.scrollLeft - 270, 0);
-              }}
-            >
-              <BackIcon />
-            </span>
-            <div className="container" ref={swRef2}>
-              <InView
-                as="div"
-                onChange={(inview, evt) => {
-                  if (inview) {
-                    evt.target.classList.add("inview");
-                  } else {
-                    evt.target.classList.remove("inview");
-                  }
-                }}
-                className="sw"
-              >
-                <span className="time">{dateintime}</span>
-                <h3 className="title">Coin</h3>
-                <span className="price">
-                  <span ref={coinRef} className="icon" />
-                  {record?.data?.wallet?.currentCoin.toLocaleString() ?? 0}
-                </span>
-                <div className="action">
-                  <span className="btn">glory spin</span>
-                </div>
-              </InView>
-              <InView
-                as="div"
-                onChange={(inview, evt) => {
-                  if (inview) {
-                    evt.target.classList.add("inview");
-                  } else {
-                    evt.target.classList.remove("inview");
-                  }
-                }}
-                className="sw"
-              >
-                <span className="time">{dateintime}</span>
-                <h3 className="title">Earnings</h3>
-                <span className="price">
-                  <span ref={coinRef2} className="icon" />{" "}
-                  {record?.data?.referal?.inactiveReferal ??
-                    0 * defaults?.data?.default?.referRating ??
-                    0}
-                </span>
-                <div className="action">
-                  <span className="btn">view referrals</span>
-                </div>
-              </InView>
-            </div>
-
-            <span
-              className="sw_btn"
-              onClick={() => {
-                swRef2.current.scrollTo(swRef2.current.scrollLeft + 270, 0);
-              }}
-            >
-              <NextIcon />
-            </span>
-          </div>
-        </div>
-        <div className="second">
+       <div className="second">
           <div className="container">
             <div className="title">
               <h3>Get Games</h3>
             </div>
             <div className="history_content">
-              <DataGrid
-                rows={data.rows}
-                columns={data.column}
-                pageSize={5}
-                disableMultipleSelection
-                checkboxSelection={false}
-              />
+              <Picker title="Refer" subText="Share to friends and get you commission after their first game." earn={20} btnText="Refer" btnFunc={referuser} />
             </div>
           </div>
         </div>

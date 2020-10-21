@@ -3,6 +3,7 @@
 .Referal {
     display: flex;
     align-items: center;
+    padding-bottom: 100px;
 
     .container_first {
         width: 90%;
@@ -36,6 +37,22 @@
             font-family: mon_bold;
             font-size: 14px;
             color: $defaultColor;
+
+            &:nth-of-type(2) {
+                position: absolute;
+                top: 24px;
+                left: 5px;
+                color: white;
+                font-family: mon;
+                font-size: 12px;
+                b {
+                    font-family: mon_med;
+                    margin: 0 5px;
+                    font-size: 14px;
+                    color: #ffc34d;
+                    text-transform: uppercase;
+                }
+            }
         }
 
         .content {

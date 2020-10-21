@@ -1,5 +1,6 @@
 import { ClassType } from "react";
 import {
+  choices,
   errorType,
   Games,
   modalType,
@@ -52,6 +53,38 @@ export const backWin = (
   }
 ): void => {
   dispatch({ type: "BACK", payload });
+};
+
+export const setCustomWindow = (
+  dispatch: (t: ActionType) => void,
+  payload: {
+    isOpen: modalType;
+    request: {
+      date: Date;
+      gameDetail: string;
+      gameID: Games;
+      gameMemberCount: number;
+      gameType: Games;
+      members: string[];
+      playCount: number;
+      price_in_coin: number;
+      price_in_value: number;
+      _id: string;
+      battleScore: {
+        player1: {
+          endDate: Date;
+          title: string;
+          description: string;
+          answer: string;
+          endGameTime: Date;
+          choice: choices;
+        };
+        player2?: {};
+      };
+    };
+  }
+): void => {
+  dispatch({ type: "CUSTOMWINDOW", payload });
 };
 
 export const toast = (

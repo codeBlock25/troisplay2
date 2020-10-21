@@ -29,6 +29,10 @@ const initialState: eventReeducerType = {
     func: undefined,
     game: Games.non,
   },
+  customWindow: {
+    isOpen: modalType.close,
+    request: undefined
+  },
   back: {
     msg: "",
     open: modalType.close,
@@ -42,6 +46,8 @@ export const eventReducer = (
   action: ActionType
 ): eventReeducerType => {
   switch (action.type) {
+    case "CUSTOMWINDOW":
+      return { ...state, customWindow: action.payload };
     case "NOTIFICATION":
       return { ...state, notification: action.payload };
     case "GAME_DETAILS":

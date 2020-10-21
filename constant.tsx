@@ -10,8 +10,8 @@ export const dev_url_socket: string = "http://localhost:3022";
 export const socket_url: string = isDev ? dev_url_socket : server_url_socket;
 export const url: string = isDev ? dev_url : server_url;
 export const url_media: string = isDev ? dev_url_media : server_url_media;
-export const PUBLIC_KEY = "FLWPUBK_TEST-601c62ddd83726d50ebdbfb3c07b3ed9-X"
-export const SECRET_KEY = "FLWSECK_TEST-067e4c8c2041fcff8d4dcb14c8fcbf1e-X"
+export const PUBLIC_KEY = "FLWPUBK-892063403640cc5691d22bdf9368d89e-X"
+export const SECRET_KEY = "FLWSECK-62f4703237f4d34d5a7f1c03d3e4d72c-X"
 export const NAIRA =()=>(<b>&#8358;</b>)
 export const banks: {id: number, name: string,  code: string}[] =  [
   { id: 132, code: '560', name: 'Page MFBank' },
