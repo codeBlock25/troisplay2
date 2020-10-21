@@ -13,17 +13,20 @@
     border-radius: 7px;
     background-color: #272626;
     color: whitesmoke;
+    margin: 10px 20px;
 
     .main {
         width: 100%;
-        height: 70px;
+        height: fit-content;
+        min-height: fit-content;
         display: flex;
         flex-wrap: wrap;
-        padding: 10px 5px 0 5px;
+        padding: 10px 5px 5px 5px;
 
         .date {
             width: calc(100% - 80px);
             height: fit-content;
+            min-height: fit-content;
             display: flex;
             flex-direction: column;
             font-family: mon_bold;
@@ -33,10 +36,11 @@
                 font-family: mon_bold;
                 font-size: 18px;
                 padding: 0 10px;
+                color: white;
             }
 
             span:nth-of-type(2) {
-                font-family: mon_bold;
+                font-family: mon;
                 font-size: 13px;
             }
         }
@@ -99,6 +103,11 @@
             text-transform: uppercase;
             padding-right: 5px;
         }
+
+        svg {
+            top: -2px;
+            margin: 0 2px 0 0;
+        }
     }
 
     .action {
@@ -110,7 +119,9 @@
 
         .btn_ {
             width: 35%;
-            height: 35px;
+            height: 35px !important;
+            min-height: 35px !important;
+            max-height: 35px !important;
             color: #4093dd;
             background-color: rgba($color: #000000, $alpha: 0.05);
             box-shadow: 0px 5px 10px #00000030;
@@ -119,6 +130,10 @@
             &:nth-of-type(1) {
                 background-color: $defaultColor;
                 color: white !important;
+
+                span {
+                    color: white !important;
+                }
             }
         }
     }

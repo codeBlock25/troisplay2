@@ -5,9 +5,9 @@ import { useQueryCache } from 'react-query';
 import { BackIcon, NextIcon } from '../icon';
 import { InView } from "react-intersection-observer"
 import moment from "moment"
-import { Games } from '../typescript/enum';
+import { Games, PlayerType } from "../typescript/enum";
 import { useRouter } from 'next/router';
-import { toast } from '../store/action';
+import { setGameDetails, toast } from "../store/action";
 import { useDispatch } from 'react-redux';
 
 export default function DetailScreen() {
@@ -146,102 +146,127 @@ export default function DetailScreen() {
     };
   }, [spin]);
     return (
-        <div className="cover">
-            <span
-                className="sw_btn"
-                onClick={() => {
-                swRef1.current.scrollTo(swRef1.current.scrollLeft - 270, 0);
-                }}
-            >
-                <BackIcon />
+      <div className="cover">
+        <span
+          className="sw_btn"
+          onClick={() => {
+            swRef1.current.scrollTo(swRef1.current.scrollLeft - 270, 0);
+          }}
+        >
+          <BackIcon />
+        </span>
+        <div className="container" ref={swRef1}>
+          <InView
+            as="div"
+            onChange={(inview, evt) => {
+              if (inview) {
+                evt.target.classList.add("inview");
+              } else {
+                evt.target.classList.remove("inview");
+              }
+            }}
+            className="sw"
+          >
+            <span className="time">Next Spin {dateintime}</span>
+            <h3 className="title">Cash</h3>
+            <span className="price">
+              $ {record?.data?.cashwallet?.currentCash.toLocaleString() ?? 0}
             </span>
-            <div className="container" ref={swRef1}>
-                <InView
-                    as="div"
-                    onChange={(inview, evt) => {
-                        if (inview) {
-                        evt.target.classList.add("inview");
-                        } else {
-                        evt.target.classList.remove("inview");
-                        }
-                    }}
-                    className="sw"
-                >
-                    <span className="time">Next Spin {dateintime}</span>
-                    <h3 className="title">Cash</h3>
-                    <span className="price">
-                        ${" "}
-                        {record?.data?.cashwallet?.currentCash.toLocaleString() ?? 0}
-                    </span>
-                    <div className="action">
-                        <span className="btn">fund</span>
-                        <span className="btn">withdraw</span>
-                    </div>
-                </InView>
-                <InView
-                    as="div"
-                    onChange={(inview, evt) => {
-                        if (inview) {
-                        evt.target.classList.add("inview");
-                        } else {
-                        evt.target.classList.remove("inview");
-                        }
-                    }}
-                    className="sw"
-                >
-                    <span className="time">Next Spin {dateintime}</span>
-                    <h3 className="title">Coin</h3>
-                    <span className="price">
-                        <span ref={coinRef} className="icon" />
-                        {record?.data?.wallet?.currentCoin.toLocaleString() ?? 0}
-                    </span>
-                    <div className="action">
-                        <span
-                            className="btn"
-                            onClick={() => {
-                                push("/games/get-coin");
-                            }}
-                            >
-                            get more
-                        </span>
-                        <span className="btn">glory spin</span>
-                    </div>
-                </InView>
-                <InView
-                    as="div"
-                    onChange={(inview, evt) => {
-                        if (inview) {
-                        evt.target.classList.add("inview");
-                        } else {
-                        evt.target.classList.remove("inview");
-                        }
-                    }}
-                    className="sw"
-                >
-                    <span className="time">Next Spin {dateintime}</span>
-                    <h3 className="title">Earnings</h3>
-                    <span className="price">
-                        <span ref={coinRef2} className="icon" />{" "}
-                        {record?.data?.referal?.inactiveReferal ??
-                        0 * defaults?.data?.default?.referRating ??
-                        0}
-                    </span>
-                    <div className="action">
-                        <span className="btn" onClick={Share}>refer</span>
-                        <span className="btn" onClick={()=>{
-                          push("/games/referal")
-                        }}>view referrals</span>
-                    </div>
-                </InView>
+            <div className="action">
+              <span className="btn">fund</span>
+              <span className="btn">withdraw</span>
             </div>
-            <span
-                className="sw_btn"
-                onClick={() => {
-                swRef1.current.scrollTo(swRef1.current.scrollLeft + 270, 0);
-                }}
-            >
-                <NextIcon />
+          </InView>
+          <InView
+            as="div"
+            onChange={(inview, evt) => {
+              if (inview) {
+                evt.target.classList.add("inview");
+              } else {
+                evt.target.classList.remove("inview");
+              }
+            }}
+            className="sw"
+          >
+            <span className="time">Next Spin {dateintime}</span>
+            <h3 className="title">Coin</h3>
+            <span className="price">
+              <span ref={coinRef} className="icon" />
+              {record?.data?.wallet?.currentCoin.toLocaleString() ?? 0}
             </span>
+            <div className="action">
+              <span
+                className="btn"
+                onClick={() => {
+                  push("/games/get-coin");
+                }}
+              >
+                get more
+              </span>
+              <span
+                className="btn"
+                onClick={() => {
+                  if (!spin.data.spin_details.isPlayable) {
+                    toast(dispatch, {
+                      msg:
+                        "Sorry you can't spin right now, glory spin can only be used once a day.",
+                    }).fail();
+                    return;
+                  }
+                  setGameDetails(dispatch, {
+                    player: PlayerType.first,
+                    game: Games.glory_spin,
+                    id: "",
+                    price: 0,
+                  });
+                }}
+              >
+                glory spin
+              </span>
+            </div>
+          </InView>
+          <InView
+            as="div"
+            onChange={(inview, evt) => {
+              if (inview) {
+                evt.target.classList.add("inview");
+              } else {
+                evt.target.classList.remove("inview");
+              }
+            }}
+            className="sw"
+          >
+            <span className="time">Next Spin {dateintime}</span>
+            <h3 className="title">Earnings</h3>
+            <span className="price">
+              <span ref={coinRef2} className="icon" />{" "}
+              {record?.data?.referal?.inactiveReferal ??
+                0 * defaults?.data?.default?.referRating ??
+                0}
+            </span>
+            <div className="action">
+              <span className="btn" onClick={Share}>
+                refer
+              </span>
+              <span
+                className="btn"
+                onClick={() => {
+                  push("/games/referal");
+                }}
+              >
+                view referrals
+              </span>
+            </div>
+          </InView>
         </div>
-    )
+        <span
+          className="sw_btn"
+          onClick={() => {
+            swRef1.current.scrollTo(swRef1.current.scrollLeft + 270, 0);
+          }}
+        >
+          <NextIcon />
+        </span>
+      </div>
+    );
 }

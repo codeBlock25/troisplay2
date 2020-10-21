@@ -112,13 +112,6 @@ export default function GamesScreen() {
     game: Games.non,
     next: nextType.player,
   });
- const spins: AxiosResponse<{
-    spin_details: {
-    currentTime: Date,
-    gameTime:Date,
-    isPlayable: boolean,
-    },
-  }> = useQueryCache().getQueryData("spins")
   const lottieLoader = useCallback(() => {
     Lottie.loadAnimation({
       container: coinRef.current,

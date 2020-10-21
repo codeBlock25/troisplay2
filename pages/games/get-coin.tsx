@@ -12,7 +12,7 @@ import Lottie from "lottie-web";
 import moment from "moment";
 import { useQueryCache } from "react-query";
 import { AxiosResponse } from "axios";
-import { Games, Viewing, nextType } from "../../typescript/enum";
+import { Games, Viewing, nextType, PlayerType } from "../../typescript/enum";
 import { getPrice, getToken, isPlayable } from "../../functions";
 import Notification from "../../components/notification";
 import { useDispatch } from "react-redux";
@@ -25,7 +25,7 @@ import { isArray } from "lodash";
 import {CloseViewIcon,OpenViewIcon} from "../../icon"
 import { Button } from "@material-ui/core";
 import Picker from "../../components/picker";
-import { toast } from "../../store/action";
+import { setGameDetails, toast } from "../../store/action";
 
 
 export default function GetterScreen() {
@@ -101,6 +101,14 @@ export default function GetterScreen() {
       referRating: number;
     };
   }> = useQueryCache().getQueryData("defaults");
+  
+  const spin: AxiosResponse<{
+    spin_details: {
+      currentTime: Date;
+      gameTime: Date;
+      isPlayable: boolean;
+    };
+  }> = useQueryCache().getQueryData("spins");
   const record: AxiosResponse<{
     player: {
       userID: string;
@@ -195,13 +203,42 @@ export default function GetterScreen() {
           setViewOpen(false);
         }}
       >
-       <div className="second">
+        <div className="second">
           <div className="container">
             <div className="title">
               <h3>Get Games</h3>
             </div>
             <div className="history_content">
-              <Picker title="Refer" subText="Share to friends and get you commission after their first game." earn={20} btnText="Refer" btnFunc={referuser} />
+              <Picker
+                title="Refer"
+                subText="Share to friends and get you commission after their first game."
+                earn={defaults?.data?.default.referRating}
+                btnText="Refer"
+                btnFunc={referuser}
+                image="/images/pic5.jpg"
+              />
+              <Picker
+                title="Glory Spin"
+                subText="Claim daily coins with glory spin of up to 100 coins per day."
+                earn={"0 - 100"}
+                btnText="Spin"
+                btnFunc={() =>{
+                  if (!spin.data.spin_details.isPlayable) {
+                  toast(dispatch, {
+                    msg:
+                      "Sorry you can't spin right now, glory spin can only be used once a day.",
+                  }).fail();
+                  return;
+                }
+                  setGameDetails(dispatch, {
+                    player: PlayerType.first,
+                    game: Games.glory_spin,
+                    id: "",
+                    price: 0,
+                  });
+                }}
+                image="/images/pic6.jpg"
+              />
             </div>
           </div>
         </div>
