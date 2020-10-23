@@ -75,23 +75,24 @@ export const banks: {id: number, name: string,  code: string}[] =  [
   { id: 190, code: '033', name: 'United Bank for Africa' },
   { id: 191, code: '044', name: 'Access Bank' },
    { id: 567, code: '90115', name: 'TCF MFB' }
- ]
+]
+ 
 export const config: FlutterWaveTypes.FlutterwaveConfig = {
-    public_key: 'FLWPUBK-8c5827522df0380bb54faca18b03458e-X',
-    tx_ref: new  Date().toString(),
-    amount: 100,
-    // NOTE: Alway change price
-    currency: 'NGN',
-    payment_options: 'card,mobilemoney,ussd',
-    customer: {
-        email: 'user@gmail.com',
-        phonenumber: '07064586146',
-        name: 'joel ugwumadu',
-    },
-    // NOTE: Alway change user details
-    customizations: {
-      title: 'Troisplay Mobile Wallet',
-      description: 'payment to your Troisplay E-Account',
-      logo: 'https://troisplay2.vercel.app/images/logo.png',
-    },
-  };
+  public_key: PUBLIC_KEY,
+  tx_ref: new Date().toString(),
+  amount: 100,
+  // NOTE: Alway change price
+  currency: "NGN",
+  payment_options: "card,mobilemoney,ussd",
+  customer: {
+    email: "user@gmail.com",
+    phonenumber: "07064586146",
+    name: "joel ugwumadu",
+  },
+  // NOTE: Alway change user details
+  customizations: {
+    title: "Troisplay Mobile Wallet",
+    description: "payment to your Troisplay E-Account",
+    logo: "https://troisplay2.vercel.app/images/logo.png",
+  },
+};

@@ -178,7 +178,6 @@ export default function GamesScreen() {
       }
     }[];
   }> = useQueryCache().getQueryData("requests");
-  console.log(requests)
 const defaults: AxiosResponse<{
   default: {
     commission_roshambo: {

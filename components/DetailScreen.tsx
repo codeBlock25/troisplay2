@@ -107,8 +107,8 @@ export default function DetailScreen() {
         } else {
           if (navigator.clipboard) {
             await navigator.clipboard.writeText(
-              `Check out the best playform to have fun and get paid at: https://troisplay.vercel.app/signup/${record?.data.referal?.refer_code}`
-              );
+              `https://troisplay2.vercel.app/signup/${record?.data.referal?.refer_code}`
+            );
               toast(dispatch, {msg: "Your Link has been copied, paste anywhere and share to gain more coins."}).success()
           }
         }
@@ -182,12 +182,15 @@ export default function DetailScreen() {
               $ {record?.data?.cashwallet?.currentCash.toLocaleString() ?? 0}
             </span>
             <div className="action">
-              <span className="btn" onClick={() => setAction(dispatch,ReasonType.fund)}>
+              <span
+                className="btn"
+                onClick={() => setAction(dispatch, ReasonType.fund)}
+              >
                 fund
               </span>
               <span
                 className="btn"
-                onClick={() => setAction(dispatch,ReasonType.withdraw)}
+                onClick={() => setAction(dispatch, ReasonType.withdraw)}
               >
                 withdraw
               </span>
