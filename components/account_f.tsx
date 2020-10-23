@@ -1,11 +1,12 @@
-import { AxiosResponse } from 'axios';
+import Axios, { AxiosResponse } from 'axios';
 import { useFlutterwave } from 'flutterwave-react-v3';
 import React, { useState } from 'react';
 import { useQueryCache } from 'react-query';
 import { useDispatch, useSelector } from 'react-redux';
 import { SyncLoader } from 'react-spinners';
-import { config } from '../constant';
-import { setAction} from '../store/action';
+import { config, url } from '../constant';
+import { getToken } from '../functions';
+import { setAction, toast} from '../store/action';
 import { Games, ReasonType } from '../typescript/enum';
 import { reducerType } from '../typescript/interface';
 
@@ -133,8 +134,13 @@ export default function AccountF() {
             onClick={async () => {
               if (action === ReasonType.fund) {
                 callFlutter({
-                  callback: (response) => {
-                    console.log(response);
+                  callback: async (response) => {
+                    if (response.status === "successful") {
+                     await Axios.post(`${url}/wallet/fund`, {price: fundTp}, {headers: {authorization: `Bearer ${getToken()}`}})
+                      toast(dispatch, {msg:"Account Funding was succesful, Check out the play game option to find games to play and earn more cash."}).success()
+                    } else {
+                      toast(dispatch, {msg:"Account Funding was unsuccesful, You can try using you coin balance to continue gaming or get more coin."}).error()
+                    }
                   },
                   onClose: () => {
                     setFund(0);

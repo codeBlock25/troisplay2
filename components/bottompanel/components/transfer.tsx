@@ -17,66 +17,94 @@ export default function Transfer({open}:{open: BillPayment}) {
     const [amount, setAmount] = useState<number>()
     const [key_error, setKey_error] = useState<errorType>(errorType.non);
     return (
-        <form className={open === BillPayment.transfer? "form open": "form"} onSubmit={(e) => {
-            e.preventDefault()
-            useTransfer({username, amount, key,loading, setLoading, dispatch, setUsernameError, setKey_error})
-          }} data-title="Transfer Form">
-            <TextField
-              variant="filled"
-              label="Account Number"
-              className="inputBox"
-              type="tel"
-              required
-              value={username}
-              placeholder="eg troisgamer (must have a troisplay account)."
-              onChange={({ target: { value } }) => {
-                setUsernamer(value);
-              }}
-              error={username_error === errorType.fail}
-              helperText={username_error === errorType.fail? "No account found with this username.": ""}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">{"  "}</InputAdornment>
-              )
-            }} 
-            />
-            <TextField
-              variant="filled"
-              label="Amount"
-              className="inputBox amount"
-              type="number"
-              required
-              value={amount}
-              placeholder="00.00"
-              onChange={({ target: { value } }) => {
-                setAmount(parseFloat(value));
-              }}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start" style={{fontFamily: "mon_bold"}}>
-                    <NAIRA />
-                  </InputAdornment>
-                )
-              }}
-              />
-            <TextField
-              variant="filled"
-              label="Betting Key"
-              className="inputBox"
-              required
-              type="password"
-              value={key}
-              placeholder="Your 6 digit betting key"
-              onChange={({ target: { value } }) => {
-                if (key_error !== errorType.non) {
-                  setKey_error(errorType.non);
-                }
-                setKey(value);
-              }}
-              error={key_error === errorType.error || key.length !== 6}
-              helperText={key_error === errorType.error? "Incorrect betting key." :key.length !== 6 ? "Betting key should 6 digits long." : ""}
-            />
-            <Button type="submit" className="btn">Buy</Button>
-          </form>
-         )
+      <form
+        className={open === BillPayment.transfer ? "form open" : "form"}
+        onSubmit={(e) => {
+          e.preventDefault();
+          useTransfer({
+            username,
+            amount,
+            key,
+            loading,
+            setLoading,
+            dispatch,
+            setUsernameError,
+            setKey_error,
+          });
+        }}
+        data-title="Transfer Form"
+      >
+        <TextField
+          variant="filled"
+          label="Account Number"
+          className="inputBox"
+          type="tel"
+          required
+          value={username}
+          placeholder="0022XXXX00."
+          onChange={({ target: { value } }) => {
+            setUsernamer(value);
+          }}
+          error={username_error === errorType.fail}
+          helperText={
+            username_error === errorType.fail
+              ? "No account found with this username."
+              : ""
+          }
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">{"  "}</InputAdornment>
+            ),
+          }}
+        />
+        <TextField
+          variant="filled"
+          label="Amount"
+          className="inputBox amount"
+          type="number"
+          required
+          value={amount}
+          placeholder="00.00"
+          onChange={({ target: { value } }) => {
+            setAmount(parseFloat(value));
+          }}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment
+                position="start"
+                style={{ fontFamily: "mon_bold" }}
+              >
+                <NAIRA />
+              </InputAdornment>
+            ),
+          }}
+        />
+        <TextField
+          variant="filled"
+          label="Pin (Betting Key)"
+          className="inputBox"
+          required
+          type="password"
+          value={key}
+          placeholder="Your 6 digit betting key"
+          onChange={({ target: { value } }) => {
+            if (key_error !== errorType.non) {
+              setKey_error(errorType.non);
+            }
+            setKey(value);
+          }}
+          error={key_error === errorType.error || key.length !== 6}
+          helperText={
+            key_error === errorType.error
+              ? "Incorrect betting key."
+              : key.length !== 6
+              ? "Betting key should 6 digits long."
+              : ""
+          }
+        />
+        <Button type="submit" className="btn">
+          Buy
+        </Button>
+      </form>
+    );
 }

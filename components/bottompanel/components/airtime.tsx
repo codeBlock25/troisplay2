@@ -4,6 +4,7 @@ import { NAIRA } from '../../../constant';
 import { useDispatch } from 'react-redux';
 import { BillPayment, errorType } from '../../../typescript/enum';
 import { usePayBill } from '../../../functions';
+import { MoonLoader } from "react-spinners";
 
 export default function Airtime({open}:{open: BillPayment}) {
     const dispatch = useDispatch()
@@ -16,10 +17,21 @@ export default function Airtime({open}:{open: BillPayment}) {
     const [amount, setAmount] = useState<number>()
     const [key_error, setKey_error] = useState<errorType>(errorType.non);
     return (
-        <form data-title="Airtime form" className={open === BillPayment.airtime ? "form open" : "form"} onSubmit={(e) => {
-        e.preventDefault()
-        usePayBill({phone_number,amount, key,loading, setLoading, dispatch})
-      }}>
+      <form
+        data-title="Airtime form"
+        className={open === BillPayment.airtime ? "form open" : "form"}
+        onSubmit={(e) => {
+          e.preventDefault();
+          usePayBill({
+            phone_number,
+            amount,
+            key,
+            loading,
+            setLoading,
+            dispatch,
+          });
+        }}
+      >
         <TextField
           variant="filled"
           label="Phone Number"
@@ -34,9 +46,18 @@ export default function Airtime({open}:{open: BillPayment}) {
             }
             setPhone_number(value);
           }}
-          error={phone_number_error === errorType.warning || phone_number_error === errorType.error}
-          helperText={phone_number_error === errorType.warning? "No account found with this number.": phone_number_error === errorType.error?"Invalid phone number.":""}
-          />
+          error={
+            phone_number_error === errorType.warning ||
+            phone_number_error === errorType.error
+          }
+          helperText={
+            phone_number_error === errorType.warning
+              ? "No account found with this number."
+              : phone_number_error === errorType.error
+              ? "Invalid phone number."
+              : ""
+          }
+        />
         <TextField
           variant="filled"
           label="Amount"
@@ -51,14 +72,14 @@ export default function Airtime({open}:{open: BillPayment}) {
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <NAIRA/>
+                <NAIRA />
               </InputAdornment>
-            )
+            ),
           }}
-          />
+        />
         <TextField
           variant="filled"
-          label="Betting Key"
+          label="Pin (Betting Key)"
           className="inputBox"
           required
           type="password"
@@ -71,9 +92,17 @@ export default function Airtime({open}:{open: BillPayment}) {
             setKey(value);
           }}
           error={key_error === errorType.error || key.length !== 6}
-          helperText={key_error === errorType.error? "Incorrect betting key." :key.length !== 6 ? "Betting key should 6 digits long." : ""}
+          helperText={
+            key_error === errorType.error
+              ? "Incorrect betting key."
+              : key.length !== 6
+              ? "Betting key should 6 digits long."
+              : ""
+          }
         />
-        <Button type="submit" className="btn">Buy</Button>
+        <Button type="submit" className="btn">
+          {loading ? <MoonLoader size="25px" color="white" /> : "Buy"}
+        </Button>
       </form>
-    )
+    );
 }
