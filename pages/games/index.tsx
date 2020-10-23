@@ -416,14 +416,22 @@ const defaults: AxiosResponse<{
             <p className="txt">{spec.manual}</p>
             <span
               className="btn"
-              onClick={() => {
-                setSpec((prev) => {
-                  return {
-                    ...prev,
-                    next: nextType.player,
-                  };
-                });
-              }}
+                  onClick={() => {
+                    if (
+                      spec.game === Games.lucky_geoge ||
+                      spec.game === Games.rooms
+                    ) {
+                      setViewOpen(false);
+                      setP2(true);
+                      return;
+                    }
+                    setSpec((prev) => {
+                      return {
+                        ...prev,
+                        next: nextType.player,
+                      };
+                    });
+                  }}
             >
               confirm
             </span>
@@ -530,11 +538,10 @@ const defaults: AxiosResponse<{
             className="game"
             onClick={() => {
               setViewOpen(false);
-              setP2(true)
               setSpec({
-                isOpen: false,
+                isOpen: true,
                 manual:
-                  "A player who decides to play rock will beat another player who has chosen scissors (rock crushes scissors), but will lose to one who has played paper (paper covers rock); a play of paper will lose to a play of scissors (scissors cuts paper). If both players choose the same shape, the game is tied and is usually immediately replayed to break the tie.",
+                  "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor non, enim accusantium officiis laborum hic asperiores a corporis illum quis.",
                 price: 0,
                 game: Games.lucky_geoge,
               });
@@ -585,11 +592,10 @@ const defaults: AxiosResponse<{
             className="game"
             onClick={() => {
               setViewOpen(false);
-              setP2(true)
               setSpec({
-                isOpen: false,
+                isOpen: true,
                 manual:
-                  "A player who decides to play rock will beat another player who has chosen scissors (rock crushes scissors), but will lose to one who has played paper (paper covers rock); a play of paper will lose to a play of scissors (scissors cuts paper). If both players choose the same shape, the game is tied and is usually immediately replayed to break the tie.",
+                  "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor non, enim accusantium officiis laborum hic asperiores a corporis illum quis.",
                 price: 0,
                 game: Games.rooms,
               });
