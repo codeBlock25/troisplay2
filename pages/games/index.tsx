@@ -551,7 +551,7 @@ const defaults: AxiosResponse<{
               style={{ backgroundImage: `url(/images/lucky-geoge.png)` }}
             />
             <div className="details">
-              <span className="name">Luckyjudge</span>
+              <span className="name">lucky judge</span>
               <span className="info">
                 <b>min stake:</b>judge based
               </span>
@@ -671,7 +671,7 @@ const defaults: AxiosResponse<{
                          : game.gameID === Games.matcher
                            ? "Guess Master"
                            : game.gameID === Games.lucky_geoge
-                             ? "Luckyjudge"
+                             ? "lucky judge"
                              : game.gameID === Games.rooms
                                ? (`${game.gameDetail} room` ?? "")
                                : ""
