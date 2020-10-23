@@ -478,7 +478,7 @@ export default function Index() {
                 role="img"
                 style={{ backgroundImage: "url(/images/lucky-geoge.png)" }}
               />
-              <span className="name">Lucky Geoge</span>
+              <span className="name">Luckyjudge</span>
               <p className="txt">
                 This is a game set by the Game Master for players to win prices
                 after entering the game which is drawn at random.
@@ -518,7 +518,7 @@ export default function Index() {
                 <div className="tr">Penelty Shot</div>
                 <div className="tr">Rooms</div>
                 <div className="tr">Custom Game</div>
-                <div className="tr">Lucky Geoge</div>
+                <div className="tr">Luckyjudge</div>
               </div>
               <div className="tbody">
                 <div className="td">

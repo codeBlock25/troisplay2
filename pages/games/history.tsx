@@ -276,7 +276,7 @@ export default function HistoryScreen() {
           game:
             record.game === Games.roshambo ? "Roshambo"
             : record.game === Games.penalth_card ? "Penalty Card"
-            : record.game === Games.lucky_geoge ? "Lucky Geoge"
+            : record.game === Games.lucky_geoge ? "Luckyjudge"
             : record.game === Games.matcher ? "Guess master"
             : record.game === Games.glory_spin ? "Glory spin":"",
           earnings: record.earnings

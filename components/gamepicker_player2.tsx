@@ -344,6 +344,7 @@ export default function PickerPlayer2({
                     v2={game.price_in_value * (defaults?.data.default.cashRating ?? 0)}
                     coin={game.battleScore.player1.winnerCount}
                     v3={game.battleScore.player1.winnerCount}
+                    v4={game.members.length}
                     game={game.gameID}
                     btn1func={() => {
                       setPopState(prev => {

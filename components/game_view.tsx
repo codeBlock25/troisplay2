@@ -21,6 +21,7 @@ const GameView = memo(function ({
     v1?: number | string;
   v2?: number | string
   v3?: number | string
+  v4?: number | string
   name: string;
   date: Date;
   id: string;
@@ -64,61 +65,71 @@ const GameView = memo(function ({
       <span className="name">{name}</span>
       <span className="date">{moment(date).format("Do MMMM, YYYY")}</span>
       <div className="viewee">
-        {
-          type === "lucky" ? (
-            <>
-            <span className="stake">$ {v1 ?? 0}
-            </span>
+        {type === "lucky" ? (
+          <>
+            <span className="stake">$ {v1 ?? 0}</span>
             <span className="coin">
               <GameCoin width={10} height={10} /> {v2 ?? 0}
             </span>
-              <span className="Win">$ {v3 ?? 0}</span>
-              </>
-        ):
-          type === "room" ? (
-            <>
-            <span className="entry ($)">$ {v1 ?? 0}
+            <span className="Members">$ {v3 ?? 0}</span>
+            <span className="stake">$ {v1 ?? 0}</span>
+            <span className="coin">
+              <GameCoin width={10} height={10} /> {v2 ?? 0}
             </span>
+            <span className="Win">$ {v3 ?? 0}</span>
+          </>
+        ) : type === "room" ? (
+          <>
+            <span className="entry ($)">$ {v1 ?? 0}</span>
             <span className="entry (coin)">
               <GameCoin width={10} height={10} /> {v2 ?? 0}
             </span>
-              <span className="Members">{v3 ?? 0}</span>
-              </>
-              )
-        :(
-        <>
-          <span className="stake">
-            $ {cash.toLocaleString().slice(0, 7)}
-            {cash.toString().length >= 6 ?? "+"}
-          </span>
-          <span className="coin">
-            <GameCoin width={10} height={10} />
-            {coin.toLocaleString().slice(0, 7)}
-            {coin.toString().length >= 6 ?? "+"}
-          </span>
-          <span className="earning">$ {getPrice(game,cash,defaults?.data?.default)}</span>
-        </>
+            <span className="Members">{v3 ?? 0}</span>
+          </>
+        ) : (
+          <>
+            <span className="stake">
+              $ {cash.toLocaleString().slice(0, 7)}
+              {cash.toString().length >= 6 ?? "+"}
+            </span>
+            <span className="coin">
+              <GameCoin width={10} height={10} />
+              {coin.toLocaleString().slice(0, 7)}
+              {coin.toString().length >= 6 ?? "+"}
+            </span>
+            <span className="earning">
+              $ {getPrice(game, cash, defaults?.data?.default)}
+            </span>
+          </>
         )}
       </div>
-      {
-        type==="normal"?
-       (
-          <div className="action">
-        <span className="btn">{btn1view ?? "view"}</span>
-        <span className="btn">{btn2view ??"cancel"}</span>
-      </div>
-       ):
-        type==="custom"?
-       (
-          <div className="action">
-        <span className="btn" onClick={btn1func}>{btn1view ?? "view"}</span>
-        <span className="btn" onClick={btn2func}>{btn2view ??"reject"}</span>
-      </div>
-      ): (
-          <div className="action">
-        <span className="btn" onClick={btn1func}>{btn1view ??"play with $"}</span>
-        <span className="btn" onClick={btn2func}>{btn2view ?? <>play with <GameCoin/></>}</span>
-      </div>
+      {type === "normal" ? (
+        <div className="action">
+          <span className="btn">{btn1view ?? "view"}</span>
+          <span className="btn">{btn2view ?? "cancel"}</span>
+        </div>
+      ) : type === "custom" ? (
+        <div className="action">
+          <span className="btn" onClick={btn1func}>
+            {btn1view ?? "view"}
+          </span>
+          <span className="btn" onClick={btn2func}>
+            {btn2view ?? "reject"}
+          </span>
+        </div>
+      ) : (
+        <div className="action">
+          <span className="btn" onClick={btn1func}>
+            {btn1view ?? "play with $"}
+          </span>
+          <span className="btn" onClick={btn2func}>
+            {btn2view ?? (
+              <>
+                play with <GameCoin />
+              </>
+            )}
+          </span>
+        </div>
       )}
     </div>
   );
