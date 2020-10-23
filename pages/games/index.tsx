@@ -44,6 +44,7 @@ import Bottompanel from "../../components/bottompanel";
 import { reducerType } from "../../typescript/interface";
 import DetailScreen from "../../components/DetailScreen";
 import CustomWindow from "../../components/customWindow";
+import AccountF from "../../components/account_f";
 
 export default function GamesScreen() {
   const dispatch = useDispatch();
@@ -260,16 +261,6 @@ const defaults: AxiosResponse<{
     })
   }, [])
 
-  const callFlutter = useFlutterwave({
-    ...config,
-    amount: fundTp,
-    customer: {
-      email: record?.data.player.email,
-      phonenumber: record?.data.player.phone_number,
-      name: record?.data.player.full_name,
-    }
-  })
-
   return (
     <>
       <Head>
@@ -299,65 +290,7 @@ const defaults: AxiosResponse<{
       specfunc={setSpec} />
       <ToastContainer />
        <Header setApp_loading={setApp_loading} setRunText={setRunText} />
-      <div
-        className={`game_picker_view ${action !== ReasonType.non ? "open" : ""}`}
-        onClick={(e: any) => {
-          if (!e.target?.classList?.contains("game_picker_view")) {
-            return;
-          }
-          setAction(ReasonType.non)
-        }}
-      >
-        {action !== ReasonType.non && (
-          <div className="container_price">
-            <h3 className="title">Troisplay E wallet form.</h3>
-            <p className="txt">
-              {
-                ((fundTp> (record?.data?.cashwallet.currentCash??0)) && action === ReasonType.withdraw) && `Can't withdraw more than your avalible balance`
-              }
-            </p>
-            <div className="inputBox">
-              <label htmlFor="number">Account</label>
-              <input
-                type="number"
-                value={fundTp}
-                onChange={(e) => {
-                  e.persist();
-                  setFund(parseInt(e.target.value, 10));
-                }}
-                id="funds"
-                placeholder="in ($)"
-              />
-            </div>
-            <span
-              className="btn"
-              onClick={async () => {
-                if (action === ReasonType.fund) {
-                  callFlutter({
-                    callback: (response) => {
-                    console.log(response);
-                  },
-                  onClose: () => {
-                    setFund(0);
-                    setAction(ReasonType.non);
-                  },
-                });
-                } else {
-                  return;
-              }
-              }}
-              >
-              {playLoader ? (
-                <SyncLoader size="10px" color="white" />
-              ) : action === ReasonType.withdraw ?
-                  "Withdraw" :
-                  action === ReasonType.fund ? "Fund":""
-              }
-            </span>
-          </div>
-        )}
-      </div>
-      <div
+     <div
         className={`game_picker_view ${spec.isOpen ? "open" : ""}`}
         onClick={(e: any) => {
           if (!e.target?.classList?.contains("game_picker_view")) {
@@ -679,7 +612,7 @@ const defaults: AxiosResponse<{
          
         </div>
       </div>
-
+<AccountF/>
       <section 
         className={
           gameViewOpen || spec.isOpen ? "games_world_ blur" : "games_world_"

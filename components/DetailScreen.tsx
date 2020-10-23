@@ -5,17 +5,23 @@ import { useQueryCache } from 'react-query';
 import { BackIcon, NextIcon } from '../icon';
 import { InView } from "react-intersection-observer"
 import moment from "moment"
-import { Games, PlayerType } from "../typescript/enum";
+import { Games, PlayerType, ReasonType } from "../typescript/enum";
 import { useRouter } from 'next/router';
-import { setGameDetails, toast } from "../store/action";
+import { setAction, setGameDetails, toast } from "../store/action";
 import { useDispatch } from 'react-redux';
+import { SyncLoader } from "react-spinners";
+import { useFlutterwave } from "flutterwave-react-v3";
+import { config } from "../constant";
 
 export default function DetailScreen() {
     const dispatch = useDispatch()
     const swRef1: MutableRefObject<HTMLDivElement | null> = useRef();
     const coinRef: MutableRefObject<HTMLSpanElement | null> = useRef();
     const coinRef2: MutableRefObject<HTMLSpanElement | null> = useRef();
-    const [dateintime, setDateintime] = useState("");
+  const [dateintime, setDateintime] = useState("");
+  const swRef: MutableRefObject<HTMLDivElement | null> = useRef();
+  const [playLoader, setPlayerLoader] = useState<boolean>(false);
+  const [fundTp, setFund] = useState<number>(0);
     const {push} = useRouter()
     const defaults: AxiosResponse<{
         default: {
@@ -145,7 +151,10 @@ export default function DetailScreen() {
           clearInterval(countdownEvt);
     };
   }, [spin]);
-    return (
+  
+
+  return (
+    <>
       <div className="cover">
         <span
           className="sw_btn"
@@ -173,8 +182,15 @@ export default function DetailScreen() {
               $ {record?.data?.cashwallet?.currentCash.toLocaleString() ?? 0}
             </span>
             <div className="action">
-              <span className="btn">fund</span>
-              <span className="btn">withdraw</span>
+              <span className="btn" onClick={() => setAction(dispatch,ReasonType.fund)}>
+                fund
+              </span>
+              <span
+                className="btn"
+                onClick={() => setAction(dispatch,ReasonType.withdraw)}
+              >
+                withdraw
+              </span>
             </div>
           </InView>
           <InView
@@ -268,5 +284,6 @@ export default function DetailScreen() {
           <NextIcon />
         </span>
       </div>
-    );
+    </>
+  );
 }

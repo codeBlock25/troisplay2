@@ -4,6 +4,7 @@ import {
   NotiErrorType,
   errorType,
   PlayerType,
+  ReasonType,
 } from "../../typescript/enum";
 import { ActionType, eventReeducerType } from "../../typescript/interface";
 
@@ -33,6 +34,7 @@ const initialState: eventReeducerType = {
     isOpen: modalType.close,
     request: undefined
   },
+  action: ReasonType.non,
   back: {
     msg: "",
     open: modalType.close,
@@ -48,6 +50,8 @@ export const eventReducer = (
   switch (action.type) {
     case "CUSTOMWINDOW":
       return { ...state, customWindow: action.payload };
+    case "ACTION":
+      return { ...state, action: action.payload };
     case "NOTIFICATION":
       return { ...state, notification: action.payload };
     case "GAME_DETAILS":

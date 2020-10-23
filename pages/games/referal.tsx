@@ -14,6 +14,7 @@ import AppLoader from "../../components/app_loader";
 import Lottie from "lottie-web";
 import DetailScreen from "../../components/DetailScreen";
 import { GameCoin } from "../../icon";
+import AccountF from "../../components/account_f";
 
 export default function () {
   const [snack_open, setSnack_open] = useState<boolean>(false);
@@ -132,66 +133,66 @@ const defaults: AxiosResponse<{
   };
   return (
     <>
-        <Head>
-          <title>Troisplay:: Referals</title>
-        </Head>
-        {app_loading && (
+      <Head>
+        <title>Troisplay:: Referals</title>
+      </Head>
+      {app_loading && (
+        <>
+          <AppLoader runText={runText} />
+        </>
+      )}
+      <Snackbar
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right",
+        }}
+        className="notification"
+        open={snack_open}
+        autoHideDuration={6000}
+        onClose={(_event: SyntheticEvent | MouseEvent, reason?: string) => {
+          if (reason === "clickaway") return;
+          setSnack_open(false);
+        }}
+        message="Sharable link Copied! :)"
+        action={
           <>
-            <AppLoader runText={runText} />
+            <IconButton
+              size="small"
+              aria-label="close"
+              color="inherit"
+              onClick={(
+                _event: SyntheticEvent | MouseEvent,
+                reason?: string
+              ) => {
+                if (reason === "clickaway") return;
+                setSnack_open(false);
+              }}
+            >
+              <Close fontSize="small" />
+            </IconButton>
           </>
-        )}
-        <Snackbar
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "right",
-          }}
-          className="notification"
-          open={snack_open}
-          autoHideDuration={6000}
-          onClose={(_event: SyntheticEvent | MouseEvent, reason?: string) => {
-            if (reason === "clickaway") return;
-            setSnack_open(false);
-          }}
-          message="Sharable link Copied! :)"
-          action={
-            <>
-              <IconButton
-                size="small"
-                aria-label="close"
-                color="inherit"
-                onClick={(
-                  _event: SyntheticEvent | MouseEvent,
-                  reason?: string
-                ) => {
-                  if (reason === "clickaway") return;
-                  setSnack_open(false);
-                }}
-              >
-                <Close fontSize="small" />
-              </IconButton>
-            </>
-          }
-        />
-          <span
+        }
+      />
+      <span
         className="new_game"
         onClick={() => {
-          push("/games")
+          push("/games");
         }}
       >
         games <span className="icon" ref={game_play} />
       </span>
-         <ToastContainer />
+      <ToastContainer />
       <Header setApp_loading={setApp_loading} setRunText={setRunText} />
-     
-      <section 
-        className="games_world_ Referal"
-      >
+      <AccountF />
+      <section className="games_world_ Referal">
         <div className="first">
           <DetailScreen />
         </div>
         <div className="container_first theme">
           <span className="title">Referal Earnings</span>
-          <span className="title">Your Referal code <b>{record?.data?.referal?.refer_code}</b></span>
+          <span className="title">
+            Your Referal code <b>{record?.data?.referal?.refer_code}</b>
+          </span>
           <div className="content">
             <span className="icon" />
             <span className="count">
@@ -233,11 +234,14 @@ const defaults: AxiosResponse<{
         </div>
         <div className="container_first theme">
           <span className="title">Referal Record</span>
-          <span className="title">Your Referal code <b>{record?.data?.referal?.refer_code}</b></span>
+          <span className="title">
+            Your Referal code <b>{record?.data?.referal?.refer_code}</b>
+          </span>
           <div className="content">
             <span className="icon" />
             <span className="count">
-              {(record?.data?.referal?.activeReferal ?? 0) + (record?.data?.referal?.inactiveReferal ?? 0)}
+              {(record?.data?.referal?.activeReferal ?? 0) +
+                (record?.data?.referal?.inactiveReferal ?? 0)}
             </span>
           </div>
           <div className="content_">
@@ -250,11 +254,15 @@ const defaults: AxiosResponse<{
             </div>
             <div className="item">
               <span className="name">Current Refered account</span>
-              <span className="value">{record?.data?.referal?.activeReferal ?? 0}</span>
+              <span className="value">
+                {record?.data?.referal?.activeReferal ?? 0}
+              </span>
             </div>
             <div className="item">
               <span className="name">inactive refered account</span>
-              <span className="value">{record?.data?.referal?.inactiveReferal ?? 0}</span>
+              <span className="value">
+                {record?.data?.referal?.inactiveReferal ?? 0}
+              </span>
             </div>
             <div className="item">
               <Button className="btn_" onClick={referuser}>

@@ -6,6 +6,7 @@ import {
   PlayerType,
   errorType,
   choices,
+  ReasonType,
 } from "./enum";
 
 export interface eventReeducerType {
@@ -20,6 +21,7 @@ export interface eventReeducerType {
     id?: string;
     player: PlayerType;
   };
+  action: ReasonType;
   customWindow: {
     isOpen: modalType;
     request?: {
@@ -71,6 +73,7 @@ export interface ActionType<T = any> {
     | "TOAST"
     | "EXIT"
     | "BACK"
+    | "ACTION"
     | "CUSTOMWINDOW";
   payload: T;
 }

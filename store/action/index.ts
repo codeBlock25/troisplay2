@@ -6,6 +6,7 @@ import {
   modalType,
   NotiErrorType,
   PlayerType,
+  ReasonType,
 } from "../../typescript/enum";
 import { ActionType } from "../../typescript/interface";
 
@@ -19,6 +20,13 @@ export const notify = (
 ): void => {
   dispatch({ type: "NOTIFICATION", payload });
 };
+
+export const setAction = (
+  dispatch: (t: ActionType) => void,
+  payload: ReasonType
+) => {
+  dispatch({type: "ACTION", payload})
+}
 
 export const setGameDetails = (
   dispatch: (t: ActionType) => void,
