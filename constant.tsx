@@ -1,10 +1,10 @@
 import {FlutterWaveTypes} from "flutterwave-react-v3"
 
 export const isDev: boolean = process.env.NODE_ENV === "development";
-export const server_url: string = "http://localhost:41007/api";
+export const server_url: string = "http://127.0.0.1:41007/api";
 export const dev_url: string = "http://localhost:4050/api";
 export const dev_url_media: string = "http://localhost:4050/";
-export const server_url_socket: string = "http://localhost:41007/";
+export const server_url_socket: string = "http://127.0.0.1:41007/";
 export const server_url_media: string = "https://troisplay.herokuapp.com/";
 export const dev_url_socket: string = "http://localhost:3022";
 export const socket_url: string = isDev ? dev_url_socket : server_url_socket;
