@@ -222,7 +222,7 @@ const HeadFunc = memo(function ({
   });
   const { data: requests } = useQuery("requests", async () => {
     let token = getToken();
-    return await Axios.get(`${url}/games/custom-game/games`, {
+    return await Axios.get(`${url}/games/requests`, {
       headers: { authorization: `Bearer ${token}` },
     });
   });

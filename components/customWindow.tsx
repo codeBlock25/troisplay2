@@ -62,6 +62,11 @@ export default function CustomWindow() {
           msg:
             "The game is all set, sit tight and with for your judge daty to come, In the mean time you can try more games here on Trois.",
         }).success();
+        setCustomWindow(dispatch, {
+          isOpen: modalType.close,
+          request: undefined,
+        });
+        setAnswer("");
       })
       .catch(() => {
         toast(dispatch, { msg: "" }).close();

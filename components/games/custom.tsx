@@ -127,12 +127,6 @@ export default function CustomGame(): JSX.Element {
           setPlayer2Username_error(true);
           return;
         }
-        setDescription("");
-        setTitle("");
-        setAnswer("");
-        setEndGameTime(new Date());
-        setEndDate(new Date());
-        setPlayer2Username("");
         if (err.message === "Request failed with status code 402") {
          toast(dispatch, { msg: "insufficient fund." }).fail();
          return;
@@ -151,7 +145,12 @@ export default function CustomGame(): JSX.Element {
         className={`gameworld theme ${theme}`}
         onClick={(e: any) => {
           if (e.target.classList?.contains("gameworld")) {
-            setGameDetails(dispatch, {player: PlayerType.first, game:Games.non, id: "", price: 0})
+            setGameDetails(dispatch, {
+              player: PlayerType.first,
+              game: Games.non,
+              id: "",
+              price: 0,
+            });
             setDescription("");
             setTitle("");
             setAnswer("");
@@ -162,30 +161,30 @@ export default function CustomGame(): JSX.Element {
         }}
       >
         <div className="world spin custom">
-        <div
-              className="close_btn"
-              onClick={() => {
-                if (isEmpty(details.id)) {
-                  setGameDetails(dispatch, {
-                    player: PlayerType.first,
-                    game: Games.non,
-                    id: undefined,
-                    price: 0,
-                  });
-                  setLoading(false);
-                  setDescription("");
-                  setTitle("");
-                  setAnswer("");
-                  setEndGameTime(new Date());
-                  setEndDate(new Date());
-                  setPlayer2Username("");
-                  setPlayer2Username_error(false)
-                  return;
-                }
-              }}
-            >
-              <CloseIcon />
-            </div>
+          <div
+            className="close_btn"
+            onClick={() => {
+              if (isEmpty(details.id)) {
+                setGameDetails(dispatch, {
+                  player: PlayerType.first,
+                  game: Games.non,
+                  id: undefined,
+                  price: 0,
+                });
+                setLoading(false);
+                setDescription("");
+                setTitle("");
+                setAnswer("");
+                setEndGameTime(new Date());
+                setEndDate(new Date());
+                setPlayer2Username("");
+                setPlayer2Username_error(false);
+                return;
+              }
+            }}
+          >
+            <CloseIcon />
+          </div>
           <h3 className="title">Set your game</h3>
           <form onSubmit={handleSubmit}>
             <TextField
@@ -328,61 +327,60 @@ export default function CustomGame(): JSX.Element {
                   "aria-label": "change date",
                 }}
               />
-              // NOTE: Timer
-            {choice_ === choice.at_stated_timed && (
-              <>
-                <KeyboardDatePicker
-                  disableToolbar
-                  variant="inline"
-                  required
-                  inputVariant="outlined"
-                  className={`inputBox theme ${theme}`}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment className="icon_" position="start">
-                        <EventNote />
-                      </InputAdornment>
-                    ),
-                  }}
-                  format="MM/dd/yyyy"
-                  margin="normal"
-                  id="game-end-date"
-                  label="Game End Date"
-                  value={endDate}
-                  onChange={(date) => {
-                    setEndDate(date);
-                  }}
-                  KeyboardButtonProps={{
-                    "aria-label": "change date",
-                  }}
-                />
+              {choice_ === choice.at_stated_timed && (
+                <>
+                  <KeyboardDatePicker
+                    disableToolbar
+                    variant="inline"
+                    required
+                    inputVariant="outlined"
+                    className={`inputBox theme ${theme}`}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment className="icon_" position="start">
+                          <EventNote />
+                        </InputAdornment>
+                      ),
+                    }}
+                    format="MM/dd/yyyy"
+                    margin="normal"
+                    id="game-end-date"
+                    label="Game End Date"
+                    value={endDate}
+                    onChange={(date) => {
+                      setEndDate(date);
+                    }}
+                    KeyboardButtonProps={{
+                      "aria-label": "change date",
+                    }}
+                  />
 
-                <KeyboardTimePicker
-                  margin="normal"
-                  id="game-end-time"
-                  inputVariant="outlined"
-                  label="Game End Time"
-                  variant="dialog"
-                  className={`inputBox theme ${theme}`}
-                  value={endGameTime}
-                  required
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment className="icon_" position="start">
-                        <Timer />
-                      </InputAdornment>
-                    ),
-                  }}
-                  onChange={(date) => {
-                    setEndGameTime(date);
-                  }}
-                  KeyboardButtonProps={{
-                    "aria-label": "change time",
-                  }}
-                />
+                  <KeyboardTimePicker
+                    margin="normal"
+                    id="game-end-time"
+                    inputVariant="outlined"
+                    label="Game End Time"
+                    variant="dialog"
+                    className={`inputBox theme ${theme}`}
+                    value={endGameTime}
+                    required
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment className="icon_" position="start">
+                          <Timer />
+                        </InputAdornment>
+                      ),
+                    }}
+                    onChange={(date) => {
+                      setEndGameTime(date);
+                    }}
+                    KeyboardButtonProps={{
+                      "aria-label": "change time",
+                    }}
+                  />
                 </>
-                )}
-                </MuiPickersUtilsProvider>
+              )}
+            </MuiPickersUtilsProvider>
             <Button type="submit" className={`btn theme ${theme}`}>
               {loading ? <MoonLoader size="20px" color="white" /> : "set game"}
             </Button>

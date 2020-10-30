@@ -139,6 +139,13 @@ const GuessMaster = memo(function () {
     toast(dispatch, {msg: `Insufficient Fund, please fund your ${payWith === PayType.cash?"cash wallet":"coin wallet"} to continue the game.`}).fail()
     return;
   }
+          if (err.message === "Request failed with status code 404") {
+            toast(dispatch, {
+              msg:
+                "Opps!  This game already exist, Join as Player 2 to continue or create another game with a different amount.",
+            }).fail();
+            return;
+          }
   toast(dispatch, {msg: `An Error occured could not connect to troisplay game server please check you interner connection and Try Again.`}).error()
 })
         .finally(() => {

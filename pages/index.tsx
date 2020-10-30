@@ -109,13 +109,14 @@ export default function Index() {
       .then(({ data: { token, isPlayer } }) => {
         localStorage.setItem("game_token", token);
         localStorage.setItem("gamer", isPlayer ? "old" : "new");
+        toast(dispatch, { msg: "Login successful." }).success();
         setTimeout(() => {
           push(isPlayer ? "/games" : "/launch");
-        }, 500);
+        }, 4000);
       })
       .catch((err) => {
         if (err.message === "Request failed with status code 402") {
-          setPhone_number_error(errorType.used);
+          setPhone_number_error(errorType.warning);
           return;
         }
         if (err.message === "Request failed with status code 401") {
