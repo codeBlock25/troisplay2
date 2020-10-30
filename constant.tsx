@@ -1,10 +1,10 @@
 import {FlutterWaveTypes} from "flutterwave-react-v3"
 
 export const isDev: boolean = process.env.NODE_ENV === "development";
-export const server_url: string = "https://troisplay.herokuapp.com/api";
+export const server_url: string = "http://67.205.179.49:41007/api";
 export const dev_url: string = "http://localhost:4050/api";
 export const dev_url_media: string = "http://localhost:4050/";
-export const server_url_socket: string = "https://troisplay-chat.herokuapp.com/";
+export const server_url_socket: string = "http://67.205.179.49:41007/";
 export const server_url_media: string = "https://troisplay.herokuapp.com/";
 export const dev_url_socket: string = "http://localhost:3022";
 export const socket_url: string = isDev ? dev_url_socket : server_url_socket;
@@ -76,7 +76,7 @@ export const banks: {id: number, name: string,  code: string}[] =  [
   { id: 191, code: '044', name: 'Access Bank' },
    { id: 567, code: '90115', name: 'TCF MFB' }
 ]
- 
+
 export const config: FlutterWaveTypes.FlutterwaveConfig = {
   public_key: PUBLIC_KEY,
   tx_ref: new Date().toString(),
