@@ -42,40 +42,40 @@ export function getPrice(
   switch (game) {
     case Games.roshambo:
       return defaults.commission_roshambo.value_in === "$"
-        ? cash + (cash - defaults.commission_roshambo.value)
+        ? cash + (cash - (defaults.commission_roshambo.value * 2))
         : defaults.commission_roshambo.value_in === "c"
         ? cash +
-          (cash - defaults.cashRating * defaults.commission_roshambo.value)
+          (cash - defaults.cashRating * (defaults.commission_roshambo.value * 2))
         : defaults.commission_roshambo.value_in === "%"
-        ? cash + (cash - cash / defaults.commission_roshambo.value)
+        ? cash + (cash - (cash / defaults.commission_roshambo.value)* 2)
         : 0;
 
     case Games.penalth_card:
       return defaults.commission_penalty.value_in === "$"
-        ? cash + (cash - defaults.commission_penalty.value)
+        ? cash + (cash - (defaults.commission_penalty.value * 2))
         : defaults.commission_penalty.value_in === "c"
         ? cash +
-          (cash - defaults.cashRating * defaults.commission_penalty.value)
+          (cash - defaults.cashRating * (defaults.commission_penalty.value * 2))
         : defaults.commission_penalty.value_in === "%"
-        ? cash + (cash - cash / defaults.commission_penalty.value)
+        ? cash + (cash - (cash / defaults.commission_penalty.value)* 2)
         : 0;
     case Games.matcher:
       return defaults.commission_guess_mater.value_in === "$"
-        ? cash + (cash - defaults.commission_guess_mater.value)
+        ? cash + (cash - (defaults.commission_guess_mater.value * 2))
         : defaults.commission_guess_mater.value_in === "c"
         ? cash +
           (cash - defaults.cashRating * defaults.commission_guess_mater.value)
         : defaults.commission_guess_mater.value_in === "%"
-        ? cash + (cash - cash / defaults.commission_guess_mater.value)
+        ? cash + (cash - (cash / defaults.commission_guess_mater.value) * 2)
         : 0;
     case Games.custom_game:
       return defaults.commission_custom_game.value_in === "$"
-        ? cash + (cash - defaults.commission_custom_game.value)
+        ? cash + (cash - (defaults.commission_custom_game.value * 2))
         : defaults.commission_custom_game.value_in === "c"
         ? cash +
           (cash - defaults.cashRating * defaults.commission_custom_game.value)
         : defaults.commission_custom_game.value_in === "%"
-        ? cash + (cash - cash / defaults.commission_custom_game.value)
+        ? cash + (cash - (cash / defaults.commission_custom_game.value) * 2)
         : 0;
     default:
       return 0;

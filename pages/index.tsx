@@ -69,6 +69,10 @@ export default function Index() {
         setPhone_number2("");
         setKey2("");
         setRefer_code("");
+        toast(dispatch, {
+          msg:
+            "Congratulations! Your registration was successful, please login to complete your profile.",
+        }).success();
       })
       .catch((err) => {
         setSignUpState(false);

@@ -311,7 +311,7 @@ const defaults: AxiosResponse<{
             <p className="txt">
               To stand a chances to earn{" "}
               {getPrice(spec.game, spec.price, defaults?.data?.default) <= 0
-                ? "Nothing"
+                ? ""
                 : `$ ${getPrice(
                     spec.game,
                     spec.price,
@@ -320,9 +320,8 @@ const defaults: AxiosResponse<{
             </p>
             <p className="txt">
               or Stake At{" "}
-              {getPrice(spec.game, spec.price, defaults?.data?.default) <= 0
-                ? "0"
-                : <span style={{marginLeft: 5, display:"flex", marginRight: 5}}>
+              {(defaults?.data?.default.cashRating * spec.price) === null || !(defaults?.data?.default.cashRating * spec.price) ? "0" :
+                <span style={{ marginLeft: 5, display: "flex", marginRight: 5 }}>
                 {"  "} <GameCoin/>{" "}
                 {`${defaults?.data?.default.cashRating * spec.price}`}</span>}
             </p>
@@ -381,7 +380,7 @@ const defaults: AxiosResponse<{
             >
               {playLoader ? (
                 <SyncLoader size="10px" color="white" />
-              ) : "stake" }
+              ) : "Proceed" }
             </span>
           </div>
         ) : spec.next === nextType.player ? (

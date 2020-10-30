@@ -31,6 +31,7 @@ import { getToken } from "../functions";
 import { toast } from "../store/action";
 import { modalType } from "../typescript/enum";
 import AppLoader from "../components/app_loader";
+import ToastContainer from "../components/toast";
 
 export default function Launch() {
   const [playername, setPlayername] = useState<string>("");
@@ -83,7 +84,13 @@ export default function Launch() {
     })
       .then(({ data: { player } }) => {
         localStorage.setItem("gamer", "old");
-        window.location.assign("/games");
+        toast(dispatch, {
+          msg:
+            "Thanks for completing your profile, fund your account to play your first game. Great things await you!",
+        }).success();
+        setTimeout(() => {
+          window.location.assign("/games");
+        }, 4000);
       })
       .catch((err) => {
         if (err.message === "Request failed with status code 400") {
@@ -111,6 +118,7 @@ export default function Launch() {
     );
   return (
     <div className="Setup">
+      <ToastContainer />
       <Head>
         <title>Player setup :: Troisplay</title>
       </Head>
@@ -167,14 +175,21 @@ export default function Launch() {
           />
           <FormControl className="inputBox dark-mode" required>
             <InputLabel htmlFor="bank name">Bank Name</InputLabel>
-            <Select variant="outlined" inputProps={{id: "bank name"}} value={bank_name} onChange={(e) => {
-              setBank_name(e.target.value as string)
-            }}>
-              {banks.map(bank => {
+            <Select
+              variant="outlined"
+              inputProps={{ id: "bank name" }}
+              value={bank_name}
+              onChange={(e) => {
+                setBank_name(e.target.value as string);
+              }}
+            >
+              {banks.map((bank) => {
                 return (
-                  <MenuItem key={bank.id} value={bank.code}>{bank.name}</MenuItem>
-              )
-            })}
+                  <MenuItem key={bank.id} value={bank.code}>
+                    {bank.name}
+                  </MenuItem>
+                );
+              })}
             </Select>
           </FormControl>
           <TextField

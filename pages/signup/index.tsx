@@ -66,6 +66,11 @@ export default function Signup() {
         setPhone_number2("");
         setKey2("");
         setRefer_code("");
+        push("/login")
+        toast(dispatch, {
+          msg:
+            "Congratulations! Your registration was successful, please login to complete your profile.",
+        }).success();
       })
       .catch((err) => {
         if (err.message === "Request failed with status code 400") {

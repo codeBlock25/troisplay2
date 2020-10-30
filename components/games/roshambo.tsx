@@ -887,7 +887,7 @@ export default function Roshambo() {
                   {loading ? (
                     <SyncLoader size="10px" color={`white`} />
                   ) : (
-                    `stake ₦  ${getPrice(details.game, details.price, defaults.data.default)}`
+                    `stake ₦  ${details.price}`
                   )}
                 </div>
                 <div
@@ -900,7 +900,7 @@ export default function Roshambo() {
                     <SyncLoader size="10px" color={`white`} />
                   ) : (
                     <>
-                      stake <GameCoin /> {getPrice(details.game, details.price, defaults.data.default) * (defaults?.data.default.cashRating ?? 0)}
+                      stake <GameCoin /> {details.price * (defaults?.data.default.cashRating ?? 0)}
                     </>
                   )}
                 </div>
