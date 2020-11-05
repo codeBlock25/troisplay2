@@ -12,12 +12,13 @@
     top: 100px;
     opacity: 0;
     pointer-events: none;
-    
-    &.open{
+
+    &.open {
         opacity: 1;
         top: 0;
         pointer-events: visible;
     }
+
     &.dark-mode {
         background-color: rgba($color: #000000, $alpha: 0.6);
         color: #ffffff;
@@ -81,8 +82,8 @@
         opacity: 0;
         transition: ease-in-out .4s;
         pointer-events: none;
-        
-        &.open{
+
+        &.open {
             pointer-events: visible;
             transform: scale(1);
             opacity: 1;
@@ -113,6 +114,7 @@
                 font-size: 16px;
                 color: white;
             }
+
             .txt {
                 width: 100%;
                 height: fit-content;
@@ -123,6 +125,7 @@
                 justify-content: center;
                 text-align: center;
             }
+
             .btn {
                 background-color: rgb(50, 207, 71);
                 color: white;
@@ -131,6 +134,7 @@
             }
         }
     }
+
     .container {
         position: fixed;
         top: 0;
@@ -139,8 +143,8 @@
         max-width: 1000px;
         height: 100vh;
         min-height: 100vh;
-        overflow: hidden;
-        overflow-y: auto;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
         padding: 0 10px 0 0;
         overflow: hidden;
         overflow-y: auto;
@@ -166,6 +170,7 @@
             line-height: 50px;
             color: currentColor;
             padding: 0 60px 0 0;
+
             @media (max-width: 500px) {
                 padding: 0;
             }

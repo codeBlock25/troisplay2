@@ -49,7 +49,7 @@ export default function Roshambo() {
   const [playStateLoad, setPlayStateLoading] = useState<boolean>(false);
   const [playType, setPlayType] = useState<PlayType>(PlayType.non);
   const [playCount, setPlayCount] = useState<number>(0);
-
+  const [winner, setWinner] = useState<GameRec>(GameRec.draw);
   const [round1, setRound1] = useState<{
     round: number;
     value: RoshamboOption;
@@ -127,7 +127,7 @@ export default function Roshambo() {
       referRating: number;
     };
   }> = useQueryCache().getQueryData("defaults");
-   
+  const setter = useQueryCache().setQueryData;
   const theme = "dark-mode";
   const handleSubmit = async (payWith?: PayType) => {
     let token = getToken();
@@ -153,7 +153,7 @@ export default function Roshambo() {
         },
       })
         .then(
-          ({
+          async ({
             data: { game },
           }: AxiosResponse<{
             game: {
@@ -170,12 +170,12 @@ export default function Roshambo() {
               date?: Date;
             };
           }>) => {
-                  setGameDetails(dispatch, {
-                    player: PlayerType.first,
-                    game: Games.non,
-                    id: undefined,
-                    price: 0,
-                  });
+            setGameDetails(dispatch, {
+              player: PlayerType.first,
+              game: Games.non,
+              id: undefined,
+              price: 0,
+            });
             toast(dispatch, {
               msg: `Congratulations!!!! You have successfully played a game, please wait for Player 2's challange.`,
             }).success();
@@ -183,7 +183,11 @@ export default function Roshambo() {
         )
         .catch((err) => {
           if (err.message === "Request failed with status code 401") {
-            toast(dispatch, {msg: `Insufficient Fund, please fund your ${payWith === PayType.cash?"cash wallet":"coin wallet"} to continue the game.`}).fail()
+            toast(dispatch, {
+              msg: `Insufficient Fund, please fund your ${
+                payWith === PayType.cash ? "cash wallet" : "coin wallet"
+              } to continue the game.`,
+            }).fail();
             return;
           }
           if (err.message === "Request failed with status code 404") {
@@ -193,7 +197,9 @@ export default function Roshambo() {
             }).fail();
             return;
           }
-          toast(dispatch, {msg: `An Error occured could not connect to troisplay game server please check you interner connection and Try Again.`}).error()
+          toast(dispatch, {
+            msg: `An Error occured could not connect to troisplay game server please check you interner connection and Try Again.`,
+          }).error();
         })
         .finally(() => {
           setLoading(false);
@@ -227,21 +233,27 @@ export default function Roshambo() {
           },
         },
       })
-      .then(
-        ({
-          data: { winner, price },
-        }: AxiosResponse<{ winner: boolean; price: number }>) => {
-          if (winner) {
-            notify(dispatch, {type: NotiErrorType.success, msg: `Congratualation your have just won the game and earned $ ${price}. you can withdraw you cash price or use it to play more games.`,isOpen: modalType.open})
-          } else {
-            notify(dispatch, {type: NotiErrorType.error, msg: `Sorry your have just lost this game and lost $ ${price}. you can try other games for a better chance.`,isOpen: modalType.open})
-          }
-          setGameDetails(dispatch, {
-            player: PlayerType.first,
-            game: Games.non,
-            id: undefined,
-            price: 0,
-          });
+        .then(
+          ({
+            data: { winner, price, game_result },
+          }: AxiosResponse<{
+            winner: GameRec;
+            price: number;
+            game_result: {
+              round1: CheckerType;
+              round2: CheckerType;
+              round3: CheckerType;
+              round4: CheckerType;
+              round5: CheckerType;
+            };
+          }>) => {
+            setWinner(winner);
+            setPlayType(PlayType.one_by_one);
+            setKnownState1(game_result.round1);
+            setKnownState2(game_result.round2);
+            setKnownState3(game_result.round3);
+            setKnownState4(game_result.round4);
+            setKnownState5(game_result.round5);
           }
         )
         .catch((err) => {
@@ -280,7 +292,7 @@ export default function Roshambo() {
         round,
       },
     })
-      .then(
+      .then( 
         ({
           data: { winner, price, final, finalWin },
         }: AxiosResponse<{
@@ -400,12 +412,12 @@ export default function Roshambo() {
                 <div
                   className="btn_"
                   onClick={() => {
-                   setPlayType(PlayType.one_by_one);
-                  }}        
+                    setPlayType(PlayType.one_by_one);
+                  }}
                 >
                   Play
                 </div>
-                <div    
+                <div
                   className="btn_"
                   onClick={() => {
                     setPlayType(PlayType.all);
@@ -416,7 +428,7 @@ export default function Roshambo() {
               </div>
             </div>
           </div>
-        ) :(
+        ) : (
           <div className="world spin roshambo">
             <div
               className="close_btn"
@@ -560,7 +572,7 @@ export default function Roshambo() {
                       : round1knowState === CheckerType.won
                       ? "won"
                       : round1knowState === CheckerType.lost
-                        ? "lost"
+                      ? "lost"
                       : round1knowState === CheckerType.draw
                       ? "draw"
                       : ""}
@@ -668,9 +680,9 @@ export default function Roshambo() {
                             : RoshamboOption.rock,
                       };
                     });
-                   }} 
+                  }}
                 >
-                   { round3.value === RoshamboOption.rock ? (
+                  {round3.value === RoshamboOption.rock ? (
                     <RockIcon />
                   ) : round3.value === RoshamboOption.paper ? (
                     <PaperIcon />
@@ -778,7 +790,7 @@ export default function Roshambo() {
                   >
                     {round4knowState === CheckerType.unknown
                       ? "play"
-                        : round4knowState === CheckerType.won
+                      : round4knowState === CheckerType.won
                       ? "won"
                       : round4knowState === CheckerType.lost
                       ? "lost"
@@ -862,6 +874,49 @@ export default function Roshambo() {
                 )}
               </div>
             </div>
+            {!isEmpty(details.id) && playType === PlayType.one_by_one && (
+              <div
+                className={`btn_ theme ${theme}`}
+                onClick={() => {
+                  if (winner === GameRec.win) {
+                    notify(dispatch, {
+                      type: NotiErrorType.success,
+                      msg: `Congratualation your have just won the game and earned $ ${getPrice(
+                        Games.roshambo,
+                        details.price,
+                        defaults.data.default
+                      )}. you can withdraw you cash price or use it to play more games.`,
+                      isOpen: modalType.open,
+                    });
+                  } else if (winner === GameRec.draw) {
+                    notify(dispatch, {
+                      type: NotiErrorType.state,
+                      msg: `This game came out as a draw an your stake amount has been refund back to you. You can withdraw you cash price or use it to play more games.`,
+                      isOpen: modalType.open,
+                    });
+                  } else {
+                    notify(dispatch, {
+                      type: NotiErrorType.error,
+                      msg: `Sorry your have just lost this game and lost $ ${getPrice(
+                        Games.roshambo,
+                        details.price,
+                        defaults.data.default
+                      )}. you can try other games for a better chance.`,
+                      isOpen: modalType.open,
+                    });
+                  }
+                  setPlayType(PlayType.non);
+                  setGameDetails(dispatch, {
+                    player: PlayerType.first,
+                    game: Games.non,
+                    id: undefined,
+                    price: 0,
+                  });
+                }}
+              >
+                Close
+              </div>
+            )}
             {!isEmpty(details.id) && playType === PlayType.all ? (
               <div
                 className={`btn_ theme ${theme}`}
@@ -907,7 +962,8 @@ export default function Roshambo() {
                     <SyncLoader size="10px" color={`white`} />
                   ) : (
                     <>
-                      stake <GameCoin /> {details.price * (defaults?.data.default.cashRating ?? 0)}
+                      stake <GameCoin />{" "}
+                      {details.price * (defaults?.data.default.cashRating ?? 0)}
                     </>
                   )}
                 </div>

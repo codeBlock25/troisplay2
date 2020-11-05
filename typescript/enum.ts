@@ -98,8 +98,8 @@ export enum PenaltyOption {
 export enum CheckerType {
   won,
   lost,
-  unknown,
   draw,
+  unknown,
 }
 
 export enum errorType {

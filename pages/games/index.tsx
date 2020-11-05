@@ -700,6 +700,8 @@ const defaults: AxiosResponse<{
             </div>
             <div className="game_content">
               {viewing === Viewing.current ? (
+                my_games?.data?.games.length === 0 ?
+                <p className="none">You don't have any active games, hit the play game button to add</p>:
                 my_games?.data?.games.map((game) => {
                   return (
                     <GameView
@@ -733,8 +735,10 @@ const defaults: AxiosResponse<{
                   );
                 })
               ) : viewing === Viewing.notification ? (
-                <p>No nofications yet</p>
-              ) : viewing === Viewing.request ? (
+                <p className="none">No nofications yet</p>
+                ) : viewing === Viewing.request ? (
+                    requests.data.requests.length===0 ? 
+                <p className="none">No requests yet</p>:
                 requests.data.requests.map((request) => {
                   return (
                     <GameView

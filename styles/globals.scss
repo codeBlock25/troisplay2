@@ -8,7 +8,6 @@
   box-sizing: border-box;
   text-decoration: none;
   font-family: mon;
-  user-select: none;
 
   p,
   div,
@@ -24,6 +23,21 @@
   a {
     transition: all .4s;
   }
+}
+
+@supports (-webkit-touch-callout: none) {
+  * {
+    white-space: nowrap;
+    overflow: scroll;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+textarea,
+input {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  user-select: text;
 }
 
 body {

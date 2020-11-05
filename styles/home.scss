@@ -1,8 +1,5 @@
 @import "./variable";
 
-
-
-
 .right_min {
     position: absolute;
     top: 20px;
@@ -155,6 +152,10 @@
     }
 }
 
+.none {
+    color: white;
+}
+
 .Index {
     width: 100vw;
     height: 100vh;
@@ -162,6 +163,8 @@
     flex-direction: column;
     overflow: hidden;
     overflow-y: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
     background-color: #0b0b0d;
     scroll-behavior: smooth;
     filter: blur(0px);
@@ -570,6 +573,12 @@
             overflow: hidden;
             overflow-x: auto;
 
+            @media (min-width: 1000px) {
+                align-self: center;
+                width: fit-content !important;
+                min-width: fit-content !important;
+            }
+
 
             .table {
                 width: fit-content;
@@ -662,7 +671,7 @@
             min-width: 100px;
             height: 50px;
             padding: 0 10px;
-            line-height: 50px;
+            line-height: 30px;
             color: white;
             align-self: center;
             font-family: mon_bold;

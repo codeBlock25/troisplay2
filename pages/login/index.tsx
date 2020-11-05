@@ -74,7 +74,6 @@ export default function Login() {
           setKey_error(errorType.error);
           return;
         }
-        setLoginState(false);
         toast(dispatch, {
           msg:
             "Sorry, we could not communicate with the troisplay server please check you internet connection.",

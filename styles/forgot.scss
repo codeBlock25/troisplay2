@@ -59,6 +59,8 @@
     align-items: center;
     overflow: hidden;
     overflow-y: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
 
     @media (max-width: 670px) {
       display: none;
@@ -114,6 +116,8 @@
     padding: 0 20px;
     overflow: hidden;
     overflow-y: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
     flex-direction: column;
 
     @media (max-width: 670px) {

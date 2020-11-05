@@ -170,6 +170,8 @@
             overflow-y: auto;
             padding-top: 20px;
             padding-bottom: 50px;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
         }
 
         &.view_game {
@@ -203,6 +205,8 @@
             border-radius: 10px;
             overflow: hidden;
             overflow-y: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
 
             &.dark-mode {
                 background-color: #1919199e;
@@ -358,12 +362,12 @@
             display: flex;
             padding: 0 10px;
             font-size: 13px;
-            color:  $defaultColor;
+            color: $defaultColor;
             font-family: mon_med;
             justify-content: center;
             text-align: center;
         }
-        
+
         .txt {
             width: 100%;
             height: fit-content;
@@ -691,17 +695,17 @@
             }
         }
 
-        @media (max-width: 800px) {
-            width: 70%;
-        }
+        // @media (max-width: 800px) {
+        //     width: 70%;
+        // }
 
-        @media (max-width: 600px) {
-            width: 80%;
-        }
+        // @media (max-width: 600px) {
+        //     width: 80%;
+        // }
 
-        @media (max-width: 400px) {
-            width: 95%;
-        }
+        // @media (max-width: 400px) {
+        //     width: 95%;
+        // }
 
         .spinner {
             width: 200px;
@@ -745,8 +749,9 @@
         }
 
         .btn_ {
-            width: 200px;
-            min-width: 200px;
+            width: 40%;
+            max-width: 240px;
+            min-width: 140px;
             height: 45px;
             cursor: pointer;
             margin: 15px auto;
@@ -854,7 +859,8 @@
                             color: $defaultColor;
                         }
 
-                        box-shadow: 0px 5px 10px #0000005c, 0px -3px 10px #00651026;
+                        box-shadow: 0px 5px 10px #0000005c,
+                        0px -3px 10px #00651026;
                     }
 
                     * {

@@ -15,15 +15,19 @@
         flex-direction: column;
         overflow: hidden;
         overflow-y: auto;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
         padding-top: 70px;
+
         &::-webkit-scrollbar {
             width: 0;
             display: none;
         }
-    
+
         &::-webkit-scrollbar-thumb {
             width: 0;
-            display: none;;
+            display: none;
+            ;
             border-radius: 10px;
         }
 
@@ -44,7 +48,7 @@
             display: flex;
             overflow: hidden;
             background-color: #131212;
-            
+
             &::before {
                 content: "";
                 width: 100%;
@@ -176,6 +180,8 @@
         flex-direction: column;
         overflow: hidden;
         overflow-y: auto;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
         background-color: #151515;
         padding-top: 80px;
 
