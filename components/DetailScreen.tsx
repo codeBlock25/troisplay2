@@ -11,17 +11,17 @@ import { setAction, setGameDetails, toast } from "../store/action";
 import { useDispatch } from 'react-redux';
 import { SyncLoader } from "react-spinners";
 import { useFlutterwave } from "flutterwave-react-v3";
-import { config } from "../constant";
+import { config, NAIRA } from "../constant";
 
 export default function DetailScreen() {
     const dispatch = useDispatch()
     const swRef1: MutableRefObject<HTMLDivElement | null> = useRef();
     const coinRef: MutableRefObject<HTMLSpanElement | null> = useRef();
     const coinRef2: MutableRefObject<HTMLSpanElement | null> = useRef();
-  const [dateintime, setDateintime] = useState("");
-  const swRef: MutableRefObject<HTMLDivElement | null> = useRef();
-  const [playLoader, setPlayerLoader] = useState<boolean>(false);
-  const [fundTp, setFund] = useState<number>(0);
+    const [dateintime, setDateintime] = useState("");
+    const swRef: MutableRefObject<HTMLDivElement | null> = useRef();
+    const [playLoader, setPlayerLoader] = useState<boolean>(false);
+    const [fundTp, setFund] = useState<number>(0);
     const {push} = useRouter()
     const defaults: AxiosResponse<{
         default: {
@@ -48,96 +48,102 @@ export default function DetailScreen() {
           min_stack_custom: number;
           referRating: number;
         };
-      }> = useQueryCache().getQueryData("defaults");
-      const record: AxiosResponse<{
-        player: {
-          userID: string;
-          full_name: string;
-          phone_number: string;
-          playerpic: string;
-          playername: string;
-          email: string;
-          location: string;
-        };
-        deviceSetup: {
-          userID: string;
-          isDarkMode: boolean;
-          remember: boolean;
-          online_status: boolean;
-          email_notification: boolean;
-          app_notification: boolean;
-          mobile_notification: boolean;
-        };
-        referal: {
-          userID: string;
-          activeReferal: number;
-          inactiveReferal: number;
-          refer_code: string;
-        };
-        wallet: {
-          userID: string;
-          currentCoin: number;
-          pendingCoin: number;
-        };
-        gamerecord: {
-          userID: string;
-          date_mark: Date;
-          game: Games;
-          won: string;
-          earnings: number;
-        }[];
-        cashwallet: {
-          userID: string;
-          currentCash: number;
-          pendingCash: number;
-        };
-      }> = useQueryCache().getQueryData("records");
+    }> = useQueryCache().getQueryData("defaults");
+  
+    const record: AxiosResponse<{
+      player: {
+        userID: string;
+        full_name: string;
+        phone_number: string;
+        playerpic: string;
+        playername: string;
+        email: string;
+        location: string;
+      };
+      deviceSetup: {
+        userID: string;
+        isDarkMode: boolean;
+        remember: boolean;
+        online_status: boolean;
+        email_notification: boolean;
+        app_notification: boolean;
+        mobile_notification: boolean;
+      };
+      referal: {
+        userID: string;
+        activeReferal: number;
+        inactiveReferal: number;
+        refer_code: string;
+      };
+      wallet: {
+        userID: string;
+        currentCoin: number;
+        pendingCoin: number;
+      };
+      gamerecord: {
+        userID: string;
+        date_mark: Date;
+        game: Games;
+        won: string;
+        earnings: number;
+      }[];
+      cashwallet: {
+        userID: string;
+        currentCash: number;
+        pendingCash: number;
+      };
+    }> = useQueryCache().getQueryData("records");
     
-      const Share = async () => {
-        if (navigator.share) {
-          await navigator
-            .share({
-              title: "Troisplay",
-              text:
-                "Check out the best playform to have fun and get paid",
-              url: `https://troisplay2.vercel.app/signup/${record?.data.referal?.refer_code}`,
-            })
-            .then(() => console.log("Share was successful."))
-            .catch((error) => console.log("Sharing failed", error));
-        } else {
-          if (navigator.clipboard) {
-            await navigator.clipboard.writeText(
-              `https://troisplay2.vercel.app/signup/${record?.data.referal?.refer_code}`
-            );
-              toast(dispatch, {msg: "Your Link has been copied, paste anywhere and share to gain more coins."}).success()
-          }
+    const Share = async () => {
+      if (navigator.share) {
+        await navigator
+          .share({
+            title: "Troisplay",
+            text:
+              "Check out the best playform to have fun and get paid",
+            url: `https://troisplay2.vercel.app/signup/${record?.data.referal?.refer_code}`,
+          })
+          .then(() => console.log("Share was successful."))
+          .catch((error) => console.log("Sharing failed", error));
+      } else {
+        if (navigator.clipboard) {
+          await navigator.clipboard.writeText(
+            `https://troisplay2.vercel.app/signup/${record?.data.referal?.refer_code}`
+          );
+          toast(dispatch, { msg: "Your Link has been copied, paste anywhere and share to gain more coins." }).success();
         }
-    }
-      const lottieLoader = useCallback(() => {
-        Lottie.loadAnimation({
-        container: coinRef.current,
-        autoplay: true,
-        loop: true,
-        renderer: "canvas",
-        animationData: require("../lottie/coin.json"),
-        });
-        Lottie.loadAnimation({
-        container: coinRef2.current,
-        autoplay: true,
-        loop: true,
-        renderer: "canvas",
-        animationData: require("../lottie/coin.json"),
-        });
+      }
+    };
+
+    const lottieLoader = useCallback(() => {
+      Lottie.loadAnimation({
+      container: coinRef.current,
+      autoplay: true,
+      loop: true,
+      renderer: "canvas",
+      animationData: require("../lottie/coin.json"),
+      });
+      Lottie.loadAnimation({
+      container: coinRef2.current,
+      autoplay: true,
+      loop: true,
+      renderer: "canvas",
+      animationData: require("../lottie/coin.json"),
+      });
     }, []);
-  useEffect(() => {
-    lottieLoader();
-  }, [lottieLoader]);
+  
+    useEffect(() => {
+      lottieLoader();
+    }, [lottieLoader]);
+
   const spin: AxiosResponse<{
     spin_details: {
       currentTime: Date,
       gameTime: Date,
       isPlayable: boolean,
-    },}> = useQueryCache().getQueryData("spins")
+    },
+  }> = useQueryCache().getQueryData("spins");
+
   useEffect(() => {
     let countdownEvt = setInterval(() => {
     if (spin) {
@@ -152,7 +158,6 @@ export default function DetailScreen() {
     };
   }, [spin]);
   
-
   return (
     <>
       <div className="cover">
@@ -179,7 +184,7 @@ export default function DetailScreen() {
             <span className="time">Next Spin {dateintime}</span>
             <h3 className="title">Cash</h3>
             <span className="price">
-              $ {record?.data?.cashwallet?.currentCash.toLocaleString() ?? 0}
+              <NAIRA/>{" "} {record?.data?.cashwallet?.currentCash.toLocaleString() ?? 0}
             </span>
             <div className="action">
               <span

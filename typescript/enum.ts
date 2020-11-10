@@ -124,3 +124,9 @@ export enum GameRec {
   lose,
   draw,
 }
+
+export enum TwoButtonLoader {
+  first_loading,
+  second_loading,
+  no_loading,
+}

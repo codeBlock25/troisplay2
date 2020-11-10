@@ -95,9 +95,9 @@
             max-width: 450px;
             display: flex;
             flex-direction: column;
-            height: 35%;
+            height: 28%;
             min-height: fit-content;
-            max-height: 400px;
+            max-height: 320px;
             padding: 10px;
             background-color: #232123;
             border-radius: 10px;
@@ -124,6 +124,30 @@
                 padding: 10px 20px;
                 justify-content: center;
                 text-align: center;
+            }
+
+            .txt_ {
+                width: 100%;
+                height: fit-content;
+                min-height: fit-content;
+                display: inline-block;
+                text-align: center;
+                justify-content: center;
+
+                span {
+                    width: fit-content;
+                    padding: 0 7px;
+                    font-family: mon_bold;
+                    color: #ef8d11;
+                }
+
+                color: #969696;
+            }
+
+            .txt_sub {
+                text-align: center;
+                font-size: 14px;
+                color: #969696;
             }
 
             .btn {

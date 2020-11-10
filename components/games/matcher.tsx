@@ -9,7 +9,14 @@ import {
 import Link from "next/link";
 import { isEmpty } from "lodash";
 import { SyncLoader } from "react-spinners";
-import { Games, modalType, NotiErrorType, PayType, PlayerType } from "../../typescript/enum";
+import {
+  Games,
+  modalType,
+  NotiErrorType,
+  PayType,
+  PlayerType,
+  TwoButtonLoader,
+} from "../../typescript/enum";
 import { reducerType } from "../../typescript/interface";
 import { getPrice, getToken } from "../../functions";
 import { CloseIcon, GameCoin } from "../../icon";
@@ -20,7 +27,9 @@ const GuessMaster = memo(function () {
   const dispatch = useDispatch();
   const [prize, setPrice] = useState<number>(0);
   const [playCount, setPlaycount] = useState<number>(1);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<TwoButtonLoader>(
+    TwoButtonLoader.no_loading
+  );
   const [done, setDone] = useState<boolean>(false);
   const [num, setNum] = useState<number>(1);
   const [view1, setView1] = useState<boolean>(true);
@@ -91,8 +100,12 @@ const GuessMaster = memo(function () {
     payWith: PayType
   ): Promise<void> => {
     let token = getToken()
-    if (loading || num === 0) return;
-    setLoading(true);
+    if (loading !== TwoButtonLoader.no_loading || num === 0) return;
+    if (PayType.cash === payWith) {
+      setLoading(TwoButtonLoader.first_loading);
+    } else {
+      setLoading(TwoButtonLoader.second_loading);
+    }
     if (isEmpty(details.id)) {
       await Axios({
         method: "POST",
@@ -103,6 +116,7 @@ const GuessMaster = memo(function () {
         data: {
           price_in_cash: details.price,
           gameInPut: num,
+          payWith,
         },
       })
         .then(
@@ -124,21 +138,25 @@ const GuessMaster = memo(function () {
             };
           }>) => {
             setGameDetails(dispatch, {
-            player: PlayerType.first,
-            game: Games.non,
-            id: undefined,
-            price: 0,
-          });
-    toast(dispatch, {
-      msg: `Congratulations!!!! You have successfully played a game, please wait for Player 2's challange.`,
-    }).success();
-  }
-)
-.catch((err) => {
-  if (err.message === "Request failed with status code 401") {
-    toast(dispatch, {msg: `Insufficient Fund, please fund your ${payWith === PayType.cash?"cash wallet":"coin wallet"} to continue the game.`}).fail()
-    return;
-  }
+              player: PlayerType.first,
+              game: Games.non,
+              id: undefined,
+              price: 0,
+            });
+            toast(dispatch, {
+              msg: `Congratulations!!!! You have successfully played a game, please wait for Player 2's challange.`,
+            }).success();
+          }
+        )
+        .catch((err) => {
+          if (err.message === "Request failed with status code 401") {
+            toast(dispatch, {
+              msg: `Insufficient Fund, please fund your ${
+                payWith === PayType.cash ? "cash wallet" : "coin wallet"
+              } to continue the game.`,
+            }).fail();
+            return;
+          }
           if (err.message === "Request failed with status code 404") {
             toast(dispatch, {
               msg:
@@ -146,15 +164,17 @@ const GuessMaster = memo(function () {
             }).fail();
             return;
           }
-  toast(dispatch, {msg: `An Error occured could not connect to troisplay game server please check you interner connection and Try Again.`}).error()
-})
+          toast(dispatch, {
+            msg: `An Error occured could not connect to troisplay game server please check you interner connection and Try Again.`,
+          }).error();
+        })
         .finally(() => {
-          setLoading(false);
-          setNum(0);
+          setLoading(TwoButtonLoader.no_loading);
+          setNum(1);
         });
     } else {
       if (played.includes(num)) {
-        setLoading(false);
+        setLoading(TwoButtonLoader.no_loading);
         return;
       }
       await Axios({
@@ -179,7 +199,11 @@ const GuessMaster = memo(function () {
             setPlaycount((prev) => prev + 1);
             if (!winner) {
               if (playCount === 3) {
-                notify(dispatch, {type: NotiErrorType.error, msg: "Sorry you lost this game you can try other games for a better chances.", isOpen: modalType.open})
+                notify(dispatch, {
+                  type: NotiErrorType.error,
+                  msg: "Sorry you lost this game.",
+                  isOpen: modalType.open,
+                });
                 setView1(true);
                 setView2(true);
                 setView3(true);
@@ -199,6 +223,11 @@ const GuessMaster = memo(function () {
               } else {
                 // !counting
                 setPlayed((prev) => [...prev, num]);
+                 toast(dispatch, {
+                   msg: `Sorry wrong number selected, You have ${
+                     3 - playCount
+                   } attemp(s) left!`,
+                 }).fail();
                 switch (num) {
                   case 1:
                     setView1(false);
@@ -227,7 +256,7 @@ const GuessMaster = memo(function () {
               }
               return;
             }
-            notify(dispatch, {isOpen: modalType.open, type: NotiErrorType.success,  msg: `Congratulations!!!! You have successfully played a game, please wait for Player 2's challange.`});
+            notify(dispatch, {isOpen: modalType.open, type: NotiErrorType.success,  msg: `Congratulations!!!! You won.`});
             setPlaycount(1);
             setView1(true);
             setView2(true);
@@ -251,7 +280,7 @@ const GuessMaster = memo(function () {
           toast(dispatch, {msg: "Communication error."}).error()
         })
         .finally(() => {
-          setLoading(false);
+          setLoading(TwoButtonLoader.no_loading);
         });
     }
   };
@@ -260,82 +289,82 @@ const GuessMaster = memo(function () {
     return (
       <div className={`gameworld ${theme}`}>
         <div className="world matcher">
-            <div
-              className="close_btn"
-              onClick={() => {
-                if (isEmpty(details.id)) {
-                  setGameDetails(dispatch, {
-                    player: PlayerType.first,
-                    game: Games.non,
-                    id: undefined,
-                    price: 0,
-                  });
-                  setLoading(false);
-                  setPlaycount(1);
-                  setView1(true);
-                  setView2(true);
-                  setView3(true);
-                  setView4(true);
-                  setView5(true);
-                  setView6(true);
-                  setView7(true);
-                  setNum(1);
-                  setPlayed([]);
-                  return;
-                }
-                exitWin(dispatch, {
-                  open: modalType.open,
-                  func: async () => {
-                    let token = getToken();
-                    await Axios({
-                      method: "POST",
-                      url: `${url}/games/roshambo/exit`,
-                      headers: {
-                        Authorization: `Bearer ${token}`,
-                      },
-                      data: {
-                        id: details.id,
-                      },
-                    })
-                      .then(() => {
-                        setLoading(false);
-                        setPlaycount(1);
-                        setView1(true);
-                        setView2(true);
-                        setView3(true);
-                        setView4(true);
-                        setView5(true);
-                        setNum(1);
-                        setPlayed([]);
-                        setGameDetails(dispatch, {
-                          player: PlayerType.first,
-                          game: Games.non,
-                          id: undefined,
-                          price: 0,
-                        });
-                      })
-                      .catch(() => {
-                        toast(dispatch, {
-                          msg: "Oops, An error occured.",
-                        }).error();
-                      });
-                  },
+          <div
+            className="close_btn"
+            onClick={() => {
+              if (isEmpty(details.id)) {
+                setGameDetails(dispatch, {
+                  player: PlayerType.first,
+                  game: Games.non,
+                  id: undefined,
+                  price: 0,
                 });
-              }}
-            >
-              <CloseIcon />
-            </div>
+                setLoading(TwoButtonLoader.no_loading);
+                setPlaycount(1);
+                setView1(true);
+                setView2(true);
+                setView3(true);
+                setView4(true);
+                setView5(true);
+                setView6(true);
+                setView7(true);
+                setNum(1);
+                setPlayed([]);
+                return;
+              }
+              exitWin(dispatch, {
+                open: modalType.open,
+                func: async () => {
+                  let token = getToken();
+                  await Axios({
+                    method: "POST",
+                    url: `${url}/games/roshambo/exit`,
+                    headers: {
+                      Authorization: `Bearer ${token}`,
+                    },
+                    data: {
+                      id: details.id,
+                    },
+                  })
+                    .then(() => {
+                      setLoading(TwoButtonLoader.no_loading);
+                      setPlaycount(1);
+                      setView1(true);
+                      setView2(true);
+                      setView3(true);
+                      setView4(true);
+                      setView5(true);
+                      setNum(1);
+                      setPlayed([]);
+                      setGameDetails(dispatch, {
+                        player: PlayerType.first,
+                        game: Games.non,
+                        id: undefined,
+                        price: 0,
+                      });
+                    })
+                    .catch(() => {
+                      toast(dispatch, {
+                        msg: "Oops, An error occured.",
+                      }).error();
+                    });
+                },
+              });
+            }}
+          >
+            <CloseIcon />
+          </div>
           <h3 className="title">Pick A number</h3>
           <p className={`txt theme ${theme}`}>
             NOTE: You Pick your moves by clicking/tapping the icons to each
             option, hit play when yo have made you choice.
           </p>
-          {
-            details.player === PlayerType.second || !isEmpty(details.id) && (
+          {details.player === PlayerType.second ||
+            (!isEmpty(details.id) && (
               <p className={`sub_txt theme ${theme}`}>
-                You have used {playCount -1} out your 3 trials
-              </p>)
-          }
+                You have used {playCount - 1} out your 3 trials
+              </p>
+            ))}
           <div className="num">
             <span>{num}</span>
           </div>
@@ -381,11 +410,33 @@ const GuessMaster = memo(function () {
               5
             </div>
           </div>
-          <div className={`btn_ theme ${theme}`} onClick={()=>matchPlay(PayType.cash)}>
-            {loading ? <SyncLoader size="10px" color={`white`} /> : <>stake ₦ {getPrice(details.game, details.price, defaults.data.default)}</>}
+          <div
+            className={`btn_ theme ${theme}`}
+            onClick={() => matchPlay(PayType.cash)}
+          >
+            {loading === TwoButtonLoader.first_loading ? (
+              <SyncLoader size="10px" color={`white`} />
+            ) : (
+              <>
+                stake ₦{" "}
+                {details.price}
+              </>
+            )}
           </div>
-          <div className={`btn_ theme ${theme}`} onClick={()=>matchPlay(PayType.coin)}>
-            {loading ? <SyncLoader size="10px" color={`white`} /> : <> stake <GameCoin /> {getPrice(details.game, details.price, defaults.data.default) * (defaults?.data.default.cashRating ?? 0)}</>}
+          <div
+            className={`btn_ theme ${theme}`}
+            onClick={() => matchPlay(PayType.coin)}
+          >
+            {loading === TwoButtonLoader.second_loading ? (
+              <SyncLoader size="10px" color={`white`} />
+            ) : (
+              <>
+                {" "}
+                stake <GameCoin />{" "}
+                {details.price *
+                  (defaults?.data.default.cashRating ?? 0)}
+              </>
+            )}
           </div>
         </div>
       </div>

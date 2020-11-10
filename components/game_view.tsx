@@ -71,11 +71,6 @@ const GameView = memo(function ({
             <span className="coin">
               <GameCoin width={10} height={10} /> {v2 ?? 0}
             </span>
-            <span className="Members">$ {v3 ?? 0}</span>
-            <span className="stake">$ {v1 ?? 0}</span>
-            <span className="coin">
-              <GameCoin width={10} height={10} /> {v2 ?? 0}
-            </span>
             <span className="Win">$ {v3 ?? 0}</span>
           </>
         ) : type === "room" ? (

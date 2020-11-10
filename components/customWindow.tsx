@@ -1,19 +1,82 @@
-import { Button, TextField } from "@material-ui/core";
-import React, { useState } from "react";
+import {
+  Button,
+  Checkbox,
+  FormControlLabel,
+  TextField,
+  Typography,
+} from "@material-ui/core";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { GameCoin } from "../icon";
-import { choices, Games, modalType, PayType } from "../typescript/enum";
+import {
+  choices,
+  GameRec,
+  Games,
+  modalType,
+  PayType,
+} from "../typescript/enum";
 import { reducerType } from "../typescript/interface";
 import moment from "moment";
 import { setCustomWindow, toast } from "../store/action";
-import Axios from "axios";
+import Axios, { AxiosResponse } from "axios";
 import { url } from "../constant";
 import { getToken } from "../functions";
+import { useQueryCache } from "react-query";
+import { isEmpty, isString } from "lodash";
 
 export default function CustomWindow() {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [answer, setAnswer] = useState<string>("");
+  const [winner, setWinner] = useState<GameRec>(GameRec.win);
+  const record: AxiosResponse<{
+    user: {
+      full_name: string;
+      phone_number: string;
+    };
+    player: {
+      userID: string;
+      full_name: string;
+      phone_number: string;
+      playerpic: string;
+      playername: string;
+      email: string;
+      location: string;
+    };
+    deviceSetup: {
+      userID: string;
+      isDarkMode: boolean;
+      remember: boolean;
+      online_status: boolean;
+      email_notification: boolean;
+      app_notification: boolean;
+      mobile_notification: boolean;
+    };
+    referal: {
+      userID: string;
+      activeReferal: number;
+      inactiveReferal: number;
+      refer_code: string;
+    };
+    wallet: {
+      userID: string;
+      currentCoin: number;
+      pendingCoin: number;
+    };
+    gamerecord: {
+      userID: string;
+      date_mark: Date;
+      game: Games;
+      won: string;
+      earnings: number;
+    }[];
+    cashwallet: {
+      userID: string;
+      currentCash: number;
+      pendingCash: number;
+    };
+  }> = useQueryCache().getQueryData("records");
+
   const { window } = useSelector<
     reducerType,
     {
@@ -39,7 +102,10 @@ export default function CustomWindow() {
               endGameTime: Date;
               choice: choices;
             };
-            player2?: {};
+            player2?: {
+              answer: string;
+              waiting: boolean;
+            };
           };
         };
       };
@@ -49,6 +115,9 @@ export default function CustomWindow() {
       window: state.event.customWindow,
     };
   });
+  useEffect(() => {
+    setWinner(GameRec.win);
+  }, [window]);
   const handleJoin = async (payWith: PayType) => {
     if (loading) return;
     setLoading(true);
@@ -100,7 +169,6 @@ export default function CustomWindow() {
           {moment(
             window.request?.battleScore?.player1?.endDate ?? new Date()
           ).format("Do MMMM, YYYY")}
-          {"  "}
           {moment(
             window.request?.battleScore.player1.endGameTime ?? new Date()
           ).format("hh:mm a")}
@@ -116,7 +184,8 @@ export default function CustomWindow() {
           </b>
           {window?.request?.price_in_coin}
         </p>
-        {!window?.request?.battleScore?.player2 ? (
+        {(record?.data?.player?.userID ?? "") ===
+          (window?.request?.members[0] ?? "") ? (
           <TextField
             variant="filled"
             className="inputBox"
@@ -124,15 +193,61 @@ export default function CustomWindow() {
             value={answer}
             onChange={(e) => setAnswer(e.target.value)}
           />
-        ) : (
-          <></>
-        )}
+        ) :  isEmpty(window?.request?.battleScore?.player2) ? (
+          <div className="center">
+            <p className="text" style={{ padding: "20px 0" }}>
+              Waiting for player 2
+            </p>
+            </div>
+          )
+         : (<div className="center">
+              <Typography variant="body2">
+                What the correct anser to this games
+              </Typography>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={winner === GameRec.win}
+                    onChange={(e) => {
+                      setWinner(e.target.checked ? GameRec.win : GameRec.lose);
+                    }}
+                    name="checkedA"
+                  />
+                }
+                label={`${
+                  isString(window?.request?.battleScore?.player1?.answer)
+                    ? window?.request?.battleScore?.player1?.answer
+                    : ""
+                }`}
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={winner === GameRec.lose}
+                    onChange={(e) => {
+                      setWinner(e.target.checked ? GameRec.lose : GameRec.win);
+                    }}
+                    name="checkedB"
+                  />
+                }
+                label={`${
+                  window?.request?.battleScore?.player2?.answer ?? ""
+                } `}
+              />
+            </div>
+          )}
         <div className="action">
-          {window?.request?.battleScore?.player2 ? (
+          {isEmpty(window?.request?.battleScore?.player2) &&
+          (
+            (record?.data?.player?.userID ?? "") ===
+            (window?.request?.members[0] ?? "")
+          ) ? (
             <Button
               className="btn"
               onClick={() => {
+                console.log("kjh");
               }}
+              disabled={!isEmpty(window?.request?.battleScore?.player2)}
             >
               Judge
             </Button>

@@ -22,6 +22,7 @@ import {
   PlayerType,
   PlayType,
   RoshamboOption,
+  TwoButtonLoader,
 } from "../../typescript/enum";
 import { ActionType, reducerType } from "../../typescript/interface";
 import { getPrice, getToken } from "../../functions";
@@ -30,7 +31,9 @@ import { useQueryCache } from "react-query";
 export default function Roshambo() {
   const dispatch: (t: ActionType) => void = useDispatch();
   const [isDemoPlay, setDemoState] = useState<boolean>(true);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<TwoButtonLoader>(
+    TwoButtonLoader.no_loading
+  );
   const [round1knowState, setKnownState1] = useState<CheckerType>(
     CheckerType.unknown
   );
@@ -131,9 +134,13 @@ export default function Roshambo() {
   const theme = "dark-mode";
   const handleSubmit = async (payWith?: PayType) => {
     let token = getToken();
-    if (loading) return;
-    setLoading(true);
+    if (loading !== TwoButtonLoader.no_loading) return;
     if (isEmpty(details.id)) {
+      if (payWith === PayType.cash) {
+        setLoading(TwoButtonLoader.first_loading);
+      } else {
+        setLoading(TwoButtonLoader.second_loading);
+      }
       await Axios({
         method: "POST",
         url: `${url}/games/roshambo`,
@@ -202,7 +209,7 @@ export default function Roshambo() {
           }).error();
         })
         .finally(() => {
-          setLoading(false);
+          setLoading(TwoButtonLoader.no_loading);
           setDemoState(true);
           setKnownState1(CheckerType.unknown);
           setKnownState2(CheckerType.unknown);
@@ -263,7 +270,7 @@ export default function Roshambo() {
           }).error();
         })
         .finally(() => {
-          setLoading(false);
+          setLoading(TwoButtonLoader.no_loading);
           setRound1({ round: 1, value: RoshamboOption.rock });
           setRound2({ round: 2, value: RoshamboOption.rock });
           setRound3({ round: 3, value: RoshamboOption.rock });
@@ -351,8 +358,9 @@ export default function Roshambo() {
               return;
           }
           if (final !== "no") {
-            setLoading(false);
+            setLoading(TwoButtonLoader.no_loading);
             setDemoState(true);
+            setPlayType(PlayType.non);
             setKnownState1(CheckerType.unknown);
             setKnownState2(CheckerType.unknown);
             setKnownState3(CheckerType.unknown);
@@ -440,7 +448,8 @@ export default function Roshambo() {
                     id: undefined,
                     price: 0,
                   });
-                  setLoading(false);
+                  setPlayType(PlayType.non);
+                  setLoading(TwoButtonLoader.no_loading);
                   setDemoState(true);
                   setKnownState1(CheckerType.unknown);
                   setKnownState2(CheckerType.unknown);
@@ -469,7 +478,7 @@ export default function Roshambo() {
                       },
                     })
                       .then(() => {
-                        setLoading(false);
+                        setLoading(TwoButtonLoader.no_loading);
                         setDemoState(true);
                         setKnownState1(CheckerType.unknown);
                         setKnownState2(CheckerType.unknown);
@@ -906,6 +915,11 @@ export default function Roshambo() {
                     });
                   }
                   setPlayType(PlayType.non);
+                  setKnownState1(CheckerType.unknown);
+                  setKnownState2(CheckerType.unknown);
+                  setKnownState3(CheckerType.unknown);
+                  setKnownState4(CheckerType.unknown);
+                  setKnownState5(CheckerType.unknown);
                   setGameDetails(dispatch, {
                     player: PlayerType.first,
                     game: Games.non,
@@ -925,7 +939,7 @@ export default function Roshambo() {
                 }}
               >
                 {isEmpty(details.id) ? (
-                  loading ? (
+                  loading === TwoButtonLoader.first_loading ? (
                     <SyncLoader size="10px" color={`white`} />
                   ) : (
                     "Play All"
@@ -946,7 +960,7 @@ export default function Roshambo() {
                     handleSubmit(PayType.cash);
                   }}
                 >
-                  {loading ? (
+                  {loading === TwoButtonLoader.first_loading ? (
                     <SyncLoader size="10px" color={`white`} />
                   ) : (
                     `stake ₦  ${details.price}`
@@ -958,7 +972,7 @@ export default function Roshambo() {
                     handleSubmit(PayType.coin);
                   }}
                 >
-                  {loading ? (
+                  {loading === TwoButtonLoader.second_loading ? (
                     <SyncLoader size="10px" color={`white`} />
                   ) : (
                     <>

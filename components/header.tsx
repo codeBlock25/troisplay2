@@ -48,17 +48,17 @@ const HeadFunc = memo(function ({
     data: spins,
   }: QueryResult<AxiosResponse<{
     spin_details: {
-      currentTime: Date,
-      gameTime: Date,
-      isPlayable: boolean,
-    },
+      currentTime: Date;
+      gameTime: Date;
+      isPlayable: boolean;
+    };
   }>> = useQuery("spins", async () => {
     let token = getToken();
     return await Axios.get(`${url}/games/spin/check-time`, {
       headers: { authorization: `Bearer ${token}` },
     });
   });
-  
+
   const {
     data: rooms,
   }: QueryResult<AxiosResponse<{
@@ -96,7 +96,7 @@ const HeadFunc = memo(function ({
       headers: { authorization: `Bearer ${token}` },
     });
   });
-  
+
   const {
     data: record,
     isLoading,
@@ -280,14 +280,14 @@ const HeadFunc = memo(function ({
       </section>
       <section className="bottom">
         <Link href="/games/settings">
-        <a
-          className="me_pic"
-          title="Account"
-          style={{
-            backgroundImage: `url(${url_media}${record?.data?.player?.playerpic})`,
-          }}
-        />
-            </Link>
+          <a
+            className="me_pic"
+            title="Account"
+            style={{
+              backgroundImage: `url(${url_media}${record?.data?.player?.playerpic})`,
+            }}
+          />
+        </Link>
         <Link href="/games">
           <a className="logo" />
         </Link>

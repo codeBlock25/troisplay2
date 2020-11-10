@@ -10,7 +10,7 @@ import {
   exitWin,
   notify, setGameDetails, toast,
 } from "../../store/action";
-import { CheckerType, GameRec, Games, modalType, NotiErrorType, PayType, PenaltyOption, PlayerType, PlayType } from "../../typescript/enum";
+import { CheckerType, GameRec, Games, modalType, NotiErrorType, PayType, PenaltyOption, PlayerType, PlayType, TwoButtonLoader } from "../../typescript/enum";
 import { reducerType } from "../../typescript/interface";
 import { useQueryCache } from "react-query";
 
@@ -18,7 +18,9 @@ import { useQueryCache } from "react-query";
 export default function Penalty_card() {
   const dispatch = useDispatch();
   const [isDemoPlay, setDemoState] = useState<boolean>(true);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<TwoButtonLoader>(
+    TwoButtonLoader.no_loading
+  );
   const [round1knowState, setKnownState1] = useState<CheckerType>(CheckerType.unknown);
   const [round2knowState, setKnownState2] = useState<CheckerType>(CheckerType.unknown);
   const [round3knowState, setKnownState3] = useState<CheckerType>(CheckerType.unknown);
@@ -109,9 +111,13 @@ export default function Penalty_card() {
   const theme = "dark-mode"
 
   const handleSubmit = async (payWith?: PayType) => {
-    if (loading) return;
+    if (loading !== TwoButtonLoader.no_loading) return;
     let token = getToken()
-    setLoading(true);
+    if(payWith === PayType.cash) {
+      setLoading(TwoButtonLoader.first_loading);
+    } else {
+      setLoading(TwoButtonLoader.second_loading);
+    }
     if (isEmpty(details.id)) {
       await Axios({
         method: "POST",
@@ -181,7 +187,7 @@ export default function Penalty_card() {
           }).error();
         })
         .finally(() => {
-          setLoading(false);
+                        setLoading(TwoButtonLoader.no_loading);
           setDemoState(true);
           setRound1({ round: 1, value: PenaltyOption.left });
           setRound2({ round: 2, value: PenaltyOption.left });
@@ -245,7 +251,7 @@ export default function Penalty_card() {
           }).error();
         })
         .finally(() => {
-          setLoading(false);
+                        setLoading(TwoButtonLoader.no_loading);
           setDemoState(true);
           setRound1({ round: 1, value: PenaltyOption.left });
           setRound2({ round: 2, value: PenaltyOption.left });
@@ -304,7 +310,7 @@ export default function Penalty_card() {
               return;
           }
           if (final) {
-            setLoading(false);
+                        setLoading(TwoButtonLoader.no_loading);
             setDemoState(true);
             setKnownState1(CheckerType.unknown);
             setKnownState2(CheckerType.unknown);
@@ -359,7 +365,7 @@ if (price >0) {
       <div className={`gameworld theme ${theme}`}>
         {playType === PlayType.non && details.player === PlayerType.second ? (
           <div className="container">
-          <h3 className="title">Play format.</h3>
+            <h3 className="title">Play format.</h3>
             <div className="content">
               <div className="action">
                 <div
@@ -383,10 +389,9 @@ if (price >0) {
           </div>
         ) : (
           <div className="world spin penalty">
-              <div
-                className="close_btn"
-                onClick={() => {
-                  
+            <div
+              className="close_btn"
+              onClick={() => {
                 if (isEmpty(details.id)) {
                   setGameDetails(dispatch, {
                     player: PlayerType.first,
@@ -394,7 +399,7 @@ if (price >0) {
                     id: undefined,
                     price: 0,
                   });
-                  setLoading(false);
+                        setLoading(TwoButtonLoader.no_loading);
                   setDemoState(true);
                   setKnownState1(CheckerType.unknown);
                   setKnownState2(CheckerType.unknown);
@@ -423,7 +428,7 @@ if (price >0) {
                       },
                     })
                       .then(() => {
-                        setLoading(false);
+                        setLoading(TwoButtonLoader.no_loading);
                         setDemoState(true);
                         setKnownState1(CheckerType.unknown);
                         setKnownState2(CheckerType.unknown);
@@ -449,11 +454,10 @@ if (price >0) {
                       });
                   },
                 });
-              
-                }}
-              >
-                <CloseIcon />
-              </div>
+              }}
+            >
+              <CloseIcon />
+            </div>
             <h3 className="title">
               {isEmpty(details.id) ? "Taker" : "Goalkeeper"}
             </h3>
@@ -497,9 +501,17 @@ if (price >0) {
                   }}
                 >
                   {round1.value === PenaltyOption.left ? (
-                   details.player === PlayerType.first? <ForwardIcon /> : <GoalPostIcon/>
+                    details.player === PlayerType.first ? (
+                      <ForwardIcon />
+                    ) : (
+                      <GoalPostIcon />
+                    )
                   ) : round1.value === PenaltyOption.right ? (
-                   details.player === PlayerType.first? <ForwardIcon /> : <GoalPostIcon/>
+                    details.player === PlayerType.first ? (
+                      <ForwardIcon />
+                    ) : (
+                      <GoalPostIcon />
+                    )
                   ) : (
                     <></>
                   )}
@@ -563,9 +575,17 @@ if (price >0) {
                   }}
                 >
                   {round2.value === PenaltyOption.left ? (
-                   details.player === PlayerType.first? <ForwardIcon /> : <GoalPostIcon/>
+                    details.player === PlayerType.first ? (
+                      <ForwardIcon />
+                    ) : (
+                      <GoalPostIcon />
+                    )
                   ) : round2.value === PenaltyOption.right ? (
-                   details.player === PlayerType.first? <ForwardIcon /> : <GoalPostIcon/>
+                    details.player === PlayerType.first ? (
+                      <ForwardIcon />
+                    ) : (
+                      <GoalPostIcon />
+                    )
                   ) : (
                     <></>
                   )}
@@ -629,9 +649,17 @@ if (price >0) {
                   }}
                 >
                   {round3.value === PenaltyOption.left ? (
-                   details.player === PlayerType.first? <ForwardIcon /> : <GoalPostIcon/>
+                    details.player === PlayerType.first ? (
+                      <ForwardIcon />
+                    ) : (
+                      <GoalPostIcon />
+                    )
                   ) : round3.value === PenaltyOption.right ? (
-                   details.player === PlayerType.first? <ForwardIcon /> : <GoalPostIcon/>
+                    details.player === PlayerType.first ? (
+                      <ForwardIcon />
+                    ) : (
+                      <GoalPostIcon />
+                    )
                   ) : (
                     <></>
                   )}
@@ -695,9 +723,17 @@ if (price >0) {
                   }}
                 >
                   {round4.value === PenaltyOption.left ? (
-                   details.player === PlayerType.first? <ForwardIcon /> : <GoalPostIcon/>
+                    details.player === PlayerType.first ? (
+                      <ForwardIcon />
+                    ) : (
+                      <GoalPostIcon />
+                    )
                   ) : round4.value === PenaltyOption.right ? (
-                   details.player === PlayerType.first? <ForwardIcon /> : <GoalPostIcon/>
+                    details.player === PlayerType.first ? (
+                      <ForwardIcon />
+                    ) : (
+                      <GoalPostIcon />
+                    )
                   ) : (
                     <></>
                   )}
@@ -761,9 +797,17 @@ if (price >0) {
                   }}
                 >
                   {round5.value === PenaltyOption.left ? (
-                   details.player === PlayerType.first? <ForwardIcon /> : <GoalPostIcon/>
+                    details.player === PlayerType.first ? (
+                      <ForwardIcon />
+                    ) : (
+                      <GoalPostIcon />
+                    )
                   ) : round5.value === PenaltyOption.right ? (
-                   details.player === PlayerType.first? <ForwardIcon /> : <GoalPostIcon/>
+                    details.player === PlayerType.first ? (
+                      <ForwardIcon />
+                    ) : (
+                      <GoalPostIcon />
+                    )
                   ) : (
                     <></>
                   )}
@@ -800,45 +844,54 @@ if (price >0) {
             </div>
             {isEmpty(details.id) ? (
               <div className="game_action">
-              <div
-                className={`btn_ theme ${theme}`}
-                onClick={() => {
-                  handleSubmit(PayType.cash);
-                }}
-              >
-                {loading ? (
-                  <SyncLoader size="10px" color={`white`} />
-                ) : (
-                  `stake ₦ ${getPrice(details.game, details.price, defaults.data.default)}`
-                )}
+                <div
+                  className={`btn_ theme ${theme}`}
+                  onClick={() => {
+                    handleSubmit(PayType.cash);
+                  }}
+                >
+                  {loading === TwoButtonLoader.first_loading ? (
+                    <SyncLoader size="10px" color={`white`} />
+                  ) : (
+                    `stake ₦ ${getPrice(
+                      details.game,
+                      details.price,
+                      defaults.data.default
+                    )}`
+                  )}
+                </div>
+                <div
+                  className={`btn_ theme ${theme}`}
+                  onClick={() => {
+                    handleSubmit(PayType.coin);
+                  }}
+                >
+                  {loading === TwoButtonLoader.second_loading ? (
+                    <SyncLoader size="10px" color={`white`} />
+                  ) : (
+                    <>
+                      stake <GameCoin />{" "}
+                      {getPrice(
+                        details.game,
+                        details.price,
+                        defaults.data.default
+                      ) * (defaults?.data.default.cashRating ?? 0)}
+                    </>
+                  )}
+                </div>
               </div>
-              <div
-                className={`btn_ theme ${theme}`}
-                onClick={() => {
-                  handleSubmit(PayType.coin);
-                }}
-              >
-                {loading ? (
-                  <SyncLoader size="10px" color={`white`} />
-                ) : (
-                  <>
-                    stake <GameCoin /> {getPrice(details.game, details.price, defaults.data.default) * (defaults?.data.default.cashRating ?? 0)}
-                  </>
-                )}
-              </div>
-            </div>
             ) : playType === PlayType.all ? (
               <div
                 className={`btn_ theme ${theme}`}
                 onClick={() => handleSubmit()}
               >
                 {isEmpty(details.id) ? (
-                  loading ? (
+                  loading === TwoButtonLoader.first_loading ? (
                     <SyncLoader size="10px" color={`white`} />
                   ) : (
                     "Play"
                   )
-                ) : loading ? (
+                ) : loading === TwoButtonLoader.second_loading ? (
                   <SyncLoader size="10px" color={`white`} />
                 ) : (
                   "challange"

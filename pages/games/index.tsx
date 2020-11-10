@@ -39,7 +39,7 @@ import CustomGame, { choice } from "../../components/games/custom";
 import Gloryspin from "../../components/games/gloryspin";
 import BackWindow from "../../components/backwindow";
 import { Fab } from "@material-ui/core";
-import { Close } from "@material-ui/icons";
+import { ArrowDownward, Close } from "@material-ui/icons";
 import Bottompanel from "../../components/bottompanel";
 import { reducerType } from "../../typescript/interface";
 import DetailScreen from "../../components/DetailScreen";
@@ -85,7 +85,9 @@ export default function GamesScreen() {
       currentTime: Date,
       gameTime: Date,
       isPlayable: boolean,
-    },}> = useQueryCache().getQueryData("spins")
+    },
+  }> = useQueryCache().getQueryData("spins");
+
   useEffect(() => {
     let countdownEvt = setInterval(() => {
     if (spin) {
@@ -113,6 +115,7 @@ export default function GamesScreen() {
     game: Games.non,
     next: nextType.player,
   });
+
   const lottieLoader = useCallback(() => {
     Lottie.loadAnimation({
       container: coinRef.current,
@@ -136,6 +139,7 @@ export default function GamesScreen() {
       animationData: require("../../lottie/game.json"),
     });
   }, []);
+  
   useEffect(() => {
     lottieLoader();
   }, [lottieLoader]);
@@ -164,6 +168,7 @@ export default function GamesScreen() {
       _id: string;
     }[];
   }> = useQueryCache().getQueryData("my_games");
+
   const requests: AxiosResponse<{
     requests: {
       date: Date;
@@ -188,6 +193,7 @@ export default function GamesScreen() {
       };
     }[];
   }> = useQueryCache().getQueryData("requests");
+
 const defaults: AxiosResponse<{
   default: {
     commission_roshambo: {
@@ -265,17 +271,15 @@ const defaults: AxiosResponse<{
   useEffect(() => {
     beforePopState(({ url, as, options }) => {
       window.location.href = as
-      console.log(url, as, options)
       return confirm("Are you sure you want to leave this game?")
     })
   }, [])
-
   return (
     <>
       <Head>
         <title>Games - Troisplay</title>
       </Head>
-      {app_loading && (
+      { app_loading && (
         <>
           <AppLoader runText={runText} />
         </>
@@ -290,6 +294,7 @@ const defaults: AxiosResponse<{
       <Bottompanel />
       <BackWindow />
       <CustomWindow />
+      <Header setApp_loading={setApp_loading} setRunText={setRunText} />
       <PickerPlayer2
         game={spec.game}
         isOpen={p2}
@@ -299,7 +304,6 @@ const defaults: AxiosResponse<{
         specfunc={setSpec}
       />
       <ToastContainer />
-      <Header setApp_loading={setApp_loading} setRunText={setRunText} />
       <div
         className={`game_picker_view ${spec.isOpen ? "open" : ""}`}
         onClick={(e: any) => {
@@ -324,24 +328,24 @@ const defaults: AxiosResponse<{
               {getPrice(spec.game, spec.price, defaults?.data?.default) <= 0
                 ? ""
                 : `$ ${getPrice(
-                    spec.game,
-                    spec.price,
-                    defaults?.data?.default
-                  )}`}{" "}
+                  spec.game,
+                  spec.price,
+                  defaults?.data?.default
+                )}`}{" "}
             </p>
             <p className="txt">
               or Stake At{" "}
               {defaults?.data?.default.cashRating * spec.price === null ||
-              !(defaults?.data?.default.cashRating * spec.price) ? (
-                "0"
-              ) : (
-                <span
-                  style={{ marginLeft: 5, display: "flex", marginRight: 5 }}
-                >
-                  {"  "} <GameCoin />{" "}
-                  {`${defaults?.data?.default.cashRating * spec.price}`}
-                </span>
-              )}
+                !(defaults?.data?.default.cashRating * spec.price) ? (
+                  "0"
+                ) : (
+                  <span
+                    style={{ marginLeft: 5, display: "flex", marginRight: 5 }}
+                  >
+                    {"  "} <GameCoin />{" "}
+                    {`${defaults?.data?.default.cashRating * spec.price}`}
+                  </span>
+                )}
             </p>
             <div className="inputBox">
               <label htmlFor="number">Price</label>
@@ -369,29 +373,27 @@ const defaults: AxiosResponse<{
                   (spec.game === Games.roshambo
                     ? defaults.data.default.min_stack_roshambo
                     : spec.game === Games.penalth_card
-                    ? defaults.data.default.min_stack_penalty
-                    : spec.game === Games.matcher
-                    ? defaults.data.default.min_stack_guess_master
-                    : 0)
+                      ? defaults.data.default.min_stack_penalty
+                      : spec.game === Games.matcher
+                        ? defaults.data.default.min_stack_guess_master
+                        : 0)
                 ) {
                   toast(dispatch, {
-                    msg: `Can't play ${
-                      spec.game === Games.roshambo
-                        ? "Roshambo"
-                        : spec.game === Games.penalth_card
+                    msg: `Can't play ${spec.game === Games.roshambo
+                      ? "Roshambo"
+                      : spec.game === Games.penalth_card
                         ? "Penalty Card"
                         : spec.game === Games.matcher
-                        ? "Guess Master"
-                        : ""
-                    } game below the minimum price bar. Please stake something higher than ₦ ${
-                      spec.game === Games.roshambo
+                          ? "Guess Master"
+                          : ""
+                      } game below the minimum price bar. Please stake something higher than ₦ ${spec.game === Games.roshambo
                         ? defaults.data.default.min_stack_roshambo
                         : spec.game === Games.penalth_card
-                        ? defaults.data.default.min_stack_penalty
-                        : spec.game === Games.matcher
-                        ? defaults.data.default.min_stack_guess_master
-                        : 0
-                    } to continue`,
+                          ? defaults.data.default.min_stack_penalty
+                          : spec.game === Games.matcher
+                            ? defaults.data.default.min_stack_guess_master
+                            : 0
+                      } to continue`,
                   }).error();
                   return;
                 }
@@ -415,8 +417,8 @@ const defaults: AxiosResponse<{
               {playLoader ? (
                 <SyncLoader size="10px" color="white" />
               ) : (
-                "Proceed"
-              )}
+                  "Proceed"
+                )}
             </span>
           </div>
         ) : spec.next === nextType.player ? (
@@ -450,32 +452,32 @@ const defaults: AxiosResponse<{
             </div>
           </div>
         ) : (
-          <div className="container">
-            <h3 className="title">Game Manual</h3>
-            <p className="txt">{spec.manual}</p>
-            <span
-              className="btn"
-              onClick={() => {
-                if (
-                  spec.game === Games.lucky_geoge ||
-                  spec.game === Games.rooms
-                ) {
-                  setViewOpen(false);
-                  setP2(true);
-                  return;
-                }
-                setSpec((prev) => {
-                  return {
-                    ...prev,
-                    next: nextType.player,
-                  };
-                });
-              }}
-            >
-              confirm
+              <div className="container">
+                <h3 className="title">Game Manual</h3>
+                <p className="txt">{spec.manual}</p>
+                <span
+                  className="btn"
+                  onClick={() => {
+                    if (
+                      spec.game === Games.lucky_geoge ||
+                      spec.game === Games.rooms
+                    ) {
+                      setViewOpen(false);
+                      setP2(true);
+                      return;
+                    }
+                    setSpec((prev) => {
+                      return {
+                        ...prev,
+                        next: nextType.player,
+                      };
+                    });
+                  }}
+                >
+                  confirm
             </span>
-          </div>
-        )}
+              </div>
+            )}
       </div>
       <span
         className="new_game"
@@ -492,7 +494,7 @@ const defaults: AxiosResponse<{
             setViewOpen(false);
           }}
         >
-          <Close />
+          <ArrowDownward />
         </Fab>
         <div className="container">
           <div
@@ -689,9 +691,8 @@ const defaults: AxiosResponse<{
                   Request
                 </span>
                 <span
-                  className={`btn ${
-                    viewing === Viewing.notification ? "on" : ""
-                  }`}
+                  className={`btn ${viewing === Viewing.notification ? "on" : ""
+                    }`}
                   onClick={() => setViewing(Viewing.notification)}
                 >
                   Notification
@@ -700,87 +701,94 @@ const defaults: AxiosResponse<{
             </div>
             <div className="game_content">
               {viewing === Viewing.current ? (
-                my_games?.data?.games.length === 0 ?
-                <p className="none">You don't have any active games, hit the play game button to add</p>:
-                my_games?.data?.games.map((game) => {
-                  return (
-                    <GameView
-                      type={game.gameID === Games.rooms ? "room" : "normal"}
-                      name={
-                        game.gameID === Games.roshambo
-                          ? "Roshambo"
-                          : game.gameID === Games.penalth_card
-                          ? "Penelty Card"
-                          : game.gameID === Games.matcher
-                          ? "Guess Master"
-                          : game.gameID === Games.lucky_geoge
-                          ? "lucky judge"
-                          : game.gameID === Games.rooms
-                          ? `${game.gameDetail} room` ?? ""
-                          : ""
-                      }
-                      key={game._id}
-                      date={game.date}
-                      v1={
-                        game.price_in_value *
-                        (defaults?.data.default?.cashRating ?? 1)
-                      }
-                      v2={game.price_in_value}
-                      v3={game.gameMemberCount}
-                      id={game._id}
-                      cash={game.price_in_value}
-                      coin={game.price_in_coin}
-                      game={game.gameID}
-                    />
-                  );
-                })
+                my_games?.data?.games.length === 0 ? (
+                  <p className="none">
+                    You don't have any active games, hit the play game button to
+                    add
+                  </p>
+                ) : (
+                    my_games?.data?.games.map((game) => {
+                      return (
+                        <GameView
+                          type={game.gameID === Games.rooms ? "room" : "normal"}
+                          name={
+                            game.gameID === Games.roshambo
+                              ? "Roshambo"
+                              : game.gameID === Games.penalth_card
+                                ? "Penelty Card"
+                                : game.gameID === Games.matcher
+                                  ? "Guess Master"
+                                  : game.gameID === Games.lucky_geoge
+                                    ? "lucky judge"
+                                    : game.gameID === Games.rooms
+                                      ? `${game.gameDetail} room` ?? ""
+                                      : ""
+                          }
+                          key={game._id}
+                          date={game.date}
+                          v1={
+                            game.price_in_value *
+                            (defaults?.data.default?.cashRating ?? 1)
+                          }
+                          v2={game.price_in_value}
+                          v3={game.gameMemberCount}
+                          id={game._id}
+                          cash={game.price_in_value}
+                          coin={game.price_in_coin}
+                          game={game.gameID}
+                        />
+                      );
+                    })
+                  )
               ) : viewing === Viewing.notification ? (
                 <p className="none">No nofications yet</p>
-                ) : viewing === Viewing.request ? (
-                    requests.data.requests.length===0 ? 
-                <p className="none">No requests yet</p>:
-                requests.data.requests.map((request) => {
-                  return (
-                    <GameView
-                      type="custom"
-                      name={request?.battleScore?.player1?.title}
-                      key={request._id}
-                      date={request.date}
-                      v1={
-                        request.price_in_value *
-                        (defaults?.data.default?.cashRating ?? 1)
-                      }
-                      v2={request.price_in_value}
-                      v3={request.gameMemberCount}
-                      id={request._id}
-                      btn1func={() =>
-                        setCustomWindow(dispatch, {
-                          isOpen: modalType.open,
-                          request,
-                        })
-                      }
-                      btn2func={() =>
-                        exitWin(dispatch, {
-                          open: modalType.open,
-                          func: async () =>
-                            Axios.post(
-                              `${url}/games/custom/game`,
-                              { id: request._id },
-                              {
-                                headers: {
-                                  authorization: `Bearer ${getToken()}`,
-                                },
-                              }
-                            ),
-                          game: Games.custom_game,
-                        })
-                      }
-                      cash={request.price_in_value}
-                      coin={request.price_in_coin}
-                      game={request.gameID}
-                    />
-                  );
-                })
+              ) : viewing === Viewing.request ? (
+                requests.data.requests.length === 0 ? (
+                  <p className="none">No requests yet</p>
+                ) : (
+                    requests.data.requests.map((request) => {
+                      return (
+                        <GameView
+                          type="custom"
+                          name={request?.battleScore?.player1?.title}
+                          key={request._id}
+                          date={request.date}
+                          v1={
+                            request.price_in_value *
+                            (defaults?.data.default?.cashRating ?? 1)
+                          }
+                          v2={request.price_in_value}
+                          v3={request.gameMemberCount}
+                          id={request._id}
+                          btn1func={() =>
+                            setCustomWindow(dispatch, {
+                              isOpen: modalType.open,
+                              request,
+                            })
+                          }
+                          btn2func={() =>
+                            exitWin(dispatch, {
+                              open: modalType.open,
+                              func: async () =>
+                                Axios.post(
+                                  `${url}/games/custom/game`,
+                                  { id: request._id },
+                                  {
+                                    headers: {
+                                      authorization: `Bearer ${getToken()}`,
+                                    },
+                                  }
+                                ),
+                              game: Games.custom_game,
+                            })
+                          }
+                          cash={request.price_in_value}
+                          coin={request.price_in_coin}
+                          game={request.gameID}
+                        />
+                      );
+                    })
+                  )
               ) : null}
             </div>
           </div>

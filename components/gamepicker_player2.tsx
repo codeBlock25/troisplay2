@@ -192,7 +192,6 @@ export default function PickerPlayer2({
   const playOne = async (playWith: PayType, id: string, game: Games) => {
     let token = getToken();
       if (btn_loading) return;
-      console.log(id)
       setBtnLoading(true);
       await Axios({
         method: "POST",
@@ -312,17 +311,24 @@ export default function PickerPlayer2({
   return (
     <div className={`game_picker2 theme ${isOpen? "open":""} ${theme}`}>
       <div className={popState.game === Games.lucky_geoge || popState.game === Games.rooms ? "container_pop open" : "container_pop"} onClick={(e: any) => {
-        if (e.target?.classList.includes("container_pop")) {
+       try {
+          if (e?.target?.classList.contains("container_pop")) {
           setPopState(prev => {
             return {...prev, game: Games.non, func: null}
           })
         }
-      }}>
+      } catch (error) {
+        console.error(error, [e.target])
+      }
+    }}>
         <div className="content">
           <h3 className="title">{popState.game ===Games.lucky_geoge ? (popState.lucky?.battleScore.player1.title ?? ""): (popState.room?.room_name??"")}</h3>
           <div className="txt">{popState.game === Games.lucky_geoge ? (popState.lucky?.battleScore.player1.description ?? "") : ""}</div>
+          {popState.lucky && (<div className="txt_"> <span>Members</span> {popState.game === Games.lucky_geoge ? (popState.lucky?.members.length ?? "") : ""}</div>)}
           <p className="txt_sub">NOTE: By clicking play you accept the game policy.</p>
-          <Button className="btn" onClick={()=>popState.func()}>play</Button>
+          <Button className="btn" onClick={() => {
+            popState.func();
+          }}>play</Button>
         </div>
     </div>
       <div className="container">
@@ -355,7 +361,14 @@ export default function PickerPlayer2({
                           func: async () => await PlayLuckyGeogeGame(PayType.cash, btn_loading, setBtnLoading, game._id, dispatch, game.battleScore.player1.title).finally(() => {
                             setPopState(prev => {
                               return { ...prev, func: null, game: Games.non };
-                            })
+                            });
+                            close();
+                            setGameDetails(dispatch, {
+                              player: PlayerType.first,
+                              game: Games.non,
+                              id: undefined,
+                              price: 0,
+                            });
                           })
                         };
                       });
@@ -369,6 +382,13 @@ export default function PickerPlayer2({
                           func: async () => await PlayLuckyGeogeGame(PayType.coin, btn_loading, setBtnLoading, game._id, dispatch, game.battleScore.player1.title).finally(() => {
                             setPopState(prev => {
                               return { ...prev, func: null, game: Games.non };
+                            });
+                            close();
+                            setGameDetails(dispatch, {
+                              player: PlayerType.first,
+                              game: Games.non,
+                              id: undefined,
+                              price: 0,
                             });
                           })
                         };
@@ -422,9 +442,10 @@ export default function PickerPlayer2({
             </>
           ) : (
             open_games.map((game) => {
+              let loading = false;
               return (
                 <GameView
-                type="game_view"
+                  type="game_view"
                   name={
                     game.gameID === Games.roshambo
                       ? "Roshambo"
@@ -440,12 +461,26 @@ export default function PickerPlayer2({
                   cash={game.price_in_value}
                   coin={game.price_in_coin}
                   game={game.gameID}
-                  btn1view={btn_loading ? <SyncLoader size="10px" color="white" /> : null}
-                  btn2view={btn_loading ? <SyncLoader size="10px" color="white" /> : null}
-                  btn1func={()=>playOne(PayType.cash, game._id, game.gameID)}
-                  btn2func={()=>playOne(PayType.coin, game._id, game.gameID)}
+                  btn1view={
+                    loading ? <SyncLoader size="10px" color="white" /> : null
+                  }
+                  btn2view={
+                    loading ? <SyncLoader size="10px" color="white" /> : null
+                  }
+                  btn1func={() => {
+                    loading = true;
+                    playOne(PayType.cash, game._id, game.gameID).finally(
+                      () => (loading = false)
+                    );
+                  }}
+                  btn2func={() => {
+                    loading = true;
+                    playOne(PayType.coin, game._id, game.gameID).finally(
+                      () => (loading = false)
+                    );
+                  }}
                 />
-                );
+              );
             })
           )}
         </div>
