@@ -751,9 +751,7 @@
     display: block;
     flex-direction: column;
     overflow: hidden;
-    overflow-y: auto;
-    white-space: nowrap;
-    -webkit-overflow-scrolling: touch;
+    overflow-y: auto; 
     -ms-overflow-style: scrollbar;
     padding-top: 60px;
     background-color: $body;

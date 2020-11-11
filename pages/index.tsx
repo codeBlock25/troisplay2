@@ -1,6 +1,5 @@
 import Head from "next/head";
-import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
-import Lottie from "lottie-web";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import moment from "moment";
 import Link from "next/link";
 import { CloseIcon, MenuIcon } from "../icon";
@@ -12,10 +11,8 @@ import ToastContainer from "../components/toast";
 import { errorType, modalType } from "../typescript/enum";
 import { toast } from "../store/action";
 import { useDispatch } from "react-redux";
-
-const choose = require("../lottie/choose.json");
-const fund = require("../lottie/fund.json");
-const money = require("../lottie/money.json");
+import { Button, Fab } from "@material-ui/core";
+import { Facebook, Instagram, Twitter, WhatsApp } from "@material-ui/icons";
  
 export default function Index() {
   const dispatch = useDispatch();
@@ -37,7 +34,8 @@ export default function Index() {
   const [key2, setKey2] = useState<string>("");
   const [key_error, setKey_error] = useState<errorType>(errorType.non);
   const [key_error2, setKey_error2] = useState<errorType>(errorType.non);
-  const { push } = useRouter();
+  const { push, pathname, asPath } = useRouter();
+  const route = useRouter();
   const [refer_code, setRefer_code] = useState<string>("");
   const [full_name, setFull_name] = useState<string>("");
   const [loading, setloading] = useState<boolean>(false);
@@ -46,7 +44,7 @@ export default function Index() {
   const handleSubmitSignup = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (loading) return;
-      if (!(/^[0-9]*$/g.test(key2) && key2.length < 7)) return;
+    if (!(/^[0-9]*$/g.test(key2) && key2.length < 7)) return;
     if (!/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/g.test(phone_number2)) {
       setPhone_number_error2(errorType.error);
       return;
@@ -133,32 +131,20 @@ export default function Index() {
         setloading(false);
       });
   };
-  const loadAnimations = useCallback(() => {
-    Lottie.loadAnimation({
-      container: chooseContainerRef.current,
-      renderer: "canvas",
-      autoplay: true,
-      loop: true,
-      animationData: choose,
-    });
-    Lottie.loadAnimation({
-      container: moneyContainerRef.current,
-      renderer: "canvas",
-      autoplay: true,
-      loop: true,
-      animationData: money,
-    });
-    Lottie.loadAnimation({
-      container: fundContainerRef.current,
-      renderer: "canvas",
-      autoplay: true,
-      loop: true,
-      animationData: fund,
-    });
-  }, []);
+
   useEffect(() => {
-    loadAnimations();
-  }, [loadAnimations]);
+    if (asPath === "/#signup") {
+      setLoginState(false);
+      setSignUpState(true)
+    } else if (asPath === "/#login") {
+      setLoginState(true);
+      setSignUpState(false)
+    }
+    else {
+      setLoginState(false);
+      setSignUpState(false)
+    };
+  }, [asPath, pathname]);
   return (
     <>
       <Head>
@@ -180,21 +166,24 @@ export default function Index() {
         }}
       >
         <Link href="/#games">
+          <span className="link">Play</span>
+        </Link>
+        <Link href="/#games">
           <span className="link">Games</span>
         </Link>
         <Link href="/#how-it-works">
           <a className="link">How it works</a>
         </Link>
         <Link href="/#commission">
-          <a className="link">commission</a>
+          <a className="link">Download</a>
         </Link>
         <Link href="/#faq">
-          <a className="link">faq</a>
+          <a className="link">contact us</a>
         </Link>
         <span
           className="link_"
           onClick={() => {
-            setSignUpState(true);
+            push("/#signup");
           }}
         >
           join
@@ -213,7 +202,7 @@ export default function Index() {
           <button
             type="button"
             className="close_icon"
-            onClick={() => !loading && setLoginState(false)}
+            onClick={() => !loading && push("/")}
           >
             <CloseIcon />
           </button>
@@ -276,12 +265,7 @@ export default function Index() {
           <p className="link">
             Don't have an account?
             <Link href="#signup">
-              <a
-                onClick={() => {
-                  setLoginState(false);
-                  setSignUpState(true);
-                }}
-              >
+              <a>
                 click here
               </a>
             </Link>
@@ -293,7 +277,7 @@ export default function Index() {
           <button
             type="button"
             className="close_icon"
-            onClick={() => !loading && setSignUpState(false)}
+            onClick={() => !loading && push("/")}
           >
             <CloseIcon />
           </button>
@@ -377,12 +361,8 @@ export default function Index() {
           </button>
           <p className="link">
             already have an account?
-            <Link href="#signup">
+            <Link href="#login">
               <a
-                onClick={() => {
-                  setSignUpState(false);
-                  setLoginState(true);
-                }}
               >
                 click here
               </a>
@@ -395,12 +375,21 @@ export default function Index() {
       >
         <header>
           <div className="left">
-            <span className="logo" role="img" />
             <Link href="/">
-              <span className="link">Troisplay</span>
+            <span className="logo" role="img" />
             </Link>
           </div>
+          <div className="min_op">
+            <Button className="btn_op" onClick={()=>push("/#login")}>Login</Button>
+            <Fab className="btn_sp"><Instagram/></Fab>
+            <Fab className="btn_sp"><Facebook/></Fab>
+            <Fab className="btn_sp"><Twitter/></Fab>
+            <Fab className="btn_sp"><WhatsApp/></Fab>
+          </div>
           <div className="right">
+            <Link href="/#games">
+              <span className="link">Play</span>
+            </Link>
             <Link href="/#games">
               <span className="link">Games</span>
             </Link>
@@ -408,10 +397,10 @@ export default function Index() {
               <a className="link">How it works</a>
             </Link>
             <Link href="/#commission">
-              <a className="link">commission</a>
+              <a className="link">Download</a>
             </Link>
             <Link href="/#faq">
-              <a className="link">faq</a>
+              <a className="link">contact us</a>
             </Link>
             <span
               className="link_"
@@ -430,7 +419,7 @@ export default function Index() {
               Here is a platform that brings together our love for money and
               passion for competition all in one place.
             </p>
-            <button className="join_btn" onClick={() => setSignUpState(true)}>
+            <button className="join_btn" onClick={() => push("/#signup")}>
               Join
             </button>
           </div>

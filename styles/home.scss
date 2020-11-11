@@ -3,7 +3,7 @@
 .right_min {
     position: absolute;
     top: 20px;
-    right: 35px;
+    left: 35px;
     width: 35px;
     height: 35px;
     display: flex;
@@ -50,7 +50,8 @@
         width: 30px;
         height: 30px;
         display: flex;
-        fill: $defaultColor
+        fill: $defaultColor;
+        transform: rotateY(180deg);
     }
 }
 
@@ -163,8 +164,6 @@
     flex-direction: column;
     overflow: hidden;
     overflow-y: auto;
-    white-space: nowrap;
-    -webkit-overflow-scrolling: touch;
     background-color: #0b0b0d;
     scroll-behavior: smooth;
     filter: blur(0px);
@@ -197,6 +196,38 @@
             z-index: 20;
         }
 
+        .min_op {
+            width: 230px;
+            height: 50px;
+            display: flex;
+
+            .btn_op {
+                width: 100px;
+                height: 40px;
+                margin: 5px 5px 5px 0;
+                color: $defaultColor;
+                border: 1px $defaultColor solid;
+            }
+
+            .btn_sp {
+                width: 30px;
+                height: 30px;
+                min-width: 30px;
+                min-height: 30px;
+                max-width: 30px;
+                max-height: 30px;
+                margin: 10px 3px;
+                border: 1px $defaultColor solid;
+                background-color: transparent;
+
+                svg {
+                    width: 14px;
+                    height: 14px;
+                    fill: white;
+                }
+            }
+        }
+
         .left,
         .right {
             width: 50%;
@@ -206,15 +237,17 @@
         }
 
         .left {
-            width: 250px;
-            min-width: 250px;
+            width: 260px;
+            min-width: 260px;
             justify-content: flex-end;
 
             .logo {
-                width: 50px;
+                margin-top: -5px;
+                width: 170px;
+                min-width: 170px;
                 height: 50px;
                 display: flex;
-                background-image: url(/images/logo.png);
+                background-image: url(/images/logo_full2.png);
                 background-size: contain;
                 background-position: center;
                 background-repeat: no-repeat;
@@ -901,7 +934,10 @@
         border-top: 2px $defaultColor solid;
 
         .footer {
+            justify-content: center;
+            text-align: center;
             font-size: 12px;
+            line-height: 70px;
             color: #696969;
             padding: 0 20px;
         }
