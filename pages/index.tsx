@@ -414,7 +414,7 @@ export default function Index() {
         </header>
         <section className="first">
           <div className="container">
-            <h3 className="title">Welcome to Troisplay Play</h3>
+            <h3 className="title">Welcome to Troisplay</h3>
             <p className="txt">
               Here is a platform that brings together our love for money and
               passion for competition all in one place.

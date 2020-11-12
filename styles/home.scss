@@ -201,6 +201,10 @@
             height: 50px;
             display: flex;
 
+            @media (min-width: 1020px) {
+                display: none;
+            }
+
             .btn_op {
                 width: 100px;
                 height: 40px;
