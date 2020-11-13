@@ -19,9 +19,9 @@ import Axios, { AxiosResponse } from "axios";
 import { url, url_media } from "../constant";
 import { BounceLoader, SyncLoader, PulseLoader } from "react-spinners";
 import moment from "moment";
-import { Games, modalType, nextType, PayType, PlayerType } from "../typescript/enum";
+import { choices, Games, modalType, nextType, PayType, PlayerType } from "../typescript/enum";
 import { getPrice, getToken, PlayLuckyGeogeGame } from "../functions";
-import { setGameDetails, toast } from "../store/action";
+import { exitWin, setCustomWindow, setGameDetails, toast } from "../store/action";
 import { useQueryCache } from "react-query";
 import GameView from "./game_view";
 import { useRouter } from "next/router";
@@ -120,8 +120,15 @@ export default function PickerPlayer2({
       played: boolean;
       date: Date;
       battleScore: {
-        player1: any;
-        player2: any;
+        player1: {
+          endDate: Date;
+          title: string;
+          description: string;
+          answer: string;
+          endGameTime: Date;
+          choice: choices;
+        };
+        player2: {};
       };
     }[]
   >([]);
@@ -443,6 +450,47 @@ export default function PickerPlayer2({
           ) : (
             open_games.map((game) => {
               let loading = false;
+              console.log(game)
+              if (game.gameID === Games.custom_game) return (
+                <GameView
+                type="custom"
+                name={game?.battleScore?.player1?.title}
+                key={game._id}
+                date={game.date}
+                v1={
+                  game.price_in_value *
+                  (defaults?.data.default?.cashRating ?? 1)
+                }
+                v2={game.price_in_value}
+                v3={game.gameMemberCount}
+                id={game._id}
+                btn1func={() =>
+                  setCustomWindow(dispatch, {
+                    isOpen: modalType.open,
+                    game,
+                  })
+                }
+                btn2func={() =>
+                  exitWin(dispatch, {
+                    open: modalType.open,
+                    func: async () =>
+                      Axios.post(
+                        `${url}/games/custom/game`,
+                        { id: game._id },
+                        {
+                          headers: {
+                            authorization: `Bearer ${getToken()}`,
+                          },
+                        }
+                      ),
+                    game: Games.custom_game,
+                  })
+                }
+                cash={game.price_in_value}
+                coin={game.price_in_coin}
+                game={game.gameID}
+              />
+              );
               return (
                 <GameView
                   type="game_view"
@@ -453,8 +501,6 @@ export default function PickerPlayer2({
                       ? "Penelty Card"
                       : game.gameID === Games.matcher
                       ? "Guess Master"
-                      : game.gameID === Games.custom_game
-                      ? game.battleScore.player1.title ?? ""
                       : ""
                   }
                   key={game._id}

@@ -49,7 +49,7 @@ export const eventReducer = (
 ): eventReeducerType => {
   switch (action.type) {
     case "CUSTOMWINDOW":
-      return { ...state, customWindow: action.payload };
+      return { ...state, customWindow: {isOpen: action.payload.isOpen, request: action.payload.game} };
     case "ACTION":
       return { ...state, action: action.payload };
     case "NOTIFICATION":

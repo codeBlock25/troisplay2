@@ -133,7 +133,7 @@ export default function CustomWindow() {
         }).success();
         setCustomWindow(dispatch, {
           isOpen: modalType.close,
-          request: undefined,
+          game: undefined,
         });
         setAnswer("");
       })
@@ -184,7 +184,7 @@ export default function CustomWindow() {
           </b>
           {window?.request?.price_in_coin}
         </p>
-        {(record?.data?.player?.userID ?? "") ===
+        {(record?.data?.player?.userID ?? "") !==
           (window?.request?.members[0] ?? "") ? (
           <TextField
             variant="filled"
@@ -277,7 +277,7 @@ export default function CustomWindow() {
               if (loading) return;
               setCustomWindow(dispatch, {
                 isOpen: modalType.close,
-                request: undefined,
+                game: undefined,
               });
             }}
           >

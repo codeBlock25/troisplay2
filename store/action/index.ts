@@ -67,7 +67,7 @@ export const setCustomWindow = (
   dispatch: (t: ActionType) => void,
   payload: {
     isOpen: modalType;
-    request: {
+    game: {
       date: Date;
       gameDetail: string;
       gameID: Games;
