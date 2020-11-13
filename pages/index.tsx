@@ -13,13 +13,12 @@ import { toast } from "../store/action";
 import { useDispatch } from "react-redux";
 import { Button, Fab } from "@material-ui/core";
 import { Facebook, Instagram, Twitter, WhatsApp } from "@material-ui/icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faApple, faGooglePlay } from "@fortawesome/free-brands-svg-icons";
  
 export default function Index() {
   const dispatch = useDispatch();
   const [nav_bar, setNarBar] = useState<boolean>(false);
-  const chooseContainerRef = useRef(null);
-  const fundContainerRef = useRef(null);
-  const moneyContainerRef = useRef(null);
   const [loginOpen, setLoginState] = useState<boolean>(false);
   const [signupOpen, setSignUpState] = useState<boolean>(false);
   const [phone_number, setPhone_number] = useState<string>("");
@@ -39,7 +38,6 @@ export default function Index() {
   const [refer_code, setRefer_code] = useState<string>("");
   const [full_name, setFull_name] = useState<string>("");
   const [loading, setloading] = useState<boolean>(false);
-  const [error_open, setErrorOpen] = useState<boolean>(false);
 
   const handleSubmitSignup = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -61,8 +59,7 @@ export default function Index() {
       },
     })
       .then(() => {
-        setSignUpState(false);
-        setLoginState(true);
+        push("/#login");
         setFull_name("");
         setPhone_number2("");
         setKey2("");
@@ -87,6 +84,7 @@ export default function Index() {
         setloading(false);
       });
   };
+
   const handleSubmitLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!(/^[0-9]*$/g.test(key) && key.length < 7)) return;
@@ -265,9 +263,7 @@ export default function Index() {
           <p className="link">
             Don't have an account?
             <Link href="#signup">
-              <a>
-                click here
-              </a>
+              <a>click here</a>
             </Link>
           </p>
         </form>
@@ -362,10 +358,7 @@ export default function Index() {
           <p className="link">
             already have an account?
             <Link href="#login">
-              <a
-              >
-                click here
-              </a>
+              <a>click here</a>
             </Link>
           </p>
         </form>
@@ -376,15 +369,25 @@ export default function Index() {
         <header>
           <div className="left">
             <Link href="/">
-            <span className="logo" role="img" />
+              <span className="logo" role="img" />
             </Link>
           </div>
           <div className="min_op">
-            <Button className="btn_op" onClick={()=>push("/#login")}>Login</Button>
-            <Fab className="btn_sp"><Instagram/></Fab>
-            <Fab className="btn_sp"><Facebook/></Fab>
-            <Fab className="btn_sp"><Twitter/></Fab>
-            <Fab className="btn_sp"><WhatsApp/></Fab>
+            <Button className="btn_op" onClick={() => push("/#login")}>
+              Login
+            </Button>
+            <Fab className="btn_sp">
+              <Instagram />
+            </Fab>
+            <Fab className="btn_sp">
+              <Facebook />
+            </Fab>
+            <Fab className="btn_sp">
+              <Twitter />
+            </Fab>
+            <Fab className="btn_sp">
+              <WhatsApp />
+            </Fab>
           </div>
           <div className="right">
             <Link href="/#games">
@@ -497,96 +500,13 @@ export default function Index() {
             />
           </div>
         </section>
-        <section className="third" id="commission">
-          <h3 className="title">Commission</h3>
-          <h4 className="title_sub">
-            Earn as much in real cash playing on Troisplay
-          </h4>
-          <div className="container">
-            <div className="table">
-              <div className="thead">
-                <div className="tr">price</div>
-                <div className="tr">Cash</div>
-                <div className="tr">Roshambo</div>
-                <div className="tr">Guess Matcher</div>
-                <div className="tr">Penelty Shot</div>
-                <div className="tr">Rooms</div>
-                <div className="tr">Custom Game</div>
-                <div className="tr">Luckyjudge</div>
-              </div>
-              <div className="tbody">
-                <div className="td">
-                  <div className="tr">10$</div>
-                  <div className="tr">19$</div>
-                  <div className="tr">16$</div>
-                  <div className="tr">17$</div>
-                  <div className="tr">15$+</div>
-                  <div className="tr">18$</div>
-                  <div className="tr">8$+</div>
-                  <div className="tr">8$+</div>
-                </div>
-                <div className="td">
-                  <div className="tr">20$</div>
-                  <div className="tr">29$</div>
-                  <div className="tr">26$</div>
-                  <div className="tr">27$</div>
-                  <div className="tr">25$+</div>
-                  <div className="tr">28$</div>
-                  <div className="tr">18$+</div>
-                  <div className="tr">18$+</div>
-                </div>
-                <div className="td">
-                  <div className="tr">30$</div>
-                  <div className="tr">39$</div>
-                  <div className="tr">36$</div>
-                  <div className="tr">37$</div>
-                  <div className="tr">35$+</div>
-                  <div className="tr">38$</div>
-                  <div className="tr">28$+</div>
-                  <div className="tr">28$+</div>
-                </div>
-                <div className="td">
-                  <div className="tr">50$</div>
-                  <div className="tr">59$</div>
-                  <div className="tr">56$</div>
-                  <div className="tr">57$</div>
-                  <div className="tr">55$+</div>
-                  <div className="tr">58$</div>
-                  <div className="tr">48$+</div>
-                  <div className="tr">48$+</div>
-                </div>
-                <div className="td">
-                  <div className="tr">100$</div>
-                  <div className="tr">190$</div>
-                  <div className="tr">160$</div>
-                  <div className="tr">170$</div>
-                  <div className="tr">150$+</div>
-                  <div className="tr">180$</div>
-                  <div className="tr">80$+</div>
-                  <div className="tr">80$+</div>
-                </div>
-                <div className="td">
-                  <div className="tr">200$</div>
-                  <div className="tr">390$</div>
-                  <div className="tr">360$</div>
-                  <div className="tr">370$</div>
-                  <div className="tr">350$+</div>
-                  <div className="tr">380$</div>
-                  <div className="tr">180$+</div>
-                  <div className="tr">180$+</div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <button className="join_btn">start earning now</button>
-        </section>
         <section className="fouth" id="how-it-works">
           <h3 className="title">How it Works.</h3>
           <h4 className="title_sub">Make more cash in just 4 steps.</h4>
           <div className="container">
             <div className="step">
               <span className="count">step 1</span>
-              <div className="lottie_view" ref={chooseContainerRef}></div>
+              <div className="lottie_view"></div>
               <h3 className="title_">Choose Game</h3>
               <p className="txt">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit.
@@ -595,7 +515,7 @@ export default function Index() {
             </div>
             <div className="step">
               <span className="count">step 2</span>
-              <div className="lottie_view" ref={moneyContainerRef}></div>
+              <div className="lottie_view"></div>
               <h3 className="title_">Fund Wallet</h3>
               <p className="txt">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit.
@@ -613,7 +533,7 @@ export default function Index() {
             </div>
             <div className="step">
               <span className="count">step 4</span>
-              <div className="lottie_view" ref={fundContainerRef}></div>
+              <div className="lottie_view"></div>
               <h3 className="title_">Collect Cash</h3>
               <p className="txt">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit.
@@ -625,7 +545,22 @@ export default function Index() {
         <section className="five">
           <div className="container">
             <h3 className="title">Ready to start making cool fun cash?</h3>
-            <button className="join_btn">start game</button>
+            <Button className="btn">
+              <div className="view">
+                <FontAwesomeIcon icon={faApple} />
+                <div className="txt">
+                  Dowload on <span>Apple Store</span>
+                </div>
+              </div>
+            </Button>
+            <Button className="btn">
+              <div className="view">
+                <FontAwesomeIcon icon={faGooglePlay} />
+                <div className="txt">
+                  Dowload on <span>Google Play</span>
+                </div>
+              </div>
+            </Button>
           </div>
         </section>
         <footer>

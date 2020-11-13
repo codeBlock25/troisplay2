@@ -793,12 +793,33 @@
                 justify-content: center;
                 align-items: center;
 
+                .lottie_view {
+                    background-position: center;
+                    background-size: contain;
+                    background-repeat: no-repeat;
+                }
+
+                &:nth-of-type(1) {
+                    .lottie_view {
+                        background-image: url(/images/pic8.png);
+                    }
+                }
+
+                &:nth-of-type(2) {
+                    .lottie_view {
+                        background-image: url(/images/pic9.png);
+                    }
+                }
+
                 &:nth-of-type(3) {
                     .lottie_view {
                         background-image: url(/images/roshambo.png);
-                        background-position: center;
-                        background-size: contain;
-                        background-repeat: no-repeat;
+                    }
+                }
+
+                &:nth-of-type(4) {
+                    .lottie_view {
+                        background-image: url(/images/pic10.png);
                     }
                 }
 
@@ -902,28 +923,39 @@
                 }
             }
 
-            .join_btn {
-                width: 180px;
-                min-width: 180px;
+            .btn {
+                width: 160px;
                 height: 50px;
-                padding: 0 10px;
-                line-height: 50px;
-                color: white;
-                font-family: mon_bold;
-                font-size: 14px;
-                text-align: center;
-                margin: 0 4px;
-                border-radius: 10px;
-                background-color: #101010;
-                cursor: pointer;
-                transform: scale(1);
-                transition: $bounce 0.3s;
-                margin-top: 15px;
-                margin-left: 30px;
-                z-index: 30;
+                border: 1px solid $defaultColor;
+                margin: 5px;
+                padding: 5px 10px;
+                border-radius: 5px;
+                background-color: #0b0b0d;
 
-                &:active {
-                    transform: scale(0.9);
+                .view {
+                    width: 100%;
+                    height: 100%;
+                    display: flex;
+
+                    svg {
+                        width: 20px;
+                        height: 20px;
+                        display: flex;
+                        align-self: center;
+                        fill: white;
+                        color: white;
+                    }
+
+                    .txt {
+                        width: fit-content;
+                        color: rgb(199, 199, 199);
+                        font-size: 8px;
+
+                        span {
+                            color: rgb(231, 231, 231);
+                            font-family: mon_bold;
+                        }
+                    }
                 }
             }
         }

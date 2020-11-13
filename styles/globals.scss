@@ -95,7 +95,7 @@ body {
 
 @font-face {
   src: url(/fonts/Montserrat_Alternates/MontserratAlternates-BoldItalic.ttf) format("truetype");
-  font-family: mon_bold;
+  font-family: mon_bold_itl;
 }
 
 @font-face {
@@ -131,9 +131,4 @@ body {
 @font-face {
   src: url(/fonts/Montserrat_Alternates/MontserratAlternates-LightItalic.ttf) format("truetype");
   font-family: mon_light_itl;
-}
-
-@font-face {
-  src: url(/fonts/Montserrat_Alternates/MontserratAlternates-Regular.ttf) format("truetype");
-  font-family: mon;
 }
