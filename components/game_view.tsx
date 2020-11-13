@@ -100,8 +100,12 @@ const GameView = memo(function ({
       </div>
       {type === "normal" ? (
         <div className="action">
-          <span className="btn">{btn1view ?? "view"}</span>
-          <span className="btn">{btn2view ?? "cancel"}</span>
+          <span className="btn" onClick={btn1func}>
+            {btn1view ?? "view"}
+          </span>
+          <span className="btn" onClick={btn2func}>
+            {btn2view ?? "cancel"}
+          </span>
         </div>
       ) : type === "custom" ? (
         <div className="action">

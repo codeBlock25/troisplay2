@@ -717,13 +717,15 @@ export default function GamesScreen() {
                           console.log("working");
                         }}
                         btn2view="exit"
-                        btn2func={() =>
+                        btn2func={() => {
+                          console.log("test");;
                           exitWin(dispatch, {
                             open: modalType.open,
                             game: game.gameID,
                             func: async () => {
                               await Axios.delete(`${url}/games/any/cancel`, {
                                 params: { gameID: game._id },
+                                headers: {authorization: `Bearer ${getToken()}`}
                               })
                                 .then(() => {
                                   toast(dispatch, {
@@ -741,8 +743,8 @@ export default function GamesScreen() {
                                   }).error();
                                 });
                             },
-                          })
-                        }
+                          });;
+                        }}
                         cash={game.price_in_value}
                         coin={game.price_in_coin}
                         game={game.gameID}
