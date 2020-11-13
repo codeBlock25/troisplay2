@@ -15,6 +15,7 @@ import { Button, Fab } from "@material-ui/core";
 import { Facebook, Instagram, Twitter, WhatsApp } from "@material-ui/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faApple, faGooglePlay } from "@fortawesome/free-brands-svg-icons";
+import Footer from "../components/footer";
  
 export default function Index() {
   const dispatch = useDispatch();
@@ -163,7 +164,7 @@ export default function Index() {
           setNarBar(false);
         }}
       >
-        <Link href="/#games">
+        <Link href="/#home">
           <span className="link">Play</span>
         </Link>
         <Link href="/#games">
@@ -172,10 +173,10 @@ export default function Index() {
         <Link href="/#how-it-works">
           <a className="link">How it works</a>
         </Link>
-        <Link href="/#commission">
+        <Link href="/#download">
           <a className="link">Download</a>
         </Link>
-        <Link href="/#faq">
+        <Link href="/#contact">
           <a className="link">contact us</a>
         </Link>
         <span
@@ -390,7 +391,7 @@ export default function Index() {
             </Fab>
           </div>
           <div className="right">
-            <Link href="/#games">
+            <Link href="/#home">
               <span className="link">Play</span>
             </Link>
             <Link href="/#games">
@@ -399,10 +400,10 @@ export default function Index() {
             <Link href="/#how-it-works">
               <a className="link">How it works</a>
             </Link>
-            <Link href="/#commission">
+            <Link href="/#download">
               <a className="link">Download</a>
             </Link>
-            <Link href="/#faq">
+            <Link href="/#contact">
               <a className="link">contact us</a>
             </Link>
             <span
@@ -415,7 +416,7 @@ export default function Index() {
             </span>
           </div>
         </header>
-        <section className="first">
+        <section className="first" id="home">
           <div className="container">
             <h3 className="title">Welcome to Troisplay</h3>
             <p className="txt">
@@ -542,7 +543,7 @@ export default function Index() {
             </div>
           </div>
         </section>
-        <section className="five">
+        <section className="five" id="download">
           <div className="container">
             <h3 className="title">Ready to start making cool fun cash?</h3>
             <Button className="btn">
@@ -563,11 +564,7 @@ export default function Index() {
             </Button>
           </div>
         </section>
-        <footer>
-          <p className="footer">
-            Term & condition apply &copy; Troisplay {moment().format("YYYY")}
-          </p>
-        </footer>
+        <Footer />
       </section>
     </>
   );

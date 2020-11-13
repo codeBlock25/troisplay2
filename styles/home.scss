@@ -961,21 +961,150 @@
         }
     }
 
-    footer {
-        width: 100vw;
-        height: 100px;
-        min-height: 100px;
-        display: flex;
-        flex-direction: column;
-        border-top: 2px $defaultColor solid;
+    // footer {
+    //     width: 100vw;
+    //     height: 100px;
+    //     min-height: 100px;
+    //     display: flex;
+    //     flex-direction: column;
+    //     border-top: 2px $defaultColor solid;
 
-        .footer {
+    //     .footer {
+    //         justify-content: center;
+    //         text-align: center;
+    //         font-size: 12px;
+    //         line-height: 70px;
+    //         color: #696969;
+    //         padding: 0 20px;
+    //     }
+    // }
+
+    footer {
+        width: 100%;
+        height: auto;
+        min-height: fit-content;
+        display: flex;
+        flex-wrap: wrap;
+        padding: 20px 10% 0 10%;
+        background-color: #0b0b0d;
+        justify-content: space-around;
+
+        .content {
+            width: 200px;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            padding: 0 0 20px 0;
+
+            .title {
+                width: 100%;
+                height: 50px;
+                display: flex;
+                align-self: flex-end;
+                color: whitesmoke;
+
+                .logo {
+                    align-self: center;
+                    width: 150px;
+                    height: 40px;
+                    display: flex;
+                    justify-content: center;
+                    overflow: hidden;
+
+                    &::before {
+                        content: "";
+                        width: 150px;
+                        height: 40px;
+                        display: flex;
+                        align-self: center;
+                        background-image: url('/images/logo_full2.png');
+                        background-position: center;
+                        background-size: contain;
+                        background-repeat: no-repeat;
+                    }
+                }
+            }
+
+            .main_title {
+                width: 100%;
+                height: 30px;
+                display: flex;
+                font-size: 16px;
+                color: whitesmoke;
+                margin: 20px 0 0 0;
+                font-family: mon_bold;
+                padding: 0 0 0 10px;
+            }
+
+            ul {
+                width: 100%;
+                height: auto;
+                display: flex;
+                flex-direction: column;
+                padding: 0 0 0 10px;
+
+                li {
+                    width: 100%;
+                    padding: 0 5px;
+                    height: 25px;
+                    line-height: 25px;
+                    display: flex;
+                    font-size: 14px;
+                    color: #c2c2c2;
+                    cursor: pointer;
+
+                    &:hover {
+                        background-color: rgba($color: #000000, $alpha: 0.03);
+                    }
+                }
+            }
+
+            p {
+                width: 100%;
+                height: auto;
+                display: flex;
+                font-size: 14px;
+                color: #c2c2c2;
+            }
+
+            .links {
+                width: 100%;
+                height: 50px;
+                display: flex;
+                justify-content: space-around;
+                margin: 10px 0;
+
+                .link {
+                    width: 35px;
+                    height: 35px;
+                    min-height: 35px;
+                    color: whitesmoke;
+                    background-color: $defaultColor;
+                    box-shadow: 0 7px 20px 0 rgba(43, 80, 237, 0.2);
+
+                    &:hover {
+                        background-color: darken($color: #ffffff, $amount: 2);
+                    }
+
+                    svg {
+                        width: 20px;
+                        height: 20px;
+                        display: flex;
+                    }
+                }
+            }
+        }
+
+        .ryt {
+            width: 100%;
+            height: 30px;
+            line-height: 30px;
+            display: flex;
             justify-content: center;
             text-align: center;
+            color: #f9f9f9;
             font-size: 12px;
-            line-height: 70px;
-            color: #696969;
-            padding: 0 20px;
+            font-family: mon_bold;
         }
     }
 }
