@@ -791,7 +791,7 @@ export default function GamesScreen() {
                         btn1func={() =>
                           setCustomWindow(dispatch, {
                             isOpen: modalType.open,
-                            request,
+                            game: request,
                           })
                         }
                         btn2func={() =>

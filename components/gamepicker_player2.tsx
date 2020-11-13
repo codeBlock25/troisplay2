@@ -108,17 +108,16 @@ export default function PickerPlayer2({
   }>({ game: Games.non, msg: "", func: null, lucky:null, room: null })
   const [open_games, setOpenGame] = useState<
     {
-      _id: string;
-      gameMemberCount: number;
-      members: string[];
-      priceType: string;
-      price_in_coin: number;
-      price_in_value: number;
-      Games: string;
+      date: Date;
       gameDetail: string;
       gameID: Games;
-      played: boolean;
-      date: Date;
+      gameMemberCount: number;
+      gameType: Games;
+      members: string[];
+      playCount: number;
+      price_in_coin: number;
+      price_in_value: number;
+      _id: string;
       battleScore: {
         player1: {
           endDate: Date;
@@ -128,7 +127,10 @@ export default function PickerPlayer2({
           endGameTime: Date;
           choice: choices;
         };
-        player2: {};
+        player2?: {
+          answer: string;
+          waiting: boolean;
+        };
       };
     }[]
   >([]);
@@ -284,20 +286,29 @@ export default function PickerPlayer2({
           data: { games },
         }: AxiosResponse<{
           games: {
-            _id: string;
-            gameMemberCount: number;
-            members: string[];
-            priceType: string;
-            price_in_coin: number;
-            price_in_value: number;
-            Games: string;
+            date: Date;
             gameDetail: string;
             gameID: Games;
-            played: boolean;
-            date: Date;
+            gameMemberCount: number;
+            gameType: Games;
+            members: string[];
+            playCount: number;
+            price_in_coin: number;
+            price_in_value: number;
+            _id: string;
             battleScore: {
-              player1: any;
-              player2: any;
+              player1: {
+                endDate: Date;
+                title: string;
+                description: string;
+                answer: string;
+                endGameTime: Date;
+                choice: choices;
+              };
+              player2?: {
+                answer: string;
+                waiting: boolean;
+              };
             };
           }[];
         }>) => {
