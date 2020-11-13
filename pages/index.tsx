@@ -39,6 +39,7 @@ export default function Index() {
   const [refer_code, setRefer_code] = useState<string>("");
   const [full_name, setFull_name] = useState<string>("");
   const [loading, setloading] = useState<boolean>(false);
+  const [viewMore, setViewMore] = useState(false);
 
   const handleSubmitSignup = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -71,7 +72,7 @@ export default function Index() {
         }).success();
       })
       .catch((err) => {
-        setSignUpState(false);
+        push("/")
         if (err.message === "Request failed with status code 400") {
           setPhone_number_error2(errorType.used);
           return;
@@ -409,10 +410,10 @@ export default function Index() {
             <span
               className="link_"
               onClick={() => {
-                setSignUpState(true);
+                push("/#login")
               }}
             >
-              join
+              Login
             </span>
           </div>
         </header>
@@ -435,6 +436,18 @@ export default function Index() {
               <span
                 className="pic"
                 role="img"
+                style={{ backgroundImage: "url(/images/lucky-geoge.png)" }}
+              />
+              <span className="name">Lucky judge</span>
+              <p className="txt">
+                This is a game set by the Game Master for players to win prices
+                after entering the game which is drawn at random.
+              </p>
+            </div>
+            <div className="game_view">
+              <span
+                className="pic"
+                role="img"
                 style={{ backgroundImage: "url(/images/roshambo.png)" }}
               />
               <span className="name">Roshambo (Rock, Paper, Scrissors)</span>
@@ -447,53 +460,60 @@ export default function Index() {
               <span
                 className="pic"
                 role="img"
-                style={{ backgroundImage: "url(/images/penatly-shot.png)" }}
-              />
-              <span className="name">Penalty Shot</span>
-              <p className="txt">
-                A game between two parties where one is the Penalty taker and
-                the other the goal keeper, the goal keeper try to stop the
-                penalty taker from soccering, both stande a chance to win their
-                stake amount in cash
-              </p>
-            </div>
-            <div className="game_view">
-              <span
-                className="pic"
-                role="img"
-                style={{ backgroundImage: "url(/images/guess-master.png)" }}
-              />
-              <span className="name">Guess master</span>
-              <p className="txt">
-                A game of the mind where party two tries to guess the number
-                party has set standing a chance to win their stake amount in
-                cash.
-              </p>
-            </div>
-            <div className="game_view">
-              <span
-                className="pic"
-                role="img"
-                style={{ backgroundImage: "url(/images/lucky-geoge.png)" }}
-              />
-              <span className="name">Luckyjudge</span>
-              <p className="txt">
-                This is a game set by the Game Master for players to win prices
-                after entering the game which is drawn at random.
-              </p>
-            </div>
-            <div className="game_view">
-              <span
-                className="pic"
-                role="img"
                 style={{ backgroundImage: "url(/images/custom.png)" }}
               />
-              <span className="name">Room Games</span>
+              <span className="name">Custom Games</span>
               <p className="txt">
                 This is a game for players to answer question after joining a
                 room to win cash prices ranging from $10 - $1000 pending on the
                 question and the room.
               </p>
+            </div>
+            {!viewMore && (
+              <>
+                <div className="game_view">
+                  <span
+                    className="pic"
+                    role="img"
+                    style={{ backgroundImage: "url(/images/penatly-shot.png)" }}
+                  />
+                  <span className="name">Penalty Shot</span>
+                  <p className="txt">
+                    A game between two parties where one is the Penalty taker
+                    and the other the goal keeper, the goal keeper try to stop
+                    the penalty taker from soccering, both stande a chance to
+                    win their stake amount in cash
+                  </p>
+                </div>
+                <div className="game_view">
+                  <span
+                    className="pic"
+                    role="img"
+                    style={{ backgroundImage: "url(/images/guess-master.png)" }}
+                  />
+                  <span className="name">Guess master</span>
+                  <p className="txt">
+                    A game of the mind where party two tries to guess the number
+                    party has set standing a chance to win their stake amount in
+                    cash.
+                  </p>
+                </div>
+                <div className="game_view">
+                  <span
+                    className="pic"
+                    role="img"
+                    style={{ backgroundImage: "url(/images/custom.png)" }}
+                  />
+                  <span className="name">Room Games</span>
+                  <p className="txt">
+                    This is a game for players to answer question after joining
+                    a room to win cash prices ranging from $10 - $1000 pending
+                    on the question and the room.
+                  </p>
+                </div>
+              </>
+            )}
+            <div style={{width: 200, height: 350, minHeight: 250, minWidth: 200, display: "flex", flexDirection: "column", justifyContent: 'flex-end',alignItems: "center",}}><Button onClick={()=> setViewMore(prev => !prev)} className="btn_">view {viewMore ? "more":"less"}</Button>
             </div>
             <span
               className="correct"

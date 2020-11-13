@@ -3,9 +3,9 @@
 .right_min {
     position: absolute;
     top: 20px;
-    left: 35px;
-    width: 35px;
-    height: 35px;
+    left: 5px;
+    width: 30px;
+    height: 30px;
     display: flex;
     border-radius: 50%;
     z-index: 1000;
@@ -47,8 +47,8 @@
     }
 
     svg {
-        width: 30px;
-        height: 30px;
+        width: 20px;
+        height: 20px;
         display: flex;
         fill: $defaultColor;
         transform: rotateY(180deg);
@@ -192,12 +192,16 @@
         justify-content: space-between;
         z-index: 2000;
 
+        @media (max-width: 1024px) {
+            padding-top: 15px;
+        }
+
         * {
             z-index: 20;
         }
 
         .min_op {
-            width: 230px;
+            width: 180px;
             height: 50px;
             display: flex;
 
@@ -206,20 +210,24 @@
             }
 
             .btn_op {
-                width: 100px;
-                height: 40px;
+                width: 60px;
+                height: 30px;
                 margin: 5px 5px 5px 0;
                 color: $defaultColor;
                 border: 1px $defaultColor solid;
+
+                * {
+                    font-size: 10px;
+                }
             }
 
             .btn_sp {
-                width: 30px;
-                height: 30px;
-                min-width: 30px;
-                min-height: 30px;
-                max-width: 30px;
-                max-height: 30px;
+                width: 20px;
+                height: 20px;
+                min-width: 20px;
+                min-height: 20px;
+                max-width: 20px;
+                max-height: 20px;
                 margin: 10px 3px;
                 border: 1px $defaultColor solid;
                 background-color: transparent;
@@ -255,6 +263,16 @@
                 background-size: contain;
                 background-position: center;
                 background-repeat: no-repeat;
+            }
+
+            @media (max-width: 600px) {
+                width: 130px;
+                min-width: 130px;
+
+                .logo {
+                    width: 90px;
+                    min-width: 90px;
+                }
             }
 
             .link {
@@ -466,9 +484,8 @@
 
     .second {
         width: 100vw;
-        height: 60vh;
-        min-height: 450px;
-        max-height: 550px;
+        height: fit-content;
+        min-height: fit-content;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -488,33 +505,38 @@
 
         .container {
             width: 100%;
-            height: 85%;
-            min-height: 300px;
-            max-height: 400px;
+            height: fit-content;
+            min-height: fit-content;
             display: flex;
-            padding: 0 20px 20px 20px;
-            overflow: hidden;
-            overflow-x: auto;
-            scrollbar-width: 0;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 0 0 20px 0;
+
 
             &::-webkit-scrollbar {
                 width: 0;
                 display: none;
             }
 
+            .btn_ {
+                width: 200px;
+                height: 40px;
+                color: white;
+                background-color: rgba(255, 255, 255, 0.12);
+            }
+
             .game_view {
                 width: 280px;
-                height: 100%;
+                height: 350px;
                 min-width: 280px;
-                min-height: 100%;
+                min-height: 350px;
                 display: flex;
-                margin: 0 20px;
+                margin: 10px 20px;
                 flex-direction: column;
-                background-color: #222226;
+                background-color: #111114;
                 border-radius: 10px;
                 align-items: center;
-                border: 3px solid $defaultColor;
-                box-shadow: 0px 10px 15px #00000085, 0px -6px 20px #0454111c;
+                box-shadow: 0px 10px 15px #00000085;
 
                 .pic {
                     width: 60%;
@@ -531,7 +553,7 @@
                     min-height: fit-content;
                     display: flex;
                     font-family: mon_exa;
-                    font-size: 20px;
+                    font-size: 17px;
                     padding: 0 10px;
                     color: white;
                 }
