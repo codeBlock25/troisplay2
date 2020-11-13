@@ -263,7 +263,7 @@ export default function GamesScreen() {
     }
   }, [asPath, pathname])
   useEffect(()=>{
-    if(gameViewOpen){
+    if(!gameViewOpen){
       push("/games#play-games")
     } else {
       push("/games")
