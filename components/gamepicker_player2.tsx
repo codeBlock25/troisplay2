@@ -453,6 +453,8 @@ export default function PickerPlayer2({
                       ? "Penelty Card"
                       : game.gameID === Games.matcher
                       ? "Guess Master"
+                      : game.gameID === Games.custom_game
+                      ? game.battleScore.player1.title ?? ""
                       : ""
                   }
                   key={game._id}

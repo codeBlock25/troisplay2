@@ -248,20 +248,21 @@ export default function GamesScreen() {
       return confirm("Are you sure you want to leave this game?");
     });
   }, []);
-  const { asPath, pathname } = useRouter();
-  useEffect(() => {
-    switch (asPath) {
-      case "/games#play-games": {
-          setViewOpen(true);
-      }
-        break;
+  // const { asPath, pathname } = useRouter();
+  // useEffect(() => {
+  //   switch (asPath) {
+  //     case "/games#play-games": {
+  //         setViewOpen(true);
+  //     }
+  //       break;
     
-      default: {
-        setViewOpen(false);
-      }
-        break;
-    }
-  }, [asPath, pathname])
+  //     default: {
+  //       setViewOpen(false);
+  //     }
+  //       break;
+  //   }
+  // }, [asPath, pathname])
+  
   return (
     <>
       <Head>
@@ -472,7 +473,8 @@ export default function GamesScreen() {
       <span
         className="new_game"
         onClick={() => {
-          push("/games#play-games")
+          // push("/games#play-games")
+          setViewOpen(true);
         }}
       >
         play game{" "}
