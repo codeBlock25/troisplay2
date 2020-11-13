@@ -45,10 +45,12 @@ import { reducerType } from "../../typescript/interface";
 import DetailScreen from "../../components/DetailScreen";
 import CustomWindow from "../../components/customWindow";
 import AccountF from "../../components/account_f";
+import { faGamepad } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function GamesScreen() {
   const dispatch = useDispatch();
-  
+
   const { details } = useSelector<
     reducerType,
     {
@@ -76,29 +78,29 @@ export default function GamesScreen() {
   const [playLoader, setPlayerLoader] = useState<boolean>(false);
   const [game_loading, setgameLoading] = useState<boolean>(false);
   const [p2, setP2] = useState<boolean>(false);
-  const [fundTp, setFund] = useState<number>(0)
-  const [action, setAction]  = useState<ReasonType>(ReasonType.non)
   const { push, beforePopState } = useRouter();
   const [time, setTime] = useState<string>("00:00");
   const spin: AxiosResponse<{
     spin_details: {
-      currentTime: Date,
-      gameTime: Date,
-      isPlayable: boolean,
-    },
+      currentTime: Date;
+      gameTime: Date;
+      isPlayable: boolean;
+    };
   }> = useQueryCache().getQueryData("spins");
 
   useEffect(() => {
     let countdownEvt = setInterval(() => {
-    if (spin) {
+      if (spin) {
         let time = moment(
-          moment(spin?.data?.spin_details.gameTime?? new Date()).diff(new Date())
-          ).format("HH:MM:ss");
-          setDateintime(spin.data.spin_details.isPlayable ? "00:00:00":time);
-        }
-        }, 200);
-        return () => {
-          clearInterval(countdownEvt);
+          moment(spin?.data?.spin_details.gameTime ?? new Date()).diff(
+            new Date()
+          )
+        ).format("HH:MM:ss");
+        setDateintime(spin.data.spin_details.isPlayable ? "00:00:00" : time);
+      }
+    }, 200);
+    return () => {
+      clearInterval(countdownEvt);
     };
   }, [spin]);
 
@@ -115,34 +117,6 @@ export default function GamesScreen() {
     game: Games.non,
     next: nextType.player,
   });
-
-  const lottieLoader = useCallback(() => {
-    Lottie.loadAnimation({
-      container: coinRef.current,
-      autoplay: true,
-      loop: true,
-      renderer: "canvas",
-      animationData: require("../../lottie/coin.json"),
-    });
-    Lottie.loadAnimation({
-      container: coinRef2.current,
-      autoplay: true,
-      loop: true,
-      renderer: "canvas",
-      animationData: require("../../lottie/coin.json"),
-    });
-    Lottie.loadAnimation({
-      container: game_play.current,
-      autoplay: true,
-      loop: true,
-      renderer: "canvas",
-      animationData: require("../../lottie/game.json"),
-    });
-  }, []);
-  
-  useEffect(() => {
-    lottieLoader();
-  }, [lottieLoader]);
 
   const my_games: AxiosResponse<{
     games: {
@@ -194,37 +168,37 @@ export default function GamesScreen() {
     }[];
   }> = useQueryCache().getQueryData("requests");
 
-const defaults: AxiosResponse<{
-  default: {
-    commission_roshambo: {
-      value: number;
-      value_in: "$" | "%" | "c";
+  const defaults: AxiosResponse<{
+    default: {
+      commission_roshambo: {
+        value: number;
+        value_in: "$" | "%" | "c";
+      };
+      commission_penalty: {
+        value: number;
+        value_in: "$" | "%" | "c";
+      };
+      commission_guess_mater: {
+        value: number;
+        value_in: "$" | "%" | "c";
+      };
+      commission_custom_game: {
+        value: number;
+        value_in: "$" | "%" | "c";
+      };
+      cashRating: number;
+      min_stack_roshambo: number;
+      min_stack_penalty: number;
+      min_stack_guess_master: number;
+      min_stack_custom: number;
+      referRating: number;
     };
-    commission_penalty: {
-      value: number;
-      value_in: "$" | "%" | "c";
-    };
-    commission_guess_mater: {
-      value: number;
-      value_in: "$" | "%" | "c";
-    };
-    commission_custom_game: {
-      value: number;
-      value_in: "$" | "%" | "c";
-    };
-    cashRating: number;
-    min_stack_roshambo: number;
-    min_stack_penalty: number;
-    min_stack_guess_master: number;
-    min_stack_custom: number;
-    referRating: number;
-  };
-}> = useQueryCache().getQueryData("defaults");
-  const record: AxiosResponse<{ 
+  }> = useQueryCache().getQueryData("defaults");
+  const record: AxiosResponse<{
     user: {
       full_name: string;
       phone_number: string;
-    }
+    };
     player: {
       userID: string;
       full_name: string;
@@ -270,16 +244,16 @@ const defaults: AxiosResponse<{
 
   useEffect(() => {
     beforePopState(({ url, as, options }) => {
-      window.location.href = as
-      return confirm("Are you sure you want to leave this game?")
-    })
-  }, [])
+      window.location.href = as;
+      return confirm("Are you sure you want to leave this game?");
+    });
+  }, []);
   return (
     <>
       <Head>
         <title>Games - Troisplay</title>
       </Head>
-      { app_loading && (
+      {app_loading && (
         <>
           <AppLoader runText={runText} />
         </>
@@ -328,24 +302,24 @@ const defaults: AxiosResponse<{
               {getPrice(spec.game, spec.price, defaults?.data?.default) <= 0
                 ? ""
                 : `$ ${getPrice(
-                  spec.game,
-                  spec.price,
-                  defaults?.data?.default
-                )}`}{" "}
+                    spec.game,
+                    spec.price,
+                    defaults?.data?.default
+                  )}`}{" "}
             </p>
             <p className="txt">
               or Stake At{" "}
               {defaults?.data?.default.cashRating * spec.price === null ||
-                !(defaults?.data?.default.cashRating * spec.price) ? (
-                  "0"
-                ) : (
-                  <span
-                    style={{ marginLeft: 5, display: "flex", marginRight: 5 }}
-                  >
-                    {"  "} <GameCoin />{" "}
-                    {`${defaults?.data?.default.cashRating * spec.price}`}
-                  </span>
-                )}
+              !(defaults?.data?.default.cashRating * spec.price) ? (
+                "0"
+              ) : (
+                <span
+                  style={{ marginLeft: 5, display: "flex", marginRight: 5 }}
+                >
+                  {"  "} <GameCoin />{" "}
+                  {`${defaults?.data?.default.cashRating * spec.price}`}
+                </span>
+              )}
             </p>
             <div className="inputBox">
               <label htmlFor="number">Price</label>
@@ -373,27 +347,29 @@ const defaults: AxiosResponse<{
                   (spec.game === Games.roshambo
                     ? defaults.data.default.min_stack_roshambo
                     : spec.game === Games.penalth_card
-                      ? defaults.data.default.min_stack_penalty
-                      : spec.game === Games.matcher
-                        ? defaults.data.default.min_stack_guess_master
-                        : 0)
+                    ? defaults.data.default.min_stack_penalty
+                    : spec.game === Games.matcher
+                    ? defaults.data.default.min_stack_guess_master
+                    : 0)
                 ) {
                   toast(dispatch, {
-                    msg: `Can't play ${spec.game === Games.roshambo
-                      ? "Roshambo"
-                      : spec.game === Games.penalth_card
+                    msg: `Can't play ${
+                      spec.game === Games.roshambo
+                        ? "Roshambo"
+                        : spec.game === Games.penalth_card
                         ? "Penalty Card"
                         : spec.game === Games.matcher
-                          ? "Guess Master"
-                          : ""
-                      } game below the minimum price bar. Please stake something higher than ₦ ${spec.game === Games.roshambo
+                        ? "Guess Master"
+                        : ""
+                    } game below the minimum price bar. Please stake something higher than ₦ ${
+                      spec.game === Games.roshambo
                         ? defaults.data.default.min_stack_roshambo
                         : spec.game === Games.penalth_card
-                          ? defaults.data.default.min_stack_penalty
-                          : spec.game === Games.matcher
-                            ? defaults.data.default.min_stack_guess_master
-                            : 0
-                      } to continue`,
+                        ? defaults.data.default.min_stack_penalty
+                        : spec.game === Games.matcher
+                        ? defaults.data.default.min_stack_guess_master
+                        : 0
+                    } to continue`,
                   }).error();
                   return;
                 }
@@ -417,8 +393,8 @@ const defaults: AxiosResponse<{
               {playLoader ? (
                 <SyncLoader size="10px" color="white" />
               ) : (
-                  "Proceed"
-                )}
+                "Proceed"
+              )}
             </span>
           </div>
         ) : spec.next === nextType.player ? (
@@ -452,32 +428,32 @@ const defaults: AxiosResponse<{
             </div>
           </div>
         ) : (
-              <div className="container">
-                <h3 className="title">Game Manual</h3>
-                <p className="txt">{spec.manual}</p>
-                <span
-                  className="btn"
-                  onClick={() => {
-                    if (
-                      spec.game === Games.lucky_geoge ||
-                      spec.game === Games.rooms
-                    ) {
-                      setViewOpen(false);
-                      setP2(true);
-                      return;
-                    }
-                    setSpec((prev) => {
-                      return {
-                        ...prev,
-                        next: nextType.player,
-                      };
-                    });
-                  }}
-                >
-                  confirm
+          <div className="container">
+            <h3 className="title">Game Manual</h3>
+            <p className="txt">{spec.manual}</p>
+            <span
+              className="btn"
+              onClick={() => {
+                if (
+                  spec.game === Games.lucky_geoge ||
+                  spec.game === Games.rooms
+                ) {
+                  setViewOpen(false);
+                  setP2(true);
+                  return;
+                }
+                setSpec((prev) => {
+                  return {
+                    ...prev,
+                    next: nextType.player,
+                  };
+                });
+              }}
+            >
+              confirm
             </span>
-              </div>
-            )}
+          </div>
+        )}
       </div>
       <span
         className="new_game"
@@ -485,7 +461,10 @@ const defaults: AxiosResponse<{
           setViewOpen(true);
         }}
       >
-        play game <span className="icon" ref={game_play} />
+        play game{" "}
+        <span className="icon">
+          <FontAwesomeIcon icon={faGamepad} />
+        </span>
       </span>
       <div className={`games_view ${gameViewOpen && "open"}`}>
         <Fab
@@ -691,8 +670,9 @@ const defaults: AxiosResponse<{
                   Request
                 </span>
                 <span
-                  className={`btn ${viewing === Viewing.notification ? "on" : ""
-                    }`}
+                  className={`btn ${
+                    viewing === Viewing.notification ? "on" : ""
+                  }`}
                   onClick={() => setViewing(Viewing.notification)}
                 >
                   Notification
@@ -707,88 +687,118 @@ const defaults: AxiosResponse<{
                     add
                   </p>
                 ) : (
-                    my_games?.data?.games.map((game) => {
-                      return (
-                        <GameView
-                          type={game.gameID === Games.rooms ? "room" : "normal"}
-                          name={
-                            game.gameID === Games.roshambo
-                              ? "Roshambo"
-                              : game.gameID === Games.penalth_card
-                                ? "Penelty Card"
-                                : game.gameID === Games.matcher
-                                  ? "Guess Master"
-                                  : game.gameID === Games.lucky_geoge
-                                    ? "lucky judge"
-                                    : game.gameID === Games.rooms
-                                      ? `${game.gameDetail} room` ?? ""
-                                      : ""
-                          }
-                          key={game._id}
-                          date={game.date}
-                          v1={
-                            game.price_in_value *
-                            (defaults?.data.default?.cashRating ?? 1)
-                          }
-                          v2={game.price_in_value}
-                          v3={game.gameMemberCount}
-                          id={game._id}
-                          cash={game.price_in_value}
-                          coin={game.price_in_coin}
-                          game={game.gameID}
-                        />
-                      );
-                    })
-                  )
+                  my_games?.data?.games.map((game) => {
+                    return (
+                      <GameView
+                        type={game.gameID === Games.rooms ? "room" : "normal"}
+                        name={
+                          game.gameID === Games.roshambo
+                            ? "Roshambo"
+                            : game.gameID === Games.penalth_card
+                            ? "Penelty Card"
+                            : game.gameID === Games.matcher
+                            ? "Guess Master"
+                            : game.gameID === Games.lucky_geoge
+                            ? "lucky judge"
+                            : game.gameID === Games.rooms
+                            ? `${game.gameDetail} room` ?? ""
+                            : ""
+                        }
+                        key={game._id}
+                        date={game.date}
+                        v1={
+                          game.price_in_value *
+                          (defaults?.data.default?.cashRating ?? 1)
+                        }
+                        v2={game.price_in_value}
+                        v3={game.gameMemberCount}
+                        id={game._id}
+                        btn1func={() => {
+                          console.log("working");
+                        }}
+                        btn2view="exit"
+                        btn2func={() =>
+                          exitWin(dispatch, {
+                            open: modalType.open,
+                            game: game.gameID,
+                            func: async () => {
+                              await Axios.delete(`${url}/games/any/cancel`, {
+                                params: { gameID: game._id },
+                              })
+                                .then(() => {
+                                  toast(dispatch, {
+                                    msg:
+                                      "This game has been delete and your cash has been forwarded to your account, you play more game to earn more.",
+                                  }).success();
+                                  setTimeout(() => {
+                                    window.location.reload();
+                                  }, 4000);
+                                })
+                                .catch(() => {
+                                  toast(dispatch, {
+                                    msg:
+                                      "An Error Occured, Please check your internet connect and reload this page.",
+                                  }).error();
+                                });
+                            },
+                          })
+                        }
+                        cash={game.price_in_value}
+                        coin={game.price_in_coin}
+                        game={game.gameID}
+                      />
+                    );
+                  })
+                )
               ) : viewing === Viewing.notification ? (
                 <p className="none">No nofications yet</p>
               ) : viewing === Viewing.request ? (
                 requests.data.requests.length === 0 ? (
                   <p className="none">No requests yet</p>
                 ) : (
-                    requests.data.requests.map((request) => {
-                      return (
-                        <GameView
-                          type="custom"
-                          name={request?.battleScore?.player1?.title}
-                          key={request._id}
-                          date={request.date}
-                          v1={
-                            request.price_in_value *
-                            (defaults?.data.default?.cashRating ?? 1)
-                          }
-                          v2={request.price_in_value}
-                          v3={request.gameMemberCount}
-                          id={request._id}
-                          btn1func={() =>
-                            setCustomWindow(dispatch, {
-                              isOpen: modalType.open,
-                              request,
-                            })
-                          }
-                          btn2func={() =>
-                            exitWin(dispatch, {
-                              open: modalType.open,
-                              func: async () =>
-                                Axios.post(
-                                  `${url}/games/custom/game`,
-                                  { id: request._id },
-                                  {
-                                    headers: {
-                                      authorization: `Bearer ${getToken()}`,
-                                    },
-                                  }
-                                ),
-                              game: Games.custom_game,
-                            })
-                          }
-                          cash={request.price_in_value}
-                          coin={request.price_in_coin}
-                          game={request.gameID}
-                        />
-                      );
-                    })
-                  )
+                  requests.data.requests.map((request) => {
+                    return (
+                      <GameView
+                        type="custom"
+                        name={request?.battleScore?.player1?.title}
+                        key={request._id}
+                        date={request.date}
+                        v1={
+                          request.price_in_value *
+                          (defaults?.data.default?.cashRating ?? 1)
+                        }
+                        v2={request.price_in_value}
+                        v3={request.gameMemberCount}
+                        id={request._id}
+                        btn1func={() =>
+                          setCustomWindow(dispatch, {
+                            isOpen: modalType.open,
+                            request,
+                          })
+                        }
+                        btn2func={() =>
+                          exitWin(dispatch, {
+                            open: modalType.open,
+                            func: async () =>
+                              Axios.post(
+                                `${url}/games/custom/game`,
+                                { id: request._id },
+                                {
+                                  headers: {
+                                    authorization: `Bearer ${getToken()}`,
+                                  },
+                                }
+                              ),
+                            game: Games.custom_game,
+                          })
+                        }
+                        cash={request.price_in_value}
+                        coin={request.price_in_coin}
+                        game={request.gameID}
+                      />
+                    );
+                  })
+                )
               ) : null}
             </div>
           </div>

@@ -399,7 +399,7 @@ if (price >0) {
                     id: undefined,
                     price: 0,
                   });
-                        setLoading(TwoButtonLoader.no_loading);
+                  setLoading(TwoButtonLoader.no_loading);
                   setDemoState(true);
                   setKnownState1(CheckerType.unknown);
                   setKnownState2(CheckerType.unknown);
@@ -853,11 +853,7 @@ if (price >0) {
                   {loading === TwoButtonLoader.first_loading ? (
                     <SyncLoader size="10px" color={`white`} />
                   ) : (
-                    `stake ₦ ${getPrice(
-                      details.game,
-                      details.price,
-                      defaults.data.default
-                    )}`
+                    `stake ₦ ${details.price}`
                   )}
                 </div>
                 <div
@@ -871,11 +867,7 @@ if (price >0) {
                   ) : (
                     <>
                       stake <GameCoin />{" "}
-                      {getPrice(
-                        details.game,
-                        details.price,
-                        defaults.data.default
-                      ) * (defaults?.data.default.cashRating ?? 0)}
+                      {details.price * (defaults?.data.default.cashRating ?? 0)}
                     </>
                   )}
                 </div>

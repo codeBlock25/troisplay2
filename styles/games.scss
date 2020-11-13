@@ -265,6 +265,8 @@
     user-select: none;
     cursor: pointer;
     transform: scale(1);
+    justify-content: center;
+    align-items: center;
     transition: cubic-bezier(0.075, 0.82, 0.165, 1) .3s;
 
     @media (max-width: 500px) {
@@ -296,6 +298,12 @@
         display: flex;
         align-self: center;
         margin: 0 4px;
+        justify-content: center;
+        align-items: center;
+
+        svg {
+            color: rgb(240, 146, 6);
+        }
     }
 }
 
@@ -751,7 +759,7 @@
     display: block;
     flex-direction: column;
     overflow: hidden;
-    overflow-y: auto; 
+    overflow-y: auto;
     -ms-overflow-style: scrollbar;
     padding-top: 60px;
     background-color: $body;

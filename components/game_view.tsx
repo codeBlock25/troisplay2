@@ -30,9 +30,9 @@ const GameView = memo(function ({
   game: Games
   type:"game_view"|"normal" | "lucky" | "room" | "custom",
   btn1func?: () => Promise<void> |  void | boolean | Dispatch<SetStateAction<any>>
-  btn1view?: JSX.Element
+  btn1view?: JSX.Element | string
   btn2func?: () => Promise<void> | void | boolean | Dispatch<SetStateAction<any>>
-  btn2view?: JSX.Element
+  btn2view?: JSX.Element | string
 }) {
   const defaults: AxiosResponse<{
     default: {

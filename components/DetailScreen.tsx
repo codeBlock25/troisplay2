@@ -12,12 +12,12 @@ import { useDispatch } from 'react-redux';
 import { SyncLoader } from "react-spinners";
 import { useFlutterwave } from "flutterwave-react-v3";
 import { config, NAIRA } from "../constant";
+import { faCoins } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export default function DetailScreen() {
     const dispatch = useDispatch()
     const swRef1: MutableRefObject<HTMLDivElement | null> = useRef();
-    const coinRef: MutableRefObject<HTMLSpanElement | null> = useRef();
-    const coinRef2: MutableRefObject<HTMLSpanElement | null> = useRef();
     const [dateintime, setDateintime] = useState("");
     const swRef: MutableRefObject<HTMLDivElement | null> = useRef();
     const [playLoader, setPlayerLoader] = useState<boolean>(false);
@@ -115,27 +115,6 @@ export default function DetailScreen() {
       }
     };
 
-    const lottieLoader = useCallback(() => {
-      Lottie.loadAnimation({
-      container: coinRef.current,
-      autoplay: true,
-      loop: true,
-      renderer: "canvas",
-      animationData: require("../lottie/coin.json"),
-      });
-      Lottie.loadAnimation({
-      container: coinRef2.current,
-      autoplay: true,
-      loop: true,
-      renderer: "canvas",
-      animationData: require("../lottie/coin.json"),
-      });
-    }, []);
-  
-    useEffect(() => {
-      lottieLoader();
-    }, [lottieLoader]);
-
   const spin: AxiosResponse<{
     spin_details: {
       currentTime: Date,
@@ -215,7 +194,9 @@ export default function DetailScreen() {
             <span className="time">Next Spin {dateintime}</span>
             <h3 className="title">Coin</h3>
             <span className="price">
-              <span ref={coinRef} className="icon" />
+              <span className="icon">
+                <FontAwesomeIcon icon={faCoins} />
+              </span>
               {record?.data?.wallet?.currentCoin.toLocaleString() ?? 0}
             </span>
             <div className="action">
@@ -263,7 +244,10 @@ export default function DetailScreen() {
             <span className="time">Next Spin {dateintime}</span>
             <h3 className="title">Earnings</h3>
             <span className="price">
-              <span ref={coinRef2} className="icon" />{" "}
+              <span className="icon">
+              <FontAwesomeIcon icon={faCoins} />
+              </span>
+              {" "}
               {record?.data?.referal?.inactiveReferal ??
                 0 * defaults?.data?.default?.referRating ??
                 0}
