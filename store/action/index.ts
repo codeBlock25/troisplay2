@@ -1,4 +1,5 @@
 import { ClassType } from "react";
+import { Dispatch } from "redux";
 import {
   choices,
   errorType,
@@ -9,6 +10,46 @@ import {
   ReasonType,
 } from "../../typescript/enum";
 import { ActionType } from "../../typescript/interface";
+
+export const initReduceGameState = {
+  init: ({
+    dispatch,
+    payload,
+  }: {
+    dispatch: Dispatch<ActionType<any>>;
+    payload: {
+      luckyGames: any;
+      roomGames: any;
+      my_games: any;
+      gameDefaults: any;
+      playerRecord: any;
+      spin_details: any;
+    };
+  }) => {
+    dispatch({ type: "INIT", payload });
+  },
+  clear: () => {},
+  lucky_games: () => {},
+  room_games: () => {},
+  my_games: () => {},
+  request_games: () => {},
+  spin_games: () => {},
+};
+
+export const MyGamesAction = {
+  add: ({
+    dispatch,
+    payload,
+  }: {
+    dispatch: Dispatch<ActionType<any>>;
+    payload: any;
+  }) => {
+    dispatch({ type: "PLAYED", payload });
+  },
+  remover: () => {},
+  clear: () => {},
+  reInit: () => {},
+};
 
 export const notify = (
   dispatch: (t: ActionType) => void,

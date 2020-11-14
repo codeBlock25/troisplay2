@@ -1,4 +1,5 @@
 
+import { initReducerType } from "../store/reducer/initial";
 import {
   Games,
   modalType,
@@ -77,10 +78,13 @@ export interface ActionType<T = any> {
     | "EXIT"
     | "BACK"
     | "ACTION"
-    | "CUSTOMWINDOW";
+    | "CUSTOMWINDOW"
+    | "INIT"
+    | "PLAYED";
   payload: T;
 }
 
 export interface reducerType {
   event: eventReeducerType;
+  init: initReducerType;
 }

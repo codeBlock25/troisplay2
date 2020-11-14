@@ -1,29 +1,31 @@
 import Head from "next/head";
-import { InView } from "react-intersection-observer";
-import {useFlutterwave} from "flutterwave-react-v3"
 import React, {
   MutableRefObject,
-  useCallback,
   useEffect,
   useRef,
   useState,
 } from "react";
-import {
-  BackIcon,
-  GameCoin,
-  NextIcon,
-} from "../../icon";
-import Lottie from "lottie-web";
+import { GameCoin } from "../../icon";
 import moment from "moment";
 import { useQueryCache } from "react-query";
 import Axios, { AxiosResponse } from "axios";
-import { config, url } from "../../constant";
-import { Games, PlayerType, Viewing, ReasonType, modalType } from "../../typescript/enum";
-import { getPrice, getToken, isPlayable } from "../../functions";
+import { url } from "../../constant";
+import {
+  Games,
+  PlayerType,
+  Viewing,
+  modalType,
+} from "../../typescript/enum";
+import { getPrice, getToken } from "../../functions";
 import { SyncLoader } from "react-spinners";
 import Notification from "../../components/notification";
 import Roshambo from "../../components/games/roshambo";
-import { backWin, exitWin, setCustomWindow, setGameDetails, toast } from "../../store/action";
+import {
+  exitWin,
+  setCustomWindow,
+  setGameDetails,
+  toast,
+} from "../../store/action";
 import { useDispatch, useSelector } from "react-redux";
 import Penalty_card from "../../components/games/penelty_card";
 import ToastContainer from "../../components/toast";
@@ -32,77 +34,87 @@ import { useRouter } from "next/router";
 import GameView from "../../components/game_view";
 import Exitwindow from "../../components/exitwindow";
 import Header from "../../components/header";
-import {nextType, choices} from "../../typescript/enum"
+import { nextType, choices } from "../../typescript/enum";
 import PickerPlayer2 from "../../components/gamepicker_player2";
 import GuessMaster from "../../components/games/matcher";
 import CustomGame, { choice } from "../../components/games/custom";
 import Gloryspin from "../../components/games/gloryspin";
 import BackWindow from "../../components/backwindow";
 import { Fab } from "@material-ui/core";
-import { ArrowDownward, Close } from "@material-ui/icons";
+import { ArrowDownward } from "@material-ui/icons";
 import Bottompanel from "../../components/bottompanel";
-import { reducerType } from "../../typescript/interface";
 import DetailScreen from "../../components/DetailScreen";
 import CustomWindow from "../../components/customWindow";
 import AccountF from "../../components/account_f";
 import { faGamepad } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { reducerType } from "../../typescript/interface";
 
 export default function GamesScreen() {
   const dispatch = useDispatch();
+  const [viewing, setViewing] = useState<Viewing>(Viewing.current);
+  const [app_loading, setApp_loading] = useState<boolean>(true);
+  const [runText, setRunText] = useState("loading game components...");
+  const [gameViewOpen, setViewOpen] = useState<boolean>(false);
+  const [p2, setP2] = useState<boolean>(false);
+  const { push, beforePopState, asPath, pathname } = useRouter();
 
-  const { details } = useSelector<
+  const { my_games, defaults } = useSelector<
     reducerType,
     {
-      details: {
-        price: number;
-        game: Games;
-        id?: string;
-        player: PlayerType;
+      my_games: {
+        date: Date;
+        gameDetail: string;
+        gameID: Games;
+        gameMemberCount: number;
+        gameType: Games;
+        members: string[];
+        playCount: number;
+        price_in_coin: number;
+        price_in_value: number;
+        battleScore?: {
+          player1?: {
+            endDate: Date;
+            title: string;
+            description: string;
+            answer: string;
+            endGameTime: Date;
+            choice: choice;
+          };
+        };
+        _id: string;
+      }[];
+      defaults: {
+        commission_roshambo: {
+          value: number;
+          value_in: "$" | "%" | "c";
+        };
+        commission_penalty: {
+          value: number;
+          value_in: "$" | "%" | "c";
+        };
+        commission_guess_mater: {
+          value: number;
+          value_in: "$" | "%" | "c";
+        };
+        commission_custom_game: {
+          value: number;
+          value_in: "$" | "%" | "c";
+        };
+        cashRating: number;
+        min_stack_roshambo: number;
+        min_stack_penalty: number;
+        min_stack_guess_master: number;
+        min_stack_custom: number;
+        referRating: number;
       };
     }
   >((state) => {
     return {
-      details: state.event.game_details,
+      my_games: state.init.my_games,
+      defaults: state.init.gameDefaults
     };
   });
-  const [viewing, setViewing] = useState<Viewing>(Viewing.current);
-  const [dateintime, setDateintime] = useState("");
-  const [app_loading, setApp_loading] = useState<boolean>(true);
-  const [runText, setRunText] = useState("loading game components...");
-  const [gameViewOpen, setViewOpen] = useState<boolean>(false);
-  const swRef: MutableRefObject<HTMLDivElement | null> = useRef();
-  const coinRef: MutableRefObject<HTMLSpanElement | null> = useRef();
-  const coinRef2: MutableRefObject<HTMLSpanElement | null> = useRef();
-  const game_play: MutableRefObject<HTMLSpanElement | null> = useRef();
-  const [playLoader, setPlayerLoader] = useState<boolean>(false);
-  const [game_loading, setgameLoading] = useState<boolean>(false);
-  const [p2, setP2] = useState<boolean>(false);
-  const { push, beforePopState } = useRouter();
-  const [time, setTime] = useState<string>("00:00");
-  const spin: AxiosResponse<{
-    spin_details: {
-      currentTime: Date;
-      gameTime: Date;
-      isPlayable: boolean;
-    };
-  }> = useQueryCache().getQueryData("spins");
-
-  useEffect(() => {
-    let countdownEvt = setInterval(() => {
-      if (spin) {
-        let time = moment(
-          moment(spin?.data?.spin_details.gameTime ?? new Date()).diff(
-            new Date()
-          )
-        ).format("HH:MM:ss");
-        setDateintime(spin.data.spin_details.isPlayable ? "00:00:00" : time);
-      }
-    }, 200);
-    return () => {
-      clearInterval(countdownEvt);
-    };
-  }, [spin]);
 
   const [spec, setSpec] = useState<{
     isOpen: boolean;
@@ -117,31 +129,6 @@ export default function GamesScreen() {
     game: Games.non,
     next: nextType.player,
   });
-
-  const my_games: AxiosResponse<{
-    games: {
-      date: Date;
-      gameDetail: string;
-      gameID: Games;
-      gameMemberCount: number;
-      gameType: Games;
-      members: string[];
-      playCount: number;
-      price_in_coin: number;
-      price_in_value: number;
-      battleScore?: {
-        player1?: {
-          endDate: Date;
-          title: string;
-          description: string;
-          answer: string;
-          endGameTime: Date;
-          choice: choice;
-        };
-      };
-      _id: string;
-    }[];
-  }> = useQueryCache().getQueryData("my_games");
 
   const requests: AxiosResponse<{
     requests: {
@@ -168,32 +155,6 @@ export default function GamesScreen() {
     }[];
   }> = useQueryCache().getQueryData("requests");
 
-  const defaults: AxiosResponse<{
-    default: {
-      commission_roshambo: {
-        value: number;
-        value_in: "$" | "%" | "c";
-      };
-      commission_penalty: {
-        value: number;
-        value_in: "$" | "%" | "c";
-      };
-      commission_guess_mater: {
-        value: number;
-        value_in: "$" | "%" | "c";
-      };
-      commission_custom_game: {
-        value: number;
-        value_in: "$" | "%" | "c";
-      };
-      cashRating: number;
-      min_stack_roshambo: number;
-      min_stack_penalty: number;
-      min_stack_guess_master: number;
-      min_stack_custom: number;
-      referRating: number;
-    };
-  }> = useQueryCache().getQueryData("defaults");
   const record: AxiosResponse<{
     user: {
       full_name: string;
@@ -243,26 +204,30 @@ export default function GamesScreen() {
   }> = useQueryCache().getQueryData("records");
 
   useEffect(() => {
-    beforePopState(({ url, as, options }) => {
-      window.location.href = as;
-      return confirm("Are you sure you want to leave this game?");
+    beforePopState(({ as }) => {
+      if (as.includes("#playing")) {
+        let userChoice = confirm("Are you sure you want to leave this game?"); 
+        window.location.href = as;
+        return userChoice;
+      }
     });
-  }, []);
-  // const { asPath, pathname } = useRouter();
-  // useEffect(() => {
-  //   switch (asPath) {
-  //     case "/games#play-games": {
-  //         setViewOpen(true);
-  //     }
-  //       break;
-    
-  //     default: {
-  //       setViewOpen(false);
-  //     }
-  //       break;
-  //   }
-  // }, [asPath, pathname])
-  
+  }, [pathname, asPath]);
+  useEffect(() => {
+    switch (asPath) {
+      case "/games#play-games":
+        {
+          setViewOpen(true);
+        }
+        break;
+
+      default:
+        {
+          setViewOpen(false);
+        }
+        break;
+    }
+  }, [asPath, pathname]);
+
   return (
     <>
       <Head>
@@ -314,25 +279,25 @@ export default function GamesScreen() {
             <h3 className="title">Game Setup.</h3>
             <p className="txt">
               To stand a chances to earn{" "}
-              {getPrice(spec.game, spec.price, defaults?.data?.default) <= 0
+              {getPrice(spec.game, spec.price, defaults) <= 0
                 ? ""
                 : `$ ${getPrice(
                     spec.game,
                     spec.price,
-                    defaults?.data?.default
+                    defaults
                   )}`}{" "}
             </p>
             <p className="txt">
               or Stake At{" "}
-              {defaults?.data?.default.cashRating * spec.price === null ||
-              !(defaults?.data?.default.cashRating * spec.price) ? (
+              {defaults.cashRating * spec.price === null ||
+              !(defaults.cashRating * spec.price) ? (
                 "0"
               ) : (
                 <span
                   style={{ marginLeft: 5, display: "flex", marginRight: 5 }}
                 >
                   {"  "} <GameCoin />{" "}
-                  {`${defaults?.data?.default.cashRating * spec.price}`}
+                  {`${defaults.cashRating * spec.price}`}
                 </span>
               )}
             </p>
@@ -360,11 +325,11 @@ export default function GamesScreen() {
                 if (
                   spec.price <
                   (spec.game === Games.roshambo
-                    ? defaults.data.default.min_stack_roshambo
+                    ? defaults.min_stack_roshambo
                     : spec.game === Games.penalth_card
-                    ? defaults.data.default.min_stack_penalty
+                    ? defaults.min_stack_penalty
                     : spec.game === Games.matcher
-                    ? defaults.data.default.min_stack_guess_master
+                    ? defaults.min_stack_guess_master
                     : 0)
                 ) {
                   toast(dispatch, {
@@ -378,11 +343,11 @@ export default function GamesScreen() {
                         : ""
                     } game below the minimum price bar. Please stake something higher than ₦ ${
                       spec.game === Games.roshambo
-                        ? defaults.data.default.min_stack_roshambo
+                        ? defaults.min_stack_roshambo
                         : spec.game === Games.penalth_card
-                        ? defaults.data.default.min_stack_penalty
+                        ? defaults.min_stack_penalty
                         : spec.game === Games.matcher
-                        ? defaults.data.default.min_stack_guess_master
+                        ? defaults.min_stack_guess_master
                         : 0
                     } to continue`,
                   }).error();
@@ -404,12 +369,7 @@ export default function GamesScreen() {
                   };
                 });
               }}
-            >
-              {playLoader ? (
-                <SyncLoader size="10px" color="white" />
-              ) : (
-                "Proceed"
-              )}
+            >Proceed
             </span>
           </div>
         ) : spec.next === nextType.player ? (
@@ -453,7 +413,7 @@ export default function GamesScreen() {
                   spec.game === Games.lucky_geoge ||
                   spec.game === Games.rooms
                 ) {
-                  setViewOpen(false);
+                  push("/games")
                   setP2(true);
                   return;
                 }
@@ -473,8 +433,7 @@ export default function GamesScreen() {
       <span
         className="new_game"
         onClick={() => {
-          // push("/games#play-games")
-          setViewOpen(true);
+          push("/games#play-games")
         }}
       >
         play game{" "}
@@ -486,7 +445,7 @@ export default function GamesScreen() {
         <Fab
           className="btn_close"
           onClick={() => {
-            setViewOpen(false);
+                push("/games");
           }}
         >
           <ArrowDownward />
@@ -495,7 +454,7 @@ export default function GamesScreen() {
           <div
             className="game"
             onClick={() => {
-              setViewOpen(false);
+                  push("/games");
               setSpec({
                 isOpen: true,
                 manual:
@@ -522,7 +481,7 @@ export default function GamesScreen() {
           <div
             className="game"
             onClick={() => {
-              setViewOpen(false);
+                  push("/games");
               setSpec({
                 isOpen: true,
                 manual:
@@ -549,7 +508,7 @@ export default function GamesScreen() {
           <div
             className="game"
             onClick={() => {
-              setViewOpen(false);
+                  push("/games");
               setSpec({
                 isOpen: true,
                 manual:
@@ -576,7 +535,7 @@ export default function GamesScreen() {
           <div
             className="game"
             onClick={() => {
-              setViewOpen(false);
+                  push("/games");
               setSpec({
                 isOpen: true,
                 manual:
@@ -603,7 +562,7 @@ export default function GamesScreen() {
           <div
             className="game"
             onClick={() => {
-              setViewOpen(false);
+                  push("/games");
               setSpec({
                 isOpen: true,
                 manual:
@@ -630,7 +589,7 @@ export default function GamesScreen() {
           <div
             className="game"
             onClick={() => {
-              setViewOpen(false);
+                  push("/games");
               setSpec({
                 isOpen: true,
                 manual:
@@ -662,7 +621,7 @@ export default function GamesScreen() {
           gameViewOpen || spec.isOpen ? "games_world_ blur" : "games_world_"
         }
         onClick={() => {
-          setViewOpen(false);
+                  push("/games");
         }}
       >
         <div className="first">
@@ -697,13 +656,13 @@ export default function GamesScreen() {
             </div>
             <div className="game_content">
               {viewing === Viewing.current ? (
-                my_games?.data?.games.length === 0 ? (
+                my_games.length === 0 ? (
                   <p className="none">
                     You don't have any active games, hit the play game button to
                     add
                   </p>
                 ) : (
-                  my_games?.data?.games.map((game) => {
+                  my_games.map((game) => {
                     return (
                       <GameView
                         type={game.gameID === Games.rooms ? "room" : "normal"}
@@ -724,7 +683,7 @@ export default function GamesScreen() {
                         date={game.date}
                         v1={
                           game.price_in_value *
-                          (defaults?.data.default?.cashRating ?? 1)
+                          (defaults?.cashRating ?? 1)
                         }
                         v2={game.price_in_value}
                         v3={game.gameMemberCount}
@@ -734,14 +693,16 @@ export default function GamesScreen() {
                         }}
                         btn2view="exit"
                         btn2func={() => {
-                          console.log("test");;
+                          console.log("test");
                           exitWin(dispatch, {
                             open: modalType.open,
                             game: game.gameID,
                             func: async () => {
                               await Axios.delete(`${url}/games/any/cancel`, {
                                 params: { gameID: game._id },
-                                headers: {authorization: `Bearer ${getToken()}`}
+                                headers: {
+                                  authorization: `Bearer ${getToken()}`,
+                                },
                               })
                                 .then(() => {
                                   toast(dispatch, {
@@ -759,7 +720,7 @@ export default function GamesScreen() {
                                   }).error();
                                 });
                             },
-                          });;
+                          });
                         }}
                         cash={game.price_in_value}
                         coin={game.price_in_coin}
@@ -783,7 +744,7 @@ export default function GamesScreen() {
                         date={request.date}
                         v1={
                           request.price_in_value *
-                          (defaults?.data.default?.cashRating ?? 1)
+                          (defaults?.cashRating ?? 1)
                         }
                         v2={request.price_in_value}
                         v3={request.gameMemberCount}

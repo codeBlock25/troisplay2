@@ -8,54 +8,82 @@ import { CloseIcon, ForwardIcon, GameCoin, GoalPostIcon } from "../../icon";
 import { getPrice, getToken } from "../../functions";
 import {
   exitWin,
-  notify, setGameDetails, toast,
+  MyGamesAction,
+  notify,
+  setGameDetails,
+  toast,
 } from "../../store/action";
-import { CheckerType, GameRec, Games, modalType, NotiErrorType, PayType, PenaltyOption, PlayerType, PlayType, TwoButtonLoader } from "../../typescript/enum";
+import {
+  CheckerType,
+  GameRec,
+  Games,
+  modalType,
+  NotiErrorType,
+  PayType,
+  PenaltyOption,
+  PlayerType,
+  PlayType,
+  TwoButtonLoader,
+} from "../../typescript/enum";
 import { reducerType } from "../../typescript/interface";
-import { useQueryCache } from "react-query";
-
 
 export default function Penalty_card() {
   const dispatch = useDispatch();
-  const [isDemoPlay, setDemoState] = useState<boolean>(true);
+  const [winner, setWinner] = useState<GameRec>(GameRec.draw);
   const [loading, setLoading] = useState<TwoButtonLoader>(
     TwoButtonLoader.no_loading
   );
-  const [round1knowState, setKnownState1] = useState<CheckerType>(CheckerType.unknown);
-  const [round2knowState, setKnownState2] = useState<CheckerType>(CheckerType.unknown);
-  const [round3knowState, setKnownState3] = useState<CheckerType>(CheckerType.unknown);
-  const [round4knowState, setKnownState4] = useState<CheckerType>(CheckerType.unknown);
-  const [round5knowState, setKnownState5] = useState<CheckerType>(CheckerType.unknown);
+  const [round1knowState, setKnownState1] = useState<CheckerType>(
+    CheckerType.unknown
+  );
+  const [round2knowState, setKnownState2] = useState<CheckerType>(
+    CheckerType.unknown
+  );
+  const [round3knowState, setKnownState3] = useState<CheckerType>(
+    CheckerType.unknown
+  );
+  const [round4knowState, setKnownState4] = useState<CheckerType>(
+    CheckerType.unknown
+  );
+  const [round5knowState, setKnownState5] = useState<CheckerType>(
+    CheckerType.unknown
+  );
   const [playStateLoad, setPlayStateLoading] = useState<boolean>(false);
   const [playType, setPlayType] = useState<PlayType>(PlayType.non);
-  const [playCount, setPlayCount] = useState<number>(0);
-  const defaults: AxiosResponse<{
-    default: {
-      commission_roshambo: {
-        value: number;
-        value_in: "$" | "%" | "c";
+  const { defaults } = useSelector<
+    reducerType,
+    {
+      defaults: {
+        commission_roshambo: {
+          value: number;
+          value_in: "$" | "%" | "c";
+        };
+        commission_penalty: {
+          value: number;
+          value_in: "$" | "%" | "c";
+        };
+        commission_guess_mater: {
+          value: number;
+          value_in: "$" | "%" | "c";
+        };
+        commission_custom_game: {
+          value: number;
+          value_in: "$" | "%" | "c";
+        };
+        cashRating: number;
+        min_stack_roshambo: number;
+        min_stack_penalty: number;
+        min_stack_guess_master: number;
+        min_stack_custom: number;
+        referRating: number;
       };
-      commission_penalty: {
-        value: number;
-        value_in: "$" | "%" | "c";
-      };
-      commission_guess_mater: {
-        value: number;
-        value_in: "$" | "%" | "c";
-      };
-      commission_custom_game: {
-        value: number;
-        value_in: "$" | "%" | "c";
-      };
-      cashRating: number;
-      min_stack_roshambo: number;
-      min_stack_penalty: number;
-      min_stack_guess_master: number;
-      min_stack_custom: number;
-      referRating: number;
+    }
+  >((state) => {
+    return {
+      defaults: state.init.gameDefaults,
     };
-  }> = useQueryCache().getQueryData("defaults");
-   
+  });
+
   const [round1, setRound1] = useState<{
     round: number;
     value: PenaltyOption;
@@ -91,9 +119,7 @@ export default function Penalty_card() {
     round: 5,
     value: PenaltyOption.left,
   });
-  const {
-    details
-  } = useSelector<
+  const { details } = useSelector<
     reducerType,
     {
       details: {
@@ -105,15 +131,15 @@ export default function Penalty_card() {
     }
   >((state) => {
     return {
-      details: state.event.game_details
+      details: state.event.game_details,
     };
   });
-  const theme = "dark-mode"
+  const theme = "dark-mode";
 
   const handleSubmit = async (payWith?: PayType) => {
     if (loading !== TwoButtonLoader.no_loading) return;
-    let token = getToken()
-    if(payWith === PayType.cash) {
+    let token = getToken();
+    if (payWith === PayType.cash) {
       setLoading(TwoButtonLoader.first_loading);
     } else {
       setLoading(TwoButtonLoader.second_loading);
@@ -155,6 +181,7 @@ export default function Penalty_card() {
               date?: Date;
             };
           }>) => {
+            MyGamesAction.add({ dispatch, payload: game });
             setGameDetails(dispatch, {
               player: PlayerType.first,
               game: Games.non,
@@ -187,8 +214,8 @@ export default function Penalty_card() {
           }).error();
         })
         .finally(() => {
-                        setLoading(TwoButtonLoader.no_loading);
-          setDemoState(true);
+          setLoading(TwoButtonLoader.no_loading);
+          setPlayType(PlayType.non);
           setRound1({ round: 1, value: PenaltyOption.left });
           setRound2({ round: 2, value: PenaltyOption.left });
           setRound3({ round: 3, value: PenaltyOption.left });
@@ -215,44 +242,63 @@ export default function Penalty_card() {
       })
         .then(
           ({
-            data: { winner, price },
-          }: AxiosResponse<{ winner: boolean; price: number }>) => {
-            setGameDetails(dispatch, {
+            data: { winner, price, game_result },
+          }: AxiosResponse<{
+            winner: GameRec;
+            price: number;
+            game_result: {
+              round1: CheckerType;
+              round2: CheckerType;
+              round3: CheckerType;
+              round4: CheckerType;
+              round5: CheckerType;
+            };
+          }>) => {
+            // setPlayType(PlayType.non);
+            // setGameDetails(dispatch, {
+            //   player: PlayerType.first,
+            //   game: Games.non,
+            //   id: undefined,
+            //   price: 0,
+            // });
+
+            setWinner(winner);
+            setPlayType(PlayType.one_by_one);
+            setKnownState1(game_result.round1);
+            setKnownState2(game_result.round2);
+            setKnownState3(game_result.round3);
+            setKnownState4(game_result.round4);
+            setKnownState5(game_result.round5);
+            // if (winner) {
+            //   notify(dispatch, {
+            //     type: NotiErrorType.success,
+            //     msg: `Congratualation your have just won the game and earned $ ${price}. you can withdraw you cash price or use it to play more games.`,
+            //     isOpen: modalType.open,
+            //   });
+            // } else {
+            //   notify(dispatch, {
+            //     type: NotiErrorType.error,
+            //     msg: `Sorry your have just lost this game and lost $ ${price}. you can try other games for a better chance.`,
+            //     isOpen: modalType.open,
+            //   });
+            // }
+          }
+        )
+        .catch((err) => {
+          setPlayType(PlayType.non);
+          setGameDetails(dispatch, {
             player: PlayerType.first,
             game: Games.non,
             id: undefined,
             price: 0,
           });
-            if (winner) {
-              notify(dispatch, {
-                type: NotiErrorType.success,
-                msg: `Congratualation your have just won the game and earned $ ${price}. you can withdraw you cash price or use it to play more games.`,
-                isOpen: modalType.open,
-              });
-            } else {
-              notify(dispatch, {
-                type: NotiErrorType.error,
-                msg: `Sorry your have just lost this game and lost $ ${price}. you can try other games for a better chance.`,
-                isOpen: modalType.open,
-              });
-            }
-          }
-        )
-        .catch((err) => {
-          setGameDetails(dispatch, {
-          player: PlayerType.first,
-          game: Games.non,
-          id: undefined,
-          price: 0,
-        });
           toast(dispatch, {
             msg:
               "An Error occured could not connect to troisplay game server please check you interner connection and Try Again.",
           }).error();
         })
         .finally(() => {
-                        setLoading(TwoButtonLoader.no_loading);
-          setDemoState(true);
+          setLoading(TwoButtonLoader.no_loading);
           setRound1({ round: 1, value: PenaltyOption.left });
           setRound2({ round: 2, value: PenaltyOption.left });
           setRound3({ round: 3, value: PenaltyOption.left });
@@ -266,7 +312,7 @@ export default function Penalty_card() {
     round: number,
     gameInPut: number
   ): Promise<void> => {
-    let token = getToken()
+    let token = getToken();
     if (playStateLoad) return;
     setPlayStateLoading(true);
     await Axios({
@@ -310,8 +356,8 @@ export default function Penalty_card() {
               return;
           }
           if (final) {
-                        setLoading(TwoButtonLoader.no_loading);
-            setDemoState(true);
+            setLoading(TwoButtonLoader.no_loading);
+            setPlayType(PlayType.non);
             setKnownState1(CheckerType.unknown);
             setKnownState2(CheckerType.unknown);
             setKnownState3(CheckerType.unknown);
@@ -328,25 +374,22 @@ export default function Penalty_card() {
               id: undefined,
               price: 0,
             });
-if (price >0) {
-     notify(dispatch, {
-       type: NotiErrorType.success,
-       msg: `Congratualations You just won this game and have gained $ ${price}`,
-       isOpen: modalType.open,
-     });
-           return
-} else {
-    notify(dispatch, {
-      type: NotiErrorType.error,
-      msg: `Sorry your have just lost this game and lost $ ${price}. you can try other games for a better chance.`,
-      isOpen: modalType.open,
-    });
-            return
-}
+            if (price > 0) {
+              notify(dispatch, {
+                type: NotiErrorType.success,
+                msg: `Congratualations You just won this game and have gained $ ${price}`,
+                isOpen: modalType.open,
+              });
+              return;
+            } else {
+              notify(dispatch, {
+                type: NotiErrorType.error,
+                msg: `Sorry your have just lost this game and lost $ ${price}. you can try other games for a better chance.`,
+                isOpen: modalType.open,
+              });
+              return;
+            }
           }
-          setPlayCount((prev) => {
-            return prev + 1;
-          });
         }
       )
       .catch(() => {
@@ -393,6 +436,7 @@ if (price >0) {
               className="close_btn"
               onClick={() => {
                 if (isEmpty(details.id)) {
+                  setPlayType(PlayType.non);
                   setGameDetails(dispatch, {
                     player: PlayerType.first,
                     game: Games.non,
@@ -400,7 +444,6 @@ if (price >0) {
                     price: 0,
                   });
                   setLoading(TwoButtonLoader.no_loading);
-                  setDemoState(true);
                   setKnownState1(CheckerType.unknown);
                   setKnownState2(CheckerType.unknown);
                   setKnownState3(CheckerType.unknown);
@@ -429,7 +472,7 @@ if (price >0) {
                     })
                       .then(() => {
                         setLoading(TwoButtonLoader.no_loading);
-                        setDemoState(true);
+                        setPlayType(PlayType.non);
                         setKnownState1(CheckerType.unknown);
                         setKnownState2(CheckerType.unknown);
                         setKnownState3(CheckerType.unknown);
@@ -842,6 +885,54 @@ if (price >0) {
                 )}
               </div>
             </div>
+            {!isEmpty(details.id) && playType === PlayType.one_by_one && (
+              <div
+                className={`btn_ theme ${theme}`}
+                onClick={() => {
+                  if (winner === GameRec.win) {
+                    notify(dispatch, {
+                      type: NotiErrorType.success,
+                      msg: `Congratualation your have just won the game and earned $ ${getPrice(
+                        Games.penalth_card,
+                        details.price,
+                        defaults
+                      )}. you can withdraw you cash price or use it to play more games.`,
+                      isOpen: modalType.open,
+                    });
+                  } else if (winner === GameRec.draw) {
+                    notify(dispatch, {
+                      type: NotiErrorType.state,
+                      msg: `This game came out as a draw an your stake amount has been refund back to you. You can withdraw you cash price or use it to play more games.`,
+                      isOpen: modalType.open,
+                    });
+                  } else {
+                    notify(dispatch, {
+                      type: NotiErrorType.error,
+                      msg: `Sorry your have just lost this game and lost $ ${getPrice(
+                        Games.penalth_card,
+                        details.price,
+                        defaults
+                      )}. you can try other games for a better chance.`,
+                      isOpen: modalType.open,
+                    });
+                  }
+                  setPlayType(PlayType.non);
+                  setKnownState1(CheckerType.unknown);
+                  setKnownState2(CheckerType.unknown);
+                  setKnownState3(CheckerType.unknown);
+                  setKnownState4(CheckerType.unknown);
+                  setKnownState5(CheckerType.unknown);
+                  setGameDetails(dispatch, {
+                    player: PlayerType.first,
+                    game: Games.non,
+                    id: undefined,
+                    price: 0,
+                  });
+                }}
+              >
+                Close
+              </div>
+            )}
             {isEmpty(details.id) ? (
               <div className="game_action">
                 <div
@@ -867,7 +958,7 @@ if (price >0) {
                   ) : (
                     <>
                       stake <GameCoin />{" "}
-                      {details.price * (defaults?.data.default.cashRating ?? 0)}
+                      {details.price * (defaults?.cashRating ?? 0)}
                     </>
                   )}
                 </div>

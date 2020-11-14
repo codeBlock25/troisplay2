@@ -308,7 +308,7 @@
 }
 
 .games_view {
-    position: absolute;
+    position: fixed;
     bottom: -100vh;
     left: 0;
     width: 100vw;
@@ -605,9 +605,8 @@
     width: 32%;
     min-width: 320px;
     max-width: 380px;
-    height: 16vw;
-    min-height: 170px;
-    max-height: 280px;
+    height: fit-content;
+    min-height: fit-content;
     background-color: #212121;
     display: flex;
     margin: 10px 15px;
@@ -660,9 +659,11 @@
     .viewee {
         width: 100%;
         height: fit-content;
+        min-height: fit-content;
         display: flex;
         justify-content: center;
         padding-top: 5px;
+        margin-bottom: 10px;
         flex-wrap: wrap;
 
         span {
@@ -704,7 +705,8 @@
 
     .action {
         width: 100%;
-        height: 40px;
+        height: fit-content;
+        min-height: fit-content;
         display: flex;
         align-items: center;
         justify-content: space-evenly;
@@ -755,7 +757,7 @@
 .Settings {
     width: 100vw;
     height: 100vh;
-    min-height: fit-content;
+    min-height: 100vh;
     display: block;
     flex-direction: column;
     overflow: hidden;
@@ -766,13 +768,11 @@
 
     * {
         pointer-events: visible;
-        transform: scale(1);
     }
 
     &.blur {
         * {
             pointer-events: none;
-            transform: scale(1.03);
         }
 
         filter: blur(4px);
