@@ -438,76 +438,78 @@ export default function Roshambo() {
           </div>
         ) : (
           <div className="world spin roshambo">
-            <div
-              className="close_btn"
-              onClick={() => {
-                if (isEmpty(details.id)) {
-                  setGameDetails(dispatch, {
-                    player: PlayerType.first,
-                    game: Games.non,
-                    id: undefined,
-                    price: 0,
-                  });
-                  setPlayType(PlayType.non);
-                  setLoading(TwoButtonLoader.no_loading);
-                  setDemoState(true);
-                  setKnownState1(CheckerType.unknown);
-                  setKnownState2(CheckerType.unknown);
-                  setKnownState3(CheckerType.unknown);
-                  setKnownState4(CheckerType.unknown);
-                  setKnownState5(CheckerType.unknown);
-                  setRound1({ round: 1, value: RoshamboOption.rock });
-                  setRound2({ round: 2, value: RoshamboOption.rock });
-                  setRound3({ round: 3, value: RoshamboOption.rock });
-                  setRound4({ round: 4, value: RoshamboOption.rock });
-                  setRound5({ round: 5, value: RoshamboOption.rock });
-                  return;
-                }
-                exitWin(dispatch, {
-                  open: modalType.open,
-                  func: async () => {
-                    let token = getToken();
-                    await Axios({
-                      method: "POST",
-                      url: `${url}/games/roshambo/exit`,
-                      headers: {
-                        Authorization: `Bearer ${token}`,
-                      },
-                      data: {
-                        id: details.id,
-                      },
-                    })
-                      .then(() => {
-                        setLoading(TwoButtonLoader.no_loading);
-                        setDemoState(true);
-                        setKnownState1(CheckerType.unknown);
-                        setKnownState2(CheckerType.unknown);
-                        setKnownState3(CheckerType.unknown);
-                        setKnownState4(CheckerType.unknown);
-                        setKnownState5(CheckerType.unknown);
-                        setRound1({ round: 1, value: RoshamboOption.rock });
-                        setRound2({ round: 2, value: RoshamboOption.rock });
-                        setRound3({ round: 3, value: RoshamboOption.rock });
-                        setRound4({ round: 4, value: RoshamboOption.rock });
-                        setRound5({ round: 5, value: RoshamboOption.rock });
-                        setGameDetails(dispatch, {
-                          player: PlayerType.first,
-                          game: Games.non,
-                          id: undefined,
-                          price: 0,
-                        });
+            {playType === PlayType.one_by_one && (
+              <div
+                className="close_btn"
+                onClick={() => {
+                  if (isEmpty(details.id)) {
+                    setGameDetails(dispatch, {
+                      player: PlayerType.first,
+                      game: Games.non,
+                      id: undefined,
+                      price: 0,
+                    });
+                    setPlayType(PlayType.non);
+                    setLoading(TwoButtonLoader.no_loading);
+                    setDemoState(true);
+                    setKnownState1(CheckerType.unknown);
+                    setKnownState2(CheckerType.unknown);
+                    setKnownState3(CheckerType.unknown);
+                    setKnownState4(CheckerType.unknown);
+                    setKnownState5(CheckerType.unknown);
+                    setRound1({ round: 1, value: RoshamboOption.rock });
+                    setRound2({ round: 2, value: RoshamboOption.rock });
+                    setRound3({ round: 3, value: RoshamboOption.rock });
+                    setRound4({ round: 4, value: RoshamboOption.rock });
+                    setRound5({ round: 5, value: RoshamboOption.rock });
+                    return;
+                  }
+                  exitWin(dispatch, {
+                    open: modalType.open,
+                    func: async () => {
+                      let token = getToken();
+                      await Axios({
+                        method: "POST",
+                        url: `${url}/games/roshambo/exit`,
+                        headers: {
+                          Authorization: `Bearer ${token}`,
+                        },
+                        data: {
+                          id: details.id,
+                        },
                       })
-                      .catch(() => {
-                        toast(dispatch, {
-                          msg: "Oops, An error occured.",
-                        }).error();
-                      });
-                  },
-                });
-              }}
-            >
-              <CloseIcon />
-            </div>
+                        .then(() => {
+                          setLoading(TwoButtonLoader.no_loading);
+                          setDemoState(true);
+                          setKnownState1(CheckerType.unknown);
+                          setKnownState2(CheckerType.unknown);
+                          setKnownState3(CheckerType.unknown);
+                          setKnownState4(CheckerType.unknown);
+                          setKnownState5(CheckerType.unknown);
+                          setRound1({ round: 1, value: RoshamboOption.rock });
+                          setRound2({ round: 2, value: RoshamboOption.rock });
+                          setRound3({ round: 3, value: RoshamboOption.rock });
+                          setRound4({ round: 4, value: RoshamboOption.rock });
+                          setRound5({ round: 5, value: RoshamboOption.rock });
+                          setGameDetails(dispatch, {
+                            player: PlayerType.first,
+                            game: Games.non,
+                            id: undefined,
+                            price: 0,
+                          });
+                        })
+                        .catch(() => {
+                          toast(dispatch, {
+                            msg: "Oops, An error occured.",
+                          }).error();
+                        });
+                    },
+                  });
+                }}
+              >
+                <CloseIcon />
+              </div>
+            )}
             <h3 className="title">Player {isEmpty(details.id) ? "1" : "2"}</h3>
             <h3 className="title">Set your moves</h3>
             <p className={`txt them ${theme}`}>
@@ -944,7 +946,7 @@ export default function Roshambo() {
                   ) : (
                     "Play All"
                   )
-                ) : loading ? (
+                ) : loading === TwoButtonLoader.first_loading ? (
                   <SyncLoader size="10px" color={`white`} />
                 ) : (
                   "Challange All"

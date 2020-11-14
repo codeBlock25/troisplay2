@@ -33,16 +33,6 @@ export default function Footer() {
         </div>
       </div>
       <div className="content">
-        <h3 className="main_title">Dashboard Content</h3>
-        <ul>
-          <li>Games</li>
-          <li>Record</li>
-          <li>Deposite</li>
-          <li>Withdraw</li>
-          <li>Start Game</li>
-        </ul>
-      </div>
-      <div className="content">
         <h3 className="main_title">Content</h3>
         <ul>
           <li>Blog</li>
