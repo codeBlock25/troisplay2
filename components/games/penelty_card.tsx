@@ -432,7 +432,7 @@ export default function Penalty_card() {
           </div>
         ) : (
           <div className="world spin penalty">
-            <div
+            {/* <div
               className="close_btn"
               onClick={() => {
                 if (isEmpty(details.id)) {
@@ -501,7 +501,8 @@ export default function Penalty_card() {
             >
               <CloseIcon />
             </div>
-            <h3 className="title">
+             */}
+              <h3 className="title">
               {isEmpty(details.id) ? "Taker" : "Goalkeeper"}
             </h3>
             <h3 className="title">

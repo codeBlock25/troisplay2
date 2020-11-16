@@ -289,7 +289,7 @@ const GuessMaster = memo(function () {
     return (
       <div className={`gameworld ${theme}`}>
         <div className="world matcher">
-          <div
+          {/* <div
             className="close_btn"
             onClick={() => {
               if (isEmpty(details.id)) {
@@ -354,6 +354,7 @@ const GuessMaster = memo(function () {
           >
             <CloseIcon />
           </div>
+         */}
           <h3 className="title">Pick A number</h3>
           <p className={`txt theme ${theme}`}>
             NOTE: You Pick your moves by clicking/tapping the icons to each

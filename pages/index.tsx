@@ -39,7 +39,7 @@ export default function Index() {
   const [refer_code, setRefer_code] = useState<string>("");
   const [full_name, setFull_name] = useState<string>("");
   const [loading, setloading] = useState<boolean>(false);
-  const [viewMore, setViewMore] = useState(false);
+  const [viewMore, setViewMore] = useState(true);
 
   const handleSubmitSignup = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -410,7 +410,7 @@ export default function Index() {
             <span
               className="link_"
               onClick={() => {
-                push("/#login")
+                push("/#login");
               }}
             >
               Login
@@ -513,7 +513,13 @@ export default function Index() {
                 </div>
               </>
             )}
-            <div style={{width: 200, height: 350, minHeight: 250, minWidth: 200, display: "flex", flexDirection: "column", justifyContent: 'flex-end',alignItems: "center",}}><Button onClick={()=> setViewMore(prev => !prev)} className="btn_">view {viewMore ? "more":"less"}</Button>
+            <div className="space">
+              <Button
+                onClick={() => setViewMore((prev) => !prev)}
+                className="btn_"
+              >
+                view {viewMore ? "more" : "less"}
+              </Button>
             </div>
             <span
               className="correct"
@@ -567,20 +573,20 @@ export default function Index() {
           <div className="container">
             <h3 className="title">Ready to start making cool fun cash?</h3>
             <Button className="btn">
-              <div className="view">
-                <FontAwesomeIcon icon={faApple} />
-                <div className="txt">
-                  Dowload on <span>Apple Store</span>
-                </div>
-              </div>
+              <div
+                className="view img"
+                style={{
+                  backgroundImage: `url(/images/apple-app-store-badge.svg)`,
+                }}
+              ></div>
             </Button>
             <Button className="btn">
-              <div className="view">
-                <FontAwesomeIcon icon={faGooglePlay} />
-                <div className="txt">
-                  Dowload on <span>Google Play</span>
-                </div>
-              </div>
+              <div
+                className="view img"
+                style={{
+                  backgroundImage: `url(/images/google-play-badge.svg)`,
+                }}
+              ></div>
             </Button>
           </div>
         </section>

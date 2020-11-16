@@ -438,7 +438,7 @@ export default function Roshambo() {
           </div>
         ) : (
           <div className="world spin roshambo">
-            {playType === PlayType.one_by_one && (
+            {/* {playType === PlayType.one_by_one && (
               <div
                 className="close_btn"
                 onClick={() => {
@@ -509,7 +509,7 @@ export default function Roshambo() {
               >
                 <CloseIcon />
               </div>
-            )}
+            )} */}
             <h3 className="title">Player {isEmpty(details.id) ? "1" : "2"}</h3>
             <h3 className="title">Set your moves</h3>
             <p className={`txt them ${theme}`}>
