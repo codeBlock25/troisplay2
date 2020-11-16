@@ -269,6 +269,7 @@ export default function Penalty_card() {
             setKnownState3(game_result.round3);
             setKnownState4(game_result.round4);
             setKnownState5(game_result.round5);
+            
             // if (winner) {
             //   notify(dispatch, {
             //     type: NotiErrorType.success,
@@ -502,7 +503,7 @@ export default function Penalty_card() {
               <CloseIcon />
             </div>
              */}
-              <h3 className="title">
+            <h3 className="title">
               {isEmpty(details.id) ? "Taker" : "Goalkeeper"}
             </h3>
             <h3 className="title">
@@ -931,7 +932,7 @@ export default function Penalty_card() {
                   });
                 }}
               >
-                Close
+                Finish Play
               </div>
             )}
             {isEmpty(details.id) ? (

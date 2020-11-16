@@ -930,7 +930,7 @@ export default function Roshambo() {
                   });
                 }}
               >
-                Close
+                Finish Play
               </div>
             )}
             {!isEmpty(details.id) && playType === PlayType.all ? (
