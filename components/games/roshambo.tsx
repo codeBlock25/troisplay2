@@ -881,11 +881,11 @@ export default function Roshambo() {
                   }}
                 >
                   {round4.value === RoshamboOption.rock ? (
-                    <RockIcon />
+                    <RockIcon styles={{ fill: "#00ffff" }} />
                   ) : round4.value === RoshamboOption.paper ? (
-                    <PaperIcon />
+                    <PaperIcon styles={{ fill: "#00ffff" }} />
                   ) : round4.value === RoshamboOption.scissors ? (
-                    <ScissorIcon />
+                    <ScissorIcon styles={{ fill: "#00ffff" }} />
                   ) : (
                     <></>
                   )}
@@ -939,11 +939,11 @@ export default function Roshambo() {
                     }
                   >
                     {p2Round4knowState === RoshamboOption.rock ? (
-                      <RockIcon />
+                      <RockIcon styles={{ fill: "#00ffff" }} />
                     ) : p2Round4knowState === RoshamboOption.paper ? (
-                      <PaperIcon />
+                      <PaperIcon styles={{ fill: "#00ffff" }} />
                     ) : p2Round4knowState === RoshamboOption.scissors ? (
-                      <ScissorIcon />
+                      <ScissorIcon styles={{ fill: "#00ffff" }} />
                     ) : (
                       <></>
                     )}
@@ -981,11 +981,11 @@ export default function Roshambo() {
                   }}
                 >
                   {round5.value === RoshamboOption.rock ? (
-                    <RockIcon />
+                    <RockIcon styles={{ fill: "#00ffff" }} />
                   ) : round5.value === RoshamboOption.paper ? (
-                    <PaperIcon />
+                    <PaperIcon styles={{ fill: "#00ffff" }} />
                   ) : round5.value === RoshamboOption.scissors ? (
-                    <ScissorIcon />
+                    <ScissorIcon styles={{ fill: "#00ffff" }} />
                   ) : (
                     <></>
                   )}
@@ -1039,11 +1039,11 @@ export default function Roshambo() {
                     }
                   >
                     {p2Round5knowState === RoshamboOption.rock ? (
-                      <RockIcon />
+                      <RockIcon styles={{ fill: "#00ffff" }} />
                     ) : p2Round5knowState === RoshamboOption.paper ? (
-                      <PaperIcon />
+                      <PaperIcon styles={{ fill: "#00ffff" }} />
                     ) : p2Round5knowState === RoshamboOption.scissors ? (
-                      <ScissorIcon />
+                      <ScissorIcon styles={{ fill: "#00ffff" }} />
                     ) : (
                       <></>
                     )}
