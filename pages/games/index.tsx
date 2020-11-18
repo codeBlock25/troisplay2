@@ -49,6 +49,7 @@ import AccountF from "../../components/account_f";
 import { faGamepad } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { reducerType } from "../../typescript/interface";
+import { isEmpty } from "lodash";
 
 export default function GamesScreen() {
   const dispatch = useDispatch();
@@ -80,10 +81,12 @@ export default function GamesScreen() {
             answer: string;
             endGameTime: Date;
             choice: choices;
+            correctAnswer: string
           };
           player2?: {
             answer: string;
             waiting: boolean;
+            correctAnswer: string
           };
         };
         _id: string;
@@ -678,18 +681,28 @@ export default function GamesScreen() {
                       return (
                         <GameView
                           type="custom"
-                          name={game?.battleScore?.player1?.title}
+                          name={`${game?.battleScore?.player1?.title} ${(game.battleScore.player1?.correctAnswer ?? "e") === (game.battleScore.player2?.correctAnswer ?? "r") ? "" :!isEmpty(game.battleScore.player2) ?"(awaiting judge date)": moment(game.battleScore.player1.endDate).isSameOrAfter(new Date()) && !isEmpty(game.battleScore.player2)? "(judge now)": "(not joined)"}`}
                           key={game._id}
                           date={game.date}
                           v1={game.price_in_value * (defaults?.cashRating ?? 1)}
                           v2={game.price_in_value}
                           v3={game.gameMemberCount}
                           id={game._id}
-                          btn1func={() =>
-                            setCustomWindow(dispatch, {
-                              isOpen: modalType.open,
-                              game: game,
-                            })
+                          btn1func={() => {
+                            if (
+                              moment(
+                                game.battleScore.player1.endDate
+                              ).isSameOrAfter(new Date()) &&
+                              !isEmpty(game.battleScore.player2)
+                            ) {
+                                setCustomWindow(dispatch, {
+                                  isOpen: modalType.open,
+                                  game: game,
+                                });
+                              } else {
+                              toast(dispatch, {msg:"You have not met the requirement to continue this game."}).fail()
+                                }
+                              }
                           }
                           btn2func={() =>
                             exitWin(dispatch, {
@@ -789,7 +802,7 @@ export default function GamesScreen() {
                     return (
                       <GameView
                         type="custom"
-                        name={request?.battleScore?.player1?.title}
+                        name={`${request?.battleScore?.player1?.title}`}
                         key={request._id}
                         date={request.date}
                         v1={

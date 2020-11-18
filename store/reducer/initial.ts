@@ -50,10 +50,12 @@ export interface initReducerType {
         answer: string;
         endGameTime: Date;
         choice: choices;
+        correctAnswer: string;
       };
       player2?: {
         answer: string;
         waiting: boolean;
+        correctAnswer: string;
       };
     };
   }[];

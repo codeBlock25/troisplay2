@@ -189,6 +189,10 @@ export default function CustomWindow() {
           </b>
           {window?.request?.price_in_coin}
         </p>
+        <p className="txt">
+          <b>Player 1's answer: </b>
+          {window?.request?.battleScore?.player1?.answer ?? ""}.
+        </p>
         {(record.player?.userID ?? "") ===
           (window?.request?.members[0] ?? "") &&
         isEmpty(window?.request?.battleScore?.player2) ? (

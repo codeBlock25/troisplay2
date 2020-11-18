@@ -378,7 +378,7 @@ export default function PickerPlayer2({
         <div className="content">
           <h3 className="title">
             {popState.game === Games.lucky_geoge
-              ? popState.lucky?.battleScore.player1.title ?? ""
+              ? popState.lucky?.battleScore.player1.title ?? "" : popState.game === Games.custom_game?(popState.custom.battleScore.player1.title??"")
               : popState.room?.room_name ?? ""}
           </h3>
           <div className="txt">
@@ -392,7 +392,6 @@ export default function PickerPlayer2({
               <span>Members</span>{" "}
               {popState.game === Games.lucky_geoge
                 ? popState.lucky?.members.length ?? ""
-                : ""}
             </div>
           )}
           <p className="txt_sub">
