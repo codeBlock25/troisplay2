@@ -56,7 +56,7 @@ export default function Roshambo() {
     CheckerType.unknown
   );
   const [playStateLoad, setPlayStateLoading] = useState<boolean>(false);
-  const [playType, setPlayType] = useState<PlayType>(PlayType.all);
+  const [playType, setPlayType] = useState<PlayType>(PlayType.non);
   const [playCount, setPlayCount] = useState<number>(0);
   const [winner, setWinner] = useState<GameRec>(GameRec.draw);
   const [round1, setRound1] = useState<{
