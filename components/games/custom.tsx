@@ -21,6 +21,7 @@ import { MoonLoader } from "react-spinners";
 import { MyGamesAction, setGameDetails, toast } from "../../store/action";
 import moment from "moment";
 import {
+  DateTimePicker,
   KeyboardDatePicker,
   KeyboardTimePicker,
   MuiPickersUtilsProvider,
@@ -308,7 +309,7 @@ export default function CustomGame(): JSX.Element {
               </Select>
             </FormControl>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
-              <KeyboardDatePicker
+              <DateTimePicker
                 disableToolbar
                 variant="inline"
                 required
@@ -329,13 +330,9 @@ export default function CustomGame(): JSX.Element {
                 onChange={(date) => {
                   setmaxDate(date);
                 }}
-                KeyboardButtonProps={{
-                  "aria-label": "change date",
-                }}
               />
               {choice_ === choice.at_stated_timed && (
-                <>
-                  <KeyboardDatePicker
+                  <DateTimePicker
                     disableToolbar
                     variant="inline"
                     required
@@ -364,43 +361,7 @@ export default function CustomGame(): JSX.Element {
                       }
                       setEndDate(date);
                     }}
-                    KeyboardButtonProps={{
-                      "aria-label": "change date",
-                    }}
                   />
-
-                  <KeyboardTimePicker
-                    margin="normal"
-                    id="game-end-time"
-                    inputVariant="outlined"
-                    label="Game End Time"
-                    variant="dialog"
-                    className={`inputBox theme ${theme}`}
-                    value={endGameTime}
-                    required
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment className="icon_" position="start">
-                          <Timer />
-                        </InputAdornment>
-                      ),
-                    }}
-                    onChange={(date) => {
-                      if (moment(date).isBefore(new Date())) {
-                        toast(dispatch, {
-                          msg: `The Games end date can't before the current day being ${moment().format(
-                            "Do MMMM, yyyy"
-                          )}. Please choose a further date to continue`,
-                        }).fail();
-                        return;
-                      }
-                      setEndGameTime(date);
-                    }}
-                    KeyboardButtonProps={{
-                      "aria-label": "change time",
-                    }}
-                  />
-                </>
               )}
             </MuiPickersUtilsProvider>
             <Button type="submit" className={`btn theme ${theme}`}>
