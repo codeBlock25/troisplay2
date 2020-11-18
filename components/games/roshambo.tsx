@@ -305,11 +305,6 @@ export default function Roshambo() {
         })
         .finally(() => {
           setLoading(TwoButtonLoader.no_loading);
-          setRound1({ round: 1, value: RoshamboOption.rock });
-          setRound2({ round: 2, value: RoshamboOption.rock });
-          setRound3({ round: 3, value: RoshamboOption.rock });
-          setRound4({ round: 4, value: RoshamboOption.rock });
-          setRound5({ round: 5, value: RoshamboOption.rock });
         });
     }
   };
@@ -393,7 +388,7 @@ export default function Roshambo() {
           }
           if (final !== "no") {
             setLoading(TwoButtonLoader.no_loading);
-            setPlayType(PlayType.non);
+            // setPlayType(PlayType.non);
             setKnownState1(CheckerType.unknown);
             setKnownState2(CheckerType.unknown);
             setKnownState3(CheckerType.unknown);
@@ -405,21 +400,30 @@ export default function Roshambo() {
             setRound4({ round: 4, value: RoshamboOption.rock });
             setRound5({ round: 5, value: RoshamboOption.rock });
             if (final === "draw") {
-               setGameDetails(dispatch, {
-                 player: PlayerType.first,
-                 game: Games.non,
-                 id: undefined,
-                 price: 0,
-               });
-              notify(dispatch, { type: NotiErrorType.state, msg: "This game was a tough one and ended in a draw, you game funds have been returned as a result of this.", isOpen: modalType.open });
-            } else if (final==="won") {
-               setGameDetails(dispatch, {
-                 player: PlayerType.first,
-                 game: Games.non,
-                 id: undefined,
-                 price: 0,
-               });
-              notify(dispatch, { type: NotiErrorType.success, msg: `Congratualations You just won this game and have gained $ ${price}`, isOpen: modalType.open });
+              setGameDetails(dispatch, {
+                player: PlayerType.first,
+                game: Games.non,
+                id: undefined,
+                price: 0,
+              });
+              notify(dispatch, {
+                type: NotiErrorType.state,
+                msg:
+                  "This game was a tough one and ended in a draw, you game funds have been returned as a result of this.",
+                isOpen: modalType.open,
+              });
+            } else if (final === "won") {
+              setGameDetails(dispatch, {
+                player: PlayerType.first,
+                game: Games.non,
+                id: undefined,
+                price: 0,
+              });
+              notify(dispatch, {
+                type: NotiErrorType.success,
+                msg: `Congratualations You just won this game and have gained $ ${price}`,
+                isOpen: modalType.open,
+              });
             } else {
               setGameDetails(dispatch, {
                 player: PlayerType.first,
@@ -427,9 +431,13 @@ export default function Roshambo() {
                 id: undefined,
                 price: 0,
               });
-              notify(dispatch, { type: NotiErrorType.error, msg: `Sorry your have just lost this game and lost $ ${price}. you can try other games for a better chance.`, isOpen: modalType.open });
+              notify(dispatch, {
+                type: NotiErrorType.error,
+                msg: `Sorry your have just lost this game and lost $ ${price}. you can try other games for a better chance.`,
+                isOpen: modalType.open,
+              });
             }
-            return
+            return;
           }
           setPlayCount((prev) => {
             return prev + 1;
@@ -681,11 +689,11 @@ export default function Roshambo() {
                   }}
                 >
                   {round2.value === RoshamboOption.rock ? (
-                    <RockIcon />
+                    <RockIcon styles={{ fill: "#00ffff" }} />
                   ) : round2.value === RoshamboOption.paper ? (
-                    <PaperIcon />
+                    <PaperIcon styles={{ fill: "#00ffff" }} />
                   ) : round2.value === RoshamboOption.scissors ? (
-                    <ScissorIcon />
+                    <ScissorIcon styles={{ fill: "#00ffff" }} />
                   ) : (
                     <></>
                   )}
@@ -881,11 +889,11 @@ export default function Roshambo() {
                   }}
                 >
                   {round4.value === RoshamboOption.rock ? (
-                    <RockIcon styles={{ fill: "#00ffff" }} />
+                    <RockIcon />
                   ) : round4.value === RoshamboOption.paper ? (
-                    <PaperIcon styles={{ fill: "#00ffff" }} />
+                    <PaperIcon />
                   ) : round4.value === RoshamboOption.scissors ? (
-                    <ScissorIcon styles={{ fill: "#00ffff" }} />
+                    <ScissorIcon />
                   ) : (
                     <></>
                   )}
@@ -1083,12 +1091,17 @@ export default function Roshambo() {
                     });
                   }
                   setDone(false);
-                  setPlayType(PlayType.non);
+                  setPlayType(PlayType.all);
                   setKnownState1(CheckerType.unknown);
                   setKnownState2(CheckerType.unknown);
                   setKnownState3(CheckerType.unknown);
                   setKnownState4(CheckerType.unknown);
                   setKnownState5(CheckerType.unknown);
+                  setRound1({ round: 1, value: RoshamboOption.rock });
+                  setRound2({ round: 2, value: RoshamboOption.rock });
+                  setRound3({ round: 3, value: RoshamboOption.rock });
+                  setRound4({ round: 4, value: RoshamboOption.rock });
+                  setRound5({ round: 5, value: RoshamboOption.rock });
                   setGameDetails(dispatch, {
                     player: PlayerType.first,
                     game: Games.non,

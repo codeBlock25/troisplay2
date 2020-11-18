@@ -65,7 +65,7 @@ export default function Penalty_card() {
     PenaltyOption.left
   );
   const [playStateLoad, setPlayStateLoading] = useState<boolean>(false);
-  const [playType, setPlayType] = useState<PlayType>(PlayType.non);
+  const [playType, setPlayType] = useState<PlayType>(PlayType.all);
   const [done, setDone] = useState(false);
   const { defaults } = useSelector<
     reducerType,
@@ -316,7 +316,7 @@ export default function Penalty_card() {
             }
           )
           .catch((err) => {
-            setPlayType(PlayType.non);
+            // setPlayType(PlayType.non);
             setGameDetails(dispatch, {
               player: PlayerType.first,
               game: Games.non,
@@ -330,11 +330,6 @@ export default function Penalty_card() {
           })
           .finally(() => {
             setLoading(TwoButtonLoader.no_loading);
-            setRound1({ round: 1, value: PenaltyOption.left });
-            setRound2({ round: 2, value: PenaltyOption.left });
-            setRound3({ round: 3, value: PenaltyOption.left });
-            setRound4({ round: 4, value: PenaltyOption.left });
-            setRound5({ round: 5, value: PenaltyOption.left });
           });
       }
     } catch (error) {
@@ -391,7 +386,7 @@ export default function Penalty_card() {
           }
           if (final) {
             setLoading(TwoButtonLoader.no_loading);
-            setPlayType(PlayType.non);
+            // setPlayType(PlayType.non);
             setKnownState1(CheckerType.unknown);
             setKnownState2(CheckerType.unknown);
             setKnownState3(CheckerType.unknown);
@@ -1078,12 +1073,18 @@ export default function Penalty_card() {
                     });
                   }
                   setDone(false);
-                  setPlayType(PlayType.non);
+                  // setPlayType(PlayType.non);
                   setKnownState1(CheckerType.unknown);
                   setKnownState2(CheckerType.unknown);
                   setKnownState3(CheckerType.unknown);
                   setKnownState4(CheckerType.unknown);
                   setKnownState5(CheckerType.unknown);
+                  setRound1({ round: 1, value: PenaltyOption.left });
+                  setRound2({ round: 2, value: PenaltyOption.left });
+                  setRound3({ round: 3, value: PenaltyOption.left });
+                  setRound4({ round: 4, value: PenaltyOption.left });
+                  setRound5({ round: 5, value: PenaltyOption.left });
+                  setPlayType(PlayType.all);
                   setGameDetails(dispatch, {
                     player: PlayerType.first,
                     game: Games.non,
