@@ -18,7 +18,7 @@ import {
 import { ChangeEvent, FormEvent, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { MoonLoader } from "react-spinners";
-import { setGameDetails, toast } from "../../store/action";
+import { MyGamesAction, setGameDetails, toast } from "../../store/action";
 import moment from "moment";
 import {
   KeyboardDatePicker,
@@ -28,11 +28,12 @@ import {
 import DateFnsUtils from "@date-io/date-fns";
 import Axios, { AxiosResponse } from "axios";
 import { url } from "../../constant";
-import { reducerType } from "../../typescript/interface";
+import { ActionType, reducerType } from "../../typescript/interface";
 import { getToken } from "../../functions";
 import { Games, PlayerType } from "../../typescript/enum";
 import { CloseIcon } from "../../icon";
 import { isEmpty } from "lodash";
+import { Dispatch } from "redux";
 
 export enum choice {
   at_stated_timed,
@@ -40,7 +41,7 @@ export enum choice {
 }
 
 export default function CustomGame(): JSX.Element {
-  const dispatch = useDispatch();
+  const dispatch: Dispatch<ActionType<any>> = useDispatch();
   const [player2Username, setPlayer2Username] = useState<string>("");
   const [player2Username_error, setPlayer2Username_error] = useState<boolean>(
     false
@@ -116,6 +117,7 @@ export default function CustomGame(): JSX.Element {
             date?: Date;
           };
         }>) => {
+          MyGamesAction.add({dispatch, payload: game})
           setGameDetails(dispatch, {player: PlayerType.first, price: 0, id: "", game: Games.non})
           setDescription("");
           setTitle("");

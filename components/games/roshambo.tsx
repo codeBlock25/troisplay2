@@ -2,7 +2,13 @@ import Axios, { AxiosResponse } from "axios";
 import { MouseEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { url } from "../../constant";
-import { exitWin, notify, setGameDetails, toast } from "../../store/action";
+import {
+  exitWin,
+  MyGamesAction,
+  notify,
+  setGameDetails,
+  toast,
+} from "../../store/action";
 import {
   CloseIcon,
   GameCoin,
@@ -10,7 +16,7 @@ import {
   RockIcon,
   ScissorIcon,
 } from "../../icon";
-import { defaults, isEmpty } from "lodash";
+import { isEmpty } from "lodash";
 import { SyncLoader } from "react-spinners";
 import {
   CheckerType,
@@ -27,10 +33,10 @@ import {
 import { ActionType, reducerType } from "../../typescript/interface";
 import { getPrice, getToken } from "../../functions";
 import { useQueryCache } from "react-query";
+import { Dispatch } from "redux";
 
 export default function Roshambo() {
-  const dispatch: (t: ActionType) => void = useDispatch();
-  const [isDemoPlay, setDemoState] = useState<boolean>(true);
+  const dispatch: Dispatch<ActionType<any>> = useDispatch();
   const [loading, setLoading] = useState<TwoButtonLoader>(
     TwoButtonLoader.no_loading
   );
@@ -130,7 +136,6 @@ export default function Roshambo() {
       referRating: number;
     };
   }> = useQueryCache().getQueryData("defaults");
-  const setter = useQueryCache().setQueryData;
   const theme = "dark-mode";
   const handleSubmit = async (payWith?: PayType) => {
     let token = getToken();
@@ -177,6 +182,7 @@ export default function Roshambo() {
               date?: Date;
             };
           }>) => {
+            MyGamesAction.add({ dispatch, payload: game });
             setGameDetails(dispatch, {
               player: PlayerType.first,
               game: Games.non,
@@ -210,7 +216,6 @@ export default function Roshambo() {
         })
         .finally(() => {
           setLoading(TwoButtonLoader.no_loading);
-          setDemoState(true);
           setKnownState1(CheckerType.unknown);
           setKnownState2(CheckerType.unknown);
           setKnownState3(CheckerType.unknown);
@@ -286,7 +291,7 @@ export default function Roshambo() {
   ): Promise<void> => {
     let token = getToken();
     if (playStateLoad) return;
-    // setPlayStateLoading(true);
+    setPlayStateLoading(true);
     await Axios({
       method: "POST",
       url: `${url}/games/roshambo/challange/one-on-one`,
@@ -359,7 +364,6 @@ export default function Roshambo() {
           }
           if (final !== "no") {
             setLoading(TwoButtonLoader.no_loading);
-            setDemoState(true);
             setPlayType(PlayType.non);
             setKnownState1(CheckerType.unknown);
             setKnownState2(CheckerType.unknown);
@@ -885,7 +889,7 @@ export default function Roshambo() {
                 )}
               </div>
             </div>
-            {!isEmpty(details.id) && playType === PlayType.one_by_one && (
+            {!isEmpty(details.id) && playType === PlayType.all && (
               <div
                 className={`btn_ theme ${theme}`}
                 onClick={() => {
