@@ -1302,7 +1302,7 @@ export const RockIcon = ({ styles }: { styles?: any }): JSX.Element => {
     <svg
       id="Layer_1"
       height={512}
-      style={...styles ?? {}}
+      style={styles ?? {}}
       viewBox="0 0 512 512"
       width={512}
     >
@@ -1324,7 +1324,7 @@ export const PaperIcon = ({ styles }: { styles?: any }): JSX.Element => {
       id="Capa_1"
       x="0px"
       y="0px"
-      style={...styles ?? {}}
+      style={styles ?? {}}
       viewBox="0 0 511.84 511.84"
     >
       <g>
@@ -1351,7 +1351,7 @@ export const ScissorIcon = ({ styles }: { styles?: any }): JSX.Element => {
     <svg
       id="Capa_1"
       height={512}
-      style={...styles ?? {}}
+      style={styles ?? {}}
       viewBox="0 0 512 512"
       width={512}
     >

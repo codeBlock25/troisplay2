@@ -739,11 +739,11 @@ export default function Roshambo() {
                     }
                   >
                     {p2Round2knowState === RoshamboOption.rock ? (
-                      <RockIcon />
+                      <RockIcon styles={{ fill: "#00ffff" }} />
                     ) : p2Round2knowState === RoshamboOption.paper ? (
-                      <PaperIcon />
+                      <PaperIcon styles={{ fill: "#00ffff" }} />
                     ) : p2Round2knowState === RoshamboOption.scissors ? (
-                      <ScissorIcon />
+                      <ScissorIcon styles={{ fill: "#00ffff" }} />
                     ) : (
                       <></>
                     )}
@@ -839,11 +839,11 @@ export default function Roshambo() {
                     }
                   >
                     {p2Round3knowState === RoshamboOption.rock ? (
-                      <RockIcon />
+                      <RockIcon styles={{ fill: "#00ffff" }} />
                     ) : p2Round3knowState === RoshamboOption.paper ? (
-                      <PaperIcon />
+                      <PaperIcon styles={{ fill: "#00ffff" }} />
                     ) : p2Round3knowState === RoshamboOption.scissors ? (
-                      <ScissorIcon />
+                      <ScissorIcon styles={{ fill: "#00ffff" }} />
                     ) : (
                       <></>
                     )}
@@ -981,11 +981,11 @@ export default function Roshambo() {
                   }}
                 >
                   {round5.value === RoshamboOption.rock ? (
-                    <RockIcon styles={{ fill: "#00ffff" }} />
+                    <RockIcon />
                   ) : round5.value === RoshamboOption.paper ? (
-                    <PaperIcon styles={{ fill: "#00ffff" }} />
+                    <PaperIcon />
                   ) : round5.value === RoshamboOption.scissors ? (
-                    <ScissorIcon styles={{ fill: "#00ffff" }} />
+                    <ScissorIcon />
                   ) : (
                     <></>
                   )}
