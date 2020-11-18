@@ -391,7 +391,9 @@ export default function PickerPlayer2({
               {" "}
               <span>Members</span>{" "}
               {popState.game === Games.lucky_geoge
-                ? popState.lucky?.members.length ?? ""
+                ? popState.lucky?.members.length ?? "" :
+                ""
+              }
             </div>
           )}
           <p className="txt_sub">
