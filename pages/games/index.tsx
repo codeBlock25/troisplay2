@@ -420,6 +420,13 @@ export default function GamesScreen() {
                   push("/games")
                   setP2(true);
                   return;
+                } else if (spec.game === Games.custom_game) {
+                setSpec((prev) => {
+                  return {
+                    ...prev,
+                    isOpen: false,
+                  };
+                });
                 }
                 setSpec((prev) => {
                   return {
@@ -429,7 +436,7 @@ export default function GamesScreen() {
                 });
               }}
             >
-              confirm
+             {spec.game === Games.custom_game? "back": "confirm"}
             </span>
           </div>
         )}
@@ -597,7 +604,7 @@ export default function GamesScreen() {
               setSpec({
                 isOpen: true,
                 manual:
-                  "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor non, enim accusantium officiis laborum hic asperiores a corporis illum quis.",
+                  "Coming soon",
                 price: 0,
                 game: Games.rooms,
               });
