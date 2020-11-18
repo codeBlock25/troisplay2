@@ -5,6 +5,7 @@ import {
   errorType,
   PlayerType,
   ReasonType,
+  PayType,
 } from "../../typescript/enum";
 import { ActionType, eventReeducerType } from "../../typescript/interface";
 
@@ -19,6 +20,7 @@ const initialState: eventReeducerType = {
     game: Games.non,
     id: "",
     price: 0,
+    payWith: PayType.cash,
   },
   toastNotification: {
     isOpen: modalType.close,
@@ -32,7 +34,7 @@ const initialState: eventReeducerType = {
   },
   customWindow: {
     isOpen: modalType.close,
-    request: undefined
+    request: undefined,
   },
   action: ReasonType.non,
   back: {
