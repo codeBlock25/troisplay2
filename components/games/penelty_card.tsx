@@ -49,7 +49,7 @@ export default function Penalty_card() {
     CheckerType.unknown
   );
   const [playStateLoad, setPlayStateLoading] = useState<boolean>(false);
-  const [playType, setPlayType] = useState<PlayType>(PlayType.non);
+  const [playType, setPlayType] = useState<PlayType>(PlayType.all);
   const { defaults } = useSelector<
     reducerType,
     {
