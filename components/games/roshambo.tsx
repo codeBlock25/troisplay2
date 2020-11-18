@@ -59,6 +59,22 @@ export default function Roshambo() {
   const [playType, setPlayType] = useState<PlayType>(PlayType.all);
   const [playCount, setPlayCount] = useState<number>(0);
   const [winner, setWinner] = useState<GameRec>(GameRec.draw);
+  const [done, setDone] = useState<boolean>(false);
+  const [p2Round1knowState, _setP2KnownState1] = useState<RoshamboOption>(
+    RoshamboOption.rock
+  );
+  const [p2Round2knowState, _setP2KnownState2] = useState<RoshamboOption>(
+    RoshamboOption.rock
+  );
+  const [p2Round3knowState, _setP2KnownState3] = useState<RoshamboOption>(
+    RoshamboOption.rock
+  );
+  const [p2Round4knowState, _setP2KnownState4] = useState<RoshamboOption>(
+    RoshamboOption.rock
+  );
+  const [p2Round5knowState, _setP2KnownState5] = useState<RoshamboOption>(
+    RoshamboOption.rock
+  );
   const [round1, setRound1] = useState<{
     round: number;
     value: RoshamboOption;
@@ -247,7 +263,7 @@ export default function Roshambo() {
       })
         .then(
           ({
-            data: { winner, price, game_result },
+            data: { winner, price, game_result, battlePlan },
           }: AxiosResponse<{
             winner: GameRec;
             price: number;
@@ -258,8 +274,21 @@ export default function Roshambo() {
               round4: CheckerType;
               round5: CheckerType;
             };
+            battlePlan: {
+              round1: RoshamboOption;
+              round2: RoshamboOption;
+              round3: RoshamboOption;
+              round4: RoshamboOption;
+              round5: RoshamboOption;
+            };
           }>) => {
+            _setP2KnownState1(battlePlan.round1);
+            _setP2KnownState2(battlePlan.round2);
+            _setP2KnownState3(battlePlan.round3);
+            _setP2KnownState4(battlePlan.round4);
+            _setP2KnownState5(battlePlan.round5);
             setWinner(winner);
+            setDone(true);
             setPlayType(PlayType.one_by_one);
             setKnownState1(game_result.round1);
             setKnownState2(game_result.round2);
@@ -569,7 +598,10 @@ export default function Roshambo() {
                         : "brightness(100%)",
                       cursor: playStateLoad ? "not-allowed" : "pointer",
                     }}
-                    onClick={() => playSingleMatch(round1.round, round1.value)}
+                    onClick={() => {
+                      if (round1knowState !== CheckerType.unknown) return;
+                      playSingleMatch(round1.round, round1.value);
+                    }}
                     className={`btn_check theme ${theme} ${
                       round1knowState === CheckerType.unknown
                         ? "play"
@@ -592,6 +624,30 @@ export default function Roshambo() {
                       ? "draw"
                       : ""}
                   </div>
+                )}
+                {done && (
+                  <span
+                    className="value"
+                    title={
+                      p2Round1knowState === RoshamboOption.rock
+                        ? "Rock"
+                        : p2Round1knowState === RoshamboOption.paper
+                        ? "Paper"
+                        : p2Round1knowState === RoshamboOption.scissors
+                        ? "Scissor"
+                        : ""
+                    }
+                  >
+                    {p2Round1knowState === RoshamboOption.rock ? (
+                      <RockIcon />
+                    ) : p2Round1knowState === RoshamboOption.paper ? (
+                      <PaperIcon />
+                    ) : p2Round1knowState === RoshamboOption.scissors ? (
+                      <ScissorIcon />
+                    ) : (
+                      <></>
+                    )}
+                  </span>
                 )}
               </div>
               <div className="round">
@@ -642,7 +698,10 @@ export default function Roshambo() {
                         : "brightness(100%)",
                       cursor: playStateLoad ? "not-allowed" : "pointer",
                     }}
-                    onClick={() => playSingleMatch(round2.round, round2.value)}
+                    onClick={() => {
+                      if (round2knowState !== CheckerType.unknown) return;
+                      playSingleMatch(round2.round, round2.value);
+                    }}
                     className={`btn_check theme ${theme} ${
                       round2knowState === CheckerType.unknown
                         ? "play"
@@ -665,6 +724,30 @@ export default function Roshambo() {
                       ? "draw"
                       : ""}
                   </div>
+                )}
+                {done && (
+                  <span
+                    className="value"
+                    title={
+                      p2Round2knowState === RoshamboOption.rock
+                        ? "Rock"
+                        : p2Round2knowState === RoshamboOption.paper
+                        ? "Paper"
+                        : p2Round2knowState === RoshamboOption.scissors
+                        ? "Scissor"
+                        : ""
+                    }
+                  >
+                    {p2Round2knowState === RoshamboOption.rock ? (
+                      <RockIcon />
+                    ) : p2Round2knowState === RoshamboOption.paper ? (
+                      <PaperIcon />
+                    ) : p2Round2knowState === RoshamboOption.scissors ? (
+                      <ScissorIcon />
+                    ) : (
+                      <></>
+                    )}
+                  </span>
                 )}
               </div>
               <div className="round">
@@ -715,7 +798,10 @@ export default function Roshambo() {
                         : "brightness(100%)",
                       cursor: playStateLoad ? "not-allowed" : "pointer",
                     }}
-                    onClick={() => playSingleMatch(round3.round, round3.value)}
+                    onClick={() => {
+                      if (round3knowState !== CheckerType.unknown) return;
+                      playSingleMatch(round3.round, round3.value);
+                    }}
                     className={`btn_check theme ${theme} ${
                       round3knowState === CheckerType.unknown
                         ? "play"
@@ -738,6 +824,30 @@ export default function Roshambo() {
                       ? "draw"
                       : ""}
                   </div>
+                )}
+                {done && (
+                  <span
+                    className="value"
+                    title={
+                      p2Round3knowState === RoshamboOption.rock
+                        ? "Rock"
+                        : p2Round3knowState === RoshamboOption.paper
+                        ? "Paper"
+                        : p2Round3knowState === RoshamboOption.scissors
+                        ? "Scissor"
+                        : ""
+                    }
+                  >
+                    {p2Round3knowState === RoshamboOption.rock ? (
+                      <RockIcon />
+                    ) : p2Round3knowState === RoshamboOption.paper ? (
+                      <PaperIcon />
+                    ) : p2Round3knowState === RoshamboOption.scissors ? (
+                      <ScissorIcon />
+                    ) : (
+                      <></>
+                    )}
+                  </span>
                 )}
               </div>
               <div className="round">
@@ -789,6 +899,7 @@ export default function Roshambo() {
                       cursor: playStateLoad ? "not-allowed" : "pointer",
                     }}
                     onClick={async () => {
+                      if (round4knowState !== CheckerType.unknown) return;
                       playSingleMatch(round4.round, round4.value);
                     }}
                     className={`btn_check theme ${theme} ${
@@ -813,6 +924,30 @@ export default function Roshambo() {
                       ? "draw"
                       : ""}
                   </div>
+                )}
+                {done && (
+                  <span
+                    className="value"
+                    title={
+                      p2Round4knowState === RoshamboOption.rock
+                        ? "Rock"
+                        : p2Round4knowState === RoshamboOption.paper
+                        ? "Paper"
+                        : p2Round4knowState === RoshamboOption.scissors
+                        ? "Scissor"
+                        : ""
+                    }
+                  >
+                    {p2Round4knowState === RoshamboOption.rock ? (
+                      <RockIcon />
+                    ) : p2Round4knowState === RoshamboOption.paper ? (
+                      <PaperIcon />
+                    ) : p2Round4knowState === RoshamboOption.scissors ? (
+                      <ScissorIcon />
+                    ) : (
+                      <></>
+                    )}
+                  </span>
                 )}
               </div>
               <div className="round">
@@ -863,7 +998,10 @@ export default function Roshambo() {
                         : "brightness(100%)",
                       cursor: playStateLoad ? "not-allowed" : "pointer",
                     }}
-                    onClick={() => playSingleMatch(round5.round, round5.value)}
+                    onClick={() => {
+                      if (round5knowState !== CheckerType.unknown) return;
+                      playSingleMatch(round5.round, round5.value);
+                    }}
                     className={`btn_check theme ${theme} ${
                       round5knowState === CheckerType.unknown
                         ? "play"
@@ -887,9 +1025,33 @@ export default function Roshambo() {
                       : ""}
                   </div>
                 )}
+                {done && (
+                  <span
+                    className="value"
+                    title={
+                      p2Round5knowState === RoshamboOption.rock
+                        ? "Rock"
+                        : p2Round5knowState === RoshamboOption.paper
+                        ? "Paper"
+                        : p2Round5knowState === RoshamboOption.scissors
+                        ? "Scissor"
+                        : ""
+                    }
+                  >
+                    {p2Round5knowState === RoshamboOption.rock ? (
+                      <RockIcon />
+                    ) : p2Round5knowState === RoshamboOption.paper ? (
+                      <PaperIcon />
+                    ) : p2Round5knowState === RoshamboOption.scissors ? (
+                      <ScissorIcon />
+                    ) : (
+                      <></>
+                    )}
+                  </span>
+                )}
               </div>
             </div>
-            {!isEmpty(details.id) && playType === PlayType.all && (
+            {done && (
               <div
                 className={`btn_ theme ${theme}`}
                 onClick={() => {
@@ -920,6 +1082,7 @@ export default function Roshambo() {
                       isOpen: modalType.open,
                     });
                   }
+                  setDone(false);
                   setPlayType(PlayType.non);
                   setKnownState1(CheckerType.unknown);
                   setKnownState2(CheckerType.unknown);

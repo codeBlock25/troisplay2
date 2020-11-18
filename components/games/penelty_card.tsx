@@ -48,8 +48,25 @@ export default function Penalty_card() {
   const [round5knowState, setKnownState5] = useState<CheckerType>(
     CheckerType.unknown
   );
+
+  const [p2Round1knowState, _setP2KnownState1] = useState<PenaltyOption>(
+    PenaltyOption.left
+  );
+  const [p2Round2knowState, _setP2KnownState2] = useState<PenaltyOption>(
+    PenaltyOption.left
+  );
+  const [p2Round3knowState, _setP2KnownState3] = useState<PenaltyOption>(
+    PenaltyOption.left
+  );
+  const [p2Round4knowState, _setP2KnownState4] = useState<PenaltyOption>(
+    PenaltyOption.left
+  );
+  const [p2Round5knowState, _setP2KnownState5] = useState<PenaltyOption>(
+    PenaltyOption.left
+  );
   const [playStateLoad, setPlayStateLoading] = useState<boolean>(false);
   const [playType, setPlayType] = useState<PlayType>(PlayType.non);
+  const [done, setDone] = useState(false);
   const { defaults } = useSelector<
     reducerType,
     {
@@ -243,7 +260,7 @@ export default function Penalty_card() {
           })
             .then(
               ({
-                data: { winner, price, game_result },
+                data: { winner, price, game_result, battlePlan },
               }: AxiosResponse<{
                 winner: GameRec;
                 price: number;
@@ -254,6 +271,13 @@ export default function Penalty_card() {
                   round4: CheckerType;
                   round5: CheckerType;
                 };
+                battlePlan: {
+                  round1: PenaltyOption;
+                  round2: PenaltyOption;
+                  round3: PenaltyOption;
+                  round4: PenaltyOption;
+                  round5: PenaltyOption;
+                }
               }>) => {
                 // setPlayType(PlayType.non);
                 // setGameDetails(dispatch, {
@@ -262,8 +286,13 @@ export default function Penalty_card() {
                 //   id: undefined,
                 //   price: 0,
                 // });
-
+                _setP2KnownState1(battlePlan.round1);
+                _setP2KnownState2(battlePlan.round2);
+                _setP2KnownState3(battlePlan.round3);
+                _setP2KnownState4(battlePlan.round4);
+                _setP2KnownState5(battlePlan.round5);
                 setWinner(winner);
+                setDone(true);
                 setPlayType(PlayType.one_by_one);
                 setKnownState1(game_result.round1);
                 setKnownState2(game_result.round2);
@@ -573,7 +602,10 @@ export default function Penalty_card() {
                         : "brightness(100%)",
                       cursor: playStateLoad ? "not-allowed" : "pointer",
                     }}
-                    onClick={() => playSingleMatch(round1.round, round1.value)}
+                    onClick={() => {
+                      if (round1knowState !== CheckerType.unknown) return;
+                      playSingleMatch(round1.round, round1.value);
+                    }}
                     className={`btn_check theme ${theme} ${
                       round1knowState === CheckerType.unknown
                         ? "play"
@@ -592,6 +624,36 @@ export default function Penalty_card() {
                       ? "lost"
                       : ""}
                   </div>
+                )}
+                {done && (
+                  <span
+                    className={`value ${
+                      p2Round1knowState === PenaltyOption.left ? "left" : ""
+                    }`}
+                    title={
+                      p2Round1knowState === PenaltyOption.left
+                        ? "Left shot"
+                        : p2Round1knowState === PenaltyOption.right
+                        ? "Right shot"
+                        : ""
+                    }
+                  >
+                    {p2Round1knowState === PenaltyOption.left ? (
+                      details.player === PlayerType.first ? (
+                        <ForwardIcon />
+                      ) : (
+                        <GoalPostIcon />
+                      )
+                    ) : p2Round1knowState === PenaltyOption.right ? (
+                      details.player === PlayerType.first ? (
+                        <ForwardIcon />
+                      ) : (
+                        <GoalPostIcon />
+                      )
+                    ) : (
+                      <></>
+                    )}
+                  </span>
                 )}
               </div>
               <div className="round">
@@ -647,7 +709,10 @@ export default function Penalty_card() {
                         : "brightness(100%)",
                       cursor: playStateLoad ? "not-allowed" : "pointer",
                     }}
-                    onClick={() => playSingleMatch(round2.round, round2.value)}
+                    onClick={() => {
+                      if (round2knowState !== CheckerType.unknown) return;
+                      playSingleMatch(round2.round, round2.value);
+                    }}
                     className={`btn_check theme ${theme} ${
                       round2knowState === CheckerType.unknown
                         ? "play"
@@ -666,6 +731,37 @@ export default function Penalty_card() {
                       ? "lost"
                       : ""}
                   </div>
+                )}
+
+                {done && (
+                  <span
+                    className={`value ${
+                      p2Round2knowState === PenaltyOption.left ? "left" : ""
+                    }`}
+                    title={
+                      p2Round2knowState === PenaltyOption.left
+                        ? "Left shot"
+                        : p2Round2knowState === PenaltyOption.right
+                        ? "Right shot"
+                        : ""
+                    }
+                  >
+                    {p2Round2knowState === PenaltyOption.left ? (
+                      details.player === PlayerType.first ? (
+                        <ForwardIcon />
+                      ) : (
+                        <GoalPostIcon />
+                      )
+                    ) : p2Round2knowState === PenaltyOption.right ? (
+                      details.player === PlayerType.first ? (
+                        <ForwardIcon />
+                      ) : (
+                        <GoalPostIcon />
+                      )
+                    ) : (
+                      <></>
+                    )}
+                  </span>
                 )}
               </div>
               <div className="round">
@@ -721,7 +817,10 @@ export default function Penalty_card() {
                         : "brightness(100%)",
                       cursor: playStateLoad ? "not-allowed" : "pointer",
                     }}
-                    onClick={() => playSingleMatch(round3.round, round3.value)}
+                    onClick={() => {
+                      if (round3knowState !== CheckerType.unknown) return;
+                      playSingleMatch(round3.round, round3.value);
+                    }}
                     className={`btn_check theme ${theme} ${
                       round3knowState === CheckerType.unknown
                         ? "play"
@@ -740,6 +839,36 @@ export default function Penalty_card() {
                       ? "lost"
                       : ""}
                   </div>
+                )}
+                {done && (
+                  <span
+                    className={`value ${
+                      p2Round3knowState === PenaltyOption.left ? "left" : ""
+                    }`}
+                    title={
+                      p2Round3knowState === PenaltyOption.left
+                        ? "Left shot"
+                        : p2Round3knowState === PenaltyOption.right
+                        ? "Right shot"
+                        : ""
+                    }
+                  >
+                    {p2Round3knowState === PenaltyOption.left ? (
+                      details.player === PlayerType.first ? (
+                        <ForwardIcon />
+                      ) : (
+                        <GoalPostIcon />
+                      )
+                    ) : p2Round3knowState === PenaltyOption.right ? (
+                      details.player === PlayerType.first ? (
+                        <ForwardIcon />
+                      ) : (
+                        <GoalPostIcon />
+                      )
+                    ) : (
+                      <></>
+                    )}
+                  </span>
                 )}
               </div>
               <div className="round">
@@ -795,7 +924,10 @@ export default function Penalty_card() {
                         : "brightness(100%)",
                       cursor: playStateLoad ? "not-allowed" : "pointer",
                     }}
-                    onClick={() => playSingleMatch(round4.round, round4.value)}
+                    onClick={() => {
+                      if (round4knowState !== CheckerType.unknown) return;
+                      playSingleMatch(round4.round, round4.value);
+                    }}
                     className={`btn_check theme ${theme} ${
                       round4knowState === CheckerType.unknown
                         ? "play"
@@ -814,6 +946,36 @@ export default function Penalty_card() {
                       ? "lost"
                       : ""}
                   </div>
+                )}
+                {done && (
+                  <span
+                    className={`value ${
+                      p2Round4knowState === PenaltyOption.left ? "left" : ""
+                    }`}
+                    title={
+                      p2Round4knowState === PenaltyOption.left
+                        ? "Left shot"
+                        : p2Round4knowState === PenaltyOption.right
+                        ? "Right shot"
+                        : ""
+                    }
+                  >
+                    {p2Round4knowState === PenaltyOption.left ? (
+                      details.player === PlayerType.first ? (
+                        <ForwardIcon />
+                      ) : (
+                        <GoalPostIcon />
+                      )
+                    ) : p2Round4knowState === PenaltyOption.right ? (
+                      details.player === PlayerType.first ? (
+                        <ForwardIcon />
+                      ) : (
+                        <GoalPostIcon />
+                      )
+                    ) : (
+                      <></>
+                    )}
+                  </span>
                 )}
               </div>
               <div className="round">
@@ -869,7 +1031,10 @@ export default function Penalty_card() {
                         : "brightness(100%)",
                       cursor: playStateLoad ? "not-allowed" : "pointer",
                     }}
-                    onClick={() => playSingleMatch(round5.round, round5.value)}
+                    onClick={() => {
+                      if (round5knowState !== CheckerType.unknown) return;
+                      playSingleMatch(round5.round, round5.value);
+                    }}
                     className={`btn_check theme ${theme} ${
                       round5knowState === CheckerType.unknown
                         ? "play"
@@ -889,9 +1054,39 @@ export default function Penalty_card() {
                       : ""}
                   </div>
                 )}
+                {done && (
+                  <span
+                    className={`value ${
+                      p2Round5knowState === PenaltyOption.left ? "left" : ""
+                    }`}
+                    title={
+                      p2Round5knowState === PenaltyOption.left
+                        ? "Left shot"
+                        : p2Round5knowState === PenaltyOption.right
+                        ? "Right shot"
+                        : ""
+                    }
+                  >
+                    {p2Round5knowState === PenaltyOption.left ? (
+                      details.player === PlayerType.first ? (
+                        <ForwardIcon />
+                      ) : (
+                        <GoalPostIcon />
+                      )
+                    ) : p2Round5knowState === PenaltyOption.right ? (
+                      details.player === PlayerType.first ? (
+                        <ForwardIcon />
+                      ) : (
+                        <GoalPostIcon />
+                      )
+                    ) : (
+                      <></>
+                    )}
+                  </span>
+                )}
               </div>
             </div>
-            {!isEmpty(details.id) && playType === PlayType.one_by_one && (
+            {done && (
               <div
                 className={`btn_ theme ${theme}`}
                 onClick={() => {
@@ -922,6 +1117,7 @@ export default function Penalty_card() {
                       isOpen: modalType.open,
                     });
                   }
+                  setDone(false);
                   setPlayType(PlayType.non);
                   setKnownState1(CheckerType.unknown);
                   setKnownState2(CheckerType.unknown);
