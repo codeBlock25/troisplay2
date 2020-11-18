@@ -689,11 +689,11 @@ export default function Roshambo() {
                   }}
                 >
                   {round2.value === RoshamboOption.rock ? (
-                    <RockIcon styles={{ fill: "#00ffff" }} />
+                    <RockIcon />
                   ) : round2.value === RoshamboOption.paper ? (
-                    <PaperIcon styles={{ fill: "#00ffff" }} />
+                    <PaperIcon />
                   ) : round2.value === RoshamboOption.scissors ? (
-                    <ScissorIcon styles={{ fill: "#00ffff" }} />
+                    <ScissorIcon />
                   ) : (
                     <></>
                   )}
