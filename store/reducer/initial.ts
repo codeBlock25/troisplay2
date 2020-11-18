@@ -1,4 +1,4 @@
-import { Games } from "../../typescript/enum";
+import { choices, Games } from "../../typescript/enum";
 import { ActionType } from "../../typescript/interface";
 
 export interface initReducerType {
@@ -42,6 +42,20 @@ export interface initReducerType {
     price_in_coin: number;
     price_in_value: number;
     _id: string;
+    battleScore: {
+      player1: {
+        endDate: Date;
+        title: string;
+        description: string;
+        answer: string;
+        endGameTime: Date;
+        choice: choices;
+      };
+      player2?: {
+        answer: string;
+        waiting: boolean;
+      };
+    };
   }[];
   playerRecord: {
     player: {

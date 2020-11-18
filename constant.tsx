@@ -2,11 +2,11 @@ import {FlutterWaveTypes} from "flutterwave-react-v3"
 
 export const isDev: boolean = process.env.NODE_ENV === "development";
 export const server_url: string = "https://api.troisplay.com/api";
-export const dev_url: string = "http://192.168.43.41:4050/api";
-export const dev_url_media: string = "http://192.168.43.41:4050/";
+export const dev_url: string = "http://127.0.0.1:4050/api";
+export const dev_url_media: string = "http://127.0.0.1:4050/";
 export const server_url_socket: string = "https://api.troisplay.com/";
 export const server_url_media: string = "https://api.troisplay.com/";
-export const dev_url_socket: string = "http://192.168.43.41:3022";
+export const dev_url_socket: string = "http://127.0.0.1:3022";
 export const socket_url: string = isDev ? dev_url_socket : server_url_socket;
 export const url: string = isDev ? dev_url : server_url;
 export const url_media: string = isDev ? dev_url_media : server_url_media;

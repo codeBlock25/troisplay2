@@ -137,175 +137,179 @@ export default function Penalty_card() {
   const theme = "dark-mode";
 
   const handleSubmit = async (payWith?: PayType) => {
-    if (loading !== TwoButtonLoader.no_loading) return;
-    let token = getToken();
-    if (payWith === PayType.cash) {
-      setLoading(TwoButtonLoader.first_loading);
-    } else {
-      setLoading(TwoButtonLoader.second_loading);
-    }
-    if (isEmpty(details.id)) {
-      await Axios({
-        method: "POST",
-        url: `${url}/games/penalty`,
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-        data: {
-          price_in_cash: details.price,
-          gameInPut: {
-            round1: round1.value,
-            round2: round2.value,
-            round3: round3.value,
-            round4: round4.value,
-            round5: round5.value,
-          },
-          payWith,
-        },
-      })
-        .then(
-          ({
-            data: { game },
-          }: AxiosResponse<{
-            game: {
-              _id?: string;
-              gameMemberCount?: number;
-              members?: string[];
-              priceType?: string;
-              price_in_coin?: number;
-              price_in_value?: number;
-              gameType?: string;
-              gameDetail?: string;
-              gameID?: Games;
-              played?: boolean;
-              date?: Date;
-            };
-          }>) => {
-            MyGamesAction.add({ dispatch, payload: game });
-            setGameDetails(dispatch, {
-              player: PlayerType.first,
-              game: Games.non,
-              id: undefined,
-              price: 0,
+    try {
+        if (loading !== TwoButtonLoader.no_loading) return;
+        let token = getToken();
+        if (payWith === PayType.cash) {
+          setLoading(TwoButtonLoader.first_loading);
+        } else {
+          setLoading(TwoButtonLoader.second_loading);
+        }
+        if (isEmpty(details.id)) {
+          await Axios({
+            method: "POST",
+            url: `${url}/games/penalty`,
+            headers: {
+              authorization: `Bearer ${token}`,
+            },
+            data: {
+              price_in_cash: details.price,
+              gameInPut: {
+                round1: round1.value,
+                round2: round2.value,
+                round3: round3.value,
+                round4: round4.value,
+                round5: round5.value,
+              },
+              payWith,
+            },
+          })
+            .then(
+              ({
+                data: { game },
+              }: AxiosResponse<{
+                game: {
+                  _id?: string;
+                  gameMemberCount?: number;
+                  members?: string[];
+                  priceType?: string;
+                  price_in_coin?: number;
+                  price_in_value?: number;
+                  gameType?: string;
+                  gameDetail?: string;
+                  gameID?: Games;
+                  played?: boolean;
+                  date?: Date;
+                };
+              }>) => {
+                MyGamesAction.add({ dispatch, payload: game });
+                setGameDetails(dispatch, {
+                  player: PlayerType.first,
+                  game: Games.non,
+                  id: undefined,
+                  price: 0,
+                });
+                toast(dispatch, {
+                  msg: `Congratulations!!!! You have successfully played a game, please wait for Player 2's challange.`,
+                }).success();
+              }
+            )
+            .catch((err) => {
+              if (err.message === "Request failed with status code 401") {
+                toast(dispatch, {
+                  msg: `Insufficient Fund, please fund your ${
+                    payWith === PayType.cash ? "cash wallet" : "coin wallet"
+                  } to continue the game.`,
+                }).fail();
+                return;
+              }
+              if (err.message === "Request failed with status code 404") {
+                toast(dispatch, {
+                  msg:
+                    "Opps!  This game already exist, Join as Player 2 to continue or create another game with a different amount.",
+                }).fail();
+                return;
+              }
+              toast(dispatch, {
+                msg: `An Error occured could not connect to troisplay game server please check you interner connection and Try Again.`,
+              }).error();
+            })
+            .finally(() => {
+              setLoading(TwoButtonLoader.no_loading);
+              setPlayType(PlayType.non);
+              setRound1({ round: 1, value: PenaltyOption.left });
+              setRound2({ round: 2, value: PenaltyOption.left });
+              setRound3({ round: 3, value: PenaltyOption.left });
+              setRound4({ round: 4, value: PenaltyOption.left });
+              setRound5({ round: 5, value: PenaltyOption.left });
             });
-            toast(dispatch, {
-              msg: `Congratulations!!!! You have successfully played a game, please wait for Player 2's challange.`,
-            }).success();
-          }
-        )
-        .catch((err) => {
-          if (err.message === "Request failed with status code 401") {
-            toast(dispatch, {
-              msg: `Insufficient Fund, please fund your ${
-                payWith === PayType.cash ? "cash wallet" : "coin wallet"
-              } to continue the game.`,
-            }).fail();
-            return;
-          }
-          if (err.message === "Request failed with status code 404") {
-            toast(dispatch, {
-              msg:
-                "Opps!  This game already exist, Join as Player 2 to continue or create another game with a different amount.",
-            }).fail();
-            return;
-          }
-          toast(dispatch, {
-            msg: `An Error occured could not connect to troisplay game server please check you interner connection and Try Again.`,
-          }).error();
-        })
-        .finally(() => {
-          setLoading(TwoButtonLoader.no_loading);
-          setPlayType(PlayType.non);
-          setRound1({ round: 1, value: PenaltyOption.left });
-          setRound2({ round: 2, value: PenaltyOption.left });
-          setRound3({ round: 3, value: PenaltyOption.left });
-          setRound4({ round: 4, value: PenaltyOption.left });
-          setRound5({ round: 5, value: PenaltyOption.left });
-        });
-    } else {
-      await Axios({
-        method: "POST",
-        url: `${url}/games/penalty/challange`,
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-        data: {
-          id: details.id,
-          gameInPut: {
-            round1: round1.value,
-            round2: round2.value,
-            round3: round3.value,
-            round4: round4.value,
-            round5: round5.value,
-          },
-        },
-      })
-        .then(
-          ({
-            data: { winner, price, game_result },
-          }: AxiosResponse<{
-            winner: GameRec;
-            price: number;
-            game_result: {
-              round1: CheckerType;
-              round2: CheckerType;
-              round3: CheckerType;
-              round4: CheckerType;
-              round5: CheckerType;
-            };
-          }>) => {
-            // setPlayType(PlayType.non);
-            // setGameDetails(dispatch, {
-            //   player: PlayerType.first,
-            //   game: Games.non,
-            //   id: undefined,
-            //   price: 0,
-            // });
+        } else {
+          await Axios({
+            method: "POST",
+            url: `${url}/games/penalty/challange`,
+            headers: {
+              authorization: `Bearer ${token}`,
+            },
+            data: {
+              id: details.id,
+              gameInPut: {
+                round1: round1.value,
+                round2: round2.value,
+                round3: round3.value,
+                round4: round4.value,
+                round5: round5.value,
+              },
+            },
+          })
+            .then(
+              ({
+                data: { winner, price, game_result },
+              }: AxiosResponse<{
+                winner: GameRec;
+                price: number;
+                game_result: {
+                  round1: CheckerType;
+                  round2: CheckerType;
+                  round3: CheckerType;
+                  round4: CheckerType;
+                  round5: CheckerType;
+                };
+              }>) => {
+                // setPlayType(PlayType.non);
+                // setGameDetails(dispatch, {
+                //   player: PlayerType.first,
+                //   game: Games.non,
+                //   id: undefined,
+                //   price: 0,
+                // });
 
-            setWinner(winner);
-            setPlayType(PlayType.one_by_one);
-            setKnownState1(game_result.round1);
-            setKnownState2(game_result.round2);
-            setKnownState3(game_result.round3);
-            setKnownState4(game_result.round4);
-            setKnownState5(game_result.round5);
-            
-            // if (winner) {
-            //   notify(dispatch, {
-            //     type: NotiErrorType.success,
-            //     msg: `Congratualation your have just won the game and earned $ ${price}. you can withdraw you cash price or use it to play more games.`,
-            //     isOpen: modalType.open,
-            //   });
-            // } else {
-            //   notify(dispatch, {
-            //     type: NotiErrorType.error,
-            //     msg: `Sorry your have just lost this game and lost $ ${price}. you can try other games for a better chance.`,
-            //     isOpen: modalType.open,
-            //   });
-            // }
-          }
-        )
-        .catch((err) => {
-          setPlayType(PlayType.non);
-          setGameDetails(dispatch, {
-            player: PlayerType.first,
-            game: Games.non,
-            id: undefined,
-            price: 0,
-          });
-          toast(dispatch, {
-            msg:
-              "An Error occured could not connect to troisplay game server please check you interner connection and Try Again.",
-          }).error();
-        })
-        .finally(() => {
-          setLoading(TwoButtonLoader.no_loading);
-          setRound1({ round: 1, value: PenaltyOption.left });
-          setRound2({ round: 2, value: PenaltyOption.left });
-          setRound3({ round: 3, value: PenaltyOption.left });
-          setRound4({ round: 4, value: PenaltyOption.left });
-          setRound5({ round: 5, value: PenaltyOption.left });
-        });
+                setWinner(winner);
+                setPlayType(PlayType.one_by_one);
+                setKnownState1(game_result.round1);
+                setKnownState2(game_result.round2);
+                setKnownState3(game_result.round3);
+                setKnownState4(game_result.round4);
+                setKnownState5(game_result.round5);
+
+                // if (winner) {
+                //   notify(dispatch, {
+                //     type: NotiErrorType.success,
+                //     msg: `Congratualation your have just won the game and earned $ ${price}. you can withdraw you cash price or use it to play more games.`,
+                //     isOpen: modalType.open,
+                //   });
+                // } else {
+                //   notify(dispatch, {
+                //     type: NotiErrorType.error,
+                //     msg: `Sorry your have just lost this game and lost $ ${price}. you can try other games for a better chance.`,
+                //     isOpen: modalType.open,
+                //   });
+                // }
+              }
+            )
+            .catch((err) => {
+              setPlayType(PlayType.non);
+              setGameDetails(dispatch, {
+                player: PlayerType.first,
+                game: Games.non,
+                id: undefined,
+                price: 0,
+              });
+              toast(dispatch, {
+                msg:
+                  "An Error occured could not connect to troisplay game server please check you interner connection and Try Again.",
+              }).error();
+            })
+            .finally(() => {
+              setLoading(TwoButtonLoader.no_loading);
+              setRound1({ round: 1, value: PenaltyOption.left });
+              setRound2({ round: 2, value: PenaltyOption.left });
+              setRound3({ round: 3, value: PenaltyOption.left });
+              setRound4({ round: 4, value: PenaltyOption.left });
+              setRound5({ round: 5, value: PenaltyOption.left });
+            });
+        }
+    } catch (error) {
+      console.log(error);;
     }
   };
 

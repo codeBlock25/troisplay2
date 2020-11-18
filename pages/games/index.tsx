@@ -72,14 +72,18 @@ export default function GamesScreen() {
         playCount: number;
         price_in_coin: number;
         price_in_value: number;
-        battleScore?: {
-          player1?: {
+        battleScore: {
+          player1: {
             endDate: Date;
             title: string;
             description: string;
             answer: string;
             endGameTime: Date;
-            choice: choice;
+            choice: choices;
+          };
+          player2?: {
+            answer: string;
+            waiting: boolean;
           };
         };
         _id: string;
@@ -112,7 +116,7 @@ export default function GamesScreen() {
   >((state) => {
     return {
       my_games: state.init.my_games,
-      defaults: state.init.gameDefaults
+      defaults: state.init.gameDefaults,
     };
   });
 
@@ -662,7 +666,46 @@ export default function GamesScreen() {
                     add
                   </p>
                 ) : (
-                  my_games.map((game) => {
+                    my_games.map((game) => {
+                    if (game.gameID === Games.custom_game) {
+                      return (
+                        <GameView
+                          type="custom"
+                          name={game?.battleScore?.player1?.title}
+                          key={game._id}
+                          date={game.date}
+                          v1={game.price_in_value * (defaults?.cashRating ?? 1)}
+                          v2={game.price_in_value}
+                          v3={game.gameMemberCount}
+                          id={game._id}
+                          btn1func={() =>
+                            setCustomWindow(dispatch, {
+                              isOpen: modalType.open,
+                              game: game,
+                            })
+                          }
+                          btn2func={() =>
+                            exitWin(dispatch, {
+                              open: modalType.open,
+                              func: async () =>
+                                Axios.post(
+                                  `${url}/games/custom/game`,
+                                  { id: game._id },
+                                  {
+                                    headers: {
+                                      authorization: `Bearer ${getToken()}`,
+                                    },
+                                  }
+                                ),
+                              game: Games.custom_game,
+                            })
+                          }
+                          cash={game.price_in_value}
+                          coin={game.price_in_coin}
+                          game={game.gameID}
+                        />
+                      );
+                    }
                     return (
                       <GameView
                         type={game.gameID === Games.rooms ? "room" : "normal"}

@@ -10,7 +10,6 @@ import {
 import {
   Description,
   EventNote,
-  People,
   Person,
   QuestionAnswer,
   Sports,
@@ -19,7 +18,8 @@ import {
 import { ChangeEvent, FormEvent, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { MoonLoader } from "react-spinners";
-import { notify, setGameDetails, toast } from "../../store/action";
+import { setGameDetails, toast } from "../../store/action";
+import moment from "moment";
 import {
   KeyboardDatePicker,
   KeyboardTimePicker,
@@ -49,8 +49,12 @@ export default function CustomGame(): JSX.Element {
   const [answer, setAnswer] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const [endDate, setEndDate] = useState<Date>(new Date());
-  const [maxDate, setmaxDate] = useState<Date>(new Date());
+  const [endDate, setEndDate] = useState<Date>(
+    new Date(moment().add("day", 1).format("DD-MMMM-YYYY"))
+  );
+  const [maxDate, setmaxDate] = useState<Date>(
+    new Date(moment().add("day", 1).format("DD-MMMM-YYYY"))
+  );
   const [endGameTime, setEndGameTime] = useState<Date>(new Date());
   const [choice_, setChoice] = useState<choice>(choice.at_stated_timed);
   /*
@@ -348,6 +352,14 @@ export default function CustomGame(): JSX.Element {
                     label="Game End Date"
                     value={endDate}
                     onChange={(date) => {
+                      if (moment(date).isBefore(new Date())) {
+                        toast(dispatch, {
+                          msg: `The Games end date can't before the current day being ${moment().format(
+                            "Do MMMM, yyyy"
+                          )}. Please choose a further date to continue`,
+                        }).fail();
+                        return;
+                      }
                       setEndDate(date);
                     }}
                     KeyboardButtonProps={{
@@ -372,6 +384,14 @@ export default function CustomGame(): JSX.Element {
                       ),
                     }}
                     onChange={(date) => {
+                      if (moment(date).isBefore(new Date())) {
+                        toast(dispatch, {
+                          msg: `The Games end date can't before the current day being ${moment().format(
+                            "Do MMMM, yyyy"
+                          )}. Please choose a further date to continue`,
+                        }).fail();
+                        return;
+                      }
                       setEndGameTime(date);
                     }}
                     KeyboardButtonProps={{

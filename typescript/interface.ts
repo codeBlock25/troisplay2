@@ -44,10 +44,12 @@ export interface eventReeducerType {
           answer: string;
           endGameTime: Date;
           choice: choices;
+          correct_answer: string;
         };
         player2?: {
           waiting: boolean;
           answer: string;
+          correct_answer: string;
         };
       };
     };

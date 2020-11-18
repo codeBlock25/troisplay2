@@ -128,7 +128,10 @@ export const setCustomWindow = (
           endGameTime: Date;
           choice: choices;
         };
-        player2?: {};
+        player2?: {
+          answer: string;
+          waiting: boolean;
+        };
       };
     };
   }

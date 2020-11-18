@@ -25,6 +25,7 @@ import { exitWin, setCustomWindow, setGameDetails, toast } from "../store/action
 import { useQueryCache } from "react-query";
 import GameView from "./game_view";
 import { useRouter } from "next/router";
+import { choice } from "./games/custom";
 
 export default function PickerPlayer2({
   game: game_to_play,
@@ -68,30 +69,56 @@ export default function PickerPlayer2({
   const [btn_loading, setBtnLoading] = useState<boolean>(false);
   const [loadingL, setLoadingL] = useState<boolean>(false);
   const { push } = useRouter()
-  const [popState, setPopState] = useState < {
-    msg: string,
-    func?: () => void | boolean | Promise<void> | Promise<boolean>,
-    game: Games,
+  const [popState, setPopState] = useState<{
+    msg: string;
+    func?: () => void | boolean | Promise<void> | Promise<boolean>;
+    game: Games;
     lucky?: {
       battleScore: {
         player1: {
-          description: string
-        title: string
-        winnerCount: number
-        }
-      }
-    date: Date
-    gameDetail: string
-    gameID: Games
-    gameMemberCount: number
-    gameType: string
-    isComplete: boolean
-    members: string[]
-    playCount: number
-    played: boolean
-    price_in_coin: number
-    price_in_value: number
-    _id: string;
+          description: string;
+          title: string;
+          winnerCount: number;
+        };
+      };
+      date: Date;
+      gameDetail: string;
+      gameID: Games;
+      gameMemberCount: number;
+      gameType: string;
+      isComplete: boolean;
+      members: string[];
+      playCount: number;
+      played: boolean;
+      price_in_coin: number;
+      price_in_value: number;
+      _id: string;
+    };
+    custom?: {
+      date: Date;
+      gameDetail: string;
+      gameID: Games;
+      gameMemberCount: number;
+      gameType: Games;
+      members: string[];
+      playCount: number;
+      price_in_coin: number;
+      price_in_value: number;
+      _id: string;
+      battleScore: {
+        player1: {
+          endDate: Date;
+          title: string;
+          description: string;
+          answer: string;
+          endGameTime: Date;
+          choice: choices;
+        };
+        player2?: {
+          answer: string;
+          waiting: boolean;
+        };
+      };
     };
     room?: {
       _id: string;
@@ -104,8 +131,8 @@ export default function PickerPlayer2({
       addedBy: string;
       activeMember: number;
       players: [string];
-    }
-  }>({ game: Games.non, msg: "", func: null, lucky:null, room: null })
+    };
+  }>({ game: Games.non, msg: "", func: null, lucky: null, room: null });
   const [open_games, setOpenGame] = useState<
     {
       date: Date;
@@ -327,57 +354,98 @@ export default function PickerPlayer2({
 
   const theme = "dark-mode";
   return (
-    <div className={`game_picker2 theme ${isOpen? "open":""} ${theme}`}>
-      <div className={popState.game === Games.lucky_geoge || popState.game === Games.rooms ? "container_pop open" : "container_pop"} onClick={(e: any) => {
-       try {
-          if (e?.target?.classList.contains("container_pop")) {
-          setPopState(prev => {
-            return {...prev, game: Games.non, func: null}
-          })
+    <div className={`game_picker2 theme ${isOpen ? "open" : ""} ${theme}`}>
+      <div
+        className={
+          popState.game === Games.lucky_geoge ||
+          popState.game === Games.rooms ||
+            popState.game === Games.custom_game
+            ? "container_pop open"
+            : "container_pop"
         }
-      } catch (error) {
-        console.error(error, [e.target])
-      }
-    }}>
+        onClick={(e: any) => {
+          try {
+            if (e?.target?.classList.contains("container_pop")) {
+              setPopState((prev) => {
+                return { ...prev, game: Games.non, func: null };
+              });
+            }
+          } catch (error) {
+            console.error(error, [e.target]);
+          }
+        }}
+      >
         <div className="content">
-          <h3 className="title">{popState.game ===Games.lucky_geoge ? (popState.lucky?.battleScore.player1.title ?? ""): (popState.room?.room_name??"")}</h3>
-          <div className="txt">{popState.game === Games.lucky_geoge ? (popState.lucky?.battleScore.player1.description ?? "") : ""}</div>
-          {popState.lucky && (<div className="txt_"> <span>Members</span> {popState.game === Games.lucky_geoge ? (popState.lucky?.members.length ?? "") : ""}</div>)}
-          <p className="txt_sub">NOTE: By clicking play you accept the game policy.</p>
-          <Button className="btn" onClick={() => {
-            popState.func();
-          }}>play</Button>
+          <h3 className="title">
+            {popState.game === Games.lucky_geoge
+              ? popState.lucky?.battleScore.player1.title ?? ""
+              : popState.room?.room_name ?? ""}
+          </h3>
+          <div className="txt">
+            {popState.game === Games.lucky_geoge
+              ? popState.lucky?.battleScore.player1.description ?? ""
+              : ""}
+          </div>
+          {popState.lucky && (
+            <div className="txt_">
+              {" "}
+              <span>Members</span>{" "}
+              {popState.game === Games.lucky_geoge
+                ? popState.lucky?.members.length ?? ""
+                : ""}
+            </div>
+          )}
+          <p className="txt_sub">
+            NOTE: By clicking play you accept the game policy.
+          </p>
+          <Button
+            className="btn"
+            onClick={() => {
+              popState.func();
+            }}
+          >
+            play
+          </Button>
         </div>
-    </div>
+      </div>
       <div className="container">
         <h3 className="title">Games</h3>
         <div className="list_games" style={{ paddingBottom: "60px" }}>
-          {
-            game_to_play === Games.lucky_geoge ?
-              (lucky_games?.data?.games.map((game) => {
-                return (
-                  <GameView
-                    type="lucky"
-                    name={game.battleScore.player1.title
-                    }
-                    key={game._id}
-                    date={game.date}
-                    id={game._id}
-                    cash={game.price_in_value}
-                    v1={game.price_in_value}
-                    v2={game.price_in_value * (defaults?.data.default.cashRating ?? 0)}
-                    coin={game.battleScore.player1.winnerCount}
-                    v3={game.battleScore.player1.winnerCount}
-                    v4={game.members.length}
-                    game={game.gameID}
-                    btn1func={() => {
-                      setPopState(prev => {
-                        return {
-                          ...prev,
-                          game: Games.lucky_geoge,
-                          lucky: game,
-                          func: async () => await PlayLuckyGeogeGame(PayType.cash, btn_loading, setBtnLoading, game._id, dispatch, game.battleScore.player1.title).finally(() => {
-                            setPopState(prev => {
+          {game_to_play === Games.lucky_geoge ? (
+            lucky_games?.data?.games.map((game) => {
+              return (
+                <GameView
+                  type="lucky"
+                  name={game.battleScore.player1.title}
+                  key={game._id}
+                  date={game.date}
+                  id={game._id}
+                  cash={game.price_in_value}
+                  v1={game.price_in_value}
+                  v2={
+                    game.price_in_value *
+                    (defaults?.data.default.cashRating ?? 0)
+                  }
+                  coin={game.battleScore.player1.winnerCount}
+                  v3={game.battleScore.player1.winnerCount}
+                  v4={game.members.length}
+                  game={game.gameID}
+                  btn1func={() => {
+                    setPopState((prev) => {
+                      return {
+                        ...prev,
+                        game: Games.lucky_geoge,
+                        lucky: game,
+                        func: async () =>
+                          await PlayLuckyGeogeGame(
+                            PayType.cash,
+                            btn_loading,
+                            setBtnLoading,
+                            game._id,
+                            dispatch,
+                            game.battleScore.player1.title
+                          ).finally(() => {
+                            setPopState((prev) => {
                               return { ...prev, func: null, game: Games.non };
                             });
                             close();
@@ -387,18 +455,26 @@ export default function PickerPlayer2({
                               id: undefined,
                               price: 0,
                             });
-                          })
-                        };
-                      });
-                    }}
-                    btn2func={()=> {
-                      setPopState(prev => {
-                        return {
-                          ...prev,
-                          game: Games.lucky_geoge,
-                          lucky: game,
-                          func: async () => await PlayLuckyGeogeGame(PayType.coin, btn_loading, setBtnLoading, game._id, dispatch, game.battleScore.player1.title).finally(() => {
-                            setPopState(prev => {
+                          }),
+                      };
+                    });
+                  }}
+                  btn2func={() => {
+                    setPopState((prev) => {
+                      return {
+                        ...prev,
+                        game: Games.lucky_geoge,
+                        lucky: game,
+                        func: async () =>
+                          await PlayLuckyGeogeGame(
+                            PayType.coin,
+                            btn_loading,
+                            setBtnLoading,
+                            game._id,
+                            dispatch,
+                            game.battleScore.player1.title
+                          ).finally(() => {
+                            setPopState((prev) => {
                               return { ...prev, func: null, game: Games.non };
                             });
                             close();
@@ -408,100 +484,119 @@ export default function PickerPlayer2({
                               id: undefined,
                               price: 0,
                             });
-                          })
-                        };
-                      });
-                    }}
-                  />
-                );
-              }))
-              :
-              game_to_play === Games.rooms ?
-                (rooms?.data?.rooms.map((game) => {
-                  return (
-                    <GameView
-                      type="room"
-                      name={game.room_name}
-                      key={game._id}
-                      date={game.date}
-                      id={game._id}
-                      cash={game.entry_price}
-                      v1={game.entry_price}
-                      v2={game.entry_price * (defaults?.data.default.cashRating ?? 0)}
-                      coin={game.player_limit}
-                      v3={game.activeMember}
-                      game={Games.non}
-                      btn1func={() => {
-                        setPopState(prev => {
-                          return {
-                            ...prev,
-                            game: Games.rooms,
-                            room: game,
-                            func:()=> push(`/games/rooms/${game.room_name}?payWith=${PayType.cash}`)
-                          };
-                        });
-                      }}
-                      btn2func={() => setPopState(prev => {
-                        return {
-                          ...prev,
-                          game: Games.rooms,
-                          room: game,
-                          func:()=> push(`/games/rooms/${game.room_name}?payWith=${PayType.cash}`)
-                        };
-                      })
-                    }
-                  />
-                );
-              }))
-              :
-            open_games.length <= 0 ? (
+                          }),
+                      };
+                    });
+                  }}
+                />
+              );
+            })
+          ) : game_to_play === Games.rooms ? (
+            rooms?.data?.rooms.map((game) => {
+              return (
+                <GameView
+                  type="room"
+                  name={game.room_name}
+                  key={game._id}
+                  date={game.date}
+                  id={game._id}
+                  cash={game.entry_price}
+                  v1={game.entry_price}
+                  v2={
+                    game.entry_price * (defaults?.data.default.cashRating ?? 0)
+                  }
+                  coin={game.player_limit}
+                  v3={game.activeMember}
+                  game={Games.non}
+                  btn1func={() => {
+                    setPopState((prev) => {
+                      return {
+                        ...prev,
+                        game: Games.rooms,
+                        room: game,
+                        func: () =>
+                          push(
+                            `/games/rooms/${game.room_name}?payWith=${PayType.cash}`
+                          ),
+                      };
+                    });
+                  }}
+                  btn2func={() =>
+                    setPopState((prev) => {
+                      return {
+                        ...prev,
+                        game: Games.rooms,
+                        room: game,
+                        func: () =>
+                          push(
+                            `/games/rooms/${game.room_name}?payWith=${PayType.cash}`
+                          ),
+                      };
+                    })
+                  }
+                />
+              );
+            })
+          ) : open_games.length <= 0 ? (
             <>
               <span className="txt">No avaliable games.</span>
             </>
           ) : (
             open_games.map((game) => {
               let loading = false;
-              console.log(game)
-              if (game.gameID === Games.custom_game) return (
-                <GameView
-                type="custom"
-                name={game?.battleScore?.player1?.title}
-                key={game._id}
-                date={game.date}
-                v1={
-                  game.price_in_value *
-                  (defaults?.data.default?.cashRating ?? 1)
-                }
-                v2={game.price_in_value}
-                v3={game.gameMemberCount}
-                id={game._id}
-                btn1func={() =>
-                  setCustomWindow(dispatch, {
-                    isOpen: modalType.open,
-                    game,
-                  })
-                }
-                btn2func={() =>
-                  exitWin(dispatch, {
-                    open: modalType.open,
-                    func: async () =>
-                      Axios.post(
-                        `${url}/games/custom/game`,
-                        { id: game._id },
-                        {
-                          headers: {
-                            authorization: `Bearer ${getToken()}`,
+              if (game.gameID === Games.custom_game)
+                return (
+                  <GameView
+                    type="custom"
+                    name={game?.battleScore?.player1?.title}
+                    key={game._id}
+                    date={game.date}
+                    v1={
+                      game.price_in_value *
+                      (defaults?.data.default?.cashRating ?? 1)
+                    }
+                    v2={game.price_in_value}
+                    v3={game.gameMemberCount}
+                    id={game._id}
+                    btn1func={() => {
+                      console.log(game)
+                      setPopState((prev) => {
+                        return {
+                          ...prev,
+                          custom: game,
+                          msg: game.battleScore?.player1?.description ?? "hi",
+                          game: Games.custom_game,
+                          func: async () => {
+                            setCustomWindow(dispatch, {
+                              isOpen: modalType.open,
+                              game,
+                            });
+                            close();
                           },
-                        }
-                      ),
-                    game: Games.custom_game,
-                  })
-                }
-                cash={game.price_in_value}
-                coin={game.price_in_coin}
-                game={game.gameID}
-              />
-              );
+                        };
+                      });
+                    }}
+                    btn2func={() =>
+                      exitWin(dispatch, {
+                        open: modalType.open,
+                        func: async () =>
+                          Axios.post(
+                            `${url}/games/custom/game`,
+                            { id: game._id },
+                            {
+                              headers: {
+                                authorization: `Bearer ${getToken()}`,
+                              },
+                            }
+                          ),
+                        game: Games.custom_game,
+                      })
+                    }
+                    cash={game.price_in_value}
+                    coin={game.price_in_coin}
+                    game={game.gameID}
+                  />
+                );
               return (
                 <GameView
                   type="game_view"
@@ -549,7 +644,7 @@ export default function PickerPlayer2({
             onClick={() => {
               setmin(0);
               setmax(10000);
-              close()
+              close();
             }}
           >
             <Close />
@@ -559,7 +654,11 @@ export default function PickerPlayer2({
             required
             placeholder="min price"
             type="number"
-            disabled={game_to_play === Games.rooms||game_to_play===Games.lucky_geoge ? true: false}
+            disabled={
+              game_to_play === Games.rooms || game_to_play === Games.lucky_geoge
+                ? true
+                : false
+            }
             value={min}
             onChange={(evt) => {
               if (!parseInt(evt.target.value, 10) || min >= max + 5) return;
@@ -580,7 +679,11 @@ export default function PickerPlayer2({
             placeholder="min price"
             className={`inputBox theme ${theme}`}
             value={max}
-            disabled={game_to_play === Games.rooms||game_to_play===Games.lucky_geoge ? true: false}
+            disabled={
+              game_to_play === Games.rooms || game_to_play === Games.lucky_geoge
+                ? true
+                : false
+            }
             type="number"
             onChange={(evt) => {
               if (!parseInt(evt.target.value, 10) || max <= min - 5) return;
@@ -594,7 +697,15 @@ export default function PickerPlayer2({
               ),
             }}
           />
-          <Fab className="srch" onClick={LoadData} disabled={game_to_play === Games.rooms||game_to_play===Games.lucky_geoge ? true:false}>
+          <Fab
+            className="srch"
+            onClick={LoadData}
+            disabled={
+              game_to_play === Games.rooms || game_to_play === Games.lucky_geoge
+                ? true
+                : false
+            }
+          >
             <Search />
           </Fab>
         </div>
