@@ -414,13 +414,13 @@ const GuessMaster = memo(function () {
           </div>
           {!isEmpty(details.id) ? (
             <div className={`btn_ theme ${theme}`} onClick={() => matchPlay()}>
-            {loading === TwoButtonLoader.first_loading ? (
-              <SyncLoader size="10px" color={`white`} />
+              {loading === TwoButtonLoader.first_loading ? (
+                <SyncLoader size="10px" color={`white`} />
               ) : (
-                <>Play</>
+                <>{played.length >= 1 ? "Retry"   : "Play"}</>
               )}
-          </div>
-            ):
+            </div>
+          ) : (
             <>
               <div
                 className={`btn_ theme ${theme}`}
@@ -447,7 +447,7 @@ const GuessMaster = memo(function () {
                 )}
               </div>
             </>
-          }
+          )}
         </div>
       </div>
     );
