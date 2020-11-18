@@ -8,6 +8,7 @@ import {
   errorType,
   choices,
   ReasonType,
+  PayType,
 } from "./enum";
 
 export interface eventReeducerType {
@@ -21,6 +22,7 @@ export interface eventReeducerType {
     game: Games;
     id?: string;
     player: PlayerType;
+    payWith: PayType
   };
   action: ReasonType;
   customWindow: {
@@ -90,3 +92,14 @@ export interface reducerType {
   event: eventReeducerType;
   init: initReducerType;
 }
+
+
+
+
+          // <div className={`btn_ theme ${theme}`} onClick={() => matchPlay()}>
+          //   {loading === TwoButtonLoader.first_loading ? (
+          //     <SyncLoader size="10px" color={`white`} />
+          //   ) : (
+          //     <>Play</>
+          //   )}
+          // </div>;

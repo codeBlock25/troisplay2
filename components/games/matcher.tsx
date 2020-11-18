@@ -48,6 +48,7 @@ const GuessMaster = memo(function () {
         game: Games;
         id?: string;
         player: PlayerType;
+        payWith: PayType
       };
     }
   >((state) => {
@@ -97,11 +98,11 @@ const GuessMaster = memo(function () {
   }, [isStarted, details]);
 
   const matchPlay = async (
-    payWith: PayType
+    payWith?: PayType
   ): Promise<void> => {
     let token = getToken()
     if (loading !== TwoButtonLoader.no_loading || num === 0) return;
-    if (PayType.cash === payWith) {
+    if (PayType.cash === details.payWith) {
       setLoading(TwoButtonLoader.first_loading);
     } else {
       setLoading(TwoButtonLoader.second_loading);
@@ -116,7 +117,7 @@ const GuessMaster = memo(function () {
         data: {
           price_in_cash: details.price,
           gameInPut: num,
-          payWith,
+          payWith: details.payWith,
         },
       })
         .then(
@@ -152,7 +153,7 @@ const GuessMaster = memo(function () {
           if (err.message === "Request failed with status code 401") {
             toast(dispatch, {
               msg: `Insufficient Fund, please fund your ${
-                payWith === PayType.cash ? "cash wallet" : "coin wallet"
+                details.payWith === PayType.cash ? "cash wallet" : "coin wallet"
               } to continue the game.`,
             }).fail();
             return;
@@ -411,34 +412,42 @@ const GuessMaster = memo(function () {
               5
             </div>
           </div>
-          <div
-            className={`btn_ theme ${theme}`}
-            onClick={() => matchPlay(PayType.cash)}
-          >
+          {isEmpty(details.id) ? (      
+            <div className={`btn_ theme ${theme}`} onClick={() => matchPlay()}>
             {loading === TwoButtonLoader.first_loading ? (
               <SyncLoader size="10px" color={`white`} />
-            ) : (
-              <>
-                stake ₦{" "}
-                {details.price}
-              </>
-            )}
+              ) : (
+                <>Play</>
+              )}
           </div>
-          <div
-            className={`btn_ theme ${theme}`}
-            onClick={() => matchPlay(PayType.coin)}
-          >
-            {loading === TwoButtonLoader.second_loading ? (
-              <SyncLoader size="10px" color={`white`} />
-            ) : (
-              <>
-                {" "}
-                stake <GameCoin />{" "}
-                {details.price *
-                  (defaults?.data.default.cashRating ?? 0)}
-              </>
-            )}
-          </div>
+            ):
+            <>
+              <div
+                className={`btn_ theme ${theme}`}
+                onClick={() => matchPlay(PayType.cash)}
+              >
+                {loading === TwoButtonLoader.first_loading ? (
+                  <SyncLoader size="10px" color={`white`} />
+                ) : (
+                  <>stake ₦ {details.price}</>
+                )}
+              </div>
+              <div
+                className={`btn_ theme ${theme}`}
+                onClick={() => matchPlay(PayType.coin)}
+              >
+                {loading === TwoButtonLoader.second_loading ? (
+                  <SyncLoader size="10px" color={`white`} />
+                ) : (
+                  <>
+                    {" "}
+                    stake <GameCoin />{" "}
+                    {details.price * (defaults?.data.default.cashRating ?? 0)}
+                  </>
+                )}
+              </div>
+            </>
+          }
         </div>
       </div>
     );

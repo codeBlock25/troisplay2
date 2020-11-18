@@ -624,15 +624,35 @@ export default function PickerPlayer2({
                   }
                   btn1func={() => {
                     loading = true;
-                    playOne(PayType.cash, game._id, game.gameID).finally(
-                      () => (loading = false)
-                    );
+                    if (game.gameID === Games.matcher) {
+                        setGameDetails(dispatch, {
+                          player: PlayerType.second,
+                          game: game.gameID,
+                          id: game._id,
+                          price: game.price_in_value,
+                          payType: PayType.cash
+                        });
+                    } else {
+                      playOne(PayType.cash, game._id, game.gameID).finally(
+                        () => (loading = false)
+                        );
+                      }
                   }}
                   btn2func={() => {
                     loading = true;
-                    playOne(PayType.coin, game._id, game.gameID).finally(
-                      () => (loading = false)
-                    );
+                    if (game.gameID === Games.matcher) {
+                      setGameDetails(dispatch, {
+                        player: PlayerType.second,
+                        game: game.gameID,
+                        id: game._id,
+                        price: game.price_in_value,
+                        payType: PayType.coin
+                      });
+                    } else {
+                      playOne(PayType.coin, game._id, game.gameID).finally(
+                        () => (loading = false)
+                      );
+                    }
                   }}
                 />
               );

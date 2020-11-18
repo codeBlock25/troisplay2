@@ -6,6 +6,7 @@ import {
   Games,
   modalType,
   NotiErrorType,
+  PayType,
   PlayerType,
   ReasonType,
 } from "../../typescript/enum";
@@ -76,6 +77,7 @@ export const setGameDetails = (
     game: Games;
     id: string;
     price: number;
+    payType?: PayType;
   }
 ): void => {
   dispatch({ type: "GAME_DETAILS", payload });

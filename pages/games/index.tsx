@@ -417,13 +417,12 @@ export default function GamesScreen() {
               className="btn"
               onClick={() => {
                 if (
-                  spec.game === Games.lucky_geoge ||
-                  spec.game === Games.rooms
+                  spec.game === Games.lucky_geoge 
                 ) {
                   push("/games")
                   setP2(true);
                   return;
-                } else if (spec.game === Games.custom_game) {
+                } else if (spec.game === Games.rooms) {
                 setSpec((prev) => {
                   return {
                     ...prev,
