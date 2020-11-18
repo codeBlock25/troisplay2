@@ -412,7 +412,7 @@ const GuessMaster = memo(function () {
               5
             </div>
           </div>
-          {isEmpty(details.id) ? (      
+          {!isEmpty(details.id) ? (
             <div className={`btn_ theme ${theme}`} onClick={() => matchPlay()}>
             {loading === TwoButtonLoader.first_loading ? (
               <SyncLoader size="10px" color={`white`} />

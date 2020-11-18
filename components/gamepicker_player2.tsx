@@ -30,37 +30,11 @@ import { choice } from "./games/custom";
 export default function PickerPlayer2({
   game: game_to_play,
   isOpen,
-  my,
   close,
-  spec,
-  specfunc
 }: {
   close: ()=>void
-  spec:{
-    isOpen: boolean;
-    manual: string;
-    price: number;
-    game: Games;
-    next?: nextType;
-}
-  specfunc:(value:SetStateAction<{
-    isOpen: boolean;
-    manual: string;
-    price: number;
-    game: Games;
-    next?: nextType;
-}>) => void
   game: Games;
   isOpen: boolean;
-  my: {
-    userID: string;
-    full_name: string;
-    phone_number: string;
-    playerpic: string;
-    playername: string;
-    email: string;
-    location: string;
-  };
 }) {
   const dispatch = useDispatch();
   const [min, setmin] = useState<number>(0);
@@ -632,6 +606,7 @@ export default function PickerPlayer2({
                           price: game.price_in_value,
                           payType: PayType.cash
                         });
+                      close();
                     } else {
                       playOne(PayType.cash, game._id, game.gameID).finally(
                         () => (loading = false)
@@ -646,8 +621,9 @@ export default function PickerPlayer2({
                         game: game.gameID,
                         id: game._id,
                         price: game.price_in_value,
-                        payType: PayType.coin
+                        payType: PayType.coin,
                       });
+                      close();
                     } else {
                       playOne(PayType.coin, game._id, game.gameID).finally(
                         () => (loading = false)

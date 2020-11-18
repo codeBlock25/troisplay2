@@ -259,10 +259,7 @@ export default function GamesScreen() {
       <PickerPlayer2
         game={spec.game}
         isOpen={p2}
-        my={record?.data.player}
         close={() => setP2(false)}
-        spec={spec}
-        specfunc={setSpec}
       />
       <ToastContainer />
       <div
