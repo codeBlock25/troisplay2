@@ -322,7 +322,7 @@ export default function CustomGame(): JSX.Element {
                     </InputAdornment>
                   ),
                 }}
-                format="MM/dd/yyyy"
+                format="MM/dd/yyyy - hh:mm a"
                 margin="normal"
                 id="game-end-date"
                 label="Max Join Date"
@@ -332,36 +332,36 @@ export default function CustomGame(): JSX.Element {
                 }}
               />
               {choice_ === choice.at_stated_timed && (
-                  <DateTimePicker
-                    disableToolbar
-                    variant="inline"
-                    required
-                    inputVariant="outlined"
-                    className={`inputBox theme ${theme}`}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment className="icon_" position="start">
-                          <EventNote />
-                        </InputAdornment>
-                      ),
-                    }}
-                    format="MM/dd/yyyy"
-                    margin="normal"
-                    id="game-end-date"
-                    label="Game End Date"
-                    value={endDate}
-                    onChange={(date) => {
-                      if (moment(date).isBefore(new Date())) {
-                        toast(dispatch, {
-                          msg: `The Games end date can't before the current day being ${moment().format(
-                            "Do MMMM, yyyy"
-                          )}. Please choose a further date to continue`,
-                        }).fail();
-                        return;
-                      }
-                      setEndDate(date);
-                    }}
-                  />
+                <DateTimePicker
+                  disableToolbar
+                  variant="inline"
+                  required
+                  inputVariant="outlined"
+                  className={`inputBox theme ${theme}`}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment className="icon_" position="start">
+                        <EventNote />
+                      </InputAdornment>
+                    ),
+                  }}
+                  format="MM/dd/yyyy - hh:mm a"
+                  margin="normal"
+                  id="game-end-date"
+                  label="Judge Date"
+                  value={endDate}
+                  onChange={(date) => {
+                    if (moment(date).isBefore(new Date())) {
+                      toast(dispatch, {
+                        msg: `The Games end date can't before the current day being ${moment().format(
+                          "Do MMMM, yyyy"
+                        )}. Please choose a further date to continue`,
+                      }).fail();
+                      return;
+                    }
+                    setEndDate(date);
+                  }}
+                />
               )}
             </MuiPickersUtilsProvider>
             <Button type="submit" className={`btn theme ${theme}`}>

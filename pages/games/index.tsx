@@ -438,7 +438,7 @@ export default function GamesScreen() {
                 });
               }}
             >
-             {spec.game === Games.custom_game? "back": "confirm"}
+             {spec.game === Games.rooms? "back": "confirm"}
             </span>
           </div>
         )}
