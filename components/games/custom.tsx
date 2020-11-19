@@ -59,9 +59,7 @@ export default function CustomGame(): JSX.Element {
   );
   const [endGameTime, setEndGameTime] = useState<Date>(new Date());
   const [choice_, setChoice] = useState<choice>(choice.at_stated_timed);
-  /*
-  
-  */
+
   const { details } = useSelector<
     reducerType,
     {
@@ -118,15 +116,23 @@ export default function CustomGame(): JSX.Element {
             date?: Date;
           };
         }>) => {
-          MyGamesAction.add({dispatch, payload: game})
-          setGameDetails(dispatch, {player: PlayerType.first, price: 0, id: "", game: Games.non})
+          MyGamesAction.add({ dispatch, payload: game });
+          setGameDetails(dispatch, {
+            player: PlayerType.first,
+            price: 0,
+            id: "",
+            game: Games.non,
+          });
           setDescription("");
           setTitle("");
           setAnswer("");
           setEndGameTime(new Date());
           setEndDate(new Date());
           setPlayer2Username("");
-          toast(dispatch, {msg: "Congratulations!!!! You have successfully set you custom game, please wait for Player 2 provide his/her answer."}).success()
+          toast(dispatch, {
+            msg:
+              "Congratulations!!!! You have successfully set you custom game, please wait for Player 2 provide his/her answer.",
+          }).success();
         }
       )
       .catch((err) => {
@@ -135,8 +141,8 @@ export default function CustomGame(): JSX.Element {
           return;
         }
         if (err.message === "Request failed with status code 402") {
-         toast(dispatch, { msg: "insufficient fund." }).fail();
-         return;
+          toast(dispatch, { msg: "insufficient fund." }).fail();
+          return;
         }
         toast(dispatch, {
           msg: "An error occured please recheck your connection and try again",
@@ -290,27 +296,8 @@ export default function CustomGame(): JSX.Element {
                 ),
               }}
             />
-            <FormControl
-              variant="outlined"
-              className={`inputBox theme ${theme}`}
-              required
-            >
-              <InputLabel>Time to judge</InputLabel>
-              <Select
-                onChange={(e: ChangeEvent<{ value: unknown }>) => {
-                  setChoice(e.target.value as choice);
-                }}
-                value={choice_}
-              >
-                <MenuItem value={choice.at_stated_timed}>
-                  At stated Date
-                </MenuItem>
-                <MenuItem value={choice.immediately}>immediately</MenuItem>
-              </Select>
-            </FormControl>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <DateTimePicker
-                disableToolbar
                 variant="inline"
                 required
                 inputVariant="outlined"
@@ -333,7 +320,6 @@ export default function CustomGame(): JSX.Element {
               />
               {choice_ === choice.at_stated_timed && (
                 <DateTimePicker
-                  disableToolbar
                   variant="inline"
                   required
                   inputVariant="outlined"
