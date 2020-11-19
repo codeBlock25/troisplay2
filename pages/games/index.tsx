@@ -60,52 +60,9 @@ export default function GamesScreen() {
   const [p2, setP2] = useState<boolean>(false);
   const { push, beforePopState, asPath, pathname } = useRouter();
 
-  const { my_games, defaults, playerRecord } = useSelector<
+  const { my_games, defaults } = useSelector<
     reducerType,
     {
-      playerRecord: {
-        player: {
-          userID: string;
-          full_name: string;
-          phone_number: string;
-          playerpic: string;
-          playername: string;
-          email: string;
-          location: string;
-        };
-        deviceSetup: {
-          userID: string;
-          isDarkMode: boolean;
-          remember: boolean;
-          online_status: boolean;
-          email_notification: boolean;
-          app_notification: boolean;
-          mobile_notification: boolean;
-        };
-        referal: {
-          userID: string;
-          activeReferal: number;
-          inactiveReferal: number;
-          refer_code: string;
-        };
-        wallet: {
-          userID: string;
-          currentCoin: number;
-          pendingCoin: number;
-        };
-        gamerecord: {
-          userID: string;
-          date_mark: Date;
-          game: Games;
-          won: string;
-          earnings: number;
-        }[];
-        cashwallet: {
-          userID: string;
-          currentCash: number;
-          pendingCash: number;
-        };
-      };
       my_games: {
         date: Date;
         gameDetail: string;
@@ -163,7 +120,6 @@ export default function GamesScreen() {
     return {
       my_games: state.init.my_games,
       defaults: state.init.gameDefaults,
-      playerRecord: state.init.playerRecord,
     };
   });
 
@@ -205,55 +161,6 @@ export default function GamesScreen() {
       };
     }[];
   }> = useQueryCache().getQueryData("requests");
-
-  const record: AxiosResponse<{
-    user: {
-      full_name: string;
-      phone_number: string;
-    };
-    player: {
-      userID: string;
-      full_name: string;
-      phone_number: string;
-      playerpic: string;
-      playername: string;
-      email: string;
-      location: string;
-    };
-    deviceSetup: {
-      userID: string;
-      isDarkMode: boolean;
-      remember: boolean;
-      online_status: boolean;
-      email_notification: boolean;
-      app_notification: boolean;
-      mobile_notification: boolean;
-    };
-    referal: {
-      userID: string;
-      activeReferal: number;
-      inactiveReferal: number;
-      refer_code: string;
-    };
-    wallet: {
-      userID: string;
-      currentCoin: number;
-      pendingCoin: number;
-    };
-    gamerecord: {
-      userID: string;
-      date_mark: Date;
-      game: Games;
-      won: string;
-      earnings: number;
-    }[];
-    cashwallet: {
-      userID: string;
-      currentCash: number;
-      pendingCash: number;
-    };
-  }> = useQueryCache().getQueryData("records");
-
   useEffect(() => {
     beforePopState(({ as }) => {
       if (as.includes("#playing")) {
