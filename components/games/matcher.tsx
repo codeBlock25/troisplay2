@@ -267,7 +267,7 @@ const GuessMaster = memo(function () {
             notify(dispatch, {
               isOpen: modalType.open,
               type: NotiErrorType.success,
-              msg: `Congratulations!!!! You won.`,
+              msg: `Congratulations!!!! You have won ${price}.`,
             });
             setPlaycount(1);
             setView1(true);
