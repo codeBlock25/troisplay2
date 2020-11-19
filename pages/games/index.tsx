@@ -679,13 +679,13 @@ export default function GamesScreen() {
                             (game.battleScore.player1?.correctAnswer ?? "e") ===
                             (game.battleScore.player2?.correctAnswer ?? "r")
                               ? ""
-                              : !isEmpty(game.battleScore.player2)
-                              ? "(awaiting judge date)"
                               : moment(
                                   game.battleScore.player1.endDate
                                 ).isSameOrAfter(new Date()) &&
                                 !isEmpty(game.battleScore.player2)
                               ? "(judge now)"
+                              : !isEmpty(game.battleScore.player2)
+                              ? "(awaiting judge date)"
                               : "(not joined)"
                           }`}
                           key={game._id}
