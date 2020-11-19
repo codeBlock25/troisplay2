@@ -12,29 +12,40 @@ const GameView = memo(function ({
   coin,
   cash,
   game,
-  type="normal",
+  type = "normal",
   btn1func,
   btn2func,
   btn1view,
-  btn2view, v1, v2, v3,
-  date2
+  btn2view,
+  v1,
+  v2,
+  v3,
+  date2,
 }: {
-  date2?: Date,
+  date2?: Date;
   v1?: number | string;
-  v2?: number | string
-  v3?: number | string
-  v4?: number | string
+  v2?: number | string;
+  v3?: number | string;
+  v4?: number | string;
   name: string;
   date: Date;
   id: string;
   cash: number;
-    coin: number;
-  game: Games
-  type:"game_view"|"normal" | "lucky" | "room" | "custom",
-  btn1func?: () => Promise<void> |  void | boolean | Dispatch<SetStateAction<any>>
-  btn1view?: JSX.Element | string
-  btn2func?: () => Promise<void> | void | boolean | Dispatch<SetStateAction<any>>
-  btn2view?: JSX.Element | string
+  coin: number;
+  game: Games;
+  type: "game_view" | "normal" | "lucky" | "room" | "custom" | "custom2";
+  btn1func?: () =>
+    | Promise<void>
+    | void
+    | boolean
+    | Dispatch<SetStateAction<any>>;
+  btn1view?: JSX.Element | string;
+  btn2func?: () =>
+    | Promise<void>
+    | void
+    | boolean
+    | Dispatch<SetStateAction<any>>;
+  btn2view?: JSX.Element | string;
 }) {
   const defaults: AxiosResponse<{
     default: {
@@ -123,6 +134,12 @@ const GameView = memo(function ({
           </span>
           <span className="btn" onClick={btn2func}>
             {btn2view ?? "reject"}
+          </span>
+        </div>
+      ) : type === "custom2" ? (
+        <div className="action">
+          <span className="btn" onClick={btn1func}>
+            {btn1view ?? "view"}
           </span>
         </div>
       ) : (

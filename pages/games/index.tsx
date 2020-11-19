@@ -674,7 +674,7 @@ export default function GamesScreen() {
                     if (game.gameID === Games.custom_game) {
                       return (
                         <GameView
-                          type="custom"
+                          type="custom2"
                           name={`${game?.battleScore?.player1?.title} ${
                             (game.battleScore.player1?.correctAnswer ?? "e") ===
                             (game.battleScore.player2?.correctAnswer ?? "r")
@@ -699,7 +699,7 @@ export default function GamesScreen() {
                             if (
                               moment(
                                 game.battleScore.player1.endDate
-                              ).isSameOrAfter(new Date()) &&
+                              ).isSameOrBefore(new Date()) &&
                               !isEmpty(game.battleScore.player2)
                             ) {
                               setCustomWindow(dispatch, {
