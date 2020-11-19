@@ -720,20 +720,8 @@ export default function GamesScreen() {
                         <GameView
                           type="custom2"
                           name={`${game?.battleScore?.player1?.title} ${
-                            (game.battleScore?.player1?.correct_answer &&
-                              whoIsThis({
-                                my_id: playerRecord?.player?.userID,
-                                game_members: game.members,
-                              }) === PlayerType.first) ||
-                            (game.battleScore?.player2?.correct_answer &&
-                              whoIsThis({
-                                my_id: playerRecord?.player?.userID,
-                                game_members: game.members,
-                              }) === PlayerType.second)
-                              ? "On hold"
-                              : (game.battleScore.player1?.correct_answer ??
-                                  "") !==
-                                (game.battleScore.player2?.correct_answer ?? "")
+                            (game.battleScore.player1?.correct_answer ?? "") !==
+                            (game.battleScore.player2?.correct_answer ?? "")
                               ? "On hold"
                               : moment(
                                   game.battleScore.player1.endDate
