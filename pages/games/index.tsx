@@ -40,7 +40,7 @@ import GuessMaster from "../../components/games/matcher";
 import CustomGame, { choice } from "../../components/games/custom";
 import Gloryspin from "../../components/games/gloryspin";
 import BackWindow from "../../components/backwindow";
-import { Fab } from "@material-ui/core";
+import { Badge, Fab, Typography } from "@material-ui/core";
 import { ArrowDownward } from "@material-ui/icons";
 import Bottompanel from "../../components/bottompanel";
 import DetailScreen from "../../components/DetailScreen";
@@ -256,11 +256,7 @@ export default function GamesScreen() {
       <BackWindow />
       <CustomWindow />
       <Header setApp_loading={setApp_loading} setRunText={setRunText} />
-      <PickerPlayer2
-        game={spec.game}
-        isOpen={p2}
-        close={() => setP2(false)}
-      />
+      <PickerPlayer2 game={spec.game} isOpen={p2} close={() => setP2(false)} />
       <ToastContainer />
       <div
         className={`game_picker_view ${spec.isOpen ? "open" : ""}`}
@@ -285,11 +281,7 @@ export default function GamesScreen() {
               To stand a chances to earn{" "}
               {getPrice(spec.game, spec.price, defaults) <= 0
                 ? ""
-                : `$ ${getPrice(
-                    spec.game,
-                    spec.price,
-                    defaults
-                  )}`}{" "}
+                : `$ ${getPrice(spec.game, spec.price, defaults)}`}{" "}
             </p>
             <p className="txt">
               or Stake At{" "}
@@ -300,8 +292,7 @@ export default function GamesScreen() {
                 <span
                   style={{ marginLeft: 5, display: "flex", marginRight: 5 }}
                 >
-                  {"  "} <GameCoin />{" "}
-                  {`${defaults.cashRating * spec.price}`}
+                  {"  "} <GameCoin /> {`${defaults.cashRating * spec.price}`}
                 </span>
               )}
             </p>
@@ -373,7 +364,8 @@ export default function GamesScreen() {
                   };
                 });
               }}
-            >Proceed
+            >
+              Proceed
             </span>
           </div>
         ) : spec.next === nextType.player ? (
@@ -413,19 +405,17 @@ export default function GamesScreen() {
             <span
               className="btn"
               onClick={() => {
-                if (
-                  spec.game === Games.lucky_geoge 
-                ) {
-                  push("/games")
+                if (spec.game === Games.lucky_geoge) {
+                  push("/games");
                   setP2(true);
                   return;
                 } else if (spec.game === Games.rooms) {
-                setSpec((prev) => {
-                  return {
-                    ...prev,
-                    isOpen: false,
-                  };
-                });
+                  setSpec((prev) => {
+                    return {
+                      ...prev,
+                      isOpen: false,
+                    };
+                  });
                 }
                 setSpec((prev) => {
                   return {
@@ -435,7 +425,7 @@ export default function GamesScreen() {
                 });
               }}
             >
-             {spec.game === Games.rooms? "back": "confirm"}
+              {spec.game === Games.rooms ? "back" : "confirm"}
             </span>
           </div>
         )}
@@ -443,7 +433,7 @@ export default function GamesScreen() {
       <span
         className="new_game"
         onClick={() => {
-          push("/games#play-games")
+          push("/games#play-games");
         }}
       >
         play game{" "}
@@ -455,7 +445,7 @@ export default function GamesScreen() {
         <Fab
           className="btn_close"
           onClick={() => {
-                push("/games");
+            push("/games");
           }}
         >
           <ArrowDownward />
@@ -464,7 +454,7 @@ export default function GamesScreen() {
           <div
             className="game"
             onClick={() => {
-                  push("/games");
+              push("/games");
               setSpec({
                 isOpen: true,
                 manual:
@@ -491,7 +481,7 @@ export default function GamesScreen() {
           <div
             className="game"
             onClick={() => {
-                  push("/games");
+              push("/games");
               setSpec({
                 isOpen: true,
                 manual:
@@ -518,7 +508,7 @@ export default function GamesScreen() {
           <div
             className="game"
             onClick={() => {
-                  push("/games");
+              push("/games");
               setSpec({
                 isOpen: true,
                 manual:
@@ -545,7 +535,7 @@ export default function GamesScreen() {
           <div
             className="game"
             onClick={() => {
-                  push("/games");
+              push("/games");
               setSpec({
                 isOpen: true,
                 manual:
@@ -572,7 +562,7 @@ export default function GamesScreen() {
           <div
             className="game"
             onClick={() => {
-                  push("/games");
+              push("/games");
               setSpec({
                 isOpen: true,
                 manual:
@@ -599,11 +589,10 @@ export default function GamesScreen() {
           <div
             className="game"
             onClick={() => {
-                  push("/games");
+              push("/games");
               setSpec({
                 isOpen: true,
-                manual:
-                  "Coming soon",
+                manual: "Coming soon",
                 price: 0,
                 game: Games.rooms,
               });
@@ -631,7 +620,7 @@ export default function GamesScreen() {
           gameViewOpen || spec.isOpen ? "games_world_ blur" : "games_world_"
         }
         onClick={() => {
-                  push("/games");
+          push("/games");
         }}
       >
         <div className="first">
@@ -642,26 +631,35 @@ export default function GamesScreen() {
             <div className="title">
               <h3>My Games</h3>
               <div className="title_tab">
-                <span
-                  className={`btn ${viewing === Viewing.current ? "on" : ""}`}
-                  onClick={() => setViewing(Viewing.current)}
+                <Badge color="secondary" badgeContent={my_games.length}>
+                  <Typography
+                    className={`btn ${viewing === Viewing.current ? "on" : ""}`}
+                    onClick={() => setViewing(Viewing.current)}
+                  >
+                    Played Games
+                  </Typography>
+                </Badge>
+                <Badge
+                  color="secondary"
+                  badgeContent={requests.data.requests.length}
                 >
-                  Played Games
-                </span>
-                <span
-                  className={`btn ${viewing === Viewing.request ? "on" : ""}`}
-                  onClick={() => setViewing(Viewing.request)}
-                >
-                  Request
-                </span>
-                <span
-                  className={`btn ${
-                    viewing === Viewing.notification ? "on" : ""
-                  }`}
-                  onClick={() => setViewing(Viewing.notification)}
-                >
-                  Notification
-                </span>
+                  <Typography
+                    className={`btn ${viewing === Viewing.request ? "on" : ""}`}
+                    onClick={() => setViewing(Viewing.request)}
+                  >
+                    Request
+                  </Typography>
+                </Badge>
+                <Badge color="secondary" badgeContent={0}>
+                  <Typography
+                    className={`btn ${
+                      viewing === Viewing.notification ? "on" : ""
+                    }`}
+                    onClick={() => setViewing(Viewing.notification)}
+                  >
+                    Notification
+                  </Typography>
+                </Badge>
               </div>
             </div>
             <div className="game_content">
@@ -672,14 +670,27 @@ export default function GamesScreen() {
                     add
                   </p>
                 ) : (
-                    my_games.map((game) => {
+                  my_games.map((game) => {
                     if (game.gameID === Games.custom_game) {
                       return (
                         <GameView
                           type="custom"
-                          name={`${game?.battleScore?.player1?.title} ${(game.battleScore.player1?.correctAnswer ?? "e") === (game.battleScore.player2?.correctAnswer ?? "r") ? "" :!isEmpty(game.battleScore.player2) ?"(awaiting judge date)": moment(game.battleScore.player1.endDate).isSameOrAfter(new Date()) && !isEmpty(game.battleScore.player2)? "(judge now)": "(not joined)"}`}
+                          name={`${game?.battleScore?.player1?.title} ${
+                            (game.battleScore.player1?.correctAnswer ?? "e") ===
+                            (game.battleScore.player2?.correctAnswer ?? "r")
+                              ? ""
+                              : !isEmpty(game.battleScore.player2)
+                              ? "(awaiting judge date)"
+                              : moment(
+                                  game.battleScore.player1.endDate
+                                ).isSameOrAfter(new Date()) &&
+                                !isEmpty(game.battleScore.player2)
+                              ? "(judge now)"
+                              : "(not joined)"
+                          }`}
                           key={game._id}
                           date={game.date}
+                          date2={game.battleScore.player1.endDate}
                           v1={game.price_in_value * (defaults?.cashRating ?? 1)}
                           v2={game.price_in_value}
                           v3={game.gameMemberCount}
@@ -691,15 +702,17 @@ export default function GamesScreen() {
                               ).isSameOrAfter(new Date()) &&
                               !isEmpty(game.battleScore.player2)
                             ) {
-                                setCustomWindow(dispatch, {
-                                  isOpen: modalType.open,
-                                  game: game,
-                                });
-                              } else {
-                              toast(dispatch, {msg:"You have not met the requirement to continue this game."}).fail()
-                                }
-                              }
-                          }
+                              setCustomWindow(dispatch, {
+                                isOpen: modalType.open,
+                                game: game,
+                              });
+                            } else {
+                              toast(dispatch, {
+                                msg:
+                                  "You have not met the requirement to continue this game.",
+                              }).fail();
+                            }
+                          }}
                           btn2func={() =>
                             exitWin(dispatch, {
                               open: modalType.open,
@@ -740,10 +753,7 @@ export default function GamesScreen() {
                         }
                         key={game._id}
                         date={game.date}
-                        v1={
-                          game.price_in_value *
-                          (defaults?.cashRating ?? 1)
-                        }
+                        v1={game.price_in_value * (defaults?.cashRating ?? 1)}
                         v2={game.price_in_value}
                         v3={game.gameMemberCount}
                         id={game._id}
@@ -801,9 +811,9 @@ export default function GamesScreen() {
                         name={`${request?.battleScore?.player1?.title}`}
                         key={request._id}
                         date={request.date}
+                        date2={request.battleScore.player1.endDate}
                         v1={
-                          request.price_in_value *
-                          (defaults?.cashRating ?? 1)
+                          request.price_in_value * (defaults?.cashRating ?? 1)
                         }
                         v2={request.price_in_value}
                         v3={request.gameMemberCount}

@@ -1,31 +1,22 @@
-import React, { SetStateAction, useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
   TextField,
   InputAdornment,
   Fab,
   Button,
 } from "@material-ui/core";
-import { GameCoin, PriceTagIcon } from "../icon";
+import { PriceTagIcon } from "../icon";
 import { Close, Search } from "@material-ui/icons";
 import Axios, { AxiosResponse } from "axios";
-import { url, url_media } from "../constant";
-import { BounceLoader, SyncLoader, PulseLoader } from "react-spinners";
-import moment from "moment";
-import { choices, Games, modalType, nextType, PayType, PlayerType } from "../typescript/enum";
-import { getPrice, getToken, PlayLuckyGeogeGame } from "../functions";
+import { url } from "../constant";
+import { SyncLoader } from "react-spinners";
+import { choices, Games, modalType, PayType, PlayerType } from "../typescript/enum";
+import { getToken, PlayLuckyGeogeGame } from "../functions";
 import { exitWin, setCustomWindow, setGameDetails, toast } from "../store/action";
 import { useQueryCache } from "react-query";
 import GameView from "./game_view";
 import { useRouter } from "next/router";
-import { choice } from "./games/custom";
 
 export default function PickerPlayer2({
   game: game_to_play,
