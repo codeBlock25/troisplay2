@@ -4,7 +4,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { url } from "../../constant";
 import {
   exitWin,
-  notify, setGameDetails, toast,
+  MyGamesAction,
+  notify,
+  setGameDetails,
+  toast,
 } from "../../store/action";
 import Link from "next/link";
 import { isEmpty } from "lodash";
@@ -17,14 +20,15 @@ import {
   PlayerType,
   TwoButtonLoader,
 } from "../../typescript/enum";
-import { reducerType } from "../../typescript/interface";
+import { ActionType, reducerType } from "../../typescript/interface";
 import { getPrice, getToken } from "../../functions";
 import { CloseIcon, GameCoin } from "../../icon";
 import { useQueryCache } from "react-query";
+import { Dispatch } from "redux";
 
 
 const GuessMaster = memo(function () {
-  const dispatch = useDispatch();
+  const dispatch: Dispatch<ActionType<any>> = useDispatch();
   const [prize, setPrice] = useState<number>(0);
   const [playCount, setPlaycount] = useState<number>(1);
   const [loading, setLoading] = useState<TwoButtonLoader>(
@@ -102,12 +106,12 @@ const GuessMaster = memo(function () {
   ): Promise<void> => {
     let token = getToken()
     if (loading !== TwoButtonLoader.no_loading || num === 0) return;
-    if (PayType.cash === details.payWith) {
-      setLoading(TwoButtonLoader.first_loading);
-    } else {
-      setLoading(TwoButtonLoader.second_loading);
-    }
     if (isEmpty(details.id)) {
+      if (PayType.cash === payWith) {
+        setLoading(TwoButtonLoader.first_loading);
+      } else {
+        setLoading(TwoButtonLoader.second_loading);
+      }
       await Axios({
         method: "POST",
         url: `${url}/games/guess-master`,
@@ -117,7 +121,7 @@ const GuessMaster = memo(function () {
         data: {
           price_in_cash: details.price,
           gameInPut: num,
-          payWith: details.payWith,
+          payWith: payWith,
         },
       })
         .then(
@@ -138,6 +142,7 @@ const GuessMaster = memo(function () {
               date?: Date;
             };
           }>) => {
+            MyGamesAction.add({   dispatch, payload: game   });;;
             setGameDetails(dispatch, {
               player: PlayerType.first,
               game: Games.non,
@@ -178,6 +183,7 @@ const GuessMaster = memo(function () {
         setLoading(TwoButtonLoader.no_loading);
         return;
       }
+      setLoading(TwoButtonLoader.first_loading);
       await Axios({
         method: "POST",
         url: `${url}/games/matcher/challange`,
@@ -187,6 +193,7 @@ const GuessMaster = memo(function () {
         data: {
           id: details.id,
           gameInPut: num,
+          payWith: details.payWith,
         },
       })
         .then(
@@ -215,20 +222,20 @@ const GuessMaster = memo(function () {
                 setNum(1);
                 setPlayed([]);
                 setGameDetails(dispatch, {
-                player: PlayerType.first,
-                game: Games.non,
-                id: undefined,
-                price: 0,
-              });
+                  player: PlayerType.first,
+                  game: Games.non,
+                  id: undefined,
+                  price: 0,
+                });
                 return;
               } else {
                 // !counting
                 setPlayed((prev) => [...prev, num]);
-                 toast(dispatch, {
-                   msg: `Sorry wrong number selected, You have ${
-                     3 - playCount
-                   } attemp(s) left!`,
-                 }).fail();
+                toast(dispatch, {
+                  msg: `Sorry wrong number selected, You have ${
+                    3 - playCount
+                  } attemp(s) left!`,
+                }).fail();
                 switch (num) {
                   case 1:
                     setView1(false);
@@ -257,7 +264,11 @@ const GuessMaster = memo(function () {
               }
               return;
             }
-            notify(dispatch, {isOpen: modalType.open, type: NotiErrorType.success,  msg: `Congratulations!!!! You won.`});
+            notify(dispatch, {
+              isOpen: modalType.open,
+              type: NotiErrorType.success,
+              msg: `Congratulations!!!! You won.`,
+            });
             setPlaycount(1);
             setView1(true);
             setView2(true);
@@ -269,16 +280,16 @@ const GuessMaster = memo(function () {
             setNum(1);
             setPlayed([]);
             setGameDetails(dispatch, {
-            player: PlayerType.first,
-            game: Games.non,
-            id: undefined,
-            price: 0,
-          });
+              player: PlayerType.first,
+              game: Games.non,
+              id: undefined,
+              price: 0,
+            });
           }
         )
         .catch((err) => {
           console.log(err);
-          toast(dispatch, {msg: "Communication error."}).error()
+          toast(dispatch, { msg: "Communication error." }).error();
         })
         .finally(() => {
           setLoading(TwoButtonLoader.no_loading);
