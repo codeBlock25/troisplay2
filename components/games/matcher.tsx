@@ -206,7 +206,7 @@ const GuessMaster = memo(function () {
           }>) => {
             setPlaycount((prev) => prev + 1);
             if (!winner) {
-              if (playCount === 3) {
+              if (playCount >= 3) {
                 notify(dispatch, {
                   type: NotiErrorType.error,
                   msg: "Sorry you lost this game.",
@@ -221,6 +221,7 @@ const GuessMaster = memo(function () {
                 setView7(true);
                 setNum(1);
                 setPlayed([]);
+                setPlaycount(1);
                 setGameDetails(dispatch, {
                   player: PlayerType.first,
                   game: Games.non,
