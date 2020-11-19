@@ -139,6 +139,7 @@ export default function CustomWindow() {
   };
   useEffect(() => {
     setWinner(GameRec.win);
+    setAnswer(window.request?.battleScore.player1?.answer??"")
   }, [window]);
   const handleJoin = async (payWith: PayType) => {
     if (loading) return;
@@ -237,7 +238,7 @@ export default function CustomWindow() {
         ) : !isEmpty(window?.request?.battleScore?.player2) ? (
           <div className="center">
             <Typography variant="body2">
-              What the correct anser to this games
+              What's the correct answer to this game
             </Typography>
             <FormControlLabel
               control={
