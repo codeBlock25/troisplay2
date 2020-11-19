@@ -66,11 +66,13 @@ const GameView = memo(function ({
     <div className="game_content_view">
       <span className="name">{name}</span>
       <span className="date">{moment(date).format("Do MMMM, YYYY")}</span>
-      {
-        date2 ? (
-          <span className="date">End Date: {moment(date2).format("Do MMMM, YYYY")}</span>
-        ) : (<></>)
-      }
+      {date2 ? (
+        <span className="date">
+          End Date: {moment(date2).format("Do MMMM, YYYY hh:mm a")}
+        </span>
+      ) : (
+        <></>
+      )}
       <div className="viewee">
         {type === "lucky" ? (
           <>
