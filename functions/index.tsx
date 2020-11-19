@@ -11,6 +11,23 @@ import {
 } from "../typescript/enum";
 import { ActionType } from "../typescript/interface";
 
+
+export function whoIsThis({
+  my_id,
+  game_members,
+}: {
+  my_id: string;
+  game_members: string[];
+}): PlayerType {
+  let p1 = false;
+  if (my_id === game_members[0]) {
+    p1 = true;
+    return;
+  }
+  return p1 ? PlayerType.first : PlayerType.second;
+}
+
+
 export function getPrice(
   game: Games,
   cash: number,

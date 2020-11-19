@@ -21,19 +21,9 @@ import moment from "moment";
 import { setCustomWindow, toast } from "../store/action";
 import Axios from "axios";
 import { url } from "../constant";
-import { getToken } from "../functions";
+import { getToken, whoIsThis } from "../functions";
 import { isEmpty, isString } from "lodash";
 import { ScaleLoader } from "react-spinners";
-
-
-function whoIsThis({my_id, game_members}: {my_id: string, game_members: string[]}): PlayerType {
-  let p1 = false;
-  if (my_id === game_members[0]) {
-    p1= true;
-    return
-  }
-  return p1 ? PlayerType.first : PlayerType.second;
-}
 
 export default function CustomWindow() {
   const dispatch = useDispatch();

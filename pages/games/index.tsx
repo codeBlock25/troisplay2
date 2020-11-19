@@ -16,7 +16,7 @@ import {
   Viewing,
   modalType,
 } from "../../typescript/enum";
-import { getPrice, getToken } from "../../functions";
+import { getPrice, getToken, whoIsThis } from "../../functions";
 import { SyncLoader } from "react-spinners";
 import Notification from "../../components/notification";
 import Roshambo from "../../components/games/roshambo";
@@ -60,9 +60,52 @@ export default function GamesScreen() {
   const [p2, setP2] = useState<boolean>(false);
   const { push, beforePopState, asPath, pathname } = useRouter();
 
-  const { my_games, defaults } = useSelector<
+  const { my_games, defaults, playerRecord } = useSelector<
     reducerType,
     {
+      playerRecord: {
+        player: {
+          userID: string;
+          full_name: string;
+          phone_number: string;
+          playerpic: string;
+          playername: string;
+          email: string;
+          location: string;
+        };
+        deviceSetup: {
+          userID: string;
+          isDarkMode: boolean;
+          remember: boolean;
+          online_status: boolean;
+          email_notification: boolean;
+          app_notification: boolean;
+          mobile_notification: boolean;
+        };
+        referal: {
+          userID: string;
+          activeReferal: number;
+          inactiveReferal: number;
+          refer_code: string;
+        };
+        wallet: {
+          userID: string;
+          currentCoin: number;
+          pendingCoin: number;
+        };
+        gamerecord: {
+          userID: string;
+          date_mark: Date;
+          game: Games;
+          won: string;
+          earnings: number;
+        }[];
+        cashwallet: {
+          userID: string;
+          currentCash: number;
+          pendingCash: number;
+        };
+      };
       my_games: {
         date: Date;
         gameDetail: string;
@@ -81,12 +124,12 @@ export default function GamesScreen() {
             answer: string;
             endGameTime: Date;
             choice: choices;
-            correctAnswer: string
+            correct_answer: string;
           };
           player2?: {
             answer: string;
             waiting: boolean;
-            correctAnswer: string
+            correct_answer: string;
           };
         };
         _id: string;
@@ -120,6 +163,7 @@ export default function GamesScreen() {
     return {
       my_games: state.init.my_games,
       defaults: state.init.gameDefaults,
+      playerRecord: state.init.playerRecord,
     };
   });
 
@@ -676,8 +720,20 @@ export default function GamesScreen() {
                         <GameView
                           type="custom2"
                           name={`${game?.battleScore?.player1?.title} ${
-                            (game.battleScore.player1?.correctAnswer ?? "") !==
-                            (game.battleScore.player2?.correctAnswer ?? "")
+                            (game.battleScore.player1.correct_answer &&
+                              whoIsThis({
+                                my_id: playerRecord.player.userID,
+                                game_members: game.members,
+                              }) === PlayerType.first) ||
+                            (game.battleScore.player2.correct_answer &&
+                              whoIsThis({
+                                my_id: playerRecord.player.userID,
+                                game_members: game.members,
+                              }) === PlayerType.second)
+                              ? "On hold"
+                              : (game.battleScore.player1?.correct_answer ??
+                                  "") !==
+                                (game.battleScore.player2?.correct_answer ?? "")
                               ? "On hold"
                               : moment(
                                   game.battleScore.player1.endDate
