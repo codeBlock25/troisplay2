@@ -112,8 +112,7 @@ export default function CustomWindow() {
       record: state.init.playerRecord,
     };
   });
-  const hanleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const hanleSubmit = async () => {
     if (loading2) return;
     setLoading2(true);
     await Axios.post(
@@ -275,7 +274,7 @@ export default function CustomWindow() {
             <Button
               className="btn"
               onClick={() => {
-                console.log("kjh");
+                hanleSubmit();
               }}
             >
               Judge
