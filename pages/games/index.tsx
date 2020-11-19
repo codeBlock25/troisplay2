@@ -631,7 +631,7 @@ export default function GamesScreen() {
             <div className="title">
               <h3>My Games</h3>
               <div className="title_tab">
-                <Badge color="secondary" badgeContent={my_games.length}>
+                <Badge color="secondary" badgeContent={my_games?.length  ??  0}>
                   <Typography
                     className={`btn ${viewing === Viewing.current ? "on" : ""}`}
                     onClick={() => setViewing(Viewing.current)}
@@ -641,7 +641,7 @@ export default function GamesScreen() {
                 </Badge>
                 <Badge
                   color="secondary"
-                  badgeContent={requests.data.requests.length}
+                  badgeContent={requests?.data?.requests.length  ?? 0}
                 >
                   <Typography
                     className={`btn ${viewing === Viewing.request ? "on" : ""}`}
