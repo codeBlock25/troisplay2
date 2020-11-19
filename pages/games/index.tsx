@@ -676,8 +676,8 @@ export default function GamesScreen() {
                         <GameView
                           type="custom2"
                           name={`${game?.battleScore?.player1?.title} ${
-                            (game.battleScore.player1?.correctAnswer ?? "e") !==
-                            (game.battleScore.player2?.correctAnswer ?? "r")
+                            (game.battleScore.player1?.correctAnswer ?? "") !==
+                            (game.battleScore.player2?.correctAnswer ?? "")
                               ? "On hold"
                               : moment(
                                   game.battleScore.player1.endDate
