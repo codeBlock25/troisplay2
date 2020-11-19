@@ -22,6 +22,7 @@ import Axios from "axios";
 import { url } from "../constant";
 import { getToken } from "../functions";
 import { isEmpty, isString } from "lodash";
+import { ScaleLoader } from "react-spinners";
 
 export default function CustomWindow() {
   const dispatch = useDispatch();
@@ -116,7 +117,7 @@ export default function CustomWindow() {
     if (loading2) return;
     setLoading2(true);
     await Axios.post(
-      `${url}/games/custom/judge`,
+      `${url}/games/custom-game/judge`,
       {
         choice: answer,
         game_id: window.request._id,
@@ -243,7 +244,7 @@ export default function CustomWindow() {
                 <Checkbox
                   checked={winner === GameRec.win}
                   onChange={(e) => {
-                    setAnswer(window.request.battleScore.player1.answer);;
+                    setAnswer(window.request.battleScore.player1.answer);
                     setWinner(e.target.checked ? GameRec.win : GameRec.lose);
                   }}
                   name="checkedA"
@@ -286,7 +287,7 @@ export default function CustomWindow() {
                 hanleSubmit();
               }}
             >
-              Judge
+              {loading2 ? <ScaleLoader /> : "Judge"}
             </Button>
           ) : (
             <>
