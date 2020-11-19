@@ -123,7 +123,12 @@ export default function CustomWindow() {
       },
       { headers: { authorization: `Bearer ${getToken()}` } }
     )
-      .then()
+      .then(() => {
+        setCustomWindow(dispatch, {
+          isOpen: modalType.close,
+          game: undefined,
+        });
+      })
       .catch()
       .finally(() => setLoading2(false));
   };
