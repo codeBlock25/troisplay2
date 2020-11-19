@@ -129,7 +129,11 @@ export default function CustomWindow() {
           game: undefined,
         });
       })
-      .catch()
+      .catch(() => {
+        toast(dispatch, {
+          msg: "An Error Occured please reload the page and try again.",
+        }).error();
+      })
       .finally(() => setLoading2(false));
   };
   useEffect(() => {
