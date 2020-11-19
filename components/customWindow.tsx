@@ -238,12 +238,12 @@ export default function CustomWindow() {
               Waiting for player 2
             </p>
           </div>
-        ) : (window.request.battleScore.player1.correct_answer &&
+        ) : (window?.request?.battleScore.player1.correct_answer &&
             whoIsThis({
               my_id: record.player.userID,
               game_members: window.request.members,
             }) === PlayerType.first) ||
-          (window.request.battleScore.player2.correct_answer &&
+          (window?.request?.battleScore.player2.correct_answer &&
             whoIsThis({
               my_id: record.player.userID,
               game_members: window.request.members,
