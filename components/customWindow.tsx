@@ -14,6 +14,7 @@ import {
   Games,
   modalType,
   PayType,
+  PlayerType,
 } from "../typescript/enum";
 import { reducerType } from "../typescript/interface";
 import moment from "moment";
@@ -23,6 +24,16 @@ import { url } from "../constant";
 import { getToken } from "../functions";
 import { isEmpty, isString } from "lodash";
 import { ScaleLoader } from "react-spinners";
+
+
+function whoIsThis({my_id, game_members}: {my_id: string, game_members: string[]}): PlayerType {
+  let p1 = false;
+  if (my_id === game_members[0]) {
+    p1= true;
+    return
+  }
+  return p1 ? PlayerType.first : PlayerType.second;
+}
 
 export default function CustomWindow() {
   const dispatch = useDispatch();
@@ -55,10 +66,12 @@ export default function CustomWindow() {
               answer: string;
               endGameTime: Date;
               choice: choices;
+              correct_answer: string;
             };
             player2?: {
               answer: string;
               waiting: boolean;
+              correct_answer: string;
             };
           };
         };
@@ -234,6 +247,33 @@ export default function CustomWindow() {
             <p className="text" style={{ padding: "20px 0" }}>
               Waiting for player 2
             </p>
+          </div>
+        ) : (window.request.battleScore.player1.correct_answer &&
+            whoIsThis({
+              my_id: record.player.userID,
+              game_members: window.request.members,
+            }) === PlayerType.first) ||
+          (window.request.battleScore.player2.correct_answer &&
+            whoIsThis({
+              my_id: record.player.userID,
+              game_members: window.request.members,
+            }) === PlayerType.second) ? (
+          <div className="center">
+            <Typography variant="body2">
+              Waiting for the next player to judge
+            </Typography>
+            {window?.request?.battleScore?.player1?.correct_answer ?? (
+              <p className="txt">
+                <b>Player 1's correct answer: </b>
+                {window?.request?.battleScore?.player1?.correct_answer ?? ""}.
+              </p>
+            )}
+            {window?.request?.battleScore?.player2?.correct_answer ?? (
+              <p className="txt">
+                <b>Player 2's correct answer: </b>
+                {window?.request?.battleScore?.player2?.correct_answer ?? ""}.
+              </p>
+            )}
           </div>
         ) : !isEmpty(window?.request?.battleScore?.player2) ? (
           <div className="center">
