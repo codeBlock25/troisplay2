@@ -666,15 +666,15 @@ export default function GamesScreen() {
                             (game?.battleScore.player1?.correct_answer ??
                               "") !==
                             (game?.battleScore.player2?.correct_answer ?? "")
-                              ? "On hold"
+                              ? "[On hold]"
                               : moment(
                                   game?.battleScore.player1.endDate
                                 ).isSameOrBefore(new Date()) &&
                                 !isEmpty(game?.battleScore.player2)
-                              ? "(judge now)"
+                              ? "[judge now]"
                               : !isEmpty(game?.battleScore.player2)
-                              ? "(awaiting judge date)"
-                              : "(not joined)"
+                              ? "[awaiting judge date]"
+                              : "[not joined]"
                           }`}
                           key={game._id}
                           date={game.date}
