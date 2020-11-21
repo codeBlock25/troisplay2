@@ -207,7 +207,11 @@ export default function PickerPlayer2({
       })
         .then(({ data: { price } }: AxiosResponse<{ price: number }>) => {
           close()
-          setGameDetails(dispatch,{player: PlayerType.second, game, id, price})
+          setGameDetails(dispatch, {
+            player: PlayerType.second,
+            game, id, price,
+                          payType: playWith
+                        });
         })
         .catch((err) => {
           if (err.message === "Request failed with status code 401") {
@@ -589,37 +593,15 @@ export default function PickerPlayer2({
                   }
                   btn1func={() => {
                     loading = true;
-                    if (game.gameID === Games.matcher) {
-                        setGameDetails(dispatch, {
-                          player: PlayerType.second,
-                          game: game.gameID,
-                          id: game._id,
-                          price: game.price_in_value,
-                          payType: PayType.cash
-                        });
-                      close();
-                    } else {
                       playOne(PayType.cash, game._id, game.gameID).finally(
                         () => (loading = false)
                         );
-                      }
                   }}
                   btn2func={() => {
                     loading = true;
-                    if (game.gameID === Games.matcher) {
-                      setGameDetails(dispatch, {
-                        player: PlayerType.second,
-                        game: game.gameID,
-                        id: game._id,
-                        price: game.price_in_value,
-                        payType: PayType.coin,
-                      });
-                      close();
-                    } else {
                       playOne(PayType.coin, game._id, game.gameID).finally(
                         () => (loading = false)
                       );
-                    }
                   }}
                 />
               );
