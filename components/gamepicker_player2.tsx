@@ -5,6 +5,10 @@ import {
   InputAdornment,
   Fab,
   Button,
+  InputLabel,
+  FormControl,
+  Select,
+  MenuItem,
 } from "@material-ui/core";
 import { PriceTagIcon } from "../icon";
 import { Close, Search } from "@material-ui/icons";
@@ -328,7 +332,7 @@ export default function PickerPlayer2({
         className={
           popState.game === Games.lucky_geoge ||
           popState.game === Games.rooms ||
-            popState.game === Games.custom_game
+          popState.game === Games.custom_game
             ? "container_pop open"
             : "container_pop"
         }
@@ -347,7 +351,9 @@ export default function PickerPlayer2({
         <div className="content">
           <h3 className="title">
             {popState.game === Games.lucky_geoge
-              ? popState.lucky?.battleScore.player1.title ?? "" : popState.game === Games.custom_game?(popState.custom.battleScore.player1.title??"")
+              ? popState.lucky?.battleScore.player1.title ?? ""
+              : popState.game === Games.custom_game
+              ? popState.custom.battleScore.player1.title ?? ""
               : popState.room?.room_name ?? ""}
           </h3>
           <div className="txt">
@@ -360,9 +366,8 @@ export default function PickerPlayer2({
               {" "}
               <span>Members</span>{" "}
               {popState.game === Games.lucky_geoge
-                ? popState.lucky?.members.length ?? "" :
-                ""
-              }
+                ? popState.lucky?.members.length ?? ""
+                : ""}
             </div>
           )}
           <p className="txt_sub">
@@ -529,7 +534,7 @@ export default function PickerPlayer2({
                     v3={game.gameMemberCount}
                     id={game._id}
                     btn1func={() => {
-                      console.log(game)
+                      console.log(game);
                       setPopState((prev) => {
                         return {
                           ...prev,
@@ -593,15 +598,15 @@ export default function PickerPlayer2({
                   }
                   btn1func={() => {
                     loading = true;
-                      playOne(PayType.cash, game._id, game.gameID).finally(
-                        () => (loading = false)
-                        );
+                    playOne(PayType.cash, game._id, game.gameID).finally(
+                      () => (loading = false)
+                    );
                   }}
                   btn2func={() => {
                     loading = true;
-                      playOne(PayType.coin, game._id, game.gameID).finally(
-                        () => (loading = false)
-                      );
+                    playOne(PayType.coin, game._id, game.gameID).finally(
+                      () => (loading = false)
+                    );
                   }}
                 />
               );
@@ -609,75 +614,128 @@ export default function PickerPlayer2({
           )}
         </div>
         <div className="action_input">
-          <Fab
-            className="cls"
-            onClick={() => {
-              setmin(0);
-              setmax(10000);
-              close();
-            }}
-          >
-            <Close />
-          </Fab>
-          <TextField
-            variant="outlined"
-            required
-            placeholder="min price"
-            type="number"
-            disabled={
-              game_to_play === Games.rooms || game_to_play === Games.lucky_geoge
-                ? true
-                : false
-            }
-            value={min}
-            onChange={(evt) => {
-              if (!parseInt(evt.target.value, 10) || min >= max + 5) return;
-              setmin(parseInt(evt.target.value, 10));
-            }}
-            className={`inputBox theme ${theme}`}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start" className="icon">
-                  <PriceTagIcon />
-                </InputAdornment>
-              ),
-            }}
-          />
-          <TextField
-            variant="outlined"
-            required
-            placeholder="min price"
-            className={`inputBox theme ${theme}`}
-            value={max}
-            disabled={
-              game_to_play === Games.rooms || game_to_play === Games.lucky_geoge
-                ? true
-                : false
-            }
-            type="number"
-            onChange={(evt) => {
-              if (!parseInt(evt.target.value, 10) || max <= min - 5) return;
-              setmax(parseInt(evt.target.value, 10));
-            }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start" className="icon">
-                  <PriceTagIcon />
-                </InputAdornment>
-              ),
-            }}
-          />
-          <Fab
-            className="srch"
-            onClick={LoadData}
-            disabled={
-              game_to_play === Games.rooms || game_to_play === Games.lucky_geoge
-                ? true
-                : false
-            }
-          >
-            <Search />
-          </Fab>
+          {game_to_play === Games.roshambo ||
+          game_to_play === Games.penalth_card ||
+          game_to_play === Games.matcher ? (
+            <>
+              <Fab
+                className="cls"
+                onClick={() => {
+                  setmin(0);
+                  setmax(10000);
+                  close();
+                }}
+              >
+                <Close />
+              </Fab>
+              <FormControl
+                required
+                className="inputBox select"
+                variant="filled"
+              >
+                <InputLabel>Price</InputLabel>
+                  <Select
+                    fullWidth
+                  value={max}
+                  onChange={(evt) => {
+                    if (
+                      !parseInt(evt.target.value as string, 10) ||
+                      max <= min - 5
+                    )
+                      return;
+                    setmax(parseInt(evt.target.value as string, 10));
+                  }}
+                >
+                  <MenuItem value={100}>100</MenuItem>
+                  <MenuItem value={300}>300</MenuItem>
+                  <MenuItem value={500}>500</MenuItem>
+                  <MenuItem value={1000}>1000</MenuItem>
+                  <MenuItem value={2000}>2000</MenuItem>
+                  <MenuItem value={3000}>3000</MenuItem>
+                  <MenuItem value={5000}>5000</MenuItem>
+                </Select>
+              </FormControl>
+              <Fab className="srch" onClick={LoadData}>
+                <Search />
+              </Fab>
+            </>
+          ) : (
+            <>
+              {" "}
+              <Fab
+                className="cls"
+                onClick={() => {
+                  setmin(0);
+                  setmax(10000);
+                  close();
+                }}
+              >
+                <Close />
+              </Fab>
+              <TextField
+                variant="outlined"
+                required
+                placeholder="min price"
+                type="number"
+                disabled={
+                  game_to_play === Games.rooms ||
+                  game_to_play === Games.lucky_geoge
+                    ? true
+                    : false
+                }
+                value={min}
+                onChange={(evt) => {
+                  if (!parseInt(evt.target.value, 10) || min >= max + 5) return;
+                  setmin(parseInt(evt.target.value, 10));
+                }}
+                className={`inputBox theme ${theme}`}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start" className="icon">
+                      <PriceTagIcon />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              <TextField
+                variant="outlined"
+                required
+                placeholder="min price"
+                className={`inputBox theme ${theme}`}
+                value={max}
+                disabled={
+                  game_to_play === Games.rooms ||
+                  game_to_play === Games.lucky_geoge
+                    ? true
+                    : false
+                }
+                type="number"
+                onChange={(evt) => {
+                  if (!parseInt(evt.target.value, 10) || max <= min - 5) return;
+                  setmax(parseInt(evt.target.value, 10));
+                }}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start" className="icon">
+                      <PriceTagIcon />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              <Fab
+                className="srch"
+                onClick={LoadData}
+                disabled={
+                  game_to_play === Games.rooms ||
+                  game_to_play === Games.lucky_geoge
+                    ? true
+                    : false
+                }
+              >
+                <Search />
+              </Fab>
+            </>
+          )}
         </div>
       </div>
     </div>

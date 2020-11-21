@@ -580,10 +580,10 @@
                 label {
                     font-size: 14px;
                     font-family: mon_bold;
-                    color: $defaultColor;
+                    color: $defaultColor !important;
                 }
 
-                &.MuiFilledInput-root {
+                * {
                     color: white;
                 }
 
