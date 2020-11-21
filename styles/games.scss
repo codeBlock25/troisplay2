@@ -478,6 +478,13 @@
     }
 }
 
+
+.MuiMenu-paper {
+    background-color: rgb(10, 10, 10);
+    color: white;
+}
+
+
 .game_picker_view {
     position: fixed;
     top: 0;
@@ -570,15 +577,14 @@
                 margin: 30px auto 0 auto;
                 padding: 0;
 
-                .MuiMenu-paper {
-                    background-color: rgb(10, 10, 10);
-                    color: white;
-                }
-
                 label {
                     font-size: 14px;
                     font-family: mon_bold;
                     color: $defaultColor;
+                }
+
+                &.MuiFilledInput-root {
+                    color: white;
                 }
 
                 input {
