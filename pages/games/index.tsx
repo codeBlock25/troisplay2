@@ -1,21 +1,11 @@
 import Head from "next/head";
-import React, {
-  MutableRefObject,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { MutableRefObject, useEffect, useRef, useState } from "react";
 import { GameCoin } from "../../icon";
 import moment from "moment";
 import { useQueryCache } from "react-query";
 import Axios, { AxiosResponse } from "axios";
 import { url } from "../../constant";
-import {
-  Games,
-  PlayerType,
-  Viewing,
-  modalType,
-} from "../../typescript/enum";
+import { Games, PlayerType, Viewing, modalType } from "../../typescript/enum";
 import { getPrice, getToken, whoIsThis } from "../../functions";
 import { SyncLoader } from "react-spinners";
 import Notification from "../../components/notification";
@@ -40,7 +30,15 @@ import GuessMaster from "../../components/games/matcher";
 import CustomGame, { choice } from "../../components/games/custom";
 import Gloryspin from "../../components/games/gloryspin";
 import BackWindow from "../../components/backwindow";
-import { Badge, Fab, Typography } from "@material-ui/core";
+import {
+  Badge,
+  Fab,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Typography,
+} from "@material-ui/core";
 import { ArrowDownward } from "@material-ui/icons";
 import Bottompanel from "../../components/bottompanel";
 import DetailScreen from "../../components/DetailScreen";
@@ -164,7 +162,7 @@ export default function GamesScreen() {
   useEffect(() => {
     beforePopState(({ as }) => {
       if (as.includes("#playing")) {
-        let userChoice = confirm("Are you sure you want to leave this game?"); 
+        let userChoice = confirm("Are you sure you want to leave this game?");
         window.location.href = as;
         return userChoice;
       }
@@ -247,24 +245,52 @@ export default function GamesScreen() {
                 </span>
               )}
             </p>
-            <div className="inputBox">
-              <label htmlFor="number">Price</label>
-              <input
-                type="number"
-                value={spec.price}
-                onChange={(e) => {
-                  e.persist();
-                  setSpec((prev) => {
-                    return {
-                      ...prev,
-                      price: parseInt(e.target.value, 10),
-                    };
-                  });
-                }}
-                id="price"
-                placeholder="in ($)"
-              />
-            </div>
+            {spec.game === Games.roshambo ||
+            spec.game === Games.penalth_card ||
+            spec.game === Games.matcher ? (
+              <FormControl required className="inputBox" variant="filled">
+                <InputLabel>Price</InputLabel>
+                <Select
+                  onChange={(e) => {
+                    e.persist();
+                    setSpec((prev) => {
+                      return {
+                        ...prev,
+                        price: parseInt(e.target.value as string, 10),
+                      };
+                    });
+                  }}
+                >
+                  <MenuItem value={100}>100</MenuItem>
+                  <MenuItem value={300}>300</MenuItem>
+                  <MenuItem value={500}>500</MenuItem>
+                  <MenuItem value={1000}>1000</MenuItem>
+                  <MenuItem value={2000}>2000</MenuItem>
+                  <MenuItem value={3000}>3000</MenuItem>
+                  <MenuItem value={5000}>5000</MenuItem>
+                </Select>
+              </FormControl>
+            ) : (
+              <div className="inputBox">
+                <label htmlFor="number">Price</label>
+                <input
+                  type="number"
+                  value={spec.price}
+                  onChange={(e) => {
+                    e.persist();
+                    setSpec((prev) => {
+                      return {
+                        ...prev,
+                        price: parseInt(e.target.value, 10),
+                      };
+                    });
+                  }}
+                  id="price"
+                  className="inputBox_"
+                  placeholder="in ($)"
+                />
+              </div>
+            )}
             <span
               className="btn"
               onClick={() => {
@@ -582,7 +608,7 @@ export default function GamesScreen() {
             <div className="title">
               <h3>My Games</h3>
               <div className="title_tab">
-                <Badge color="secondary" badgeContent={my_games?.length  ??  0}>
+                <Badge color="secondary" badgeContent={my_games?.length ?? 0}>
                   <Typography
                     className={`btn ${viewing === Viewing.current ? "on" : ""}`}
                     onClick={() => setViewing(Viewing.current)}
@@ -592,7 +618,7 @@ export default function GamesScreen() {
                 </Badge>
                 <Badge
                   color="secondary"
-                  badgeContent={requests?.data?.requests.length  ?? 0}
+                  badgeContent={requests?.data?.requests.length ?? 0}
                 >
                   <Typography
                     className={`btn ${viewing === Viewing.request ? "on" : ""}`}
@@ -627,7 +653,8 @@ export default function GamesScreen() {
                         <GameView
                           type="custom2"
                           name={`${game?.battleScore?.player1?.title} ${
-                            (game?.battleScore.player1?.correct_answer ?? "") !==
+                            (game?.battleScore.player1?.correct_answer ??
+                              "") !==
                             (game?.battleScore.player2?.correct_answer ?? "")
                               ? "On hold"
                               : moment(
