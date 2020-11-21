@@ -9,6 +9,7 @@ import {
   FormControl,
   Select,
   MenuItem,
+  NativeSelect,
 } from "@material-ui/core";
 import { PriceTagIcon } from "../icon";
 import { Close, Search } from "@material-ui/icons";
@@ -634,7 +635,7 @@ export default function PickerPlayer2({
                 variant="filled"
               >
                 <InputLabel>Price</InputLabel>
-                  <Select
+                  <NativeSelect
                     fullWidth
                   value={max}
                   onChange={(evt) => {
@@ -646,14 +647,14 @@ export default function PickerPlayer2({
                     setmax(parseInt(evt.target.value as string, 10));
                   }}
                 >
-                  <MenuItem value={100}>100</MenuItem>
-                  <MenuItem value={300}>300</MenuItem>
-                  <MenuItem value={500}>500</MenuItem>
-                  <MenuItem value={1000}>1000</MenuItem>
-                  <MenuItem value={2000}>2000</MenuItem>
-                  <MenuItem value={3000}>3000</MenuItem>
-                  <MenuItem value={5000}>5000</MenuItem>
-                </Select>
+                  <option value={100}>100</option>
+                  <option value={300}>300</option>
+                  <option value={500}>500</option>
+                  <option value={1000}>1000</option>
+                  <option value={2000}>2000</option>
+                  <option value={3000}>3000</option>
+                  <option value={5000}>5000</option>
+                </NativeSelect>
               </FormControl>
               <Fab className="srch" onClick={LoadData}>
                 <Search />
