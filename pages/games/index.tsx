@@ -224,7 +224,58 @@ export default function GamesScreen() {
         }}
       >
         {spec.next === nextType.price ? (
-          <div className="container_price">
+          <form
+            className="container_price"
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (
+                spec.price <
+                (spec.game === Games.roshambo
+                  ? defaults.min_stack_roshambo
+                  : spec.game === Games.penalth_card
+                  ? defaults.min_stack_penalty
+                  : spec.game === Games.matcher
+                  ? defaults.min_stack_guess_master
+                  : 0)
+              ) {
+                toast(dispatch, {
+                  msg: `Can't play ${
+                    spec.game === Games.roshambo
+                      ? "Roshambo"
+                      : spec.game === Games.penalth_card
+                      ? "Penalty Card"
+                      : spec.game === Games.matcher
+                      ? "Guess Master"
+                      : ""
+                  } game below the minimum price bar. Please stake something higher than ₦ ${
+                    spec.game === Games.roshambo
+                      ? defaults.min_stack_roshambo
+                      : spec.game === Games.penalth_card
+                      ? defaults.min_stack_penalty
+                      : spec.game === Games.matcher
+                      ? defaults.min_stack_guess_master
+                      : 0
+                  } to continue`,
+                }).error();
+                return;
+              }
+              toast(dispatch, { msg: "" }).close();
+              setGameDetails(dispatch, {
+                price: spec.price,
+                player: PlayerType.first,
+                id: undefined,
+                game: spec.game,
+              });
+              setSpec((prev) => {
+                return {
+                  ...prev,
+                  isOpen: false,
+                  game: Games.non,
+                  next: nextType.player,
+                };
+              });
+            }}
+          >
             <h3 className="title">Game Setup.</h3>
             <p className="txt">
               To stand a chances to earn{" "}
@@ -255,6 +306,7 @@ export default function GamesScreen() {
               >
                 <InputLabel>Price</InputLabel>
                 <Select
+                  value={spec.price}
                   onChange={(e) => {
                     e.persist();
                     setSpec((prev) => {
@@ -295,60 +347,14 @@ export default function GamesScreen() {
                 />
               </div>
             )}
-            <span
-              className="btn"
-              onClick={() => {
-                if (
-                  spec.price <
-                  (spec.game === Games.roshambo
-                    ? defaults.min_stack_roshambo
-                    : spec.game === Games.penalth_card
-                    ? defaults.min_stack_penalty
-                    : spec.game === Games.matcher
-                    ? defaults.min_stack_guess_master
-                    : 0)
-                ) {
-                  toast(dispatch, {
-                    msg: `Can't play ${
-                      spec.game === Games.roshambo
-                        ? "Roshambo"
-                        : spec.game === Games.penalth_card
-                        ? "Penalty Card"
-                        : spec.game === Games.matcher
-                        ? "Guess Master"
-                        : ""
-                    } game below the minimum price bar. Please stake something higher than ₦ ${
-                      spec.game === Games.roshambo
-                        ? defaults.min_stack_roshambo
-                        : spec.game === Games.penalth_card
-                        ? defaults.min_stack_penalty
-                        : spec.game === Games.matcher
-                        ? defaults.min_stack_guess_master
-                        : 0
-                    } to continue`,
-                  }).error();
-                  return;
-                }
-                toast(dispatch, { msg: "" }).close();
-                setGameDetails(dispatch, {
-                  price: spec.price,
-                  player: PlayerType.first,
-                  id: undefined,
-                  game: spec.game,
-                });
-                setSpec((prev) => {
-                  return {
-                    ...prev,
-                    isOpen: false,
-                    game: Games.non,
-                    next: nextType.player,
-                  };
-                });
-              }}
-            >
+            <button type="submit" className="btn">
+              
+              
               Proceed
-            </span>
-          </div>
+            
+            
+            </button>
+          </form>
         ) : spec.next === nextType.player ? (
           <div className="container_join">
             <h3 className="title">Join as.</h3>
