@@ -542,25 +542,41 @@
             flex-direction: column;
             padding: 10px 7%;
 
-            label {
-                width: fit-content;
-                min-width: fit-content;
-                height: fit-content;
-                min-height: fit-content;
-                display: flex;
-                font-size: 14px;
-                font-family: mon_bold;
-                color: $defaultColor;
-                margin: 0 5px;
-                margin-bottom: 5px;
+            &.norm {
+
+                label {
+                    width: fit-content;
+                    min-width: fit-content;
+                    height: fit-content;
+                    min-height: fit-content;
+                    display: flex;
+                    font-size: 14px;
+                    font-family: mon_bold;
+                    color: $defaultColor;
+                    margin: 0 5px;
+                    margin-bottom: 5px;
+                }
+
+                input {
+                    width: 100%;
+                    height: 50px;
+                    padding: 0 20px;
+                    background-color: rgba($color: #000, $alpha: 0.5);
+                    color: white;
+                }
             }
 
-            input {
-                width: 100%;
-                height: 50px;
-                padding: 0 20px;
-                background-color: rgba($color: #000, $alpha: 0.5);
-                color: white;
+            &.select {
+                label {
+                    font-size: 14px;
+                    font-family: mon_bold;
+                    color: $defaultColor;
+                }
+
+                input {
+                    background-color: rgba($color: #000, $alpha: 0.5);
+                    color: white;
+                }
             }
         }
 

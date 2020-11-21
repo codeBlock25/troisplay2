@@ -248,7 +248,11 @@ export default function GamesScreen() {
             {spec.game === Games.roshambo ||
             spec.game === Games.penalth_card ||
             spec.game === Games.matcher ? (
-              <FormControl required className="inputBox" variant="filled">
+              <FormControl
+                required
+                className="inputBox select"
+                variant="filled"
+              >
                 <InputLabel>Price</InputLabel>
                 <Select
                   onChange={(e) => {
@@ -271,7 +275,7 @@ export default function GamesScreen() {
                 </Select>
               </FormControl>
             ) : (
-              <div className="inputBox">
+              <div className="inputBox norm">
                 <label htmlFor="number">Price</label>
                 <input
                   type="number"
