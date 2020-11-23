@@ -25,6 +25,7 @@ export const initReduceGameState = {
       gameDefaults: any;
       playerRecord: any;
       spin_details: any;
+      notifications: any;
     };
   }) => {
     dispatch({ type: "INIT", payload });

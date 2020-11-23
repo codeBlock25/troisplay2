@@ -61,6 +61,10 @@ const HeadFunc = memo(function ({
       headers: { authorization: `Bearer ${token}` },
     });
   });
+  const { data: notifications } = useQuery(
+    "notifications",
+    async () => await Axios.get(`${url}/notifications/all`, {headers: {authorization: `Bearer ${getToken()}`}})
+  );
 
   const {
     data: record,
@@ -141,6 +145,7 @@ useEffect(() => {
         gameDefaults: defaults.data.default,
         playerRecord: record.data,
         spin_details: spins.data.spin_details,
+        notifications: notifications.data.notifications,
       },
     });
   }

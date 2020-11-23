@@ -1,3 +1,5 @@
+@import "./variable";
+
 .Notifiaction {
     position: fixed;
     top: 0;
@@ -33,54 +35,57 @@
         .txt {
             color: white !important;
         }
-        
+
         &::before {
             background-image: radial-gradient(rgba(0, 0, 0, 0.19) 17%, rgba(255, 23, 23, 0.95) 55%);
         }
     }
-    
+
     &.success {
-        
+
         .txt {
             color: white !important;
         }
+
         &::before {
             background-image: radial-gradient(rgba(0, 0, 0, 0.19) 17%, #0f882ff2 55%);
         }
     }
-    
+
     &.dark-mode.state {
-        
+
         .txt {
             color: white !important;
         }
+
         &::before {
             background-image: radial-gradient(rgba(0, 0, 0, 0.19) 17%, rgba(47, 46, 47, 0.95) 55%);
         }
-        
+
         .txt {
             color: rgb(255, 255, 255) !important;
         }
     }
-    
+
     &.light-mode.state {
-        
+
         .txt {
             color: white !important;
         }
+
         &::before {
             background-image: radial-gradient(rgba(0, 0, 0, 0.19) 17%, rgba(222, 222, 222, 0.95) 55%);
         }
-        
+
         .txt {
             color: rgb(37, 35, 35) !important;
         }
     }
-    
+
     &.warning {
-                    .txt {
-                        color: white !important;
-                    }
+        .txt {
+            color: white !important;
+        }
 
         &::before {
             background-image: radial-gradient(rgba(0, 0, 0, 0.19) 17%, rgba(241, 255, 23, 0.95) 55%);
@@ -157,5 +162,48 @@
                 fill: currentColor
             }
         }
+    }
+}
+
+.notification_display {
+    width: 90%;
+    height: fit-content;
+    min-height: fit-content;
+    display: flex;
+    background-color: rgb(13, 13, 17);
+    padding: 30px 15px;
+    border-radius: 10px;
+    margin: 20px 0;
+
+    .bubble {
+        width: 50px;
+        height: 50px;
+        min-width: 50px;
+        min-height: 50px;
+        border-radius: 50%;
+        display: flex;
+        background-color: $defaultColor;
+    }
+
+    .notification_message {
+        width: calc(90% - 50px);
+        height: fit-content;
+        min-height: fit-content;
+        display: flex;
+        color: white;
+        padding: 5px 10px;
+    }
+
+    .notification_date {
+        position: absolute;
+        bottom: 0;
+        right: 10px;
+        width: fit-content;
+        height: 24px;
+        display: flex;
+        font-size: 14px;
+        line-height: 24px;
+        font-family: mon_bold;
+        color: rgb(94, 94, 94);
     }
 }

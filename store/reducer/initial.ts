@@ -1,7 +1,23 @@
 import { choices, Games } from "../../typescript/enum";
 import { ActionType } from "../../typescript/interface";
 
+export enum notificationType {
+  game,
+  update,
+  silent,
+}
+
 export interface initReducerType {
+  notification: {
+    notifications: {
+      message: string;
+      time: Date;
+      type: notificationType;
+      hasNew: boolean;
+    }[];
+    userID: string;
+    date: Date;
+  };
   luckyGames: {
     date: Date;
     gameDetail: string;
@@ -129,6 +145,11 @@ export interface initReducerType {
 }
 
 const initialState: initReducerType = {
+  notification: {
+    notifications: [],
+    userID: "",
+    date: new Date(),
+  },
   luckyGames: [],
   spin_details: {
     currentTime: new Date(),
@@ -211,13 +232,16 @@ const InitialReducer = (
         luckyGames: action.payload.luckyGames,
         roomGames: action.payload.roomGames,
         my_games: action.payload.my_games,
-        gameDefaults: action.payload.gameDefaults,playerRecord: action.payload.playerRecord,
-        spin_details: action.payload.spin_details
+        gameDefaults: action.payload.gameDefaults,
+        playerRecord: action.payload.playerRecord,
+        spin_details: action.payload.spin_details,
+        notification: action.payload.notifications,
       };
-    case "PLAYED": return {
-      ...state,
-      my_games: [action.payload, ...state.my_games]
-    }
+    case "PLAYED":
+      return {
+        ...state,
+        my_games: [action.payload, ...state.my_games],
+      };
     default:
       return {
         ...state,

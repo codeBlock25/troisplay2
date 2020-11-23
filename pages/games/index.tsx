@@ -49,6 +49,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { reducerType } from "../../typescript/interface";
 import { isEmpty } from "lodash";
 import GameView2 from "../../components/game_view2";
+import NotificationDisplay from "../../components/notification_display";
+import { notificationType } from "../../store/reducer/initial";
 
 export default function GamesScreen() {
   const dispatch = useDispatch();
@@ -59,9 +61,19 @@ export default function GamesScreen() {
   const [p2, setP2] = useState<boolean>(false);
   const { push, beforePopState, asPath, pathname } = useRouter();
 
-  const { my_games, defaults } = useSelector<
+  const { my_games, defaults, notifications } = useSelector<
     reducerType,
     {
+      notifications: {
+        notifications: {
+          message: string;
+          time: Date;
+          type: notificationType;
+          hasNew: boolean;
+        }[];
+        userID: string;
+        date: Date;
+      };
       my_games: {
         date: Date;
         gameDetail: string;
@@ -122,6 +134,7 @@ export default function GamesScreen() {
     return {
       my_games: state.init.my_games,
       defaults: state.init.gameDefaults,
+      notifications: state.init.notification,
     };
   });
 
@@ -352,11 +365,7 @@ export default function GamesScreen() {
               </div>
             )}
             <button type="submit" className="btn">
-              
-              
               Proceed
-            
-            
             </button>
           </form>
         ) : spec.next === nextType.player ? (
@@ -661,149 +670,163 @@ export default function GamesScreen() {
                     add
                   </p>
                 ) : (
-                    <>
-                  {my_games.map((game) => {
-                    if (game.gameID === Games.custom_game) {
+                  <>
+                    {my_games.map((game) => {
+                      if (game.gameID === Games.custom_game) {
+                        return (
+                          <GameView
+                            type="custom2"
+                            name={`${game?.battleScore?.player1?.title} ${
+                              (game?.battleScore.player1?.correct_answer ??
+                                "") !==
+                              (game?.battleScore.player2?.correct_answer ?? "")
+                                ? "[On hold]"
+                                : moment(
+                                    game?.battleScore.player1.endDate
+                                  ).isSameOrBefore(new Date()) &&
+                                  !isEmpty(game?.battleScore.player2)
+                                ? "[judge now]"
+                                : !isEmpty(game?.battleScore.player2)
+                                ? "[awaiting judge date]"
+                                : "[not joined]"
+                            }`}
+                            key={game._id}
+                            date={game.date}
+                            date2={game.battleScore.player1.endDate}
+                            v1={
+                              game.price_in_value * (defaults?.cashRating ?? 1)
+                            }
+                            v2={game.price_in_value}
+                            v3={game.gameMemberCount}
+                            id={game._id}
+                            btn1func={() => {
+                              if (
+                                moment(
+                                  game.battleScore.player1.endDate
+                                ).isSameOrBefore(new Date()) &&
+                                !isEmpty(game.battleScore.player2)
+                              ) {
+                                setCustomWindow(dispatch, {
+                                  isOpen: modalType.open,
+                                  game: game,
+                                });
+                              } else {
+                                toast(dispatch, {
+                                  msg:
+                                    "You have not met the requirement to continue this game.",
+                                }).fail();
+                              }
+                            }}
+                            btn2func={() =>
+                              exitWin(dispatch, {
+                                open: modalType.open,
+                                func: async () =>
+                                  Axios.post(
+                                    `${url}/games/custom/game`,
+                                    { id: game._id },
+                                    {
+                                      headers: {
+                                        authorization: `Bearer ${getToken()}`,
+                                      },
+                                    }
+                                  ),
+                                game: Games.custom_game,
+                              })
+                            }
+                            cash={game.price_in_value}
+                            coin={game.price_in_coin}
+                            game={game.gameID}
+                          />
+                        );
+                      }
+                      if (game.gameID === Games.lucky_geoge)
+                        return (
+                          <GameView2
+                            key={game._id}
+                            coin={game.price_in_value}
+                            cash={game.price_in_coin}
+                            description={game.battleScore.player1.description}
+                            winnings={game.battleScore.player1.winnerPrice ?? 0}
+                            playerJoined={game.members.length}
+                            playerNeeded={
+                              game.battleScore.player1.winnerCount ?? 0
+                            }
+                          />
+                        );
                       return (
                         <GameView
-                          type="custom2"
-                          name={`${game?.battleScore?.player1?.title} ${
-                            (game?.battleScore.player1?.correct_answer ??
-                              "") !==
-                            (game?.battleScore.player2?.correct_answer ?? "")
-                              ? "[On hold]"
-                              : moment(
-                                  game?.battleScore.player1.endDate
-                                ).isSameOrBefore(new Date()) &&
-                                !isEmpty(game?.battleScore.player2)
-                              ? "[judge now]"
-                              : !isEmpty(game?.battleScore.player2)
-                              ? "[awaiting judge date]"
-                              : "[not joined]"
-                          }`}
+                          type={game.gameID === Games.rooms ? "room" : "normal"}
+                          name={
+                            game.gameID === Games.roshambo
+                              ? "Roshambo"
+                              : game.gameID === Games.penalth_card
+                              ? "Penelty Card"
+                              : game.gameID === Games.matcher
+                              ? "Guess Master"
+                              : game.gameID === Games.rooms
+                              ? `${game.gameDetail} room` ?? ""
+                              : ""
+                          }
                           key={game._id}
                           date={game.date}
-                          date2={game.battleScore.player1.endDate}
                           v1={game.price_in_value * (defaults?.cashRating ?? 1)}
                           v2={game.price_in_value}
                           v3={game.gameMemberCount}
                           id={game._id}
                           btn1func={() => {
-                            if (
-                              moment(
-                                game.battleScore.player1.endDate
-                              ).isSameOrBefore(new Date()) &&
-                              !isEmpty(game.battleScore.player2)
-                            ) {
-                              setCustomWindow(dispatch, {
-                                isOpen: modalType.open,
-                                game: game,
-                              });
-                            } else {
-                              toast(dispatch, {
-                                msg:
-                                  "You have not met the requirement to continue this game.",
-                              }).fail();
-                            }
+                            console.log("working");
                           }}
-                          btn2func={() =>
+                          btn2view="exit"
+                          btn2func={() => {
+                            console.log("test");
                             exitWin(dispatch, {
                               open: modalType.open,
-                              func: async () =>
-                                Axios.post(
-                                  `${url}/games/custom/game`,
-                                  { id: game._id },
-                                  {
-                                    headers: {
-                                      authorization: `Bearer ${getToken()}`,
-                                    },
-                                  }
-                                ),
-                              game: Games.custom_game,
-                            })
-                          }
+                              game: game.gameID,
+                              func: async () => {
+                                await Axios.delete(`${url}/games/any/cancel`, {
+                                  params: { gameID: game._id },
+                                  headers: {
+                                    authorization: `Bearer ${getToken()}`,
+                                  },
+                                })
+                                  .then(() => {
+                                    toast(dispatch, {
+                                      msg:
+                                        "This game has been delete and your cash has been forwarded to your account, you play more game to earn more.",
+                                    }).success();
+                                    setTimeout(() => {
+                                      window.location.reload();
+                                    }, 4000);
+                                  })
+                                  .catch(() => {
+                                    toast(dispatch, {
+                                      msg:
+                                        "An Error Occured, Please check your internet connect and reload this page.",
+                                    }).error();
+                                  });
+                              },
+                            });
+                          }}
                           cash={game.price_in_value}
                           coin={game.price_in_coin}
                           game={game.gameID}
                         />
                       );
-                    }
-                    if (game.gameID === Games.lucky_geoge) return (
-                      <GameView2
-                        key={game._id}
-                        coin={game.price_in_value}
-                        cash={game.price_in_coin}
-                        description={game.battleScore.player1.description}
-                        winnings={game.battleScore.player1.winnerPrice ?? 0}
-                        playerJoined={game.members.length}
-                        playerNeeded={game.battleScore.player1.winnerCount ?? 0}
-                      />
-                    );
-                    return (
-                      <GameView
-                        type={game.gameID === Games.rooms ? "room" : "normal"}
-                        name={
-                          game.gameID === Games.roshambo
-                            ? "Roshambo"
-                            : game.gameID === Games.penalth_card
-                            ? "Penelty Card"
-                            : game.gameID === Games.matcher
-                            ? "Guess Master"
-                            : game.gameID === Games.rooms
-                            ? `${game.gameDetail} room` ?? ""
-                            : ""
-                        }
-                        key={game._id}
-                        date={game.date}
-                        v1={game.price_in_value * (defaults?.cashRating ?? 1)}
-                        v2={game.price_in_value}
-                        v3={game.gameMemberCount}
-                        id={game._id}
-                        btn1func={() => {
-                          console.log("working");
-                        }}
-                        btn2view="exit"
-                        btn2func={() => {
-                          console.log("test");
-                          exitWin(dispatch, {
-                            open: modalType.open,
-                            game: game.gameID,
-                            func: async () => {
-                              await Axios.delete(`${url}/games/any/cancel`, {
-                                params: { gameID: game._id },
-                                headers: {
-                                  authorization: `Bearer ${getToken()}`,
-                                },
-                              })
-                                .then(() => {
-                                  toast(dispatch, {
-                                    msg:
-                                      "This game has been delete and your cash has been forwarded to your account, you play more game to earn more.",
-                                  }).success();
-                                  setTimeout(() => {
-                                    window.location.reload();
-                                  }, 4000);
-                                })
-                                .catch(() => {
-                                  toast(dispatch, {
-                                    msg:
-                                      "An Error Occured, Please check your internet connect and reload this page.",
-                                  }).error();
-                                });
-                            },
-                          });
-                        }}
-                        cash={game.price_in_value}
-                        coin={game.price_in_coin}
-                        game={game.gameID}
-                      />
-                    );
-                  }
+                    })}
+                  </>
                 )
-                      }</>
-                  )
               ) : viewing === Viewing.notification ? (
-                <p className="none">No nofications yet</p>
+                notifications.notifications.length === 0 ? (
+                  <p className="none">No requests yet</p>
+                ) : (
+                  notifications.notifications.map((notification, index) => (
+                    <NotificationDisplay
+                      key={index}
+                      msg={notification.message}
+                      date={notification.time}
+                    />
+                  ))
+                )
               ) : viewing === Viewing.request ? (
                 requests.data.requests.length === 0 ? (
                   <p className="none">No requests yet</p>
