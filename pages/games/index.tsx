@@ -650,7 +650,10 @@ export default function GamesScreen() {
                     Request
                   </Typography>
                 </Badge>
-                <Badge color="secondary" badgeContent={0}>
+                <Badge
+                  color="secondary"
+                  badgeContent={notifications?.notifications.length ?? 0}
+                >
                   <Typography
                     className={`btn ${
                       viewing === Viewing.notification ? "on" : ""
@@ -816,8 +819,8 @@ export default function GamesScreen() {
                   </>
                 )
               ) : viewing === Viewing.notification ? (
-                notifications.notifications.length === 0 ? (
-                  <p className="none">No requests yet</p>
+                (notifications?.notifications?.length ?? 0) === 0 ? (
+                  <p className="none">No notification yet</p>
                 ) : (
                   notifications.notifications.map((notification, index) => (
                     <NotificationDisplay
