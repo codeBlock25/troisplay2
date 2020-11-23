@@ -276,7 +276,7 @@
 
             * {
                 font-size: 12px;
-                font-family: exep_bold !important;
+                font-family: mon_bold !important;
             }
         }
 
@@ -298,6 +298,17 @@
                 min-height: fit-content;
                 margin: 0 auto 0 auto;
                 color: white;
+
+                &.select {
+                    label {
+                        color: $defaultColor;
+                        font-family: mon;
+                    }
+
+                    select {
+                        color: white;
+                    }
+                }
 
                 &.dark-mode {
                     input {
@@ -334,12 +345,12 @@
                 }
 
                 * {
-                    font-family: exep_bold;
+                    font-family: mon_bold;
                 }
 
                 input {
                     padding: 13px 0;
-                    font-family: exep;
+                    font-family: mon;
                     font-size: 13px;
                 }
 

@@ -48,6 +48,7 @@ import { faGamepad } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { reducerType } from "../../typescript/interface";
 import { isEmpty } from "lodash";
+import GameView2 from "../../components/game_view2";
 
 export default function GamesScreen() {
   const dispatch = useDispatch();
@@ -80,6 +81,9 @@ export default function GamesScreen() {
             endGameTime: Date;
             choice: choices;
             correct_answer: string;
+            winnerCount?: number;
+            winnerPrice?: number;
+            endDateTime?: number;
           };
           player2?: {
             answer: string;
@@ -657,7 +661,8 @@ export default function GamesScreen() {
                     add
                   </p>
                 ) : (
-                  my_games.map((game) => {
+                    <>
+                  {my_games.map((game) => {
                     if (game.gameID === Games.custom_game) {
                       return (
                         <GameView
@@ -723,6 +728,17 @@ export default function GamesScreen() {
                         />
                       );
                     }
+                    if (game.gameID === Games.lucky_geoge) return (
+                      <GameView2
+                        key={game._id}
+                        coin={game.price_in_value}
+                        cash={game.price_in_coin}
+                        description={game.battleScore.player1.description}
+                        winnings={game.battleScore.player1.winnerPrice ?? 0}
+                        playerJoined={game.members.length}
+                        playerNeeded={game.battleScore.player1.winnerCount ?? 0}
+                      />
+                    );
                     return (
                       <GameView
                         type={game.gameID === Games.rooms ? "room" : "normal"}
@@ -733,8 +749,6 @@ export default function GamesScreen() {
                             ? "Penelty Card"
                             : game.gameID === Games.matcher
                             ? "Guess Master"
-                            : game.gameID === Games.lucky_geoge
-                            ? "lucky judge"
                             : game.gameID === Games.rooms
                             ? `${game.gameDetail} room` ?? ""
                             : ""
@@ -784,8 +798,10 @@ export default function GamesScreen() {
                         game={game.gameID}
                       />
                     );
-                  })
+                  }
                 )
+                      }</>
+                  )
               ) : viewing === Viewing.notification ? (
                 <p className="none">No nofications yet</p>
               ) : viewing === Viewing.request ? (

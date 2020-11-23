@@ -660,9 +660,8 @@ export default function PickerPlayer2({
                 <Search />
               </Fab>
             </>
-          ) : (
+          ) : game_to_play === Games.lucky_geoge ? (<></>): (
             <>
-              {" "}
               <Fab
                 className="cls"
                 onClick={() => {
@@ -679,8 +678,7 @@ export default function PickerPlayer2({
                 placeholder="min price"
                 type="number"
                 disabled={
-                  game_to_play === Games.rooms ||
-                  game_to_play === Games.lucky_geoge
+                  game_to_play === Games.rooms 
                     ? true
                     : false
                 }
@@ -705,8 +703,7 @@ export default function PickerPlayer2({
                 className={`inputBox theme ${theme}`}
                 value={max}
                 disabled={
-                  game_to_play === Games.rooms ||
-                  game_to_play === Games.lucky_geoge
+                  game_to_play === Games.rooms 
                     ? true
                     : false
                 }
@@ -727,8 +724,7 @@ export default function PickerPlayer2({
                 className="srch"
                 onClick={LoadData}
                 disabled={
-                  game_to_play === Games.rooms ||
-                  game_to_play === Games.lucky_geoge
+                  game_to_play === Games.rooms 
                     ? true
                     : false
                 }
