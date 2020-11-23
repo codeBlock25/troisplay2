@@ -16,19 +16,31 @@ import { Close, Search } from "@material-ui/icons";
 import Axios, { AxiosResponse } from "axios";
 import { url } from "../constant";
 import { SyncLoader } from "react-spinners";
-import { choices, Games, modalType, PayType, PlayerType } from "../typescript/enum";
+import {
+  choices,
+  Games,
+  modalType,
+  PayType,
+  PlayerType,
+} from "../typescript/enum";
 import { getToken, PlayLuckyGeogeGame } from "../functions";
-import { exitWin, setCustomWindow, setGameDetails, toast } from "../store/action";
+import {
+  exitWin,
+  setCustomWindow,
+  setGameDetails,
+  toast,
+} from "../store/action";
 import { useQueryCache } from "react-query";
 import GameView from "./game_view";
 import { useRouter } from "next/router";
+import GameView2 from "./game_view2";
 
 export default function PickerPlayer2({
   game: game_to_play,
   isOpen,
   close,
 }: {
-  close: ()=>void
+  close: () => void;
   game: Games;
   isOpen: boolean;
 }) {
@@ -38,7 +50,7 @@ export default function PickerPlayer2({
   const [loading, setLoading] = useState<boolean>(false);
   const [btn_loading, setBtnLoading] = useState<boolean>(false);
   const [loadingL, setLoadingL] = useState<boolean>(false);
-  const { push } = useRouter()
+  const { push } = useRouter();
   const [popState, setPopState] = useState<{
     msg: string;
     func?: () => void | boolean | Promise<void> | Promise<boolean>;
@@ -135,24 +147,27 @@ export default function PickerPlayer2({
     games: {
       battleScore: {
         player1: {
-          description: string
-          title: string
-          winnerCount: number
-      }}
-      date: Date
-      gameDetail: string
-      gameID: Games
-      gameMemberCount: number
-      gameType: string
-      isComplete: boolean
-      members: string[]
-      playCount: number
-      played: boolean
-      price_in_coin: number
-      price_in_value: number
+          description: string;
+          title: string;
+          winnerCount: number;
+          winnerPrice: number;
+          endDateTime: Date;
+        };
+      };
+      date: Date;
+      gameDetail: string;
+      gameID: Games;
+      gameMemberCount: number;
+      gameType: string;
+      isComplete: boolean;
+      members: string[];
+      playCount: number;
+      played: boolean;
+      price_in_coin: number;
+      price_in_value: number;
       _id: string;
-    }[]
-  }> = useQueryCache().getQueryData("lucky-games")
+    }[];
+  }> = useQueryCache().getQueryData("lucky-games");
   const rooms: AxiosResponse<{
     rooms: {
       _id: string;
@@ -166,8 +181,8 @@ export default function PickerPlayer2({
       activeMember: number;
       players: [string];
     }[];
-  }> = useQueryCache().getQueryData("rooms")
- 
+  }> = useQueryCache().getQueryData("rooms");
+
   const defaults: AxiosResponse<{
     default: {
       commission_roshambo: {
@@ -197,43 +212,45 @@ export default function PickerPlayer2({
 
   const playOne = async (playWith: PayType, id: string, game: Games) => {
     let token = getToken();
-      if (btn_loading) return;
-      setBtnLoading(true);
-      await Axios({
-        method: "POST",
-        url: `${url}/games/play`,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        data: {
-          gameID: id,
-          playWith,
-        },
-      })
-        .then(({ data: { price } }: AxiosResponse<{ price: number }>) => {
-          close()
-          setGameDetails(dispatch, {
-            player: PlayerType.second,
-            game, id, price,
-                          payType: playWith
-                        });
-        })
-        .catch((err) => {
-          if (err.message === "Request failed with status code 401") {
-            toast(dispatch, {
-              msg: `Insufficient Fund, please fund your cash wallet to continue the game.`,
-            }).fail();
-            return;
-          }
-          toast(dispatch, {
-            msg: `An Error occured could not connect to troisplay game server please check you interner connection and Try Again.`,
-          }).error();
-        })
-        .finally(() => {
-          setmin(0);
-          setmax(10000);
-          setBtnLoading(false);
+    if (btn_loading) return;
+    setBtnLoading(true);
+    await Axios({
+      method: "POST",
+      url: `${url}/games/play`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: {
+        gameID: id,
+        playWith,
+      },
+    })
+      .then(({ data: { price } }: AxiosResponse<{ price: number }>) => {
+        close();
+        setGameDetails(dispatch, {
+          player: PlayerType.second,
+          game,
+          id,
+          price,
+          payType: playWith,
         });
+      })
+      .catch((err) => {
+        if (err.message === "Request failed with status code 401") {
+          toast(dispatch, {
+            msg: `Insufficient Fund, please fund your cash wallet to continue the game.`,
+          }).fail();
+          return;
+        }
+        toast(dispatch, {
+          msg: `An Error occured could not connect to troisplay game server please check you interner connection and Try Again.`,
+        }).error();
+      })
+      .finally(() => {
+        setmin(0);
+        setmax(10000);
+        setBtnLoading(false);
+      });
   };
   const playLuckyGeoge = async (payWith: PayType, id: string) => {
     let token = getToken();
@@ -389,22 +406,18 @@ export default function PickerPlayer2({
           {game_to_play === Games.lucky_geoge ? (
             lucky_games?.data?.games.map((game) => {
               return (
-                <GameView
-                  type="lucky"
-                  name={game.battleScore.player1.title}
-                  key={game._id}
-                  date={game.date}
-                  id={game._id}
-                  cash={game.price_in_value}
-                  v1={game.price_in_value}
-                  v2={
-                    game.price_in_value *
-                    (defaults?.data.default.cashRating ?? 0)
+                <GameView2
+                  type="picker"
+                  coin={
+                    game.battleScore.player1.winnerPrice *
+                    (defaults?.data?.default?.cashRating ?? 0)
                   }
-                  coin={game.battleScore.player1.winnerCount}
-                  v3={game.battleScore.player1.winnerCount}
-                  v4={game.members.length}
-                  game={game.gameID}
+                  cash={game.battleScore.player1.winnerPrice}
+                  description={game.battleScore.player1.description}
+                  winnings={game.battleScore.player1.winnerPrice}
+                  playerJoined={game.members.length}
+                  playerNeeded={game.battleScore.player1.winnerCount}
+                  key={game._id}
                   btn1func={() => {
                     setPopState((prev) => {
                       return {
@@ -638,10 +651,7 @@ export default function PickerPlayer2({
                   fullWidth
                   value={max}
                   onChange={(evt) => {
-                    if (
-                      !parseInt(evt.target.value as string, 10) ||
-                      loading
-                    )
+                    if (!parseInt(evt.target.value as string, 10) || loading)
                       return;
                     setmax(parseInt(evt.target.value as string, 10));
                     LoadData();
