@@ -63,7 +63,10 @@ const HeadFunc = memo(function ({
   });
   const { data: notifications } = useQuery(
     "notifications",
-    async () => await Axios.get(`${url}/notifications/all`, {headers: {authorization: `Bearer ${getToken()}`}})
+    async () =>
+      await Axios.get(`${url}/notifications/all`, {
+        headers: { authorization: `Bearer ${getToken()}` },
+      })
   );
 
   const {
@@ -133,23 +136,27 @@ const HeadFunc = memo(function ({
     checker();
   }, [checker]);
 
-const dispatch = useDispatch();
-useEffect(() => {
-  if (lucky_games && rooms && my_games && record && spins && defaults) {
-    initReduceGameState.init({
-      dispatch,
-      payload: {
-        luckyGames: lucky_games.data.games ?? [],
-        roomGames: rooms.data.rooms ?? [],
-        my_games: my_games.data.games ?? [],
-        gameDefaults: defaults.data.default,
-        playerRecord: record.data,
-        spin_details: spins.data.spin_details,
-        notifications: notifications.data.notifications,
-      },
-    });
-  }
-}, [defaults, record, spins, lucky_games, rooms, my_games]);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (lucky_games && rooms && my_games && record && spins && defaults) {
+      initReduceGameState.init({
+        dispatch,
+        payload: {
+          luckyGames: lucky_games.data.games ?? [],
+          roomGames: rooms.data.rooms ?? [],
+          my_games: my_games.data.games ?? [],
+          gameDefaults: defaults.data.default,
+          playerRecord: record.data,
+          spin_details: spins.data.spin_details,
+          notifications: notifications.data.notifications ?? {
+            notifications: [],
+            userID: "",
+            date: new Date(),
+          },
+        },
+      });
+    }
+  }, [defaults, record, spins, lucky_games, rooms, my_games]);
 
   return (
     <header className="game_header">
