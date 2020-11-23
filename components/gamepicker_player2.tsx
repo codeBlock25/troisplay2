@@ -34,7 +34,7 @@ export default function PickerPlayer2({
 }) {
   const dispatch = useDispatch();
   const [min, setmin] = useState<number>(0);
-  const [max, setmax] = useState<number>(10000);
+  const [max, setmax] = useState<number>(100);
   const [loading, setLoading] = useState<boolean>(false);
   const [btn_loading, setBtnLoading] = useState<boolean>(false);
   const [loadingL, setLoadingL] = useState<boolean>(false);
@@ -265,7 +265,6 @@ export default function PickerPlayer2({
         setLoadingL(false);
       });
   };
-
   const LoadData = async () => {
     let token = getToken();
     if (loading) return;
@@ -635,16 +634,17 @@ export default function PickerPlayer2({
                 variant="filled"
               >
                 <InputLabel>Price</InputLabel>
-                  <NativeSelect
-                    fullWidth
+                <NativeSelect
+                  fullWidth
                   value={max}
                   onChange={(evt) => {
                     if (
                       !parseInt(evt.target.value as string, 10) ||
-                      max <= min - 5
+                      loading
                     )
                       return;
                     setmax(parseInt(evt.target.value as string, 10));
+                    LoadData();
                   }}
                 >
                   <option value={100}>100</option>
@@ -656,11 +656,10 @@ export default function PickerPlayer2({
                   <option value={5000}>5000</option>
                 </NativeSelect>
               </FormControl>
-              <Fab className="srch" onClick={LoadData}>
-                <Search />
-              </Fab>
             </>
-          ) : game_to_play === Games.lucky_geoge ? (<></>): (
+          ) : game_to_play === Games.lucky_geoge ? (
+            <></>
+          ) : (
             <>
               <Fab
                 className="cls"
@@ -677,11 +676,7 @@ export default function PickerPlayer2({
                 required
                 placeholder="min price"
                 type="number"
-                disabled={
-                  game_to_play === Games.rooms 
-                    ? true
-                    : false
-                }
+                disabled={game_to_play === Games.rooms ? true : false}
                 value={min}
                 onChange={(evt) => {
                   if (!parseInt(evt.target.value, 10) || min >= max + 5) return;
@@ -702,11 +697,7 @@ export default function PickerPlayer2({
                 placeholder="min price"
                 className={`inputBox theme ${theme}`}
                 value={max}
-                disabled={
-                  game_to_play === Games.rooms 
-                    ? true
-                    : false
-                }
+                disabled={game_to_play === Games.rooms ? true : false}
                 type="number"
                 onChange={(evt) => {
                   if (!parseInt(evt.target.value, 10) || max <= min - 5) return;
@@ -723,11 +714,7 @@ export default function PickerPlayer2({
               <Fab
                 className="srch"
                 onClick={LoadData}
-                disabled={
-                  game_to_play === Games.rooms 
-                    ? true
-                    : false
-                }
+                disabled={game_to_play === Games.rooms ? true : false}
               >
                 <Search />
               </Fab>
