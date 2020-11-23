@@ -577,6 +577,16 @@
                 margin: 30px auto 0 auto;
                 padding: 0;
 
+                select {
+                    background-color: #000 !important;
+                    color: white;
+
+                    * {
+                        background-color: #000 !important;
+                        color: white;
+                    }
+                }
+
                 label {
                     font-size: 14px;
                     font-family: mon_bold;
