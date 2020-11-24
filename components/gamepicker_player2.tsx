@@ -403,20 +403,22 @@ export default function PickerPlayer2({
       <div className="container">
         <h3 className="title">Games</h3>
         <div className="list_games" style={{ paddingBottom: "60px" }}>
-          {game_to_play === Games.lucky_geoge ? (
+          {loading ? (
+            <>
+              <span className="txt">Loading please wait...</span>
+            </>
+          ) : game_to_play === Games.lucky_geoge ? (
             lucky_games?.data?.games.map((game) => {
               return (
                 <GameView2
                   type="picker"
-                  coin={
-                    game.battleScore.player1.winnerPrice *
-                    (defaults?.data?.default?.cashRating ?? 0)
-                  }
-                  cash={game.battleScore.player1.winnerPrice}
+                  title={game.battleScore.player1.title}
+                  coin={game.price_in_coin}
+                  cash={game.price_in_value}
                   description={game.battleScore.player1.description}
                   winnings={game.battleScore.player1.winnerPrice}
                   playerJoined={game.members.length}
-                  playerNeeded={game.battleScore.player1.winnerCount}
+                  playerNeeded={game.gameMemberCount}
                   key={game._id}
                   btn1func={() => {
                     setPopState((prev) => {
@@ -647,7 +649,7 @@ export default function PickerPlayer2({
                 variant="filled"
               >
                 <InputLabel>Price</InputLabel>
-                <NativeSelect
+                <Select
                   fullWidth
                   value={max}
                   onChange={(evt) => {
@@ -657,14 +659,14 @@ export default function PickerPlayer2({
                     LoadData();
                   }}
                 >
-                  <option value={100}>100</option>
-                  <option value={300}>300</option>
-                  <option value={500}>500</option>
-                  <option value={1000}>1000</option>
-                  <option value={2000}>2000</option>
-                  <option value={3000}>3000</option>
-                  <option value={5000}>5000</option>
-                </NativeSelect>
+                  <MenuItem value={100}>100</MenuItem>
+                  <MenuItem value={300}>300</MenuItem>
+                  <MenuItem value={500}>500</MenuItem>
+                  <MenuItem value={1000}>1000</MenuItem>
+                  <MenuItem value={2000}>2000</MenuItem>
+                  <MenuItem value={3000}>3000</MenuItem>
+                  <MenuItem value={5000}>5000</MenuItem>
+                </Select>
               </FormControl>
             </>
           ) : game_to_play === Games.lucky_geoge ? (
