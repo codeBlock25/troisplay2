@@ -14,7 +14,7 @@ const GameView2 = memo(function ({
   btn1func,
   btn2func,
 }: {
-    title: string;
+  title?: string;
   type?: "picker" | "normal";
   cash: number;
   coin: number;
@@ -35,7 +35,7 @@ const GameView2 = memo(function ({
 }) {
   return (
     <div className="game_content_view">
-      <span className="name">{ title }</span>
+      <span className="name">{title ?? "Lucky games"}</span>
       <span className="name" style={{ fontSize: 14, color: "orange" }}>
         Description:
       </span>
