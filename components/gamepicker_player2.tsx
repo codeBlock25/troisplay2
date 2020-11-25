@@ -282,10 +282,11 @@ export default function PickerPlayer2({
         setLoadingL(false);
       });
   };
-  const LoadData = async () => {
+  const LoadData = async({amount}:{amount: number}) => {
     let token = getToken();
     if (loading) return;
     setLoading(true);
+    setmax(amount);
     await Axios({
       method: "GET",
       url: `${url}/games/getter`,
@@ -294,7 +295,7 @@ export default function PickerPlayer2({
       },
       params: {
         min,
-        max,
+        max: amount,
         game: game_to_play,
       },
     })
@@ -339,7 +340,7 @@ export default function PickerPlayer2({
   };
 
   useEffect(() => {
-    LoadData();
+    LoadData({amount:100});
   }, [isOpen]);
 
   const theme = "dark-mode";
@@ -655,8 +656,7 @@ export default function PickerPlayer2({
                   onChange={(evt) => {
                     if (!parseInt(evt.target.value as string, 10) || loading)
                       return;
-                    setmax(parseInt(evt.target.value as string, 10));
-                    LoadData();
+                    LoadData({amount: parseInt(evt.target.value as string, 10)});
                   }}
                 >
                   <MenuItem value={100}>100</MenuItem>
@@ -723,9 +723,9 @@ export default function PickerPlayer2({
                   ),
                 }}
               />
-              <Fab
-                className="srch"
-                onClick={LoadData}
+                  <Fab
+                    className="srch"
+                    onClick={() => LoadData({amount: max})}
                 disabled={game_to_play === Games.rooms ? true : false}
               >
                 <Search />
