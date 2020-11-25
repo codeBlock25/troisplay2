@@ -1,18 +1,12 @@
-import { choices, Games } from "../../typescript/enum";
+import { choices, Games, notificationHintType } from "../../typescript/enum";
 import { ActionType } from "../../typescript/interface";
-
-export enum notificationType {
-  game,
-  update,
-  silent,
-}
 
 export interface initReducerType {
   notification: {
     notifications: {
       message: string;
       time: Date;
-      type: notificationType;
+      type: notificationHintType;
       hasNew: boolean;
     }[];
     userID: string;

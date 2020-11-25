@@ -5,7 +5,7 @@ import moment from "moment";
 import { useQueryCache } from "react-query";
 import Axios, { AxiosResponse } from "axios";
 import { url } from "../../constant";
-import { Games, PlayerType, Viewing, modalType } from "../../typescript/enum";
+import { Games, PlayerType, Viewing, modalType, notificationHintType } from "../../typescript/enum";
 import { getPrice, getToken, whoIsThis } from "../../functions";
 import { SyncLoader } from "react-spinners";
 import Notification from "../../components/notification";
@@ -50,7 +50,6 @@ import { reducerType } from "../../typescript/interface";
 import { isEmpty } from "lodash";
 import GameView2 from "../../components/game_view2";
 import NotificationDisplay from "../../components/notification_display";
-import { notificationType } from "../../store/reducer/initial";
 
 export default function GamesScreen() {
   const dispatch = useDispatch();
@@ -68,7 +67,7 @@ export default function GamesScreen() {
         notifications: {
           message: string;
           time: Date;
-          type: notificationType;
+          type: notificationHintType;
           hasNew: boolean;
         }[];
         userID: string;
@@ -827,6 +826,7 @@ export default function GamesScreen() {
                       key={index}
                       msg={notification.message}
                       date={notification.time}
+                      type={notification.type}
                     />
                   ))
                 )

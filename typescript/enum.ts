@@ -17,6 +17,13 @@ export enum BillPayment {
   transfer,
 }
 
+export enum notificationHintType {
+  withdraw, // orange
+  fund, // blue
+  lost, // red
+  win, // green
+  draw, // yellow
+}
 
 export enum choices {
   at_stated_timed,
