@@ -1,4 +1,4 @@
-import { cloneDeep, remove, sortBy } from "lodash";
+import { cloneDeep, remove, set, sortBy } from "lodash";
 import { ClassType } from "react";
 import { Dispatch } from "redux";
 import {
@@ -70,8 +70,8 @@ export const setAction = (
   dispatch: (t: ActionType) => void,
   payload: ReasonType
 ) => {
-  dispatch({type: "ACTION", payload})
-}
+  dispatch({ type: "ACTION", payload });
+};
 
 export const setGameDetails = (
   dispatch: (t: ActionType) => void,
@@ -103,7 +103,7 @@ export const backWin = (
     open: modalType;
     func?: () => Promise<void> | void | boolean;
     game?: Games;
-    msg: string
+    msg: string;
   }
 ): void => {
   dispatch({ type: "BACK", payload });
@@ -183,31 +183,27 @@ export const toast = (
   };
 };
 
-
 export const NotificationAction = {
-  markRead: ({ time, notifications, dispatch }: {
-    time: Date; notifications: {
+  markRead: ({
+    time,
+    notifications,
+    dispatch,
+  }: {
+    time: Date;
+    notifications: {
       message: string;
       time: Date;
       type: notificationHintType;
       hasNew: boolean;
     }[];
-    dispatch: Dispatch<ActionType>
+    dispatch: Dispatch<ActionType>;
   }) => {
     let allNotifications = cloneDeep(notifications);
     let removed = remove(allNotifications, { time });
-    let update: {
-      message: string;
-      time: Date;
-      type: notificationHintType;
-      hasNew: boolean;
-    } = {
-      ...removed[0],
-      hasNew: false
-    }
+    set(removed[0], "hasNew", false);
     dispatch({
       type: "NOTIFICATIONS",
-      payload: sortBy([...allNotifications, update],{time: -1}),
+      payload: sortBy([...allNotifications, ...removed], { time: -1 }),
     });
-  }
-}
+  },
+};
