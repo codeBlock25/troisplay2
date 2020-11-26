@@ -220,6 +220,11 @@ const InitialReducer = (
   action: ActionType
 ): initReducerType => {
   switch (action.type) {
+    case "NOTIFICATIONS":
+      return {
+        ...state,
+        notification: { notifications: action.payload, ...state.notification },
+      };
     case "INIT":
       return {
         ...state,

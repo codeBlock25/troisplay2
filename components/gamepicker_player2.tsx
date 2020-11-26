@@ -282,7 +282,7 @@ export default function PickerPlayer2({
         setLoadingL(false);
       });
   };
-  const LoadData = async({amount}:{amount: number}) => {
+  const LoadData = async ({ amount }: { amount: number }) => {
     let token = getToken();
     if (loading) return;
     setLoading(true);
@@ -340,7 +340,7 @@ export default function PickerPlayer2({
   };
 
   useEffect(() => {
-    LoadData({amount:100});
+    LoadData({ amount: 100 });
   }, [isOpen]);
 
   const theme = "dark-mode";
@@ -634,16 +634,6 @@ export default function PickerPlayer2({
           game_to_play === Games.penalth_card ||
           game_to_play === Games.matcher ? (
             <>
-              <Fab
-                className="cls"
-                onClick={() => {
-                  setmin(0);
-                  setmax(10000);
-                  close();
-                }}
-              >
-                <Close />
-              </Fab>
               <FormControl
                 required
                 className="inputBox select"
@@ -656,7 +646,9 @@ export default function PickerPlayer2({
                   onChange={(evt) => {
                     if (!parseInt(evt.target.value as string, 10) || loading)
                       return;
-                    LoadData({amount: parseInt(evt.target.value as string, 10)});
+                    LoadData({
+                      amount: parseInt(evt.target.value as string, 10),
+                    });
                   }}
                 >
                   <MenuItem value={100}>100</MenuItem>
@@ -668,6 +660,16 @@ export default function PickerPlayer2({
                   <MenuItem value={5000}>5000</MenuItem>
                 </Select>
               </FormControl>
+              <Fab
+                className="cls"
+                onClick={() => {
+                  setmin(0);
+                  setmax(10000);
+                  close();
+                }}
+              >
+                <Close />
+              </Fab>
             </>
           ) : game_to_play === Games.lucky_geoge ? (
             <></>
@@ -677,7 +679,7 @@ export default function PickerPlayer2({
                 className="cls"
                 onClick={() => {
                   setmin(0);
-                  setmax(10000);
+                  setmax(100);
                   close();
                 }}
               >
@@ -723,9 +725,9 @@ export default function PickerPlayer2({
                   ),
                 }}
               />
-                  <Fab
-                    className="srch"
-                    onClick={() => LoadData({amount: max})}
+              <Fab
+                className="srch"
+                onClick={() => LoadData({ amount: max })}
                 disabled={game_to_play === Games.rooms ? true : false}
               >
                 <Search />

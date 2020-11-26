@@ -1,4 +1,3 @@
-
 import { initReducerType } from "../store/reducer/initial";
 import {
   Games,
@@ -22,7 +21,7 @@ export interface eventReeducerType {
     game: Games;
     id?: string;
     player: PlayerType;
-    payWith: PayType
+    payWith: PayType;
   };
   action: ReasonType;
   customWindow: {
@@ -84,6 +83,7 @@ export interface ActionType<T = any> {
     | "ACTION"
     | "CUSTOMWINDOW"
     | "INIT"
+    | "NOTIFICATIONS"
     | "PLAYED";
   payload: T;
 }
@@ -93,13 +93,10 @@ export interface reducerType {
   init: initReducerType;
 }
 
-
-
-
-          // <div className={`btn_ theme ${theme}`} onClick={() => matchPlay()}>
-          //   {loading === TwoButtonLoader.first_loading ? (
-          //     <SyncLoader size="10px" color={`white`} />
-          //   ) : (
-          //     <>Play</>
-          //   )}
-          // </div>;
+// <div className={`btn_ theme ${theme}`} onClick={() => matchPlay()}>
+//   {loading === TwoButtonLoader.first_loading ? (
+//     <SyncLoader size="10px" color={`white`} />
+//   ) : (
+//     <>Play</>
+//   )}
+// </div>;

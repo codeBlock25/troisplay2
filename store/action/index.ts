@@ -1,3 +1,4 @@
+import { cloneDeep, remove, sortBy } from "lodash";
 import { ClassType } from "react";
 import { Dispatch } from "redux";
 import {
@@ -6,6 +7,7 @@ import {
   Games,
   modalType,
   NotiErrorType,
+  notificationHintType,
   PayType,
   PlayerType,
   ReasonType,
@@ -180,3 +182,32 @@ export const toast = (
       }),
   };
 };
+
+
+export const NotificationAction = {
+  markRead: ({ time, notifications, dispatch }: {
+    time: Date; notifications: {
+      message: string;
+      time: Date;
+      type: notificationHintType;
+      hasNew: boolean;
+    }[];
+    dispatch: Dispatch<ActionType>
+  }) => {
+    let allNotifications = cloneDeep(notifications);
+    let removed = remove(allNotifications, { time });
+    let update: {
+      message: string;
+      time: Date;
+      type: notificationHintType;
+      hasNew: boolean;
+    } = {
+      ...removed[0],
+      hasNew: false
+    }
+    dispatch({
+      type: "NOTIFICATIONS",
+      payload: sortBy([...allNotifications, update],{time: -1}),
+    });
+  }
+}

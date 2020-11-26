@@ -5,7 +5,13 @@ import moment from "moment";
 import { useQueryCache } from "react-query";
 import Axios, { AxiosResponse } from "axios";
 import { url } from "../../constant";
-import { Games, PlayerType, Viewing, modalType, notificationHintType } from "../../typescript/enum";
+import {
+  Games,
+  PlayerType,
+  Viewing,
+  modalType,
+  notificationHintType,
+} from "../../typescript/enum";
 import { getPrice, getToken, whoIsThis } from "../../functions";
 import { SyncLoader } from "react-spinners";
 import Notification from "../../components/notification";
@@ -146,7 +152,7 @@ export default function GamesScreen() {
   }>({
     isOpen: false,
     manual: "",
-    price: 10,
+    price: 100,
     game: Games.non,
     next: nextType.player,
   });
@@ -458,7 +464,7 @@ export default function GamesScreen() {
                 isOpen: true,
                 manual:
                   "A player who decides to play rock will beat another player who has chosen scissors (rock crushes scissors), but will lose to one who has played paper (paper covers rock); a play of paper will lose to a play of scissors (scissors cuts paper). If both players choose the same shape, the game is tied and is usually immediately replayed to break the tie.",
-                price: 0,
+                price: 100,
                 game: Games.roshambo,
               });
             }}
@@ -485,7 +491,7 @@ export default function GamesScreen() {
                 isOpen: true,
                 manual:
                   "Just as penalty in the game of soccer, involves the taker and goal keeper. Taker aim is to score (choose opposite direction as the goal keeper) while the goal keeper is the catch the ball (go same direction as the taker).",
-                price: 0,
+                price: 100,
                 game: Games.penalth_card,
               });
             }}
@@ -512,7 +518,7 @@ export default function GamesScreen() {
                 isOpen: true,
                 manual:
                   "Player two has three chances to guess the number player 1 choose from number one to seven.",
-                price: 0,
+                price: 100,
                 game: Games.matcher,
               });
             }}
@@ -539,7 +545,7 @@ export default function GamesScreen() {
                 isOpen: true,
                 manual:
                   "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor non, enim accusantium officiis laborum hic asperiores a corporis illum quis.",
-                price: 0,
+                price: 100,
                 game: Games.lucky_geoge,
               });
             }}
@@ -566,7 +572,7 @@ export default function GamesScreen() {
                 isOpen: true,
                 manual:
                   "Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita in quidem natus, consectetur quia pariatur! Rem dolores maxime adipisci. Tempora earum, officia natus temporibus sit voluptas hic corrupti. Dolor, tempora.",
-                price: 0,
+                price: 100,
                 game: Games.custom_game,
               });
             }}
@@ -592,7 +598,7 @@ export default function GamesScreen() {
               setSpec({
                 isOpen: true,
                 manual: "Coming soon",
-                price: 0,
+                price: 100,
                 game: Games.rooms,
               });
             }}
@@ -827,6 +833,8 @@ export default function GamesScreen() {
                       msg={notification.message}
                       date={notification.time}
                       type={notification.type}
+                      hasSeen={notification.hasNew}
+                      notifications={notifications.notifications}
                     />
                   ))
                 )

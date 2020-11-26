@@ -1,10 +1,15 @@
-import React, { memo, MutableRefObject, useEffect, useRef } from "react";
+import React, {
+  memo,
+  MutableRefObject,
+  useCallback,
+  useEffect,
+  useRef,
+} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { notify } from "../store/action";
 import { CloseIcon, CupIcon, RefereeIcon, RefereeWarnIcon } from "../icon";
 import { reducerType } from "../typescript/interface";
 import { modalType, NotiErrorType } from "../typescript/enum";
-
 
 const Notification = memo(function () {
   const audio1: MutableRefObject<HTMLAudioElement> = useRef(null);
@@ -23,13 +28,36 @@ const Notification = memo(function () {
     };
   });
   useEffect(() => {
-    if (notification.type === NotiErrorType.success) {
-      audio2.current.play();
-    } else if (notification.type !== NotiErrorType.ok) {
-      audio1.current.play();
-    } else {
+    try {
+      if (notification.type === NotiErrorType.success) {
+        audio2.current.play();
+      } else if (notification.type !== NotiErrorType.ok) {
+        audio1.current.play();
+      } else {
+      }
+    } catch (error) {
+      console.error(error);
     }
   }, [notification]);
+  const load = useCallback(() => {
+    audio1.current.addEventListener("error", (error) => {
+      console.log(error);
+    });
+    audio2.current.addEventListener("error", (error) => {
+      console.log(error);
+    });
+    return () => {
+      audio1.current.removeEventListener("error", () => {
+        console.log("removed");
+      });
+      audio2.current.removeEventListener("error", () => {
+        console.log("removed");
+      });
+    };
+  }, []);
+  useEffect(() => {
+    load();
+  }, [load]);
   return (
     <div
       className={`Notifiaction ${
@@ -47,10 +75,24 @@ const Notification = memo(function () {
       }`}
     >
       <div className="container">
-        <audio controls className="audio" ref={audio1}>
+        <audio
+          controls
+          className="audio"
+          preload="auto"
+          autoPlay
+          muted
+          ref={audio1}
+        >
           <source src="/audio/noti.mp3" />
         </audio>
-        <audio controls className="audio" ref={audio2}>
+        <audio
+          controls
+          className="audio"
+          preload="auto"
+          autoPlay
+          muted
+          ref={audio2}
+        >
           <source src="/audio/win.mp3" />
         </audio>
         <span className="icon">
@@ -70,7 +112,11 @@ const Notification = memo(function () {
         <div
           className="close_btn"
           onClick={() => {
-            notify(dispatch, { ...notification, isOpen: modalType.close, type: NotiErrorType.non });
+            notify(dispatch, {
+              ...notification,
+              isOpen: modalType.close,
+              type: NotiErrorType.non,
+            });
           }}
         >
           <CloseIcon />
@@ -78,7 +124,6 @@ const Notification = memo(function () {
       </div>
     </div>
   );
-}
-);
+});
 
-export default Notification
+export default Notification;

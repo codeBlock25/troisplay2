@@ -300,9 +300,15 @@
                 color: white;
 
                 &.select {
+                    min-width: calc(95% - 45px);
+
                     label {
                         color: $defaultColor;
                         font-family: mon;
+                    }
+
+                    * {
+                        color: white;
                     }
 
                     select {

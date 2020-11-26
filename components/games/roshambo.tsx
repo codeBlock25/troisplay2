@@ -246,7 +246,7 @@ export default function Roshambo() {
     } else {
       await Axios({
         method: "POST",
-        url: `${url}/games/roshambo/challange`,
+        url: `${url}/games/roshambo/play-against`,
         headers: {
           authorization: `Bearer ${token}`,
         },
@@ -328,12 +328,12 @@ export default function Roshambo() {
         round,
       },
     })
-      .then( 
+      .then(
         ({
           data: { winner, price, final, finalWin },
         }: AxiosResponse<{
           winner: GameRec;
-          final: "draw"|"won"|"lost" | "no";
+          final: "draw" | "won" | "lost" | "no";
           price: number;
           finalWin: boolean | string;
         }>) => {
@@ -343,8 +343,8 @@ export default function Roshambo() {
                 winner === GameRec.win
                   ? CheckerType.won
                   : winner === GameRec.lose
-                    ? CheckerType.lost
-                    : CheckerType.draw
+                  ? CheckerType.lost
+                  : CheckerType.draw
               );
               break;
             case 2:
@@ -352,8 +352,8 @@ export default function Roshambo() {
                 winner === GameRec.win
                   ? CheckerType.won
                   : winner === GameRec.lose
-                    ? CheckerType.lost
-                    : CheckerType.draw
+                  ? CheckerType.lost
+                  : CheckerType.draw
               );
               break;
             case 3:
@@ -361,8 +361,8 @@ export default function Roshambo() {
                 winner === GameRec.win
                   ? CheckerType.won
                   : winner === GameRec.lose
-                    ? CheckerType.lost
-                    : CheckerType.draw
+                  ? CheckerType.lost
+                  : CheckerType.draw
               );
               break;
             case 4:
@@ -370,8 +370,8 @@ export default function Roshambo() {
                 winner === GameRec.win
                   ? CheckerType.won
                   : winner === GameRec.lose
-                    ? CheckerType.lost
-                    : CheckerType.draw
+                  ? CheckerType.lost
+                  : CheckerType.draw
               );
               break;
             case 5:
@@ -379,8 +379,8 @@ export default function Roshambo() {
                 winner === GameRec.win
                   ? CheckerType.won
                   : winner === GameRec.lose
-                    ? CheckerType.lost
-                    : CheckerType.draw
+                  ? CheckerType.lost
+                  : CheckerType.draw
               );
               break;
             default:
@@ -647,11 +647,11 @@ export default function Roshambo() {
                     }
                   >
                     {p2Round1knowState === RoshamboOption.rock ? (
-                      <RockIcon />
+                      <RockIcon styles={{ fill: "#00ffff" }} />
                     ) : p2Round1knowState === RoshamboOption.paper ? (
-                      <PaperIcon />
+                      <PaperIcon styles={{ fill: "#00ffff" }} />
                     ) : p2Round1knowState === RoshamboOption.scissors ? (
-                      <ScissorIcon />
+                      <ScissorIcon styles={{ fill: "#00ffff" }} />
                     ) : (
                       <></>
                     )}
