@@ -53,7 +53,7 @@ import AccountF from "../../components/account_f";
 import { faGamepad } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { reducerType } from "../../typescript/interface";
-import { isEmpty } from "lodash";
+import { filter, isEmpty } from "lodash";
 import GameView2 from "../../components/game_view2";
 import NotificationDisplay from "../../components/notification_display";
 
@@ -657,7 +657,13 @@ export default function GamesScreen() {
                 </Badge>
                 <Badge
                   color="secondary"
-                  badgeContent={notifications?.notifications.length ?? 0}
+                  badgeContent={() => {
+                    let noti =
+                      filter(notifications?.notifications ?? [], {
+                        hasNew: true,
+                      }).length ?? 0;
+                    return noti;
+                  }}
                 >
                   <Typography
                     className={`btn ${

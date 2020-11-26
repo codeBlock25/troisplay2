@@ -138,7 +138,15 @@ const HeadFunc = memo(function ({
 
   const dispatch = useDispatch();
   useEffect(() => {
-    if (lucky_games && rooms && my_games && record && spins && defaults) {
+    if (
+      lucky_games &&
+      rooms &&
+      my_games &&
+      record &&
+      spins &&
+      defaults &&
+      notifications
+    ) {
       initReduceGameState.init({
         dispatch,
         payload: {
@@ -148,7 +156,7 @@ const HeadFunc = memo(function ({
           gameDefaults: defaults.data.default,
           playerRecord: record.data,
           spin_details: spins.data.spin_details,
-          notifications: notifications.data.notifications ?? {
+          notifications: notifications?.data?.notifications ?? {
             notifications: [],
             userID: "",
             date: new Date(),
@@ -156,7 +164,7 @@ const HeadFunc = memo(function ({
         },
       });
     }
-  }, [defaults, record, spins, lucky_games, rooms, my_games]);
+  }, [defaults, record, spins, lucky_games, rooms, my_games, notifications]);
 
   return (
     <header className="game_header">
