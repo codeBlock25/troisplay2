@@ -690,22 +690,22 @@ export default function GamesScreen() {
                           <GameView
                             type="custom2"
                             name={`${game?.battleScore?.player1?.title} ${
-                              (game?.battleScore.player1?.correct_answer ??
+                              (game?.battleScore?.player1?.correct_answer ??
                                 "") !==
-                              (game?.battleScore.player2?.correct_answer ?? "")
+                              (game?.battleScore?.player2?.correct_answer ?? "")
                                 ? "[On hold]"
                                 : moment(
-                                    game?.battleScore.player1.endDate
+                                    game?.battleScore?.player1?.endDate
                                   ).isSameOrBefore(new Date()) &&
-                                  !isEmpty(game?.battleScore.player2)
+                                  !isEmpty(game?.battleScore?.player2)
                                 ? "[judge now]"
-                                : !isEmpty(game?.battleScore.player2)
+                                : !isEmpty(game?.battleScore?.player2)
                                 ? "[awaiting judge date]"
                                 : "[not joined]"
                             }`}
                             key={game._id}
                             date={game.date}
-                            date2={game.battleScore.player1.endDate}
+                            date2={game.battleScore?.player1?.endDate}
                             v1={
                               game.price_in_value * (defaults?.cashRating ?? 1)
                             }
@@ -715,9 +715,9 @@ export default function GamesScreen() {
                             btn1func={() => {
                               if (
                                 moment(
-                                  game.battleScore.player1.endDate
+                                  game.battleScore?.player1?.endDate
                                 ).isSameOrBefore(new Date()) &&
-                                !isEmpty(game.battleScore.player2)
+                                !isEmpty(game.battleScore?.player2)
                               ) {
                                 setCustomWindow(dispatch, {
                                   isOpen: modalType.open,
@@ -758,11 +758,13 @@ export default function GamesScreen() {
                             key={game._id}
                             coin={game.price_in_value}
                             cash={game.price_in_coin}
-                            description={game.battleScore.player1.description}
-                            winnings={game.battleScore.player1.winnerPrice ?? 0}
+                            description={game.battleScore?.player1?.description}
+                            winnings={
+                              game.battleScore?.player1?.winnerPrice ?? 0
+                            }
                             playerJoined={game.members.length}
                             playerNeeded={
-                              game.battleScore.player1.winnerCount ?? 0
+                              game.battleScore?.player1?.winnerCount ?? 0
                             }
                           />
                         );
@@ -854,7 +856,7 @@ export default function GamesScreen() {
                         name={`${request?.battleScore?.player1?.title}`}
                         key={request._id}
                         date={request.date}
-                        date2={request.battleScore.player1.endDate}
+                        date2={request.battleScore?.player1?.endDate}
                         v1={
                           request.price_in_value * (defaults?.cashRating ?? 1)
                         }
