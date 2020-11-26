@@ -64,6 +64,7 @@ export default function GamesScreen() {
   const [runText, setRunText] = useState("loading game components...");
   const [gameViewOpen, setViewOpen] = useState<boolean>(false);
   const [p2, setP2] = useState<boolean>(false);
+  const [notificationCount, setNotificationCount] = useState<number>(0);
   const { push, beforePopState, asPath, pathname } = useRouter();
 
   const { my_games, defaults, notifications } = useSelector<
@@ -142,7 +143,14 @@ export default function GamesScreen() {
       notifications: state.init.notification,
     };
   });
-
+  useEffect(() => {
+    if (!isEmpty(notifications.notifications)) {
+      let r = filter(notifications.notifications, {
+        hasNew: true,
+      });
+      setNotificationCount(r.length);
+    }
+  }, [notifications]);
   const [spec, setSpec] = useState<{
     isOpen: boolean;
     manual: string;
@@ -655,16 +663,7 @@ export default function GamesScreen() {
                     Request
                   </Typography>
                 </Badge>
-                <Badge
-                  color="secondary"
-                  badgeContent={() => {
-                    let noti =
-                      filter(notifications?.notifications ?? [], {
-                        hasNew: true,
-                      }).length ?? 0;
-                    return noti;
-                  }}
-                >
+                <Badge color="secondary" badgeContent={notificationCount}>
                   <Typography
                     className={`btn ${
                       viewing === Viewing.notification ? "on" : ""
