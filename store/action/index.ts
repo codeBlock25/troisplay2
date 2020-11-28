@@ -53,6 +53,49 @@ export const MyGamesAction = {
   remover: () => {},
   clear: () => {},
   reInit: () => {},
+  update: ({
+    dispatch,
+    newGame,
+    games,
+    oldGameID,
+  }: {
+    dispatch: Dispatch<ActionType<any>>;
+    oldGameID: string;
+    newGame: any;
+    games: {
+      date: Date;
+      gameDetail: string;
+      gameID: Games;
+      gameMemberCount: number;
+      gameType: Games;
+      members: string[];
+      playCount: number;
+      price_in_coin: number;
+      price_in_value: number;
+      _id: string;
+      battleScore: {
+        player1: {
+          endDate: Date;
+          title: string;
+          description: string;
+          answer: string;
+          endGameTime: Date;
+          choice: choices;
+          correct_answer: string;
+        };
+        player2?: {
+          answer: string;
+          waiting: boolean;
+          correct_answer: string;
+        };
+      };
+    }[];
+  }) => {
+    let games_ = cloneDeep(games);
+    remove(games_, { _id: oldGameID });
+    let update = [...games_, newGame];
+    dispatch({ type: "GAME_UPDATE", payload: update });
+  },
 };
 
 export const notify = (

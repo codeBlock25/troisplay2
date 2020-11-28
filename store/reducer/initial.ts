@@ -241,6 +241,11 @@ const InitialReducer = (
         ...state,
         my_games: [action.payload, ...state.my_games],
       };
+    case "GAME_UPDATE":
+      return {
+        ...state,
+        my_games: action.payload,
+      };
     default:
       return {
         ...state,

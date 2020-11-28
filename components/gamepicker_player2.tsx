@@ -377,6 +377,8 @@ export default function PickerPlayer2({
           <div className="txt">
             {popState.game === Games.lucky_geoge
               ? popState.lucky?.battleScore.player1.description ?? ""
+              : popState.game === Games.custom_game
+              ? popState.custom?.battleScore.player1.description ?? ""
               : ""}
           </div>
           {popState.lucky && (
@@ -550,7 +552,6 @@ export default function PickerPlayer2({
                     v3={game.gameMemberCount}
                     id={game._id}
                     btn1func={() => {
-                      console.log(game);
                       setPopState((prev) => {
                         return {
                           ...prev,

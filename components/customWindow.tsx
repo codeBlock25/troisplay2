@@ -18,7 +18,7 @@ import {
 } from "../typescript/enum";
 import { reducerType } from "../typescript/interface";
 import moment from "moment";
-import { setCustomWindow, toast } from "../store/action";
+import { MyGamesAction, setCustomWindow, toast } from "../store/action";
 import Axios from "axios";
 import { url } from "../constant";
 import { getToken, whoIsThis } from "../functions";
@@ -32,10 +32,38 @@ export default function CustomWindow() {
   const [answer, setAnswer] = useState<string>("");
   const [winner, setWinner] = useState<GameRec>(GameRec.win);
 
-  const { window, record } = useSelector<
+  const { windowData, record, my_games } = useSelector<
     reducerType,
     {
-      window: {
+      my_games: {
+        date: Date;
+        gameDetail: string;
+        gameID: Games;
+        gameMemberCount: number;
+        gameType: Games;
+        members: string[];
+        playCount: number;
+        price_in_coin: number;
+        price_in_value: number;
+        _id: string;
+        battleScore: {
+          player1: {
+            endDate: Date;
+            title: string;
+            description: string;
+            answer: string;
+            endGameTime: Date;
+            choice: choices;
+            correct_answer: string;
+          };
+          player2?: {
+            answer: string;
+            waiting: boolean;
+            correct_answer: string;
+          };
+        };
+      }[];
+      windowData: {
         isOpen: modalType;
         request?: {
           date: Date;
@@ -112,8 +140,9 @@ export default function CustomWindow() {
     }
   >((state) => {
     return {
-      window: state.event.customWindow,
+      windowData: state.event.customWindow,
       record: state.init.playerRecord,
+      my_games: state.init.my_games
     };
   });
   const hanleSubmit = async () => {
@@ -123,7 +152,7 @@ export default function CustomWindow() {
       `${url}/games/custom-game/judge`,
       {
         choice: answer,
-        game_id: window.request._id,
+        game_id: windowData.request._id,
       },
       { headers: { authorization: `Bearer ${getToken()}` } }
     )
@@ -142,21 +171,22 @@ export default function CustomWindow() {
   };
   useEffect(() => {
     setWinner(GameRec.win);
-    setAnswer(window.request?.battleScore.player1?.answer??"")
-  }, [window]);
+    setAnswer(windowData.request?.battleScore.player1?.answer ?? "");
+  }, [windowData]);
   const handleJoin = async (payWith: PayType) => {
     if (loading) return;
     setLoading(true);
     await Axios.get(`${url}/games/custom-game/challange`, {
       headers: { authorization: `Bearer ${getToken()}` },
-      params: { gameID: window?.request._id, payWith, answer },
+      params: { gameID: windowData?.request._id, payWith, answer },
     })
-      .then(() => {
+      .then(({data: {game}}) => {
         toast(dispatch, { msg: "" }).close();
         toast(dispatch, {
           msg:
             "The game is all set, sit tight and with for your judge daty to come, In the mean time you can try more games here on Trois.",
         }).success();
+        MyGamesAction.add({dispatch,payload: game})
         setCustomWindow(dispatch, {
           isOpen: modalType.close,
           game: undefined,
@@ -174,98 +204,100 @@ export default function CustomWindow() {
         setLoading(false);
       });
   };
-  console.log(
-    (record.player?.userID ?? "") !== (window?.request?.members[0] ?? ""),
-    record.player?.userID ?? "",
-    window?.request?.members[0] ?? "",
-    window?.request?.members
-  );
   return (
     <div
       className={
-        window.isOpen === modalType.open ? "CustomWindow open" : "CustomWindow"
+        windowData.isOpen === modalType.open
+          ? "CustomWindow open"
+          : "CustomWindow"
       }
     >
       <div className="container">
-        <h3 className="title">{window.request?.battleScore.player1.title}</h3>
+        <h3 className="title">
+          {windowData.request?.battleScore.player1.title}
+        </h3>
         <p className="txt">
           <b>Description: </b>
-          {window.request?.battleScore.player1.description}
+          {windowData.request?.battleScore.player1.description}
         </p>
         <p className="txt">
           <b>Join Expiration Date: </b>
           {moment(
-            window.request?.battleScore.player1.endDate ?? new Date()
+            windowData.request?.battleScore.player1.endDate ?? new Date()
           ).format("Do MMMM, YYYY hh:mm a")}
         </p>
         <p className="txt">
           <b>Game Exit Date: </b>
           {moment(
-            window.request?.battleScore?.player1?.endDate ?? new Date()
+            windowData.request?.battleScore?.player1?.endDate ?? new Date()
           ).format("Do MMMM, YYYY")}{" "}
           {moment(
-            window.request?.battleScore.player1.endGameTime ?? new Date()
+            windowData.request?.battleScore.player1.endGameTime ?? new Date()
           ).format("hh:mm a")}
           .
         </p>
         <p className="txt">
           <b>Join Fee $: </b>
-          {window?.request?.price_in_value}
+          {windowData?.request?.price_in_value}
         </p>
         <p className="txt">
           <b>
             Join Fee <GameCoin />:{" "}
           </b>
-          {window?.request?.price_in_coin}
+          {windowData?.request?.price_in_coin}
         </p>
         <p className="txt">
           <b>Player 1's answer: </b>
-          {window?.request?.battleScore?.player1?.answer ?? ""}.
+          {windowData?.request?.battleScore?.player1?.answer ?? ""}.
         </p>
-        {window?.request?.battleScore?.player2?.answer ? (
+        {windowData?.request?.battleScore?.player2?.answer ? (
           <p className="txt">
             <b>Player 2's answer: </b>
-            {window?.request?.battleScore?.player2?.answer ?? ""}.
+            {windowData?.request?.battleScore?.player2?.answer ?? ""}.
           </p>
         ) : (
           <></>
         )}
         {(record.player?.userID ?? "") ===
-          (window?.request?.members[0] ?? "") &&
-        isEmpty(window?.request?.battleScore?.player2) ? (
+          (windowData?.request?.members[0] ?? "") &&
+        isEmpty(windowData?.request?.battleScore?.player2) ? (
           <div className="center">
             <p className="text" style={{ padding: "20px 0" }}>
               Waiting for player 2
             </p>
           </div>
-        ) : (window?.request?.battleScore.player1.correct_answer &&
+        ) : (windowData?.request?.battleScore?.player1?.correct_answer &&
             whoIsThis({
               my_id: record.player.userID,
-              game_members: window.request.members,
+              game_members: windowData.request.members,
             }) === PlayerType.first) ||
-          (window?.request?.battleScore.player2.correct_answer &&
+          (windowData?.request?.battleScore?.player2?.correct_answer &&
             whoIsThis({
               my_id: record.player.userID,
-              game_members: window.request.members,
+              game_members: windowData.request.members,
             }) === PlayerType.second) ? (
           <div className="center">
             <Typography variant="body2">
               Waiting for the next player to judge
             </Typography>
-            {window?.request?.battleScore?.player1?.correct_answer ?? (
+            {windowData?.request?.battleScore?.player1?.correct_answer ?? (
               <p className="txt">
                 <b>Player 1's correct answer: </b>
-                {window?.request?.battleScore?.player1?.correct_answer ?? ""}.
+                {windowData?.request?.battleScore?.player1?.correct_answer ??
+                  ""}
+                .
               </p>
             )}
-            {window?.request?.battleScore?.player2?.correct_answer ?? (
+            {windowData?.request?.battleScore?.player2?.correct_answer ?? (
               <p className="txt">
                 <b>Player 2's correct answer: </b>
-                {window?.request?.battleScore?.player2?.correct_answer ?? ""}.
+                {windowData?.request?.battleScore?.player2?.correct_answer ??
+                  ""}
+                .
               </p>
             )}
           </div>
-        ) : !isEmpty(window?.request?.battleScore?.player2) ? (
+        ) : !isEmpty(windowData?.request?.battleScore?.player2) ? (
           <div className="center">
             <Typography variant="body2">
               What's the correct answer to this game
@@ -275,15 +307,15 @@ export default function CustomWindow() {
                 <Checkbox
                   checked={winner === GameRec.win}
                   onChange={(e) => {
-                    setAnswer(window.request.battleScore.player1.answer);
+                    setAnswer(windowData.request.battleScore.player1.answer);
                     setWinner(e.target.checked ? GameRec.win : GameRec.lose);
                   }}
                   name="checkedA"
                 />
               }
               label={`${
-                isString(window?.request?.battleScore?.player1?.answer)
-                  ? window?.request?.battleScore?.player1?.answer
+                isString(windowData?.request?.battleScore?.player1?.answer)
+                  ? windowData?.request?.battleScore?.player1?.answer
                   : ""
               }`}
             />
@@ -292,13 +324,15 @@ export default function CustomWindow() {
                 <Checkbox
                   checked={winner === GameRec.lose}
                   onChange={(e) => {
-                    setAnswer(window.request.battleScore.player2.answer);
+                    setAnswer(windowData.request.battleScore.player2.answer);
                     setWinner(e.target.checked ? GameRec.lose : GameRec.win);
                   }}
                   name="checkedB"
                 />
               }
-              label={`${window?.request?.battleScore?.player2?.answer ?? ""} `}
+              label={`${
+                windowData?.request?.battleScore?.player2?.answer ?? ""
+              } `}
             />
           </div>
         ) : (
@@ -311,7 +345,7 @@ export default function CustomWindow() {
           />
         )}
         <div className="action">
-          {!isEmpty(window?.request?.battleScore?.player2) ? (
+          {!isEmpty(windowData?.request?.battleScore?.player2) ? (
             <Button
               className="btn"
               onClick={() => {

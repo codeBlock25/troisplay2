@@ -83,7 +83,8 @@ export interface ActionType<T = any> {
     | "ACTION"
     | "CUSTOMWINDOW"
     | "INIT"
-    | "NOTIFICATIONS"
+  | "NOTIFICATIONS"
+  |"GAME_UPDATE"
     | "PLAYED";
   payload: T;
 }
