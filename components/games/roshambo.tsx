@@ -1148,7 +1148,7 @@ export default function Roshambo() {
                     `stake ₦  ${details.price}`
                   )}
                 </div>
-                <div
+                {/* <div
                   className={`btn_ theme ${theme}`}
                   onClick={() => {
                     handleSubmit(PayType.coin);
@@ -1163,6 +1163,7 @@ export default function Roshambo() {
                     </>
                   )}
                 </div>
+            */}
               </div>
             )}
           </div>

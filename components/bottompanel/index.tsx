@@ -1,20 +1,25 @@
-import React, { MutableRefObject, useCallback, useEffect, useRef, useState } from 'react'
-import { BackIcon, BillIcon, MAincon, MDicon, NextIcon } from '../../icon';
-import {InView} from "react-intersection-observer"
-import { BillPayment, errorType, Games } from '../../typescript/enum';
-import { AxiosResponse } from 'axios';
-import { useQueryCache } from 'react-query';
-import moment from "moment"
-import Lottie from 'lottie-web';
-import { Button, Fab } from '@material-ui/core';
-import { CreditCard } from '@material-ui/icons';
-import Airtime from './components/airtime';
-import Data from './components/data';
-import Transfer from "./components/transfer"
-import { useRouter } from 'next/router';
+import React, {
+  MutableRefObject,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { BackIcon, BillIcon, MAincon, MDicon, NextIcon } from "../../icon";
+import { InView } from "react-intersection-observer";
+import { BillPayment, errorType, Games } from "../../typescript/enum";
+import { AxiosResponse } from "axios";
+import { useQueryCache } from "react-query";
+import moment from "moment";
+import Lottie from "lottie-web";
+import { Button, Fab } from "@material-ui/core";
+import { CreditCard } from "@material-ui/icons";
+import Airtime from "./components/airtime";
+import Data from "./components/data";
+import Transfer from "./components/transfer";
+import { useRouter } from "next/router";
 import { faCoins, faGamepad } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
 
 export default function Bottompanel() {
   const swRef: MutableRefObject<HTMLDivElement | null> = useRef();
@@ -147,7 +152,7 @@ export default function Bottompanel() {
       pendingCash: number;
     };
   }> = useQueryCache().getQueryData("records");
- 
+
   return (
     <div className={isOpen ? "bottompanel open" : "bottompanel"}>
       <Data open={open} />
@@ -197,26 +202,6 @@ export default function Bottompanel() {
               <h3 className="title">Cash</h3>
               <span className="price">
                 $ {record?.data?.cashwallet?.currentCash.toLocaleString() ?? 0}
-              </span>
-            </InView>
-            <InView
-              as="div"
-              onChange={(inview, evt) => {
-                if (inview) {
-                  evt.target.classList.add("inview");
-                } else {
-                  evt.target.classList.remove("inview");
-                }
-              }}
-              className="sw"
-            >
-              <span className="time">Next Spin{dateintime}</span>
-              <h3 className="title">Coin</h3>
-              <span className="price">
-                <span className="icon">
-                  <FontAwesomeIcon icon={faCoins} />
-                </span>
-                {record?.data?.wallet?.currentCoin.toLocaleString() ?? 0}
               </span>
             </InView>
             <InView

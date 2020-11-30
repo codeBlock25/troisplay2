@@ -422,7 +422,7 @@ export default function GamesScreen() {
                   push("/games");
                   setP2(true);
                   return;
-                } else if (spec.game === Games.rooms) {
+                } else if (spec.game === Games.rooms||spec.game === Games.custom_game) {
                   setSpec((prev) => {
                     return {
                       ...prev,

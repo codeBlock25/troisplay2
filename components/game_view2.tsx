@@ -46,9 +46,6 @@ const GameView2 = memo(function ({
         <span className="stake">
           <NAIRA /> {cash}
         </span>
-        <span className="coin">
-          <GameCoin width={10} height={10} /> {coin}
-        </span>
         <span className="Win">
           <NAIRA /> {winnings}
         </span>
@@ -57,9 +54,6 @@ const GameView2 = memo(function ({
         <div className="action">
           <span className="btn" onClick={btn1func}>
             play with <NAIRA />
-          </span>
-          <span className="btn" onClick={btn2func}>
-            play with <GameCoin />
           </span>
         </div>
       )}

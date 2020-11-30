@@ -163,7 +163,8 @@ export default function DetailScreen() {
             <span className="time">Next Spin {dateintime}</span>
             <h3 className="title">Cash</h3>
             <span className="price">
-              <NAIRA/>{" "} {record?.data?.cashwallet?.currentCash.toLocaleString() ?? 0}
+              <NAIRA />{" "}
+              {record?.data?.cashwallet?.currentCash.toLocaleString() ?? 0}
             </span>
             <div className="action">
               <span
@@ -180,7 +181,7 @@ export default function DetailScreen() {
               </span>
             </div>
           </InView>
-          <InView
+          {/* <InView
             as="div"
             onChange={(inview, evt) => {
               if (inview) {
@@ -230,6 +231,7 @@ export default function DetailScreen() {
               </span>
             </div>
           </InView>
+          */}
           <InView
             as="div"
             onChange={(inview, evt) => {
@@ -245,9 +247,8 @@ export default function DetailScreen() {
             <h3 className="title">Earnings</h3>
             <span className="price">
               <span className="icon">
-              <FontAwesomeIcon icon={faCoins} />
-              </span>
-              {" "}
+                <FontAwesomeIcon icon={faCoins} />
+              </span>{" "}
               {record?.data?.referal?.inactiveReferal ??
                 0 * defaults?.data?.default?.referRating ??
                 0}
@@ -259,10 +260,25 @@ export default function DetailScreen() {
               <span
                 className="btn"
                 onClick={() => {
-                  push("/games/referal");
+                  if (!spin.data.spin_details.isPlayable) {
+                    toast(dispatch, {
+                      msg:
+                        "Sorry you can't spin right now, glory spin can only be used once a day.",
+                    }).fail();
+                    return;
+                  }
+                  setGameDetails(dispatch, {
+                    player: PlayerType.first,
+                    game: Games.glory_spin,
+                    id: "",
+                    price: 0,
+                  });
                 }}
+                // onClick={() => {
+                //   push("/games/referal");
+                // }}
               >
-                view referrals
+                glory spin
               </span>
             </div>
           </InView>
