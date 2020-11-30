@@ -687,7 +687,7 @@ export default function GamesScreen() {
                     Played Games
                   </Typography>
                 </Badge>
-                <Badge
+                {/* <Badge
                   color="secondary"
                   badgeContent={requests?.data?.requests.length ?? 0}
                 >
@@ -697,7 +697,7 @@ export default function GamesScreen() {
                   >
                     Request
                   </Typography>
-                </Badge>
+                </Badge> */}
                 <Badge color="secondary" badgeContent={notificationCount}>
                   <Typography
                     className={`btn ${
