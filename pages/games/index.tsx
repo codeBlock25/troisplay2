@@ -786,15 +786,15 @@ export default function GamesScreen() {
                         return (
                           <GameView2
                             key={game._id}
-                            coin={game.price_in_value}
-                            cash={game.price_in_coin}
+                            coin={game.price_in_coin}
+                            cash={game.price_in_value}
                             description={game.battleScore?.player1?.description}
                             winnings={
                               game.battleScore?.player1?.winnerPrice ?? 0
                             }
                             playerJoined={game.members.length}
                             playerNeeded={
-                              game.battleScore?.player1?.winnerCount ?? 0
+                              game.gameMemberCount
                             }
                           />
                         );
