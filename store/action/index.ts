@@ -228,11 +228,9 @@ export const toast = (
 
 export const NotificationAction = {
   markRead: ({
-    time,
     notifications,
     dispatch,
   }: {
-    time: Date;
     notifications: {
       message: string;
       time: Date;
@@ -242,8 +240,10 @@ export const NotificationAction = {
     dispatch: Dispatch<ActionType>;
   }) => {
     let allNotifications = cloneDeep(notifications);
-    let removed = remove(allNotifications, { time });
-    set(removed[0], "hasNew", false);
+    let removed = remove(allNotifications, { hasNew: true });
+    removed.map((noti) => {
+      set(noti, "hasNew", false);
+    });
     dispatch({
       type: "NOTIFICATIONS",
       payload: sortBy([...allNotifications, ...removed], { time: -1 }),

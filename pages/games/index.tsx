@@ -1,5 +1,11 @@
 import Head from "next/head";
-import React, { MutableRefObject, useEffect, useRef, useState } from "react";
+import React, {
+  MutableRefObject,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { GameCoin } from "../../icon";
 import moment from "moment";
 import { useQueryCache } from "react-query";
@@ -18,6 +24,7 @@ import Notification from "../../components/notification";
 import Roshambo from "../../components/games/roshambo";
 import {
   exitWin,
+  NotificationAction,
   setCustomWindow,
   setGameDetails,
   toast,
@@ -53,7 +60,7 @@ import AccountF from "../../components/account_f";
 import { faGamepad } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { reducerType } from "../../typescript/interface";
-import { filter, isEmpty } from "lodash";
+import { filter, isEmpty, sortBy } from "lodash";
 import GameView2 from "../../components/game_view2";
 import NotificationDisplay from "../../components/notification_display";
 
@@ -143,6 +150,25 @@ export default function GamesScreen() {
       notifications: state.init.notification,
     };
   });
+  const notificationCallback = useCallback(async () => {
+    await Axios.put(`${url}/notifications/mark-read`, {
+      headers: {
+        authorization: `Bearer ${getToken()}`,
+      },
+    })
+      .then(() => {
+        NotificationAction.markRead({
+          dispatch,
+          notifications: notifications.notifications,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [notificationCount]);
+  useEffect(() => {
+    if (viewing === Viewing.notification) notificationCallback();
+  }, [viewing]);
   useEffect(() => {
     if (!isEmpty(notifications.notifications)) {
       let r = filter(notifications.notifications, {
@@ -198,6 +224,7 @@ export default function GamesScreen() {
       }
     });
   }, [pathname, asPath]);
+
   useEffect(() => {
     switch (asPath) {
       case "/games#play-games":
@@ -422,7 +449,10 @@ export default function GamesScreen() {
                   push("/games");
                   setP2(true);
                   return;
-                } else if (spec.game === Games.rooms||spec.game === Games.custom_game) {
+                } else if (
+                  spec.game === Games.rooms ||
+                  spec.game === Games.custom_game
+                ) {
                   setSpec((prev) => {
                     return {
                       ...prev,

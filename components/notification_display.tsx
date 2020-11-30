@@ -28,37 +28,7 @@ const NotificationDisplay = memo(function ({
 }) {
   const dispatch = useDispatch();
   return (
-    <div
-      className="notification_display"
-      onClick={async () => {
-        if (hasSeen) {
-          await Axios.put(
-            `${url}/notifications/mark-read`,
-            {
-              time: date,
-            },
-            {
-              params: {
-                time: date,
-              },
-              headers: {
-                authorization: `Bearer ${getToken()}`,
-              },
-            }
-          )
-            .then(() => {
-              NotificationAction.markRead({
-                dispatch,
-                notifications,
-                time: date,
-              });
-            })
-            .catch((error) => {
-              console.log(error);
-            });
-        }
-      }}
-    >
+    <div className="notification_display">
       <div
         className="bubble"
         style={{
@@ -79,7 +49,6 @@ const NotificationDisplay = memo(function ({
       <div className="notification_date">
         {moment(date).format("Do MMMM, YYYY - hh:mm a")}
       </div>
-      {hasSeen && <NewIcon />}
     </div>
   );
 });
