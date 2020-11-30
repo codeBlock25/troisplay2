@@ -151,11 +151,15 @@ export default function GamesScreen() {
     };
   });
   const notificationCallback = useCallback(async () => {
-    await Axios.put(`${url}/notifications/mark-read`, {
-      headers: {
-        authorization: `Bearer ${getToken()}`,
-      },
-    })
+    await Axios.put(
+      `${url}/notifications/mark-read`,
+      {},
+      {
+        headers: {
+          authorization: `Bearer ${getToken()}`,
+        },
+      }
+    )
       .then(() => {
         NotificationAction.markRead({
           dispatch,
