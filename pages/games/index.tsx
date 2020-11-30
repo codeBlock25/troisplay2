@@ -468,7 +468,9 @@ export default function GamesScreen() {
                 });
               }}
             >
-              {spec.game === Games.rooms ? "back" : "confirm"}
+              {spec.game === Games.rooms || spec.game === Games.custom_game
+                ? "back"
+                : "confirm"}
             </span>
           </div>
         )}
@@ -608,8 +610,7 @@ export default function GamesScreen() {
               push("/games");
               setSpec({
                 isOpen: true,
-                manual:
-                  "Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita in quidem natus, consectetur quia pariatur! Rem dolores maxime adipisci. Tempora earum, officia natus temporibus sit voluptas hic corrupti. Dolor, tempora.",
+                manual: "Coming Soon",
                 price: 100,
                 game: Games.custom_game,
               });
@@ -793,9 +794,7 @@ export default function GamesScreen() {
                               game.battleScore?.player1?.winnerPrice ?? 0
                             }
                             playerJoined={game.members.length}
-                            playerNeeded={
-                              game.gameMemberCount
-                            }
+                            playerNeeded={game.gameMemberCount}
                           />
                         );
                       return (
