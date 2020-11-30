@@ -36,9 +36,6 @@ const GameView2 = memo(function ({
   return (
     <div className="game_content_view">
       <span className="name">{title ?? "Lucky games"}</span>
-      <span className="name" style={{ fontSize: 14, color: "orange" }}>
-        Description:
-      </span>
       <span className="date">{description}</span>
       <span style={{ color: "white" }}>Players Needed: {playerNeeded}</span>
       <span style={{ color: "white" }}>Players Joined: {playerJoined}</span>
