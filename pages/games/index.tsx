@@ -868,7 +868,7 @@ export default function GamesScreen() {
                   <p className="none">No notification yet</p>
                 ) : (
                   sortBy(notifications.notifications, {
-                    time: -1,
+                    time: 1,
                   }).map(
                     (
                       notification: {
