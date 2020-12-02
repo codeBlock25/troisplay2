@@ -867,16 +867,28 @@ export default function GamesScreen() {
                 (notifications?.notifications?.length ?? 0) === 0 ? (
                   <p className="none">No notification yet</p>
                 ) : (
-                  notifications.notifications.map((notification, index) => (
-                    <NotificationDisplay
-                      key={index}
-                      msg={notification.message}
-                      date={notification.time}
-                      type={notification.type}
-                      hasSeen={notification.hasNew}
-                      notifications={notifications.notifications}
-                    />
-                  ))
+                  sortBy(notifications.notifications, {
+                    time: -1,
+                  }).map(
+                    (
+                      notification: {
+                        message: string;
+                        time: Date;
+                        type: notificationHintType;
+                        hasNew: boolean;
+                      },
+                      index: number
+                    ) => (
+                      <NotificationDisplay
+                        key={index}
+                        msg={notification.message}
+                        date={notification.time}
+                        type={notification.type}
+                        hasSeen={notification.hasNew}
+                        notifications={notifications.notifications}
+                      />
+                    )
+                  )
                 )
               ) : viewing === Viewing.request ? (
                 requests.data.requests.length === 0 ? (
