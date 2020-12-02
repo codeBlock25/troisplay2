@@ -101,14 +101,14 @@ export default function DetailScreen() {
             title: "Troisplay",
             text:
               "Check out the best playform to have fun and get paid",
-            url: `https://troisplay2.vercel.app/signup/${record?.data.referal?.refer_code}`,
+            url: `https://troisplay.com/signup/${record?.data.referal?.refer_code}`,
           })
           .then(() => console.log("Share was successful."))
           .catch((error) => console.log("Sharing failed", error));
       } else {
         if (navigator.clipboard) {
           await navigator.clipboard.writeText(
-            `https://troisplay2.vercel.app/signup/${record?.data.referal?.refer_code}`
+            `https://troisplay.com/signup/${record?.data.referal?.refer_code}`
           );
           toast(dispatch, { msg: "Your Link has been copied, paste anywhere and share to gain more coins." }).success();
         }
