@@ -1,153 +1,163 @@
-import { AxiosResponse } from 'axios';
-import Lottie from 'lottie-web';
-import React, { MutableRefObject, useCallback, useEffect, useRef, useState } from 'react'
-import { useQueryCache } from 'react-query';
-import { BackIcon, NextIcon } from '../icon';
-import { InView } from "react-intersection-observer"
-import moment from "moment"
+import { AxiosResponse } from "axios";
+import Lottie from "lottie-web";
+import React, {
+  MutableRefObject,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { useQueryCache } from "react-query";
+import { BackIcon, NextIcon } from "../icon";
+import { InView } from "react-intersection-observer";
+import moment from "moment";
 import { Games, PlayerType, ReasonType } from "../typescript/enum";
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
 import { setAction, setGameDetails, toast } from "../store/action";
-import { useDispatch } from 'react-redux';
+import { useDispatch } from "react-redux";
 import { SyncLoader } from "react-spinners";
 import { useFlutterwave } from "flutterwave-react-v3";
 import { config, NAIRA } from "../constant";
-import { faCoins } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCoins } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function DetailScreen() {
-    const dispatch = useDispatch()
-    const swRef1: MutableRefObject<HTMLDivElement | null> = useRef();
-    const [dateintime, setDateintime] = useState("");
-    const swRef: MutableRefObject<HTMLDivElement | null> = useRef();
-    const [playLoader, setPlayerLoader] = useState<boolean>(false);
-    const [fundTp, setFund] = useState<number>(0);
-    const {push} = useRouter()
-    const defaults: AxiosResponse<{
-        default: {
-          commission_roshambo: {
-            value: number;
-            value_in: "$" | "%" | "c";
-          };
-          commission_penalty: {
-            value: number;
-            value_in: "$" | "%" | "c";
-          };
-          commission_guess_mater: {
-            value: number;
-            value_in: "$" | "%" | "c";
-          };
-          commission_custom_game: {
-            value: number;
-            value_in: "$" | "%" | "c";
-          };
-          cashRating: number;
-          min_stack_roshambo: number;
-          min_stack_penalty: number;
-          min_stack_guess_master: number;
-          min_stack_custom: number;
-          referRating: number;
-        };
-    }> = useQueryCache().getQueryData("defaults");
-  
-    const record: AxiosResponse<{
-      player: {
-        userID: string;
-        full_name: string;
-        phone_number: string;
-        playerpic: string;
-        playername: string;
-        email: string;
-        location: string;
+  const dispatch = useDispatch();
+  const swRef1: MutableRefObject<HTMLDivElement | null> = useRef();
+  const [dateintime, setDateintime] = useState("");
+  const swRef: MutableRefObject<HTMLDivElement | null> = useRef();
+  const [playLoader, setPlayerLoader] = useState<boolean>(false);
+  const [fundTp, setFund] = useState<number>(0);
+  const { push } = useRouter();
+  const defaults: AxiosResponse<{
+    default: {
+      commission_roshambo: {
+        value: number;
+        value_in: "$" | "%" | "c";
       };
-      deviceSetup: {
-        userID: string;
-        isDarkMode: boolean;
-        remember: boolean;
-        online_status: boolean;
-        email_notification: boolean;
-        app_notification: boolean;
-        mobile_notification: boolean;
+      commission_penalty: {
+        value: number;
+        value_in: "$" | "%" | "c";
       };
-      referal: {
-        userID: string;
-        activeReferal: number;
-        inactiveReferal: number;
-        refer_code: string;
+      commission_guess_mater: {
+        value: number;
+        value_in: "$" | "%" | "c";
       };
-      wallet: {
-        userID: string;
-        currentCoin: number;
-        pendingCoin: number;
+      commission_custom_game: {
+        value: number;
+        value_in: "$" | "%" | "c";
       };
-      gamerecord: {
-        userID: string;
-        date_mark: Date;
-        game: Games;
-        won: string;
-        earnings: number;
-      }[];
-      cashwallet: {
-        userID: string;
-        currentCash: number;
-        pendingCash: number;
-      };
-    }> = useQueryCache().getQueryData("records");
-    
-    const Share = async () => {
-      if (navigator.share) {
-        await navigator
-          .share({
-            title: "Troisplay",
-            text:
-              "Check out the best playform to have fun and get paid",
-            url: `https://troisplay.com/signup/${record?.data.referal?.refer_code}`,
-          })
-          .then(() => console.log("Share was successful."))
-          .catch((error) => console.log("Sharing failed", error));
-      } else {
-        if (navigator.clipboard) {
-          await navigator.clipboard.writeText(
-            `https://troisplay.com/signup/${record?.data.referal?.refer_code}`
-          );
-          toast(dispatch, { msg: "Your Link has been copied, paste anywhere and share to gain more coins." }).success();
-        }
-      }
+      cashRating: number;
+      min_stack_roshambo: number;
+      min_stack_penalty: number;
+      min_stack_guess_master: number;
+      min_stack_custom: number;
+      referRating: number;
     };
+  }> = useQueryCache().getQueryData("defaults");
+
+  const record: AxiosResponse<{
+    player: {
+      userID: string;
+      full_name: string;
+      phone_number: string;
+      playerpic: string;
+      playername: string;
+      email: string;
+      location: string;
+    };
+    deviceSetup: {
+      userID: string;
+      isDarkMode: boolean;
+      remember: boolean;
+      online_status: boolean;
+      email_notification: boolean;
+      app_notification: boolean;
+      mobile_notification: boolean;
+    };
+    referal: {
+      userID: string;
+      activeReferal: number;
+      inactiveReferal: number;
+      refer_code: string;
+    };
+    wallet: {
+      userID: string;
+      currentCoin: number;
+      pendingCoin: number;
+    };
+    gamerecord: {
+      userID: string;
+      date_mark: Date;
+      game: Games;
+      won: string;
+      earnings: number;
+    }[];
+    cashwallet: {
+      userID: string;
+      currentCash: number;
+      pendingCash: number;
+    };
+  }> = useQueryCache().getQueryData("records");
+
+  const Share = async () => {
+    if (navigator.share) {
+      await navigator
+        .share({
+          title: "Troisplay",
+          text: "Check out the best playform to have fun and get paid",
+          url: `https://troisplay.com/signup/${record?.data.referal?.refer_code}`,
+        })
+        .then(() => console.log("Share was successful."))
+        .catch((error) => console.log("Sharing failed", error));
+    } else {
+      if (navigator.clipboard) {
+        await navigator.clipboard.writeText(
+          `https://troisplay.com/signup/${record?.data.referal?.refer_code}`
+        );
+        toast(dispatch, {
+          msg:
+            "Your Link has been copied, paste anywhere and share to gain more coins.",
+        }).success();
+      }
+    }
+  };
 
   const spin: AxiosResponse<{
     spin_details: {
-      currentTime: Date,
-      gameTime: Date,
-      isPlayable: boolean,
-    },
+      currentTime: Date;
+      gameTime: Date;
+      isPlayable: boolean;
+    };
   }> = useQueryCache().getQueryData("spins");
 
   useEffect(() => {
     let countdownEvt = setInterval(() => {
-    if (spin) {
+      if (spin) {
         let time = moment(
-          moment(spin?.data?.spin_details.gameTime?? new Date()).diff(new Date())
-          ).format("HH:MM:ss");
-          setDateintime(spin.data.spin_details.isPlayable ? "00:00:00":time);
-        }
-        }, 200);
-        return () => {
-          clearInterval(countdownEvt);
+          moment(spin?.data?.spin_details.gameTime ?? new Date()).diff(
+            new Date()
+          )
+        ).format("HH:MM:ss");
+        setDateintime(spin.data.spin_details.isPlayable ? "00:00:00" : time);
+      }
+    }, 200);
+    return () => {
+      clearInterval(countdownEvt);
     };
   }, [spin]);
-  
+
   return (
     <>
       <div className="cover">
-        <span
+        {/* <span
           className="sw_btn"
           onClick={() => {
             swRef1.current.scrollTo(swRef1.current.scrollLeft - 270, 0);
           }}
         >
           <BackIcon />
-        </span>
+        </span> */}
         <div className="container" ref={swRef1}>
           <InView
             as="div"
@@ -232,7 +242,7 @@ export default function DetailScreen() {
             </div>
           </InView>
           */}
-          <InView
+          {/* <InView
             as="div"
             onChange={(inview, evt) => {
               if (inview) {
@@ -282,15 +292,16 @@ export default function DetailScreen() {
               </span>
             </div>
           </InView>
+        */}
         </div>
-        <span
+        {/* <span
           className="sw_btn"
           onClick={() => {
             swRef1.current.scrollTo(swRef1.current.scrollLeft + 270, 0);
           }}
         >
           <NextIcon />
-        </span>
+        </span> */}
       </div>
     </>
   );

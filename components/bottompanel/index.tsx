@@ -178,14 +178,14 @@ export default function Bottompanel() {
       <h3 className="title">Ganel Panel</h3>
       <div className="container_">
         <div className="cover">
-          <span
+          {/* <span
             className="sw_btn"
             onClick={() => {
               swRef.current.scrollTo(swRef.current.scrollLeft - 270, 0);
             }}
           >
             <BackIcon />
-          </span>
+          </span> */}
           <div className="container" ref={swRef}>
             <InView
               as="div"
@@ -204,7 +204,7 @@ export default function Bottompanel() {
                 $ {record?.data?.cashwallet?.currentCash.toLocaleString() ?? 0}
               </span>
             </InView>
-            <InView
+            {/* <InView
               as="div"
               onChange={(inview, evt) => {
                 if (inview) {
@@ -225,16 +225,17 @@ export default function Bottompanel() {
                   (defaults?.data?.default?.referRating ?? 0)}
               </span>
             </InView>
+          */}
           </div>
 
-          <span
+          {/* <span
             className="sw_btn"
             onClick={() => {
               swRef.current.scrollTo(swRef.current.scrollLeft + 270, 0);
             }}
           >
             <NextIcon />
-          </span>
+          </span> */}
         </div>
         <div className="action">
           <Button

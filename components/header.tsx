@@ -179,8 +179,7 @@ const HeadFunc = memo(function ({
         </div>
         <div className="links">
           <span className="link">Games</span>
-          <span className="link">Get Coin</span>
-          <span className="link">Game Tutorials</span>
+          {/* <span className="link">Game Tutorials</span> */}
         </div>
         <div className="social">
           <a
