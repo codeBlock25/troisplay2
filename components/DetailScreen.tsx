@@ -189,6 +189,29 @@ export default function DetailScreen() {
               >
                 withdraw
               </span>
+              <span className="btn" onClick={Share}>
+                refer
+              </span>
+              <span
+                className="btn"
+                onClick={() => {
+                  if (!spin.data.spin_details.isPlayable) {
+                    toast(dispatch, {
+                      msg:
+                        "Sorry you can't spin right now, glory spin can only be used once a day.",
+                    }).fail();
+                    return;
+                  }
+                  setGameDetails(dispatch, {
+                    player: PlayerType.first,
+                    game: Games.glory_spin,
+                    id: "",
+                    price: 0,
+                  });
+                }}
+              >
+                glory spin
+              </span>
             </div>
           </InView>
           {/* <InView
