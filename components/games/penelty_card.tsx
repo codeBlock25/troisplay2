@@ -209,7 +209,7 @@ export default function Penalty_card() {
               toast(dispatch, {
                 msg: `Congratulations!!!! You have successfully played a game, please wait for Player 2's challange.`,
               }).success();
-            push("/games");
+              push("/games");
             }
           )
           .catch((err) => {
@@ -1111,21 +1111,6 @@ export default function Penalty_card() {
                     <SyncLoader size="10px" color={`white`} />
                   ) : (
                     `stake ₦ ${details.price}`
-                  )}
-                </div>
-                <div
-                  className={`btn_ theme ${theme}`}
-                  onClick={() => {
-                    handleSubmit(PayType.coin);
-                  }}
-                >
-                  {loading === TwoButtonLoader.second_loading ? (
-                    <SyncLoader size="10px" color={`white`} />
-                  ) : (
-                    <>
-                      stake <GameCoin />{" "}
-                      {details.price * (defaults?.cashRating ?? 0)}
-                    </>
                   )}
                 </div>
               </div>

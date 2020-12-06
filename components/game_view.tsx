@@ -134,7 +134,7 @@ const GameView = memo(function ({
       ) : (
         <div className="action">
           <span className="btn" onClick={btn1func}>
-            {btn1view ?? "play with $"}
+            {btn1view ?? "play"}
           </span>
         </div>
       )}

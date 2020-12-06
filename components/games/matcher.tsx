@@ -446,7 +446,7 @@ const GuessMaster = memo(function () {
                   <>stake ₦ {details.price}</>
                 )}
               </div>
-              <div
+              {/* <div
                 className={`btn_ theme ${theme}`}
                 onClick={() => matchPlay(PayType.coin)}
               >
@@ -459,7 +459,7 @@ const GuessMaster = memo(function () {
                     {details.price * (defaults?.data.default.cashRating ?? 0)}
                   </>
                 )}
-              </div>
+              </div> */}
             </>
           )}
         </div>

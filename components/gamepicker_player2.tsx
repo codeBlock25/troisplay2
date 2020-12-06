@@ -235,13 +235,13 @@ export default function PickerPlayer2({
         push(
           getGameSelect(asPath) === Games.roshambo
             ? "/games#roshambo-play"
-            : getGame(asPath) === Games.penalth_card
+            : getGameSelect(asPath) === Games.penalth_card
             ? "/games#penalty-card-play"
-            : getGame(asPath) === Games.matcher
+            : getGameSelect(asPath) === Games.matcher
             ? "/games#guess-master-play"
-            : getGame(asPath) === Games.rooms
+            : getGameSelect(asPath) === Games.rooms
             ? "/games#room-play"
-            : getGame(asPath) === Games.lucky_geoge
+            : getGameSelect(asPath) === Games.lucky_geoge
             ? "/games#lucky-draw-play"
             : "/games"
         );

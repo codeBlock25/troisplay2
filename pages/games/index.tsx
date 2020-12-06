@@ -385,19 +385,6 @@ export default function GamesScreen() {
                 ? ""
                 : `$ ${getPrice(getGame(asPath), spec.price, defaults)}`}{" "}
             </p>
-            <p className="txt">
-              or Stake At{" "}
-              {defaults.cashRating * spec.price === null ||
-              !(defaults.cashRating * spec.price) ? (
-                "0"
-              ) : (
-                <span
-                  style={{ marginLeft: 5, display: "flex", marginRight: 5 }}
-                >
-                  {"  "} <GameCoin /> {`${defaults.cashRating * spec.price}`}
-                </span>
-              )}
-            </p>
             {asPath === "/games#roshambo" ||
             asPath === "/games#penalty-card" ||
             asPath === "/games#guess-master" ? (
@@ -473,7 +460,6 @@ export default function GamesScreen() {
               <div
                 className="btn"
                 onClick={() => {
-                  //  TODO
                   push(
                     getGame(asPath) === Games.roshambo
                       ? "/games#roshambo-select"
