@@ -85,7 +85,6 @@ export default function Gloryspin() {
       .then(({}) => {
         setGameDetails(dispatch, {
           player: 0,
-          game: Games.non,
           id: undefined,
           price: 0,
         });

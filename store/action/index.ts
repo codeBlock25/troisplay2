@@ -120,7 +120,6 @@ export const setGameDetails = (
   dispatch: (t: ActionType) => void,
   payload: {
     player: PlayerType;
-    game: Games;
     id: string;
     price: number;
     payType?: PayType;

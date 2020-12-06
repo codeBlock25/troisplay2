@@ -150,70 +150,83 @@ export default function DetailScreen() {
   return (
     <>
       <div className="cover">
-        {/* <span
+        <span
           className="sw_btn"
           onClick={() => {
             swRef1.current.scrollTo(swRef1.current.scrollLeft - 270, 0);
           }}
         >
           <BackIcon />
-        </span> */}
-        <div className="container" ref={swRef1}>
-          <InView
-            as="div"
-            onChange={(inview, evt) => {
-              if (inview) {
-                evt.target.classList.add("inview");
-              } else {
-                evt.target.classList.remove("inview");
-              }
-            }}
-            className="sw"
-          >
+        </span>
+        <div className="container">
+          <div className="sw">
             <span className="time">Next Spin {dateintime}</span>
             <h3 className="title">Cash</h3>
             <span className="price">
               <NAIRA />{" "}
               {record?.data?.cashwallet?.currentCash.toLocaleString() ?? 0}
             </span>
-            <div className="action">
-              <span
-                className="btn"
-                onClick={() => setAction(dispatch, ReasonType.fund)}
-              >
-                fund
-              </span>
-              <span
-                className="btn"
-                onClick={() => setAction(dispatch, ReasonType.withdraw)}
-              >
-                withdraw
-              </span>
-              <span className="btn" onClick={Share}>
-                refer
-              </span>
-              <span
-                className="btn"
-                onClick={() => {
-                  if (!spin.data.spin_details.isPlayable) {
-                    toast(dispatch, {
-                      msg:
-                        "Sorry you can't spin right now, glory spin can only be used once a day.",
-                    }).fail();
-                    return;
+            <div className="action" ref={swRef1}>
+              <InView
+                as="div"
+                onChange={(inview, evt) => {
+                  if (inview) {
+                    evt.target.classList.add("inview");
+                  } else {
+                    evt.target.classList.remove("inview");
                   }
-                  setGameDetails(dispatch, {
-                    player: PlayerType.first,
-                    game: Games.glory_spin,
-                    id: "",
-                    price: 0,
-                  });
                 }}
+                className="actionView"
               >
-                glory spin
-              </span>
+                <span
+                  className="btn"
+                  onClick={() => setAction(dispatch, ReasonType.fund)}
+                >
+                  fund
+                </span>
+                <span
+                  className="btn"
+                  onClick={() => setAction(dispatch, ReasonType.withdraw)}
+                >
+                  withdraw
+                </span>
+              </InView>
+              <InView
+                as="div"
+                onChange={(inview, evt) => {
+                  if (inview) {
+                    evt.target.classList.add("inview");
+                  } else {
+                    evt.target.classList.remove("inview");
+                  }
+                }}
+                className="actionView"
+              >
+                <span className="btn" onClick={Share}>
+                  refer
+                </span>
+                <span
+                  className="btn"
+                  onClick={() => {
+                    if (!spin.data.spin_details.isPlayable) {
+                      toast(dispatch, {
+                        msg:
+                          "Sorry you can't spin right now, glory spin can only be used once a day.",
+                      }).fail();
+                      return;
+                    }
+                    setGameDetails(dispatch, {
+                      player: PlayerType.first,
+                      id: "",
+                      price: 0,
+                    });
+                  }}
+                >
+                  glory spin
+                </span>
+              </InView>
             </div>
-          </InView>
+          </div>
           {/* <InView
             as="div"
             onChange={(inview, evt) => {
@@ -317,14 +330,14 @@ export default function DetailScreen() {
           </InView>
         */}
         </div>
-        {/* <span
+        <span
           className="sw_btn"
           onClick={() => {
             swRef1.current.scrollTo(swRef1.current.scrollLeft + 270, 0);
           }}
         >
           <NextIcon />
-        </span> */}
+        </span>
       </div>
     </>
   );

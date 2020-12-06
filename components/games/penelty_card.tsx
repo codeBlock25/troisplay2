@@ -5,9 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { SyncLoader } from "react-spinners";
 import { url } from "../../constant";
 import { CloseIcon, ForwardIcon, GameCoin, GoalPostIcon } from "../../icon";
-import { getPrice, getToken } from "../../functions";
+import { getGamePlay, getPrice, getToken } from "../../functions";
 import {
-  exitWin,
   MyGamesAction,
   notify,
   setGameDetails,
@@ -26,6 +25,7 @@ import {
   TwoButtonLoader,
 } from "../../typescript/enum";
 import { reducerType } from "../../typescript/interface";
+import { useRouter } from "next/router";
 
 export default function Penalty_card() {
   const dispatch = useDispatch();
@@ -48,7 +48,7 @@ export default function Penalty_card() {
   const [round5knowState, setKnownState5] = useState<CheckerType>(
     CheckerType.unknown
   );
-
+  const { push, asPath } = useRouter();
   const [p2Round1knowState, _setP2KnownState1] = useState<PenaltyOption>(
     PenaltyOption.left
   );
@@ -202,13 +202,14 @@ export default function Penalty_card() {
               MyGamesAction.add({ dispatch, payload: game });
               setGameDetails(dispatch, {
                 player: PlayerType.first,
-                game: Games.non,
+
                 id: undefined,
                 price: 0,
               });
               toast(dispatch, {
                 msg: `Congratulations!!!! You have successfully played a game, please wait for Player 2's challange.`,
               }).success();
+            push("/games");
             }
           )
           .catch((err) => {
@@ -282,7 +283,7 @@ export default function Penalty_card() {
               // setPlayType(PlayType.non);
               // setGameDetails(dispatch, {
               //   player: PlayerType.first,
-              //   game: Games.non,
+
               //   id: undefined,
               //   price: 0,
               // });
@@ -299,7 +300,7 @@ export default function Penalty_card() {
               setKnownState3(game_result.round3);
               setKnownState4(game_result.round4);
               setKnownState5(game_result.round5);
-
+              push("/games");
               // if (winner) {
               //   notify(dispatch, {
               //     type: NotiErrorType.success,
@@ -319,7 +320,6 @@ export default function Penalty_card() {
             // setPlayType(PlayType.non);
             setGameDetails(dispatch, {
               player: PlayerType.first,
-              game: Games.non,
               id: undefined,
               price: 0,
             });
@@ -399,10 +399,10 @@ export default function Penalty_card() {
             setRound5({ round: 5, value: PenaltyOption.left });
             setGameDetails(dispatch, {
               player: PlayerType.first,
-              game: Games.non,
               id: undefined,
               price: 0,
             });
+            push("/games");
             if (price > 0) {
               notify(dispatch, {
                 type: NotiErrorType.success,
@@ -432,7 +432,7 @@ export default function Penalty_card() {
       });
   };
 
-  if (details.game === Games.penalth_card)
+  if (getGamePlay(asPath) === Games.penalth_card)
     return (
       <div className={`gameworld theme ${theme}`}>
         {playType === PlayType.non && details.player === PlayerType.second ? (
@@ -461,14 +461,14 @@ export default function Penalty_card() {
           </div>
         ) : (
           <div className="world spin penalty">
-            {/* <div
-              className="close_btn"
-              onClick={() => {
-                if (isEmpty(details.id)) {
+            {details.player === PlayerType.first && (
+              <div
+                className="close_btn"
+                onClick={() => {
+                  // if (isEmpty(details.id)) {
                   setPlayType(PlayType.non);
                   setGameDetails(dispatch, {
                     player: PlayerType.first,
-                    game: Games.non,
                     id: undefined,
                     price: 0,
                   });
@@ -483,54 +483,56 @@ export default function Penalty_card() {
                   setRound3({ round: 3, value: PenaltyOption.left });
                   setRound4({ round: 4, value: PenaltyOption.left });
                   setRound5({ round: 5, value: PenaltyOption.left });
-                  return;
-                }
-                exitWin(dispatch, {
-                  open: modalType.open,
-                  func: async () => {
-                    let token = getToken();
-                    await Axios({
-                      method: "POST",
-                      url: `${url}/games/penalty/exit`,
-                      headers: {
-                        Authorization: `Bearer ${token}`,
-                      },
-                      data: {
-                        id: details.id,
-                      },
-                    })
-                      .then(() => {
-                        setLoading(TwoButtonLoader.no_loading);
-                        setPlayType(PlayType.non);
-                        setKnownState1(CheckerType.unknown);
-                        setKnownState2(CheckerType.unknown);
-                        setKnownState3(CheckerType.unknown);
-                        setKnownState4(CheckerType.unknown);
-                        setKnownState5(CheckerType.unknown);
-                        setRound1({ round: 1, value: PenaltyOption.left });
-                        setRound2({ round: 2, value: PenaltyOption.left });
-                        setRound3({ round: 3, value: PenaltyOption.left });
-                        setRound4({ round: 4, value: PenaltyOption.left });
-                        setRound5({ round: 5, value: PenaltyOption.left });
-                        setGameDetails(dispatch, {
-                          player: PlayerType.first,
-                          game: Games.non,
-                          id: undefined,
-                          price: 0,
-                        });
-                      })
-                      .catch(() => {
-                        toast(dispatch, {
-                          msg: "Oops, An error occured.",
-                        }).error();
-                      });
-                  },
-                });
-              }}
-            >
-              <CloseIcon />
-            </div>
-             */}
+                  push("/games");
+                  //   return;
+                  // }
+                  // exitWin(dispatch, {
+                  //   open: modalType.open,
+                  //   func: async () => {
+                  //     let token = getToken();
+                  //     await Axios({
+                  //       method: "POST",
+                  //       url: `${url}/games/penalty/exit`,
+                  //       headers: {
+                  //         Authorization: `Bearer ${token}`,
+                  //       },
+                  //       data: {
+                  //         id: details.id,
+                  //       },
+                  //     })
+                  //       .then(() => {
+                  //         setLoading(TwoButtonLoader.no_loading);
+                  //         setPlayType(PlayType.non);
+                  //         setKnownState1(CheckerType.unknown);
+                  //         setKnownState2(CheckerType.unknown);
+                  //         setKnownState3(CheckerType.unknown);
+                  //         setKnownState4(CheckerType.unknown);
+                  //         setKnownState5(CheckerType.unknown);
+                  //         setRound1({ round: 1, value: PenaltyOption.left });
+                  //         setRound2({ round: 2, value: PenaltyOption.left });
+                  //         setRound3({ round: 3, value: PenaltyOption.left });
+                  //         setRound4({ round: 4, value: PenaltyOption.left });
+                  //         setRound5({ round: 5, value: PenaltyOption.left });
+                  //         setGameDetails(dispatch, {
+                  //           player: PlayerType.first,
+
+                  //           id: undefined,
+                  //           price: 0,
+                  //         });
+                  //       })
+                  //       .catch(() => {
+                  //         toast(dispatch, {
+                  //           msg: "Oops, An error occured.",
+                  //         }).error();
+                  //       });
+                  //   },
+                  // });
+                }}
+              >
+                <CloseIcon />
+              </div>
+            )}
+
             <h3 className="title">
               {isEmpty(details.id) ? "Taker" : "Goalkeeper"}
             </h3>
@@ -1087,10 +1089,11 @@ export default function Penalty_card() {
                   setPlayType(PlayType.all);
                   setGameDetails(dispatch, {
                     player: PlayerType.first,
-                    game: Games.non,
+
                     id: undefined,
                     price: 0,
                   });
+                  push("/games");
                 }}
               >
                 Finish Play

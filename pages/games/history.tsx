@@ -7,14 +7,11 @@ import React, {
   useRef,
   useState,
 } from "react";
-import {
-  BackIcon,
-  NextIcon,
-} from "../../icon";
+import { BackIcon, NextIcon } from "../../icon";
 import Lottie from "lottie-web";
 import moment from "moment";
-import {  useQueryCache } from "react-query";
-import  { AxiosResponse } from "axios";
+import { useQueryCache } from "react-query";
+import { AxiosResponse } from "axios";
 import { Games, Viewing, nextType } from "../../typescript/enum";
 import { getPrice, getToken, isPlayable } from "../../functions";
 import Notification from "../../components/notification";
@@ -24,13 +21,30 @@ import AppLoader from "../../components/app_loader";
 import { useRouter } from "next/router";
 import Header from "../../components/header";
 import { DataGrid, ColDef, ValueGetterParams } from "@material-ui/data-grid";
-import {isArray, find, findIndex} from "lodash"
+import { isArray, find, findIndex } from "lodash";
 import { Equalizer, TableChart } from "@material-ui/icons";
-import { Box, Button, TableBody, TableCell, TableHead, TableRow, Tooltip, Typography } from "@material-ui/core";
-import { Area, AreaChart, CartesianGrid, Legend, ResponsiveContainer, XAxis, YAxis, Tooltip as ChartTooltip } from "recharts";
+import {
+  Box,
+  Button,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Tooltip,
+  Typography,
+} from "@material-ui/core";
+import {
+  Area,
+  AreaChart,
+  CartesianGrid,
+  Legend,
+  ResponsiveContainer,
+  XAxis,
+  YAxis,
+  Tooltip as ChartTooltip,
+} from "recharts";
 import DetailScreen from "../../components/DetailScreen";
-
-
+import { spawn } from "child_process";
 
 enum Active {
   table,
@@ -53,6 +67,7 @@ function TabPanel(props: TabPanelProps) {
       id={`tabpanel-${index}`}
       aria-labelledby={`tab-${index}`}
       {...other}
+      style={{ width: "100%", minWidth: "100%" }}
     >
       {value === index && (
         <Box className={`main theme ${theme}`} p={2}>
@@ -63,8 +78,6 @@ function TabPanel(props: TabPanelProps) {
   );
 }
 
-
-
 export default function HistoryScreen() {
   const dispatch = useDispatch();
   const [app_loading, setApp_loading] = useState<boolean>(true);
@@ -73,7 +86,7 @@ export default function HistoryScreen() {
   const [runText, setRunText] = useState("loading game components...");
   const { push } = useRouter();
   const game_play: MutableRefObject<HTMLSpanElement | null> = useRef();
-  
+
   const lottieLoader = useCallback(() => {
     Lottie.loadAnimation({
       container: game_play.current,
@@ -146,8 +159,9 @@ export default function HistoryScreen() {
     gamerecord: {
       userID: string;
       date_mark: Date;
-      game: Games;
-      won: string;
+      winnings: number;
+      draws: number;
+      losses: number;
       earnings: number;
     }[];
     cashwallet: {
@@ -169,7 +183,6 @@ export default function HistoryScreen() {
       valueFormatter: ({ value }) => {
         return moment((value as unknown) as string).format(
           "Do MM, YYYY - hh:mm a"
-        
         );
       },
     },
@@ -221,8 +234,9 @@ export default function HistoryScreen() {
       _id: string;
       userID: string;
       date_mark: Date;
-      game: Games;
-      won: string;
+      winnings: number;
+      draws: number;
+      losses: number;
       earnings: number;
     }[];
   }> = useQueryCache().getQueryData("history");
@@ -237,17 +251,18 @@ export default function HistoryScreen() {
       won: string;
       earnings: number;
     }[]
-    >([]);
+  >([]);
   const [row_, setRow_] = useState<
     {
-      _id: string;
-      mark: string;
-      game: string;
+      name: string;
+      winnings: number;
+      draws: number;
+      losses: number;
       earnings: number;
     }[]
-    >([]);
+  >([]);
   useEffect(() => {
-    let r : {
+    let r: {
       sn: number;
       id: string;
       _id: string;
@@ -258,37 +273,253 @@ export default function HistoryScreen() {
       earnings: number;
     }[] = [];
     let r_: {
-      _id: string;
-      mark: string;
-      game: string;
+      name: string;
+      winnings: number;
+      draws: number;
+      losses: number;
       earnings: number;
     }[] = [];
     let r_f = [];
     if (isArray(history?.data?.records)) {
       history.data.records.map((record, index) => {
-        r.push({ ...record, id: record._id, sn: index });
-        let ind = findIndex(r_, { mark: moment(record.date_mark).format("Do")})
-        r_.push( ind !== -1 ? {
-        ...r_[ind],earnings: r_[ind].earnings + record.earnings
-        }:{
-          _id: record._id,
-          mark: moment(record.date_mark).format("Do"),
-          game:
-            record.game === Games.roshambo ? "Roshambo"
-            : record.game === Games.penalth_card ? "Penalty Card"
-            : record.game === Games.lucky_geoge ? "lucky judge"
-            : record.game === Games.matcher ? "Guess master"
-            : record.game === Games.glory_spin ? "Glory spin":"",
-          earnings: record.earnings
-        });
+        // r.push({ ...record, id: record._id, sn: index });
+        // let ind = findIndex(r_, {
+        //   mark: moment(record.date_mark).format("Do"),
+        // });
+        r_.push({ ...record, name: moment(record.date_mark).format("Do") });
       });
-      setRow(r);
       setRow_(r_);
-      r = [];
       r_ = [];
     }
   }, [history]);
-  const theme = "dark-mode"
+
+  const data: {
+    name: string;
+    winnings: number;
+    draws: number;
+    losses: number;
+    earnings: number;
+  }[] = [
+    {
+      name: moment().subtract(30, "days").format("Do"),
+      winnings: 0,
+      draws: 0,
+      losses: 0,
+      earnings: 0,
+    },
+    {
+      name: moment().subtract(29, "days").format("Do"),
+      winnings: 0,
+      draws: 0,
+      losses: 0,
+      earnings: 0,
+    },
+    {
+      name: moment().subtract(28, "days").format("Do"),
+      winnings: 0,
+      draws: 0,
+      losses: 0,
+      earnings: 0,
+    },
+    {
+      name: moment().subtract(27, "days").format("Do"),
+      winnings: 0,
+      draws: 0,
+      losses: 0,
+      earnings: 0,
+    },
+    {
+      name: moment().subtract(26, "days").format("Do"),
+      winnings: 0,
+      draws: 0,
+      losses: 0,
+      earnings: 0,
+    },
+    {
+      name: moment().subtract(25, "days").format("Do"),
+      winnings: 0,
+      draws: 0,
+      losses: 0,
+      earnings: 0,
+    },
+    {
+      name: moment().subtract(24, "days").format("Do"),
+      winnings: 0,
+      draws: 0,
+      losses: 0,
+      earnings: 0,
+    },
+    {
+      name: moment().subtract(23, "days").format("Do"),
+      winnings: 0,
+      draws: 0,
+      losses: 0,
+      earnings: 0,
+    },
+    {
+      name: moment().subtract(22, "days").format("Do"),
+      winnings: 0,
+      draws: 0,
+      losses: 0,
+      earnings: 0,
+    },
+    {
+      name: moment().subtract(21, "days").format("Do"),
+      winnings: 0,
+      draws: 0,
+      losses: 0,
+      earnings: 0,
+    },
+    {
+      name: moment().subtract(20, "days").format("Do"),
+      winnings: 0,
+      draws: 0,
+      losses: 0,
+      earnings: 0,
+    },
+    {
+      name: moment().subtract(19, "days").format("Do"),
+      winnings: 0,
+      draws: 0,
+      losses: 0,
+      earnings: 0,
+    },
+    {
+      name: moment().subtract(18, "days").format("Do"),
+      winnings: 0,
+      draws: 0,
+      losses: 0,
+      earnings: 0,
+    },
+    {
+      name: moment().subtract(17, "days").format("Do"),
+      winnings: 0,
+      draws: 0,
+      losses: 0,
+      earnings: 0,
+    },
+    {
+      name: moment().subtract(16, "days").format("Do"),
+      winnings: 0,
+      draws: 0,
+      losses: 0,
+      earnings: 0,
+    },
+    {
+      name: moment().subtract(15, "days").format("Do"),
+      winnings: 0,
+      draws: 0,
+      losses: 0,
+      earnings: 0,
+    },
+    {
+      name: moment().subtract(14, "days").format("Do"),
+      winnings: 0,
+      draws: 0,
+      losses: 0,
+      earnings: 0,
+    },
+    {
+      name: moment().subtract(13, "days").format("Do"),
+      winnings: 0,
+      draws: 0,
+      losses: 0,
+      earnings: 0,
+    },
+    {
+      name: moment().subtract(12, "days").format("Do"),
+      winnings: 0,
+      draws: 0,
+      losses: 0,
+      earnings: 0,
+    },
+    {
+      name: moment().subtract(11, "days").format("Do"),
+      winnings: 0,
+      draws: 0,
+      losses: 0,
+      earnings: 0,
+    },
+    {
+      name: moment().subtract(10, "days").format("Do"),
+      winnings: 0,
+      draws: 0,
+      losses: 0,
+      earnings: 0,
+    },
+    {
+      name: moment().subtract(9, "days").format("Do"),
+      winnings: 0,
+      draws: 0,
+      losses: 0,
+      earnings: 0,
+    },
+    {
+      name: moment().subtract(8, "days").format("Do"),
+      winnings: 0,
+      draws: 0,
+      losses: 0,
+      earnings: 0,
+    },
+    {
+      name: moment().subtract(7, "days").format("Do"),
+      winnings: 0,
+      draws: 0,
+      losses: 0,
+      earnings: 0,
+    },
+    {
+      name: moment().subtract(6, "days").format("Do"),
+
+      winnings: 0,
+      draws: 0,
+      losses: 0,
+      earnings: 0,
+    },
+    {
+      name: moment().subtract(5, "days").format("Do"),
+      winnings: 0,
+      draws: 0,
+      losses: 0,
+      earnings: 0,
+    },
+    {
+      name: moment().subtract(4, "days").format("Do"),
+      winnings: 0,
+      draws: 0,
+      losses: 0,
+      earnings: 0,
+    },
+    {
+      name: moment().subtract(3, "days").format("Do"),
+      winnings: 0,
+      draws: 0,
+      losses: 0,
+      earnings: 0,
+    },
+    {
+      name: moment().subtract(2, "days").format("Do"),
+      winnings: 0,
+      draws: 0,
+      losses: 0,
+      earnings: 0,
+    },
+    {
+      name: moment().subtract(1, "days").format("Do"),
+      winnings: 0,
+      draws: 0,
+      losses: 0,
+      earnings: 0,
+    },
+    {
+      name: moment().format("Do"),
+      winnings: 0,
+      draws: 0,
+      losses: 0,
+      earnings: 0,
+    },
+  ];
+  const theme = "dark-mode";
   return (
     <>
       <Head>
@@ -302,9 +533,7 @@ export default function HistoryScreen() {
       <Notification />
       <ToastContainer />
       <Header setApp_loading={setApp_loading} setRunText={setRunText} />
-     
-      
-      
+
       <span
         className="new_game"
         onClick={() => {
@@ -321,18 +550,127 @@ export default function HistoryScreen() {
       >
         <div className="second">
           <div className="container">
-          <TabPanel value={activeTab} index={1}>
-            <div className={`container_map theme ${theme}`}>
-              <div className="main_head">
-                <h3 className="title_">
-                  <strong>Your</strong>Game History
-                </h3>
-                <div className="selector">
-                  <Button className="oo active">last 30 day</Button>
+            <TabPanel value={activeTab} index={1}>
+              <div
+                className={`container_map theme ${theme}`}
+                style={{ width: "100%", minWidth: "100%" }}
+              >
+                <div className="main_head">
+                  <h3 className="title_">
+                    <strong>Your</strong>Game History
+                  </h3>
+                  <div className="selector">
+                    <Button className="oo active">last 30 day</Button>
+                  </div>
+                  <span className="query">today</span>
                 </div>
-                <span className="query">today</span>
+                <ResponsiveContainer
+                  width="100%"
+                  height={350}
+                  minWidth={"100%"}
+                  minHeight={300}
+                  maxHeight={450}
+                >
+                  <AreaChart
+                    data={row_}
+                    margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+                  >
+                    <defs>
+                      <linearGradient id="colorWv" x1="0" y1="0" x2="0" y2="1">
+                        <stop
+                          offset="65%"
+                          stopColor="#29c73e"
+                          stopOpacity={0.8}
+                        />
+                        <stop
+                          offset="95%"
+                          stopColor="#29c73e3f"
+                          stopOpacity={0}
+                        />
+                      </linearGradient>
+                      <linearGradient id="colorEv" x1="0" y1="0" x2="0" y2="1">
+                        <stop
+                          offset="65%"
+                          stopColor="#105ef1"
+                          stopOpacity={0.8}
+                        />
+                        <stop
+                          offset="95%"
+                          stopColor="#105ef13f"
+                          stopOpacity={0}
+                        />
+                      </linearGradient>
+                      <linearGradient id="colorDv" x1="0" y1="0" x2="0" y2="1">
+                        <stop
+                          offset="65%"
+                          stopColor="#f1e110"
+                          stopOpacity={0.8}
+                        />
+                        <stop
+                          offset="95%"
+                          stopColor="#f1e1103f"
+                          stopOpacity={0}
+                        />
+                      </linearGradient>
+                      <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+                        <stop
+                          offset="65%"
+                          stopColor="#FF5722"
+                          stopOpacity={0.8}
+                        />
+                        <stop
+                          offset="95%"
+                          stopColor="#FF57223f"
+                          stopOpacity={0}
+                        />
+                      </linearGradient>
+                    </defs>
+                    <XAxis dataKey="name" />
+                    <YAxis dataKey="earnings" />
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <ChartTooltip label="Details" />
+                    <Legend verticalAlign="top" height={36} />
+                    <Area
+                      type="monotone"
+                      dataKey="losses"
+                      stroke="#FF5722"
+                      fillOpacity={1}
+                      fill="url(#colorUv)"
+                    />
+                    <Area
+                      type="linear"
+                      dataKey="winnings"
+                      stroke="#29c73e"
+                      fillOpacity={1}
+                      fill="url(#colorWv)"
+                    />
+                    <Area
+                      type="linear"
+                      dataKey="earnings"
+                      stroke="#105ef1"
+                      fillOpacity={1}
+                      fill="url(#colorEv)"
+                    />
+                    <Area
+                      type="monotone"
+                      dataKey="draws"
+                      stroke="#f1e110"
+                      fillOpacity={1}
+                      fill="url(#colorDv)"
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
               </div>
-              <ResponsiveContainer
+            </TabPanel>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}
+
+/*
+    <ResponsiveContainer
                 width="100%"
                 height={350}
                 minWidth={500}
@@ -382,11 +720,5 @@ export default function HistoryScreen() {
                   />
                 </AreaChart>
               </ResponsiveContainer>
-            </div>
-          </TabPanel>
-          </div>
-        </div>
-      </section>
-    </>
-  );
-}
+          
+*/

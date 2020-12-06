@@ -912,11 +912,6 @@
                 height: 250px;
                 display: flex;
                 overflow: hidden;
-                overflow-x: auto;
-                scrollbar-width: 0;
-                scroll-snap-type: x mandatory;
-                scroll-behavior: smooth;
-                scroll-snap-stop: always;
 
 
                 &::-webkit-scrollbar {
@@ -934,21 +929,7 @@
                     justify-content: center;
                     align-items: center;
                     scroll-snap-align: center;
-                    opacity: 0.2;
-                    transition: linear .6s;
-                    transition-delay: .3s;
-
-                    * {
-                        transform: scale(0.8);
-                    }
-
-                    &.inview {
-                        opacity: 1;
-
-                        * {
-                            transform: scale(1);
-                        }
-                    }
+                    opacity: 1;
 
                     .time {
                         width: fit-content;
@@ -999,17 +980,53 @@
                     }
 
                     .action {
-                        width: 100%;
-                        height: fit-content;
-                        min-height: fit-content;
+                        width: 270px;
+                        height: 70px;
+                        min-width: 270px;
+                        min-height: 70px;
                         display: flex;
-                        flex-wrap: wrap;
-                        align-items: center;
-                        justify-content: space-between;
                         margin-top: 20px;
+                        overflow: hidden;
+                        overflow-x: auto;
+                        scrollbar-width: 0;
+                        scroll-snap-type: x mandatory;
+                        scroll-behavior: smooth;
+                        scroll-snap-stop: always;
+
+                        &::-webkit-scrollbar {
+                            display: none;
+                        }
+
+                        .actionView {
+                            width: 100%;
+                            min-width: 100%;
+                            height: 100%;
+                            min-height: 100%;
+                            padding: 0 10px;
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            scroll-snap-align: center;
+                            opacity: 0.2;
+                            transition: linear .6s;
+                            transition-delay: .3s;
+
+                            * {
+                                transform: scale(0.8);
+                            }
+
+                            &.inview {
+                                opacity: 1;
+
+                                * {
+                                    transform: scale(1);
+                                }
+                            }
+                        }
 
                         .btn {
-                            width: 45%;
+                            width: 44%;
+                            min-width: 44%;
                             margin-top: 20px;
                             height: 45px;
                             display: flex;

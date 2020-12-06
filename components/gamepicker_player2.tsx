@@ -23,7 +23,12 @@ import {
   PayType,
   PlayerType,
 } from "../typescript/enum";
-import { getToken, PlayLuckyGeogeGame } from "../functions";
+import {
+  getGame,
+  getGameSelect,
+  getToken,
+  PlayLuckyGeogeGame,
+} from "../functions";
 import {
   exitWin,
   setCustomWindow,
@@ -50,7 +55,7 @@ export default function PickerPlayer2({
   const [loading, setLoading] = useState<boolean>(false);
   const [btn_loading, setBtnLoading] = useState<boolean>(false);
   const [loadingL, setLoadingL] = useState<boolean>(false);
-  const { push } = useRouter();
+  const { push, asPath } = useRouter();
   const [popState, setPopState] = useState<{
     msg: string;
     func?: () => void | boolean | Promise<void> | Promise<boolean>;
@@ -227,9 +232,21 @@ export default function PickerPlayer2({
     })
       .then(({ data: { price } }: AxiosResponse<{ price: number }>) => {
         close();
+        push(
+          getGameSelect(asPath) === Games.roshambo
+            ? "/games#roshambo-play"
+            : getGame(asPath) === Games.penalth_card
+            ? "/games#penalty-card-play"
+            : getGame(asPath) === Games.matcher
+            ? "/games#guess-master-play"
+            : getGame(asPath) === Games.rooms
+            ? "/games#room-play"
+            : getGame(asPath) === Games.lucky_geoge
+            ? "/games#lucky-draw-play"
+            : "/games"
+        );
         setGameDetails(dispatch, {
           player: PlayerType.second,
-          game,
           id,
           price,
           payType: playWith,
@@ -296,7 +313,7 @@ export default function PickerPlayer2({
       params: {
         min,
         max: amount,
-        game: game_to_play,
+        game: getGameSelect(asPath),
       },
     })
       .then(
@@ -345,7 +362,11 @@ export default function PickerPlayer2({
 
   const theme = "dark-mode";
   return (
-    <div className={`game_picker2 theme ${isOpen ? "open" : ""} ${theme}`}>
+    <div
+      className={`game_picker2 theme ${
+        getGameSelect(asPath) !== Games.non ? "open" : ""
+      } ${theme}`}
+    >
       <div
         className={
           popState.game === Games.lucky_geoge ||
@@ -444,7 +465,6 @@ export default function PickerPlayer2({
                             close();
                             setGameDetails(dispatch, {
                               player: PlayerType.first,
-                              game: Games.non,
                               id: undefined,
                               price: 0,
                             });
@@ -473,7 +493,6 @@ export default function PickerPlayer2({
                             close();
                             setGameDetails(dispatch, {
                               player: PlayerType.first,
-                              game: Games.non,
                               id: undefined,
                               price: 0,
                             });
@@ -631,9 +650,9 @@ export default function PickerPlayer2({
           )}
         </div>
         <div className="action_input">
-          {game_to_play === Games.roshambo ||
-          game_to_play === Games.penalth_card ||
-          game_to_play === Games.matcher ? (
+          {getGameSelect(asPath) === Games.roshambo ||
+          getGameSelect(asPath) === Games.penalth_card ||
+          getGameSelect(asPath) === Games.matcher ? (
             <>
               <FormControl
                 required
@@ -672,7 +691,7 @@ export default function PickerPlayer2({
                 <Close />
               </Fab>
             </>
-          ) : game_to_play === Games.lucky_geoge ? (
+          ) : getGameSelect(asPath) === Games.lucky_geoge ? (
             <></>
           ) : (
             <>

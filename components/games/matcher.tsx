@@ -21,11 +21,11 @@ import {
   TwoButtonLoader,
 } from "../../typescript/enum";
 import { ActionType, reducerType } from "../../typescript/interface";
-import { getPrice, getToken } from "../../functions";
+import { getGamePlay, getPrice, getToken } from "../../functions";
 import { CloseIcon, GameCoin } from "../../icon";
 import { useQueryCache } from "react-query";
 import { Dispatch } from "redux";
-
+import { useRouter } from "next/router";
 
 const GuessMaster = memo(function () {
   const dispatch: Dispatch<ActionType<any>> = useDispatch();
@@ -52,7 +52,7 @@ const GuessMaster = memo(function () {
         game: Games;
         id?: string;
         player: PlayerType;
-        payWith: PayType
+        payWith: PayType;
       };
     }
   >((state) => {
@@ -86,7 +86,7 @@ const GuessMaster = memo(function () {
       referRating: number;
     };
   }> = useQueryCache().getQueryData("defaults");
-   
+
   const [isStarted, setStarted] = useState<boolean>(true);
   useEffect(() => {
     if (isStarted) {
@@ -101,10 +101,10 @@ const GuessMaster = memo(function () {
     }
   }, [isStarted, details]);
 
-  const matchPlay = async (
-    payWith?: PayType
-  ): Promise<void> => {
-    let token = getToken()
+  const { push, asPath } = useRouter();
+
+  const matchPlay = async (payWith?: PayType): Promise<void> => {
+    let token = getToken();
     if (loading !== TwoButtonLoader.no_loading || num === 0) return;
     if (isEmpty(details.id)) {
       if (PayType.cash === payWith) {
@@ -142,13 +142,13 @@ const GuessMaster = memo(function () {
               date?: Date;
             };
           }>) => {
-            MyGamesAction.add({   dispatch, payload: game   });;;
+            MyGamesAction.add({ dispatch, payload: game });
             setGameDetails(dispatch, {
               player: PlayerType.first,
-              game: Games.non,
               id: undefined,
               price: 0,
             });
+            push("/games");
             toast(dispatch, {
               msg: `Congratulations!!!! You have successfully played a game, please wait for Player 2's challange.`,
             }).success();
@@ -224,10 +224,10 @@ const GuessMaster = memo(function () {
                 setPlaycount(1);
                 setGameDetails(dispatch, {
                   player: PlayerType.first,
-                  game: Games.non,
                   id: undefined,
                   price: 0,
                 });
+                push("/games");
                 return;
               } else {
                 // !counting
@@ -282,10 +282,10 @@ const GuessMaster = memo(function () {
             setPlayed([]);
             setGameDetails(dispatch, {
               player: PlayerType.first,
-              game: Games.non,
               id: undefined,
               price: 0,
             });
+            push("/games");
           }
         )
         .catch((err) => {
@@ -297,18 +297,18 @@ const GuessMaster = memo(function () {
         });
     }
   };
-  const theme = "dark-mode"
-  if (details.game === Games.matcher)
+  const theme = "dark-mode";
+  if (getGamePlay(asPath) === Games.matcher)
     return (
       <div className={`gameworld ${theme}`}>
         <div className="world matcher">
-          {/* <div
-            className="close_btn"
-            onClick={() => {
-              if (isEmpty(details.id)) {
+          {details.player === PlayerType.first && (
+            <div
+              className="close_btn"
+              onClick={() => {
+                // if (isEmpty(details.id)) {
                 setGameDetails(dispatch, {
                   player: PlayerType.first,
-                  game: Games.non,
                   id: undefined,
                   price: 0,
                 });
@@ -323,51 +323,53 @@ const GuessMaster = memo(function () {
                 setView7(true);
                 setNum(1);
                 setPlayed([]);
-                return;
-              }
-              exitWin(dispatch, {
-                open: modalType.open,
-                func: async () => {
-                  let token = getToken();
-                  await Axios({
-                    method: "POST",
-                    url: `${url}/games/roshambo/exit`,
-                    headers: {
-                      Authorization: `Bearer ${token}`,
-                    },
-                    data: {
-                      id: details.id,
-                    },
-                  })
-                    .then(() => {
-                      setLoading(TwoButtonLoader.no_loading);
-                      setPlaycount(1);
-                      setView1(true);
-                      setView2(true);
-                      setView3(true);
-                      setView4(true);
-                      setView5(true);
-                      setNum(1);
-                      setPlayed([]);
-                      setGameDetails(dispatch, {
-                        player: PlayerType.first,
-                        game: Games.non,
-                        id: undefined,
-                        price: 0,
-                      });
-                    })
-                    .catch(() => {
-                      toast(dispatch, {
-                        msg: "Oops, An error occured.",
-                      }).error();
-                    });
-                },
-              });
-            }}
-          >
-            <CloseIcon />
-          </div>
-         */}
+                push("/games");
+                //   return;
+                // }
+                // exitWin(dispatch, {
+                //   open: modalType.open,
+                //   func: async () => {
+                //     let token = getToken();
+                //     await Axios({
+                //       method: "POST",
+                //       url: `${url}/games/roshambo/exit`,
+                //       headers: {
+                //         Authorization: `Bearer ${token}`,
+                //       },
+                //       data: {
+                //         id: details.id,
+                //       },
+                //     })
+                //       .then(() => {
+                //         setLoading(TwoButtonLoader.no_loading);
+                //         setPlaycount(1);
+                //         setView1(true);
+                //         setView2(true);
+                //         setView3(true);
+                //         setView4(true);
+                //         setView5(true);
+                //         setNum(1);
+                //         setPlayed([]);
+                //         setGameDetails(dispatch, {
+                //           player: PlayerType.first,
+                //           game: Games.non,
+                //           id: undefined,
+                //           price: 0,
+                //         });
+                //       })
+                //       .catch(() => {
+                //         toast(dispatch, {
+                //           msg: "Oops, An error occured.",
+                //         }).error();
+                //       });
+                //   },
+                // });
+              }}
+            >
+              <CloseIcon />
+            </div>
+          )}
+
           <h3 className="title">Pick A number</h3>
           <p className={`txt theme ${theme}`}>
             NOTE: You Pick your moves by clicking/tapping the icons to each
@@ -429,7 +431,7 @@ const GuessMaster = memo(function () {
               {loading === TwoButtonLoader.first_loading ? (
                 <SyncLoader size="10px" color={`white`} />
               ) : (
-                <>{played.length >= 1 ? "Retry"   : "Play"}</>
+                <>{played.length >= 1 ? "Retry" : "Play"}</>
               )}
             </div>
           ) : (
@@ -464,6 +466,5 @@ const GuessMaster = memo(function () {
       </div>
     );
   else return <></>;
-}
-);
-export default GuessMaster
+});
+export default GuessMaster;

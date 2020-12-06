@@ -31,9 +31,10 @@ import {
   TwoButtonLoader,
 } from "../../typescript/enum";
 import { ActionType, reducerType } from "../../typescript/interface";
-import { getPrice, getToken } from "../../functions";
+import { getGamePlay, getPrice, getToken } from "../../functions";
 import { useQueryCache } from "react-query";
 import { Dispatch } from "redux";
+import { useRouter } from "next/router";
 
 export default function Roshambo() {
   const dispatch: Dispatch<ActionType<any>> = useDispatch();
@@ -63,6 +64,7 @@ export default function Roshambo() {
   const [p2Round1knowState, _setP2KnownState1] = useState<RoshamboOption>(
     RoshamboOption.rock
   );
+  const { push, asPath } = useRouter();
   const [p2Round2knowState, _setP2KnownState2] = useState<RoshamboOption>(
     RoshamboOption.rock
   );
@@ -201,13 +203,13 @@ export default function Roshambo() {
             MyGamesAction.add({ dispatch, payload: game });
             setGameDetails(dispatch, {
               player: PlayerType.first,
-              game: Games.non,
               id: undefined,
               price: 0,
             });
             toast(dispatch, {
               msg: `Congratulations!!!! You have successfully played a game, please wait for Player 2's challange.`,
             }).success();
+            push("/games");
           }
         )
         .catch((err) => {
@@ -402,7 +404,6 @@ export default function Roshambo() {
             if (final === "draw") {
               setGameDetails(dispatch, {
                 player: PlayerType.first,
-                game: Games.non,
                 id: undefined,
                 price: 0,
               });
@@ -415,7 +416,6 @@ export default function Roshambo() {
             } else if (final === "won") {
               setGameDetails(dispatch, {
                 player: PlayerType.first,
-                game: Games.non,
                 id: undefined,
                 price: 0,
               });
@@ -427,7 +427,6 @@ export default function Roshambo() {
             } else {
               setGameDetails(dispatch, {
                 player: PlayerType.first,
-                game: Games.non,
                 id: undefined,
                 price: 0,
               });
@@ -437,6 +436,7 @@ export default function Roshambo() {
                 isOpen: modalType.open,
               });
             }
+            push("/games");
             return;
           }
           setPlayCount((prev) => {
@@ -450,7 +450,7 @@ export default function Roshambo() {
       });
   };
 
-  if (details.game === Games.roshambo)
+  if (getGamePlay(asPath) === Games.roshambo)
     return (
       <div className={`gameworld theme ${theme}`}>
         {playType === PlayType.non && details.player === PlayerType.second ? (
@@ -479,20 +479,19 @@ export default function Roshambo() {
           </div>
         ) : (
           <div className="world spin roshambo">
-            {/* {playType === PlayType.one_by_one && (
+            {details.player === PlayerType.first && (
               <div
                 className="close_btn"
                 onClick={() => {
                   if (isEmpty(details.id)) {
                     setGameDetails(dispatch, {
                       player: PlayerType.first,
-                      game: Games.non,
                       id: undefined,
                       price: 0,
                     });
+                    push("/games");
                     setPlayType(PlayType.non);
                     setLoading(TwoButtonLoader.no_loading);
-                    setDemoState(true);
                     setKnownState1(CheckerType.unknown);
                     setKnownState2(CheckerType.unknown);
                     setKnownState3(CheckerType.unknown);
@@ -505,52 +504,11 @@ export default function Roshambo() {
                     setRound5({ round: 5, value: RoshamboOption.rock });
                     return;
                   }
-                  exitWin(dispatch, {
-                    open: modalType.open,
-                    func: async () => {
-                      let token = getToken();
-                      await Axios({
-                        method: "POST",
-                        url: `${url}/games/roshambo/exit`,
-                        headers: {
-                          Authorization: `Bearer ${token}`,
-                        },
-                        data: {
-                          id: details.id,
-                        },
-                      })
-                        .then(() => {
-                          setLoading(TwoButtonLoader.no_loading);
-                          setDemoState(true);
-                          setKnownState1(CheckerType.unknown);
-                          setKnownState2(CheckerType.unknown);
-                          setKnownState3(CheckerType.unknown);
-                          setKnownState4(CheckerType.unknown);
-                          setKnownState5(CheckerType.unknown);
-                          setRound1({ round: 1, value: RoshamboOption.rock });
-                          setRound2({ round: 2, value: RoshamboOption.rock });
-                          setRound3({ round: 3, value: RoshamboOption.rock });
-                          setRound4({ round: 4, value: RoshamboOption.rock });
-                          setRound5({ round: 5, value: RoshamboOption.rock });
-                          setGameDetails(dispatch, {
-                            player: PlayerType.first,
-                            game: Games.non,
-                            id: undefined,
-                            price: 0,
-                          });
-                        })
-                        .catch(() => {
-                          toast(dispatch, {
-                            msg: "Oops, An error occured.",
-                          }).error();
-                        });
-                    },
-                  });
                 }}
               >
                 <CloseIcon />
               </div>
-            )} */}
+            )}
             <h3 className="title">Player {isEmpty(details.id) ? "1" : "2"}</h3>
             <h3 className="title">Set your moves</h3>
             <p className={`txt them ${theme}`}>
@@ -1104,10 +1062,10 @@ export default function Roshambo() {
                   setRound5({ round: 5, value: RoshamboOption.rock });
                   setGameDetails(dispatch, {
                     player: PlayerType.first,
-                    game: Games.non,
                     id: undefined,
                     price: 0,
                   });
+                  push("/games");
                 }}
               >
                 Finish Play

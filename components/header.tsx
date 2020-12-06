@@ -80,7 +80,7 @@ const HeadFunc = memo(function ({
     let token = getToken();
     return await Axios({
       method: "GET",
-      url: `${url}/player/record`,
+      url: `${url}/player/records`,
       headers: {
         authorization: `Bearer ${token}`,
       },

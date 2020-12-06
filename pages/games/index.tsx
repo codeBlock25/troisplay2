@@ -18,7 +18,13 @@ import {
   modalType,
   notificationHintType,
 } from "../../typescript/enum";
-import { getPrice, getToken, whoIsThis } from "../../functions";
+import {
+  getGame,
+  getGameSelect,
+  getPrice,
+  getToken,
+  whoIsThis,
+} from "../../functions";
 import { SyncLoader } from "react-spinners";
 import Notification from "../../components/notification";
 import Roshambo from "../../components/games/roshambo";
@@ -60,7 +66,7 @@ import AccountF from "../../components/account_f";
 import { faGamepad } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { reducerType } from "../../typescript/interface";
-import { filter, isEmpty, sortBy } from "lodash";
+import { filter, isEmpty, reverse, sortBy } from "lodash";
 import GameView2 from "../../components/game_view2";
 import NotificationDisplay from "../../components/notification_display";
 
@@ -185,13 +191,11 @@ export default function GamesScreen() {
     isOpen: boolean;
     manual: string;
     price: number;
-    game: Games;
     next?: nextType;
   }>({
     isOpen: false,
     manual: "",
     price: 100,
-    game: Games.non,
     next: nextType.player,
   });
 
@@ -236,6 +240,26 @@ export default function GamesScreen() {
           setViewOpen(true);
         }
         break;
+      // case "/games#roshambo":
+      //   {
+      //     setViewOpen(true);
+      //   }
+      //   break;
+      // case "/games#penalty-card":
+      //   {
+      //     setViewOpen(true);
+      //   }
+      //   break;
+      // case "/games#guess-master":
+      //   {
+      //     setViewOpen(true);
+      //   }
+      //   break;
+      // case "/games#lucky-draw":
+      //   {
+      //     setViewOpen(true);
+      //   }
+      //   break;
 
       default:
         {
@@ -266,18 +290,24 @@ export default function GamesScreen() {
       <BackWindow />
       <CustomWindow />
       <Header setApp_loading={setApp_loading} setRunText={setRunText} />
-      <PickerPlayer2 game={spec.game} isOpen={p2} close={() => setP2(false)} />
+      <PickerPlayer2
+        game={getGameSelect(asPath)}
+        isOpen={p2}
+        close={() => push("/games")}
+      />
       <ToastContainer />
       <div
-        className={`game_picker_view ${spec.isOpen ? "open" : ""}`}
+        className={`game_picker_view ${
+          getGame(asPath) !== Games.non ? "open" : ""
+        }`}
         onClick={(e: any) => {
           if (!e.target?.classList?.contains("game_picker_view")) {
             return;
           }
           setSpec((prev) => {
+            push("/games");
             return {
               ...prev,
-              isOpen: false,
               game: Games.non,
               next: nextType.player,
             };
@@ -291,29 +321,29 @@ export default function GamesScreen() {
               e.preventDefault();
               if (
                 spec.price <
-                (spec.game === Games.roshambo
+                (asPath === "/games#roshambo"
                   ? defaults.min_stack_roshambo
-                  : spec.game === Games.penalth_card
+                  : asPath === "/games#penalty-card"
                   ? defaults.min_stack_penalty
-                  : spec.game === Games.matcher
+                  : asPath === "/games#guess-master"
                   ? defaults.min_stack_guess_master
                   : 0)
               ) {
                 toast(dispatch, {
                   msg: `Can't play ${
-                    spec.game === Games.roshambo
+                    asPath === "/games#roshambo"
                       ? "Roshambo"
-                      : spec.game === Games.penalth_card
+                      : asPath === "/games#penalty-card"
                       ? "Penalty Card"
-                      : spec.game === Games.matcher
+                      : asPath === "/games#guess-master"
                       ? "Guess Master"
                       : ""
                   } game below the minimum price bar. Please stake something higher than ₦ ${
-                    spec.game === Games.roshambo
+                    asPath === "/games#roshambo"
                       ? defaults.min_stack_roshambo
-                      : spec.game === Games.penalth_card
+                      : asPath === "/games#penalty-card"
                       ? defaults.min_stack_penalty
-                      : spec.game === Games.matcher
+                      : asPath === "/games#guess-master"
                       ? defaults.min_stack_guess_master
                       : 0
                   } to continue`,
@@ -325,24 +355,35 @@ export default function GamesScreen() {
                 price: spec.price,
                 player: PlayerType.first,
                 id: undefined,
-                game: spec.game,
               });
               setSpec((prev) => {
                 return {
                   ...prev,
-                  isOpen: false,
                   game: Games.non,
                   next: nextType.player,
                 };
               });
+              push(
+                getGame(asPath) === Games.roshambo
+                  ? "/games#roshambo-play"
+                  : getGame(asPath) === Games.penalth_card
+                  ? "/games#penalty-card-play"
+                  : getGame(asPath) === Games.matcher
+                  ? "/games#guess-master-play"
+                  : getGame(asPath) === Games.rooms
+                  ? "/games#room-play"
+                  : getGame(asPath) === Games.lucky_geoge
+                  ? "/games#lucky-draw-play"
+                  : "/games"
+              );
             }}
           >
             <h3 className="title">Game Setup.</h3>
             <p className="txt">
               To stand a chances to earn{" "}
-              {getPrice(spec.game, spec.price, defaults) <= 0
+              {getPrice(getGame(asPath), spec.price, defaults) <= 0
                 ? ""
-                : `$ ${getPrice(spec.game, spec.price, defaults)}`}{" "}
+                : `$ ${getPrice(getGame(asPath), spec.price, defaults)}`}{" "}
             </p>
             <p className="txt">
               or Stake At{" "}
@@ -357,9 +398,9 @@ export default function GamesScreen() {
                 </span>
               )}
             </p>
-            {spec.game === Games.roshambo ||
-            spec.game === Games.penalth_card ||
-            spec.game === Games.matcher ? (
+            {asPath === "/games#roshambo" ||
+            asPath === "/games#penalty-card" ||
+            asPath === "/games#guess-master" ? (
               <FormControl
                 required
                 className="inputBox select"
@@ -427,18 +468,32 @@ export default function GamesScreen() {
                   });
                 }}
               >
-                {spec.game === Games.penalth_card ? "Taker" : "Player 1"}
+                {asPath === "/games#penalty-card" ? "Taker" : "Player 1"}
               </div>
               <div
                 className="btn"
                 onClick={() => {
+                  //  TODO
+                  push(
+                    getGame(asPath) === Games.roshambo
+                      ? "/games#roshambo-select"
+                      : getGame(asPath) === Games.penalth_card
+                      ? "/games#penalty-card-select"
+                      : getGame(asPath) === Games.matcher
+                      ? "/games#guess-master-select"
+                      : getGame(asPath) === Games.rooms
+                      ? "/games#room-select"
+                      : getGame(asPath) === Games.lucky_geoge
+                      ? "/games#lucky-draw-select"
+                      : "/games"
+                  );
                   setSpec((prev) => {
                     return { ...prev, isOpen: false };
                   });
                   setP2(true);
                 }}
               >
-                {spec.game === Games.penalth_card ? "Keeper" : "Player 2"}
+                {asPath === "/games#penalty-card" ? "Keeper" : "Player 2"}
               </div>
             </div>
           </div>
@@ -449,13 +504,13 @@ export default function GamesScreen() {
             <span
               className="btn"
               onClick={() => {
-                if (spec.game === Games.lucky_geoge) {
+                if (getGame(asPath) === Games.lucky_geoge) {
                   push("/games");
                   setP2(true);
                   return;
                 } else if (
-                  spec.game === Games.rooms ||
-                  spec.game === Games.custom_game
+                  getGame(asPath) === Games.rooms ||
+                  getGame(asPath) === Games.custom_game
                 ) {
                   setSpec((prev) => {
                     return {
@@ -472,7 +527,8 @@ export default function GamesScreen() {
                 });
               }}
             >
-              {spec.game === Games.rooms || spec.game === Games.custom_game
+              {getGame(asPath) === Games.rooms ||
+              getGame(asPath) === Games.custom_game
                 ? "back"
                 : "confirm"}
             </span>
@@ -503,13 +559,12 @@ export default function GamesScreen() {
           <div
             className="game"
             onClick={() => {
-              push("/games");
+              push("/games#roshambo");
               setSpec({
                 isOpen: true,
                 manual:
                   "A player who decides to play rock will beat another player who has chosen scissors (rock crushes scissors), but will lose to one who has played paper (paper covers rock); a play of paper will lose to a play of scissors (scissors cuts paper). If both players choose the same shape, the game is tied and is usually immediately replayed to break the tie.",
                 price: 100,
-                game: Games.roshambo,
               });
             }}
           >
@@ -530,13 +585,12 @@ export default function GamesScreen() {
           <div
             className="game"
             onClick={() => {
-              push("/games");
+              push("/games#penalty-card");
               setSpec({
                 isOpen: true,
                 manual:
                   "Just as penalty in the game of soccer, involves the taker and goal keeper. Taker aim is to score (choose opposite direction as the goal keeper) while the goal keeper is the catch the ball (go same direction as the taker).",
                 price: 100,
-                game: Games.penalth_card,
               });
             }}
           >
@@ -557,13 +611,12 @@ export default function GamesScreen() {
           <div
             className="game"
             onClick={() => {
-              push("/games");
+              push("/games#guess-master");
               setSpec({
                 isOpen: true,
                 manual:
                   "Player two has three chances to guess the number player 1 choose from number one to seven.",
                 price: 100,
-                game: Games.matcher,
               });
             }}
           >
@@ -584,13 +637,12 @@ export default function GamesScreen() {
           <div
             className="game"
             onClick={() => {
-              push("/games");
+              push("/games#lucky-draw");
               setSpec({
                 isOpen: true,
                 manual:
                   "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor non, enim accusantium officiis laborum hic asperiores a corporis illum quis.",
                 price: 100,
-                game: Games.lucky_geoge,
               });
             }}
           >
@@ -599,24 +651,23 @@ export default function GamesScreen() {
               style={{ backgroundImage: `url(/images/lucky-geoge.png)` }}
             />
             <div className="details">
-              <span className="name">lucky judge</span>
+              <span className="name">lucky draw</span>
               <span className="info">
                 <b>min stake:</b>judge based
               </span>
               <span className="info">
-                <b>rating:</b> 100%+s
+                <b>rating:</b> 100%+
               </span>
             </div>
           </div>
-          <div
+          {/* <div
             className="game"
             onClick={() => {
-              push("/games");
+              push("/games#");
               setSpec({
                 isOpen: true,
                 manual: "Coming Soon",
                 price: 100,
-                game: Games.custom_game,
               });
             }}
           >
@@ -642,7 +693,6 @@ export default function GamesScreen() {
                 isOpen: true,
                 manual: "Coming soon",
                 price: 100,
-                game: Games.rooms,
               });
             }}
           >
@@ -660,12 +710,15 @@ export default function GamesScreen() {
               </span>
             </div>
           </div>
+         */}
         </div>
       </div>
       <AccountF />
       <section
         className={
-          gameViewOpen || spec.isOpen ? "games_world_ blur" : "games_world_"
+          gameViewOpen || getGame(asPath) !== Games.non
+            ? "games_world_ blur"
+            : "games_world_"
         }
         onClick={() => {
           push("/games");
@@ -808,7 +861,7 @@ export default function GamesScreen() {
                             game.gameID === Games.roshambo
                               ? "Roshambo"
                               : game.gameID === Games.penalth_card
-                              ? "Penelty Card"
+                              ? "Penalty Card"
                               : game.gameID === Games.matcher
                               ? "Guess Master"
                               : game.gameID === Games.rooms
@@ -867,9 +920,7 @@ export default function GamesScreen() {
                 (notifications?.notifications?.length ?? 0) === 0 ? (
                   <p className="none">No notification yet</p>
                 ) : (
-                  sortBy(notifications.notifications, {
-                    time: -1,
-                  }).map(
+                  reverse(notifications?.notifications ?? []).map(
                     (
                       notification: {
                         message: string;
