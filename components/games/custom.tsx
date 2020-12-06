@@ -121,7 +121,6 @@ export default function CustomGame(): JSX.Element {
             player: PlayerType.first,
             price: 0,
             id: "",
-            game: Games.non,
           });
           setDescription("");
           setTitle("");
@@ -160,7 +159,6 @@ export default function CustomGame(): JSX.Element {
           if (e.target.classList?.contains("gameworld")) {
             setGameDetails(dispatch, {
               player: PlayerType.first,
-              game: Games.non,
               id: "",
               price: 0,
             });
@@ -180,7 +178,6 @@ export default function CustomGame(): JSX.Element {
               if (isEmpty(details.id)) {
                 setGameDetails(dispatch, {
                   player: PlayerType.first,
-                  game: Games.non,
                   id: undefined,
                   price: 0,
                 });
