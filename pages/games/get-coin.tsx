@@ -22,11 +22,10 @@ import { useRouter } from "next/router";
 import Header from "../../components/header";
 import { DataGrid, ColDef, RowProps } from "@material-ui/data-grid";
 import { isArray } from "lodash";
-import {CloseViewIcon,OpenViewIcon} from "../../icon"
+import { CloseViewIcon, OpenViewIcon } from "../../icon";
 import { Button } from "@material-ui/core";
 import Picker from "../../components/picker";
 import { setGameDetails, toast } from "../../store/action";
-
 
 export default function GetterScreen() {
   const dispatch = useDispatch();
@@ -101,7 +100,7 @@ export default function GetterScreen() {
       referRating: number;
     };
   }> = useQueryCache().getQueryData("defaults");
-  
+
   const spin: AxiosResponse<{
     spin_details: {
       currentTime: Date;
@@ -166,13 +165,17 @@ export default function GetterScreen() {
         .catch((error) => console.log("Sharing failed", error));
     } else {
       if (navigator.clipboard) {
-        await navigator.clipboard.writeText(
-          `Check out the best playform to have fun and get paid at: https://troisplay.vercel.app/signup/${
-            record?.data?.referal?.refer_code ?? ""
-          }`
-        ).finally(()=>{
-          toast(dispatch, {msg: "Link Copied, share your link to gain referals."}).success()
-        });
+        await navigator.clipboard
+          .writeText(
+            `Check out the best playform to have fun and get paid at: https://troisplay.vercel.app/signup/${
+              record?.data?.referal?.refer_code ?? ""
+            }`
+          )
+          .finally(() => {
+            toast(dispatch, {
+              msg: "Link Copied, share your link to gain referals.",
+            }).success();
+          });
       }
     }
   };
@@ -222,17 +225,16 @@ export default function GetterScreen() {
                 subText="Claim daily coins with glory spin of up to 100 coins per day."
                 earn={"0 - 100"}
                 btnText="Spin"
-                btnFunc={() =>{
+                btnFunc={() => {
                   if (!spin.data.spin_details.isPlayable) {
-                  toast(dispatch, {
-                    msg:
-                      "Sorry you can't spin right now, glory spin can only be used once a day.",
-                  }).fail();
-                  return;
-                }
+                    toast(dispatch, {
+                      msg:
+                        "Sorry you can't spin right now, glory spin can only be used once a day.",
+                    }).fail();
+                    return;
+                  }
                   setGameDetails(dispatch, {
                     player: PlayerType.first,
-                    game: Games.glory_spin,
                     id: "",
                     price: 0,
                   });
@@ -246,4 +248,3 @@ export default function GetterScreen() {
     </>
   );
 }
-
