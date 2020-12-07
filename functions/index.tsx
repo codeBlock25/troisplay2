@@ -10,7 +10,7 @@ import {
   errorType,
   nextType,
 } from "../typescript/enum";
-import { ActionType } from "../typescript/interface";
+import { ActionType, Url, TransitionOptions } from "../typescript/interface";
 
 export function getGame(path: string): Games {
   switch (path) {
@@ -147,7 +147,8 @@ export function getPrice(
       return 0;
   }
 }
-const { push } = useRouter();
+
+const {push} = useRouter()
 
 export async function PlayLuckyGeogeGame(
   payWith: PayType,
@@ -155,7 +156,8 @@ export async function PlayLuckyGeogeGame(
   setLoader: (t: boolean) => void,
   gameID: string,
   dispatch: (ActionType) => void,
-  title: string
+  title: string,
+  push: (url: Url, as?: Url, options?: TransitionOptions) => Promise<boolean>
 ) {
   let token = getToken();
   if (loader) return;

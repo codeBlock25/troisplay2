@@ -1,3 +1,5 @@
+import { urlObjectKeys } from "next/dist/next-server/lib/utils";
+import { ParsedUrlQueryInput } from "querystring";
 import { initReducerType } from "../store/reducer/initial";
 import {
   Games,
@@ -72,6 +74,26 @@ export interface eventReeducerType {
     game?: Games;
   };
 }
+export interface UrlObject {
+  auth?: string | null;
+  hash?: string | null;
+  host?: string | null;
+  hostname?: string | null;
+  href?: string | null;
+  pathname?: string | null;
+  protocol?: string | null;
+  search?: string | null;
+  slashes?: boolean | null;
+  port?: string | number | null;
+  query?: string | null | ParsedUrlQueryInput;
+}
+
+export interface TransitionOptions {
+  shallow?: boolean;
+  locale?: string | false;
+}
+
+export type Url = UrlObject | string;
 
 export interface ActionType<T = any> {
   type:
@@ -83,8 +105,8 @@ export interface ActionType<T = any> {
     | "ACTION"
     | "CUSTOMWINDOW"
     | "INIT"
-  | "NOTIFICATIONS"
-  |"GAME_UPDATE"
+    | "NOTIFICATIONS"
+    | "GAME_UPDATE"
     | "PLAYED";
   payload: T;
 }

@@ -457,7 +457,8 @@ export default function PickerPlayer2({
                             setBtnLoading,
                             game._id,
                             dispatch,
-                            game.battleScore.player1.title
+                            game.battleScore.player1.title,
+                            push
                           ).finally(() => {
                             setPopState((prev) => {
                               return { ...prev, func: null, game: Games.non };
@@ -485,7 +486,8 @@ export default function PickerPlayer2({
                             setBtnLoading,
                             game._id,
                             dispatch,
-                            game.battleScore.player1.title
+                            game.battleScore.player1.title,
+                            push
                           ).finally(() => {
                             setPopState((prev) => {
                               return { ...prev, func: null, game: Games.non };
