@@ -1,4 +1,5 @@
 import Axios, { AxiosResponse } from "axios";
+import { useRouter } from "next/router";
 import { Dispatch, SetStateAction } from "react";
 import { url } from "../constant";
 import { setGameDetails, toast } from "../store/action";
@@ -146,6 +147,7 @@ export function getPrice(
       return 0;
   }
 }
+const { push } = useRouter();
 
 export async function PlayLuckyGeogeGame(
   payWith: PayType,
@@ -170,6 +172,7 @@ export async function PlayLuckyGeogeGame(
     },
   })
     .then(({ data: { price } }: AxiosResponse<{ price: number }>) => {
+      push("/games");
       toast(dispatch, {
         msg: `You have successfully joined ${title} with $ ${price}`,
       }).success();

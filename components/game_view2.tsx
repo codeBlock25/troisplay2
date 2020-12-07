@@ -35,7 +35,9 @@ const GameView2 = memo(function ({
 }) {
   return (
     <div className="game_content_view">
-      <span className="name">{title ?? "Lucky games"}</span>
+      <span className="name" style={{ color: "orange" }}>
+        {title ?? "Lucky games"}
+      </span>
       <span className="date">{description}</span>
       <span style={{ color: "white" }}>Players Needed: {playerNeeded}</span>
       <span style={{ color: "white" }}>Players Joined: {playerJoined}</span>
@@ -50,7 +52,7 @@ const GameView2 = memo(function ({
       {type && type === "picker" && (
         <div className="action">
           <span className="btn" onClick={btn1func}>
-            play with <NAIRA />
+            play
           </span>
         </div>
       )}

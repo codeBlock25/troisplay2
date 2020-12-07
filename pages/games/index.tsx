@@ -491,7 +491,7 @@ export default function GamesScreen() {
               className="btn"
               onClick={() => {
                 if (getGame(asPath) === Games.lucky_geoge) {
-                  push("/games");
+                  push("/games#lucky-draw-select");
                   setP2(true);
                   return;
                 } else if (
