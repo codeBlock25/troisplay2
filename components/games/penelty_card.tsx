@@ -300,7 +300,6 @@ export default function Penalty_card() {
               setKnownState3(game_result.round3);
               setKnownState4(game_result.round4);
               setKnownState5(game_result.round5);
-              push("/games");
               // if (winner) {
               //   notify(dispatch, {
               //     type: NotiErrorType.success,
