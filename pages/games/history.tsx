@@ -255,6 +255,7 @@ export default function HistoryScreen() {
   const [winnings, setWinnings] = useState<number>(0);
   const [losses, setLosses] = useState<number>(0);
   const [draws, setDraws] = useState<number>(0);
+  const [playedGame, setPlayedGames] = useState<number>(0);
   const [row_, setRow_] = useState<
     {
       name: string;
@@ -267,16 +268,20 @@ export default function HistoryScreen() {
   useEffect(() => {
     let winnings = 0,
       losses = 0,
+      playedGame = 0,
       draws = 0;
     if (isArray(history?.data?.records)) {
       history.data.records.map((record, index) => {
         winnings += record.winnings;
+        playedGame += record.winnings;
+        playedGame += record.losses;
         losses += record.losses;
         draws += record.draws;
       });
       setWinnings(winnings);
       setLosses(losses);
       setDraws(draws);
+      setPlayedGames(playedGame);
       winnings = 0;
       losses = 0;
       draws = 0;
@@ -330,19 +335,25 @@ export default function HistoryScreen() {
                 </div>
                 <div className="container_history win">
                   <div className="content">
-                    <h3 className="title winnings">Your Winnings Count</h3>
+                    <h3 className="title winnings">Played games</h3>
+                    <h3 className="count">{playedGame ?? 0}</h3>
+                  </div>
+                </div>
+                <div className="container_history win">
+                  <div className="content">
+                    <h3 className="title winnings">Won</h3>
                     <h3 className="count">{winnings ?? 0}</h3>
                   </div>
                 </div>
                 <div className="container_history loss">
                   <div className="content">
-                    <h3 className="title loss">Your Losses Count</h3>
+                    <h3 className="title loss">Loss</h3>
                     <h3 className="count">{losses ?? 0}</h3>
                   </div>
                 </div>
                 <div className="container_history draw">
                   <div className="content">
-                    <h3 className="title draw">Your Draw Count</h3>
+                    <h3 className="title draw">Draw</h3>
                     <h3 className="count">{draws ?? 0}</h3>
                   </div>
                 </div>

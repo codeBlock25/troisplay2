@@ -202,9 +202,6 @@ export default function DetailScreen() {
                 }}
                 className="actionView"
               >
-                <span className="btn" onClick={Share}>
-                  refer
-                </span>
                 <span
                   className="btn"
                   onClick={() => {
@@ -223,6 +220,9 @@ export default function DetailScreen() {
                   }}
                 >
                   glory spin
+                </span>
+                <span className="btn" onClick={Share}>
+                  refer
                 </span>
               </InView>
             </div>

@@ -381,7 +381,9 @@ export default function PickerPlayer2({
               "Network error, if this continues reload the page or login again.",
           }).error();
         })
-        .finally(() => setLoadingLuckyDrawGames(false));
+        .finally(() => {
+          setLoadingLuckyDrawGames(false);
+        });
     }
   }, [luckyDrawGame, asPath]);
 
@@ -455,7 +457,7 @@ export default function PickerPlayer2({
       <div className="container">
         <h3 className="title">Games</h3>
         <div className="list_games" style={{ paddingBottom: "60px" }}>
-          {loading || loadingLuckyDrawGames ? (
+          {loading ? (
             <>
               <span className="txt">Loading please wait...</span>
             </>
