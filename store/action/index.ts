@@ -21,7 +21,6 @@ export const initReduceGameState = {
   }: {
     dispatch: Dispatch<ActionType<any>>;
     payload: {
-      luckyGames: any;
       roomGames: any;
       my_games: any;
       gameDefaults: any;
@@ -30,7 +29,7 @@ export const initReduceGameState = {
       notifications: any;
     };
   }) => {
-    dispatch({ type: "INIT", payload });
+    dispatch({ type: "INIT", payload: { ...payload, luckyGames: [] } });
   },
   clear: () => {},
   lucky_games: () => {},

@@ -25,12 +25,6 @@ const HeadFunc = memo(function ({
   setApp_loading: (T: boolean) => void;
 }) {
   const { push } = useRouter();
-  const { data: lucky_games } = useQuery("lucky-games", async () => {
-    let token = getToken();
-    return await Axios.get(`${url}/games/lucky-geoge`, {
-      headers: { authorization: `Bearer ${token}` },
-    });
-  });
   const { data: spins } = useQuery("spins", async () => {
     let token = getToken();
     return await Axios.get(`${url}/games/spin/check-time`, {
@@ -111,7 +105,6 @@ const HeadFunc = memo(function ({
     }
     if (
       isSuccess &&
-      lucky_games &&
       rooms &&
       my_games &&
       record &&
@@ -124,7 +117,6 @@ const HeadFunc = memo(function ({
     isError,
     isLoading,
     isSuccess,
-    lucky_games,
     rooms,
     my_games,
     record,
@@ -136,10 +128,11 @@ const HeadFunc = memo(function ({
     checker();
   }, [checker]);
 
+
+
   const dispatch = useDispatch();
   useEffect(() => {
     if (
-      lucky_games &&
       rooms &&
       my_games &&
       record &&
@@ -150,7 +143,6 @@ const HeadFunc = memo(function ({
       initReduceGameState.init({
         dispatch,
         payload: {
-          luckyGames: lucky_games.data.games ?? [],
           roomGames: rooms.data.rooms ?? [],
           my_games: my_games.data.games ?? [],
           gameDefaults: defaults.data.default,
@@ -164,7 +156,7 @@ const HeadFunc = memo(function ({
         },
       });
     }
-  }, [defaults, record, spins, lucky_games, rooms, my_games, notifications]);
+  }, [defaults, record, spins, rooms, my_games, notifications]);
 
   return (
     <header className="game_header">

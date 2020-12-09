@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import {
   TextField,
@@ -148,8 +148,8 @@ export default function PickerPlayer2({
       };
     }[]
   >([]);
-  const lucky_games: AxiosResponse<{
-    games: {
+  const [luckyDrawGame, setLuckyDrawGames] = useState<
+    {
       battleScore: {
         player1: {
           description: string;
@@ -171,8 +171,8 @@ export default function PickerPlayer2({
       price_in_coin: number;
       price_in_value: number;
       _id: string;
-    }[];
-  }> = useQueryCache().getQueryData("lucky-games");
+    }[]
+  >([]);
   const rooms: AxiosResponse<{
     rooms: {
       _id: string;
@@ -232,6 +232,7 @@ export default function PickerPlayer2({
     })
       .then(({ data: { price } }: AxiosResponse<{ price: number }>) => {
         close();
+        setOpenGame([]);
         push(
           getGameSelect(asPath) === Games.roshambo
             ? "/games#roshambo-play"
@@ -264,11 +265,12 @@ export default function PickerPlayer2({
         }).error();
       })
       .finally(() => {
-        setmin(0);
+        setmin(100);
         setmax(10000);
         setBtnLoading(false);
       });
   };
+
   const playLuckyGeoge = async (payWith: PayType, id: string) => {
     let token = getToken();
     if (loading) return;
@@ -299,6 +301,7 @@ export default function PickerPlayer2({
         setLoadingL(false);
       });
   };
+
   const LoadData = async ({ amount }: { amount: number }) => {
     let token = getToken();
     if (loading) return;
@@ -359,7 +362,32 @@ export default function PickerPlayer2({
   useEffect(() => {
     LoadData({ amount: 100 });
   }, [isOpen]);
+  const [loadingLuckyDrawGames, setLoadingLuckyDrawGames] = useState<boolean>(
+    false
+  );
+  const luckyDrawGettter = useCallback(async () => {
+    if (loadingLuckyDrawGames) return;
+    setLoadingLuckyDrawGames(true);
+    if (getGameSelect(asPath) === Games.lucky_geoge) {
+      await Axios.get(`${url}/games/lucky-geoge`, {
+        headers: { authorization: `Bearer ${getToken()}` },
+      })
+        .then(({ data }) => {
+          setLuckyDrawGames(data.games);
+        })
+        .catch(() => {
+          toast(dispatch, {
+            msg:
+              "Network error, if this continues reload the page or login again.",
+          }).error();
+        })
+        .finally(() => setLoadingLuckyDrawGames(false));
+    }
+  }, [luckyDrawGame, asPath]);
 
+  useEffect(() => {
+    luckyDrawGettter();
+  }, [luckyDrawGettter]);
   const theme = "dark-mode";
   return (
     <div
@@ -427,12 +455,12 @@ export default function PickerPlayer2({
       <div className="container">
         <h3 className="title">Games</h3>
         <div className="list_games" style={{ paddingBottom: "60px" }}>
-          {loading ? (
+          {loading || loadingLuckyDrawGames ? (
             <>
               <span className="txt">Loading please wait...</span>
             </>
           ) : game_to_play === Games.lucky_geoge ? (
-            lucky_games?.data?.games.map((game) => {
+            luckyDrawGame.map((game) => {
               return (
                 <GameView2
                   type="picker"
@@ -584,6 +612,7 @@ export default function PickerPlayer2({
                               isOpen: modalType.open,
                               game,
                             });
+                            setOpenGame([]);
                             close();
                           },
                         };
@@ -592,8 +621,9 @@ export default function PickerPlayer2({
                     btn2func={() =>
                       exitWin(dispatch, {
                         open: modalType.open,
-                        func: async () =>
-                          Axios.post(
+                        func: async () => {
+                          setOpenGame([]);
+                          return Axios.post(
                             `${url}/games/custom/game`,
                             { id: game._id },
                             {
@@ -601,7 +631,8 @@ export default function PickerPlayer2({
                                 authorization: `Bearer ${getToken()}`,
                               },
                             }
-                          ),
+                          );
+                        },
                         game: Games.custom_game,
                       })
                     }
@@ -685,7 +716,7 @@ export default function PickerPlayer2({
               <Fab
                 className="cls"
                 onClick={() => {
-                  setmin(0);
+                  setmin(100);
                   setmax(10000);
                   close();
                 }}
@@ -700,7 +731,7 @@ export default function PickerPlayer2({
               <Fab
                 className="cls"
                 onClick={() => {
-                  setmin(0);
+                  setmin(100);
                   setmax(100);
                   close();
                 }}
