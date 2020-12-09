@@ -252,6 +252,9 @@ export default function HistoryScreen() {
       earnings: number;
     }[]
   >([]);
+  const [winnings, setWinnings] = useState<number>(0);
+  const [losses, setLosses] = useState<number>(0);
+  const [draws, setDraws] = useState<number>(0);
   const [row_, setRow_] = useState<
     {
       name: string;
@@ -262,263 +265,24 @@ export default function HistoryScreen() {
     }[]
   >([]);
   useEffect(() => {
-    let r: {
-      sn: number;
-      id: string;
-      _id: string;
-      userID: string;
-      date_mark: Date;
-      game: Games;
-      won: string;
-      earnings: number;
-    }[] = [];
-    let r_: {
-      name: string;
-      winnings: number;
-      draws: number;
-      losses: number;
-      earnings: number;
-    }[] = [];
-    let r_f = [];
+    let winnings = 0,
+      losses = 0,
+      draws = 0;
     if (isArray(history?.data?.records)) {
       history.data.records.map((record, index) => {
-        // r.push({ ...record, id: record._id, sn: index });
-        // let ind = findIndex(r_, {
-        //   mark: moment(record.date_mark).format("Do"),
-        // });
-        r_.push({ ...record, name: moment(record.date_mark).format("Do") });
+        winnings = +record.winnings;
+        losses = +record.losses;
+        draws = +record.draws;
       });
-      setRow_(r_);
-      r_ = [];
+      setWinnings(winnings);
+      setLosses(losses);
+      setDraws(draws);
+      winnings = 0;
+      losses = 0;
+      draws = 0;
     }
   }, [history]);
 
-  const data: {
-    name: string;
-    winnings: number;
-    draws: number;
-    losses: number;
-    earnings: number;
-  }[] = [
-    {
-      name: moment().subtract(30, "days").format("Do"),
-      winnings: 0,
-      draws: 0,
-      losses: 0,
-      earnings: 0,
-    },
-    {
-      name: moment().subtract(29, "days").format("Do"),
-      winnings: 0,
-      draws: 0,
-      losses: 0,
-      earnings: 0,
-    },
-    {
-      name: moment().subtract(28, "days").format("Do"),
-      winnings: 0,
-      draws: 0,
-      losses: 0,
-      earnings: 0,
-    },
-    {
-      name: moment().subtract(27, "days").format("Do"),
-      winnings: 0,
-      draws: 0,
-      losses: 0,
-      earnings: 0,
-    },
-    {
-      name: moment().subtract(26, "days").format("Do"),
-      winnings: 0,
-      draws: 0,
-      losses: 0,
-      earnings: 0,
-    },
-    {
-      name: moment().subtract(25, "days").format("Do"),
-      winnings: 0,
-      draws: 0,
-      losses: 0,
-      earnings: 0,
-    },
-    {
-      name: moment().subtract(24, "days").format("Do"),
-      winnings: 0,
-      draws: 0,
-      losses: 0,
-      earnings: 0,
-    },
-    {
-      name: moment().subtract(23, "days").format("Do"),
-      winnings: 0,
-      draws: 0,
-      losses: 0,
-      earnings: 0,
-    },
-    {
-      name: moment().subtract(22, "days").format("Do"),
-      winnings: 0,
-      draws: 0,
-      losses: 0,
-      earnings: 0,
-    },
-    {
-      name: moment().subtract(21, "days").format("Do"),
-      winnings: 0,
-      draws: 0,
-      losses: 0,
-      earnings: 0,
-    },
-    {
-      name: moment().subtract(20, "days").format("Do"),
-      winnings: 0,
-      draws: 0,
-      losses: 0,
-      earnings: 0,
-    },
-    {
-      name: moment().subtract(19, "days").format("Do"),
-      winnings: 0,
-      draws: 0,
-      losses: 0,
-      earnings: 0,
-    },
-    {
-      name: moment().subtract(18, "days").format("Do"),
-      winnings: 0,
-      draws: 0,
-      losses: 0,
-      earnings: 0,
-    },
-    {
-      name: moment().subtract(17, "days").format("Do"),
-      winnings: 0,
-      draws: 0,
-      losses: 0,
-      earnings: 0,
-    },
-    {
-      name: moment().subtract(16, "days").format("Do"),
-      winnings: 0,
-      draws: 0,
-      losses: 0,
-      earnings: 0,
-    },
-    {
-      name: moment().subtract(15, "days").format("Do"),
-      winnings: 0,
-      draws: 0,
-      losses: 0,
-      earnings: 0,
-    },
-    {
-      name: moment().subtract(14, "days").format("Do"),
-      winnings: 0,
-      draws: 0,
-      losses: 0,
-      earnings: 0,
-    },
-    {
-      name: moment().subtract(13, "days").format("Do"),
-      winnings: 0,
-      draws: 0,
-      losses: 0,
-      earnings: 0,
-    },
-    {
-      name: moment().subtract(12, "days").format("Do"),
-      winnings: 0,
-      draws: 0,
-      losses: 0,
-      earnings: 0,
-    },
-    {
-      name: moment().subtract(11, "days").format("Do"),
-      winnings: 0,
-      draws: 0,
-      losses: 0,
-      earnings: 0,
-    },
-    {
-      name: moment().subtract(10, "days").format("Do"),
-      winnings: 0,
-      draws: 0,
-      losses: 0,
-      earnings: 0,
-    },
-    {
-      name: moment().subtract(9, "days").format("Do"),
-      winnings: 0,
-      draws: 0,
-      losses: 0,
-      earnings: 0,
-    },
-    {
-      name: moment().subtract(8, "days").format("Do"),
-      winnings: 0,
-      draws: 0,
-      losses: 0,
-      earnings: 0,
-    },
-    {
-      name: moment().subtract(7, "days").format("Do"),
-      winnings: 0,
-      draws: 0,
-      losses: 0,
-      earnings: 0,
-    },
-    {
-      name: moment().subtract(6, "days").format("Do"),
-
-      winnings: 0,
-      draws: 0,
-      losses: 0,
-      earnings: 0,
-    },
-    {
-      name: moment().subtract(5, "days").format("Do"),
-      winnings: 0,
-      draws: 0,
-      losses: 0,
-      earnings: 0,
-    },
-    {
-      name: moment().subtract(4, "days").format("Do"),
-      winnings: 0,
-      draws: 0,
-      losses: 0,
-      earnings: 0,
-    },
-    {
-      name: moment().subtract(3, "days").format("Do"),
-      winnings: 0,
-      draws: 0,
-      losses: 0,
-      earnings: 0,
-    },
-    {
-      name: moment().subtract(2, "days").format("Do"),
-      winnings: 0,
-      draws: 0,
-      losses: 0,
-      earnings: 0,
-    },
-    {
-      name: moment().subtract(1, "days").format("Do"),
-      winnings: 0,
-      draws: 0,
-      losses: 0,
-      earnings: 0,
-    },
-    {
-      name: moment().format("Do"),
-      winnings: 0,
-      draws: 0,
-      losses: 0,
-      earnings: 0,
-    },
-  ];
   const theme = "dark-mode";
   return (
     <>
@@ -564,102 +328,24 @@ export default function HistoryScreen() {
                   </div>
                   <span className="query">today</span>
                 </div>
-                <ResponsiveContainer
-                  width="100%"
-                  height={350}
-                  minWidth={"100%"}
-                  minHeight={300}
-                  maxHeight={450}
-                >
-                  <AreaChart
-                    data={row_}
-                    margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
-                  >
-                    <defs>
-                      <linearGradient id="colorWv" x1="0" y1="0" x2="0" y2="1">
-                        <stop
-                          offset="65%"
-                          stopColor="#29c73e"
-                          stopOpacity={0.8}
-                        />
-                        <stop
-                          offset="95%"
-                          stopColor="#29c73e3f"
-                          stopOpacity={0}
-                        />
-                      </linearGradient>
-                      <linearGradient id="colorEv" x1="0" y1="0" x2="0" y2="1">
-                        <stop
-                          offset="65%"
-                          stopColor="#105ef1"
-                          stopOpacity={0.8}
-                        />
-                        <stop
-                          offset="95%"
-                          stopColor="#105ef13f"
-                          stopOpacity={0}
-                        />
-                      </linearGradient>
-                      <linearGradient id="colorDv" x1="0" y1="0" x2="0" y2="1">
-                        <stop
-                          offset="65%"
-                          stopColor="#f1e110"
-                          stopOpacity={0.8}
-                        />
-                        <stop
-                          offset="95%"
-                          stopColor="#f1e1103f"
-                          stopOpacity={0}
-                        />
-                      </linearGradient>
-                      <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
-                        <stop
-                          offset="65%"
-                          stopColor="#FF5722"
-                          stopOpacity={0.8}
-                        />
-                        <stop
-                          offset="95%"
-                          stopColor="#FF57223f"
-                          stopOpacity={0}
-                        />
-                      </linearGradient>
-                    </defs>
-                    <XAxis dataKey="name" />
-                    <YAxis dataKey="earnings" />
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <ChartTooltip label="Details" />
-                    <Legend verticalAlign="top" height={36} />
-                    <Area
-                      type="monotone"
-                      dataKey="losses"
-                      stroke="#FF5722"
-                      fillOpacity={1}
-                      fill="url(#colorUv)"
-                    />
-                    <Area
-                      type="linear"
-                      dataKey="winnings"
-                      stroke="#29c73e"
-                      fillOpacity={1}
-                      fill="url(#colorWv)"
-                    />
-                    <Area
-                      type="linear"
-                      dataKey="earnings"
-                      stroke="#105ef1"
-                      fillOpacity={1}
-                      fill="url(#colorEv)"
-                    />
-                    <Area
-                      type="monotone"
-                      dataKey="draws"
-                      stroke="#f1e110"
-                      fillOpacity={1}
-                      fill="url(#colorDv)"
-                    />
-                  </AreaChart>
-                </ResponsiveContainer>
+                <div className="container_history win">
+                  <div className="content">
+                    <h3 className="title winnings">Your Winnings Count</h3>
+                    <h3 className="count">{winnings ?? 0}</h3>
+                  </div>
+                </div>
+                <div className="container_history loss">
+                  <div className="content">
+                    <h3 className="title loss">Your Losses Count</h3>
+                    <h3 className="count">{losses ?? 0}</h3>
+                  </div>
+                </div>
+                <div className="container_history draw">
+                  <div className="content">
+                    <h3 className="title draw">Your Draw Count</h3>
+                    <h3 className="count">{draws ?? 0}</h3>
+                  </div>
+                </div>
               </div>
             </TabPanel>
           </div>
@@ -668,57 +354,3 @@ export default function HistoryScreen() {
     </>
   );
 }
-
-/*
-    <ResponsiveContainer
-                width="100%"
-                height={350}
-                minWidth={500}
-                minHeight={300}
-                maxHeight={450}
-              >
-                <AreaChart
-                  data={row_}
-                  margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
-                >
-                  <defs>
-                    <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
-                      <stop
-                        offset="65%"
-                        stopColor="#2196F3"
-                        stopOpacity={0.8}
-                      />
-                      <stop offset="95%" stopColor="#f9f9f9" stopOpacity={0} />
-                    </linearGradient>
-                    <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
-                      <stop
-                        offset="65%"
-                        stopColor="#2196F3"
-                        stopOpacity={0.8}
-                      />
-                      <stop offset="95%" stopColor="#2196F3" stopOpacity={0} />
-                    </linearGradient>
-                  </defs>
-                  <XAxis dataKey="mark" />
-                  <YAxis dataKey="earnings" />
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <ChartTooltip label="Details" />
-                  <Legend verticalAlign="top" height={36} />
-                  <Area
-                    type="monotone"
-                    dataKey="losses"
-                    stroke="#2196F3"
-                    fillOpacity={1}
-                    fill="url(#colorUv)"
-                  />
-                  <Area
-                    type="monotone"
-                    dataKey="earnings"
-                    stroke="#111"
-                    fillOpacity={1}
-                    fill="url(#colorPv)"
-                  />
-                </AreaChart>
-              </ResponsiveContainer>
-          
-*/
