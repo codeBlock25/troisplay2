@@ -270,9 +270,9 @@ export default function HistoryScreen() {
       draws = 0;
     if (isArray(history?.data?.records)) {
       history.data.records.map((record, index) => {
-        winnings = +record.winnings;
-        losses = +record.losses;
-        draws = +record.draws;
+        winnings += record.winnings;
+        losses += record.losses;
+        draws += record.draws;
       });
       setWinnings(winnings);
       setLosses(losses);
