@@ -727,7 +727,19 @@ export default function PickerPlayer2({
               </Fab>
             </>
           ) : getGameSelect(asPath) === Games.lucky_geoge ? (
-            <></>
+            <>
+              <div />
+              <Fab
+                className="cls"
+                onClick={() => {
+                  setmin(100);
+                  setmax(100);
+                  close();
+                }}
+              >
+                <Close />
+              </Fab>
+            </>
           ) : (
             <>
               <Fab
