@@ -31,7 +31,7 @@
         pointer-events: none;
         opacity: 0;
         transition: $bounce .4s;
-        
+
         &.open {
             opacity: 1;
             bottom: 200px;
@@ -142,7 +142,7 @@
             min-height: fit-content;
             display: flex;
             align-self: center;
-            
+
             .sw_btn {
                 position: absolute;
                 top: calc(50% - 25px);
@@ -154,27 +154,27 @@
                 background-color: rgba(250, 250, 250, 0);
                 border-radius: 50%;
                 cursor: pointer;
-                
+
                 &:hover {
                     background-color: rgba(250, 250, 250, 0.1);
                 }
-                
+
                 &:nth-of-type(1) {
                     left: -50px;
-                    
+
                     @media (max-width: 500px) {
                         left: -30px;
                     }
                 }
-                
+
                 &:nth-of-type(2) {
                     right: -50px;
-                    
+
                     @media (max-width: 500px) {
                         right: -30px;
                     }
                 }
-                
+
                 svg {
                     width: 20px;
                     height: 20px;
@@ -184,7 +184,7 @@
                     filter: drop-shadow(0 0 5px $defaultColor);
                 }
             }
-            
+
             .container {
                 width: 270px;
                 height: 60px;
@@ -238,7 +238,7 @@
                         font-family: mon_med;
                         font-size: 12px;
                     }
-                    
+
                     .title {
                         width: fit-content;
                         height: fit-content;
@@ -310,12 +310,12 @@
                             fill: $defaultColor;
                             * {
                                 &> {
-                                    
+
                                     fill: $defaultColor;
                             }
                         }
                         }
-                        
+
                         span {
                             width: fit-content;
                             font-size: 10px;

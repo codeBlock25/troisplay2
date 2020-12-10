@@ -572,7 +572,7 @@ export default function Roshambo() {
                       round1knowState === CheckerType.unknown
                         ? "play"
                         : round1knowState === CheckerType.won
-                        ? "won"
+                        ? "win"
                         : round1knowState === CheckerType.lost
                         ? "lost"
                         : round1knowState === CheckerType.draw
@@ -583,7 +583,7 @@ export default function Roshambo() {
                     {round1knowState === CheckerType.unknown
                       ? "play"
                       : round1knowState === CheckerType.won
-                      ? "won"
+                      ? "win"
                       : round1knowState === CheckerType.lost
                       ? "lost"
                       : round1knowState === CheckerType.draw
@@ -672,7 +672,7 @@ export default function Roshambo() {
                       round2knowState === CheckerType.unknown
                         ? "play"
                         : round2knowState === CheckerType.won
-                        ? "won"
+                        ? "win"
                         : round2knowState === CheckerType.lost
                         ? "lost"
                         : round2knowState === CheckerType.draw
@@ -683,7 +683,7 @@ export default function Roshambo() {
                     {round2knowState === CheckerType.unknown
                       ? "play"
                       : round2knowState === CheckerType.won
-                      ? "won"
+                      ? "win"
                       : round2knowState === CheckerType.lost
                       ? "lost"
                       : round2knowState === CheckerType.draw
@@ -772,7 +772,7 @@ export default function Roshambo() {
                       round3knowState === CheckerType.unknown
                         ? "play"
                         : round3knowState === CheckerType.won
-                        ? "won"
+                        ? "win"
                         : round3knowState === CheckerType.lost
                         ? "lost"
                         : round3knowState === CheckerType.draw
@@ -783,7 +783,7 @@ export default function Roshambo() {
                     {round3knowState === CheckerType.unknown
                       ? "play"
                       : round3knowState === CheckerType.won
-                      ? "won"
+                      ? "win"
                       : round3knowState === CheckerType.lost
                       ? "lost"
                       : round3knowState === CheckerType.draw
@@ -872,7 +872,7 @@ export default function Roshambo() {
                       round4knowState === CheckerType.unknown
                         ? "play"
                         : round4knowState === CheckerType.won
-                        ? "won"
+                        ? "win"
                         : round4knowState === CheckerType.lost
                         ? "lost"
                         : round4knowState === CheckerType.draw
@@ -883,7 +883,7 @@ export default function Roshambo() {
                     {round4knowState === CheckerType.unknown
                       ? "play"
                       : round4knowState === CheckerType.won
-                      ? "won"
+                      ? "win"
                       : round4knowState === CheckerType.lost
                       ? "lost"
                       : round4knowState === CheckerType.draw
@@ -972,7 +972,7 @@ export default function Roshambo() {
                       round5knowState === CheckerType.unknown
                         ? "play"
                         : round5knowState === CheckerType.won
-                        ? "won"
+                        ? "win"
                         : round5knowState === CheckerType.lost
                         ? "lost"
                         : round5knowState === CheckerType.draw
@@ -983,7 +983,7 @@ export default function Roshambo() {
                     {round5knowState === CheckerType.unknown
                       ? "play"
                       : round5knowState === CheckerType.won
-                      ? "won"
+                      ? "win"
                       : round5knowState === CheckerType.lost
                       ? "lost"
                       : round5knowState === CheckerType.draw

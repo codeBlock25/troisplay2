@@ -606,7 +606,7 @@ export default function Penalty_card() {
                       round1knowState === CheckerType.unknown
                         ? "play"
                         : round1knowState === CheckerType.won
-                        ? "won"
+                        ? "win"
                         : round1knowState === CheckerType.lost
                         ? "lost"
                         : ""
@@ -615,7 +615,7 @@ export default function Penalty_card() {
                     {round1knowState === CheckerType.unknown
                       ? "play"
                       : round1knowState === CheckerType.won
-                      ? "won"
+                      ? "win"
                       : round1knowState === CheckerType.lost
                       ? "lost"
                       : ""}
@@ -705,7 +705,7 @@ export default function Penalty_card() {
                       round2knowState === CheckerType.unknown
                         ? "play"
                         : round2knowState === CheckerType.won
-                        ? "won"
+                        ? "win"
                         : round2knowState === CheckerType.lost
                         ? "lost"
                         : ""
@@ -714,7 +714,7 @@ export default function Penalty_card() {
                     {round2knowState === CheckerType.unknown
                       ? "play"
                       : round2knowState === CheckerType.won
-                      ? "won"
+                      ? "win"
                       : round2knowState === CheckerType.lost
                       ? "lost"
                       : ""}
@@ -805,7 +805,7 @@ export default function Penalty_card() {
                       round3knowState === CheckerType.unknown
                         ? "play"
                         : round3knowState === CheckerType.won
-                        ? "won"
+                        ? "win"
                         : round3knowState === CheckerType.lost
                         ? "lost"
                         : ""
@@ -814,7 +814,7 @@ export default function Penalty_card() {
                     {round3knowState === CheckerType.unknown
                       ? "play"
                       : round3knowState === CheckerType.won
-                      ? "won"
+                      ? "win"
                       : round3knowState === CheckerType.lost
                       ? "lost"
                       : ""}
@@ -904,7 +904,7 @@ export default function Penalty_card() {
                       round4knowState === CheckerType.unknown
                         ? "play"
                         : round4knowState === CheckerType.won
-                        ? "won"
+                        ? "win"
                         : round4knowState === CheckerType.lost
                         ? "lost"
                         : ""
@@ -913,7 +913,7 @@ export default function Penalty_card() {
                     {round4knowState === CheckerType.unknown
                       ? "play"
                       : round4knowState === CheckerType.won
-                      ? "won"
+                      ? "win"
                       : round4knowState === CheckerType.lost
                       ? "lost"
                       : ""}
@@ -1003,7 +1003,7 @@ export default function Penalty_card() {
                       round5knowState === CheckerType.unknown
                         ? "play"
                         : round5knowState === CheckerType.won
-                        ? "won"
+                        ? "win"
                         : round5knowState === CheckerType.lost
                         ? "lost"
                         : ""
@@ -1012,7 +1012,7 @@ export default function Penalty_card() {
                     {round5knowState === CheckerType.unknown
                       ? "play"
                       : round5knowState === CheckerType.won
-                      ? "won"
+                      ? "win"
                       : round5knowState === CheckerType.lost
                       ? "lost"
                       : ""}

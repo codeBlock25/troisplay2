@@ -462,6 +462,9 @@ export default function PickerPlayer2({
               <span className="txt">Loading please wait...</span>
             </>
           ) : game_to_play === Games.lucky_geoge ? (
+            luckyDrawGame.length <= 0 ? ( <>
+              <span className="txt">No avaliable games.</span>
+            </>):
             luckyDrawGame.map((game) => {
               return (
                 <GameView2
@@ -728,7 +731,7 @@ export default function PickerPlayer2({
             </>
           ) : getGameSelect(asPath) === Games.lucky_geoge ? (
             <>
-              <div />
+              <div style={{width: `calc(95% - 50px)`}} />
               <Fab
                 className="cls"
                 onClick={() => {
