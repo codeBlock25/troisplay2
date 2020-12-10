@@ -367,8 +367,8 @@ export default function PickerPlayer2({
   );
   const luckyDrawGettter = useCallback(async () => {
     if (loadingLuckyDrawGames) return;
-    setLoadingLuckyDrawGames(true);
     if (getGameSelect(asPath) === Games.lucky_geoge) {
+      setLoadingLuckyDrawGames(true);
       await Axios.get(`${url}/games/lucky-geoge`, {
         headers: { authorization: `Bearer ${getToken()}` },
       })
@@ -389,7 +389,7 @@ export default function PickerPlayer2({
 
   useEffect(() => {
     luckyDrawGettter();
-  }, [luckyDrawGettter]);
+  }, [luckyDrawGettter, asPath]);
   const theme = "dark-mode";
   return (
     <div
