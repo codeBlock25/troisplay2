@@ -461,7 +461,7 @@ export default function PickerPlayer2({
             <>
               <span className="txt">Loading please wait...</span>
             </>
-          ) : game_to_play === Games.lucky_geoge ? (
+          ) : getGameSelect(asPath) === Games.lucky_geoge ? (
             luckyDrawGame.length <= 0 ? (
               <>
                 <span className="txt">No avaliable games.</span>
