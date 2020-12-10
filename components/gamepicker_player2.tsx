@@ -462,82 +462,85 @@ export default function PickerPlayer2({
               <span className="txt">Loading please wait...</span>
             </>
           ) : game_to_play === Games.lucky_geoge ? (
-            luckyDrawGame.length <= 0 ? ( <>
-              <span className="txt">No avaliable games.</span>
-            </>):
-            luckyDrawGame.map((game) => {
-              return (
-                <GameView2
-                  type="picker"
-                  title={game.battleScore.player1.title}
-                  coin={game.price_in_coin}
-                  cash={game.price_in_value}
-                  description={game.battleScore.player1.description}
-                  winnings={game.battleScore.player1.winnerPrice}
-                  playerJoined={game.members.length}
-                  playerNeeded={game.gameMemberCount}
-                  key={game._id}
-                  btn1func={() => {
-                    setPopState((prev) => {
-                      return {
-                        ...prev,
-                        game: Games.lucky_geoge,
-                        lucky: game,
-                        func: async () =>
-                          await PlayLuckyGeogeGame(
-                            PayType.cash,
-                            btn_loading,
-                            setBtnLoading,
-                            game._id,
-                            dispatch,
-                            game.battleScore.player1.title,
-                            push
-                          ).finally(() => {
-                            setPopState((prev) => {
-                              return { ...prev, func: null, game: Games.non };
-                            });
-                            close();
-                            setGameDetails(dispatch, {
-                              player: PlayerType.first,
-                              id: undefined,
-                              price: 0,
-                            });
-                          }),
-                      };
-                    });
-                  }}
-                  btn2func={() => {
-                    setPopState((prev) => {
-                      return {
-                        ...prev,
-                        game: Games.lucky_geoge,
-                        lucky: game,
-                        func: async () =>
-                          await PlayLuckyGeogeGame(
-                            PayType.coin,
-                            btn_loading,
-                            setBtnLoading,
-                            game._id,
-                            dispatch,
-                            game.battleScore.player1.title,
-                            push
-                          ).finally(() => {
-                            setPopState((prev) => {
-                              return { ...prev, func: null, game: Games.non };
-                            });
-                            close();
-                            setGameDetails(dispatch, {
-                              player: PlayerType.first,
-                              id: undefined,
-                              price: 0,
-                            });
-                          }),
-                      };
-                    });
-                  }}
-                />
-              );
-            })
+            luckyDrawGame.length <= 0 ? (
+              <>
+                <span className="txt">No avaliable games.</span>
+              </>
+            ) : (
+              luckyDrawGame.map((game) => {
+                return (
+                  <GameView2
+                    type="picker"
+                    title={game.battleScore.player1.title}
+                    coin={game.price_in_coin}
+                    cash={game.price_in_value}
+                    description={game.battleScore.player1.description}
+                    winnings={game.battleScore.player1.winnerPrice}
+                    playerJoined={game.members.length}
+                    playerNeeded={game.gameMemberCount}
+                    key={game._id}
+                    btn1func={() => {
+                      setPopState((prev) => {
+                        return {
+                          ...prev,
+                          game: Games.lucky_geoge,
+                          lucky: game,
+                          func: async () =>
+                            await PlayLuckyGeogeGame(
+                              PayType.cash,
+                              btn_loading,
+                              setBtnLoading,
+                              game._id,
+                              dispatch,
+                              game.battleScore.player1.title,
+                              push
+                            ).finally(() => {
+                              setPopState((prev) => {
+                                return { ...prev, func: null, game: Games.non };
+                              });
+                              close();
+                              setGameDetails(dispatch, {
+                                player: PlayerType.first,
+                                id: undefined,
+                                price: 0,
+                              });
+                            }),
+                        };
+                      });
+                    }}
+                    btn2func={() => {
+                      setPopState((prev) => {
+                        return {
+                          ...prev,
+                          game: Games.lucky_geoge,
+                          lucky: game,
+                          func: async () =>
+                            await PlayLuckyGeogeGame(
+                              PayType.coin,
+                              btn_loading,
+                              setBtnLoading,
+                              game._id,
+                              dispatch,
+                              game.battleScore.player1.title,
+                              push
+                            ).finally(() => {
+                              setPopState((prev) => {
+                                return { ...prev, func: null, game: Games.non };
+                              });
+                              close();
+                              setGameDetails(dispatch, {
+                                player: PlayerType.first,
+                                id: undefined,
+                                price: 0,
+                              });
+                            }),
+                        };
+                      });
+                    }}
+                  />
+                );
+              })
+            )
           ) : game_to_play === Games.rooms ? (
             rooms?.data?.rooms.map((game) => {
               return (
@@ -731,7 +734,7 @@ export default function PickerPlayer2({
             </>
           ) : getGameSelect(asPath) === Games.lucky_geoge ? (
             <>
-              <div style={{width: `calc(95% - 50px)`}} />
+              <div style={{ width: `calc(95% - 50px)` }} />
               <Fab
                 className="cls"
                 onClick={() => {
