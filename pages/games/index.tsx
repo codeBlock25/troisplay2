@@ -156,6 +156,7 @@ export default function GamesScreen() {
       notifications: state.init.notification,
     };
   });
+
   const notificationCallback = useCallback(async () => {
     await Axios.put(
       `${url}/notifications/mark-read`,
@@ -176,9 +177,11 @@ export default function GamesScreen() {
         console.log(error);
       });
   }, [notificationCount]);
+
   useEffect(() => {
     if (viewing === Viewing.notification) notificationCallback();
   }, [viewing]);
+
   useEffect(() => {
     if (!isEmpty(notifications.notifications)) {
       let r = filter(notifications.notifications, {
@@ -223,6 +226,7 @@ export default function GamesScreen() {
       };
     }[];
   }> = useQueryCache().getQueryData("requests");
+
   useEffect(() => {
     beforePopState(({ as }) => {
       if (as.includes("#playing")) {
@@ -240,26 +244,6 @@ export default function GamesScreen() {
           setViewOpen(true);
         }
         break;
-      // case "/games#roshambo":
-      //   {
-      //     setViewOpen(true);
-      //   }
-      //   break;
-      // case "/games#penalty-card":
-      //   {
-      //     setViewOpen(true);
-      //   }
-      //   break;
-      // case "/games#guess-master":
-      //   {
-      //     setViewOpen(true);
-      //   }
-      //   break;
-      // case "/games#lucky-draw":
-      //   {
-      //     setViewOpen(true);
-      //   }
-      //   break;
 
       default:
         {

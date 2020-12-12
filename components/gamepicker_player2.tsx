@@ -373,6 +373,7 @@ export default function PickerPlayer2({
         headers: { authorization: `Bearer ${getToken()}` },
       })
         .then(({ data }) => {
+          console.log(data)
           setLuckyDrawGames(data.games);
         })
         .catch(() => {
