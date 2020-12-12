@@ -44,10 +44,12 @@ export default function PickerPlayer2({
   game: game_to_play,
   isOpen,
   close,
+  asPath,
 }: {
   close: () => void;
   game: Games;
   isOpen: boolean;
+  asPath: string;
 }) {
   const dispatch = useDispatch();
   const [min, setmin] = useState<number>(0);
@@ -214,7 +216,6 @@ export default function PickerPlayer2({
       referRating: number;
     };
   }> = useQueryCache().getQueryData("defaults");
-  const { asPath } = useRouter();
   const playOne = async (playWith: PayType, id: string, game: Games) => {
     let token = getToken();
     if (btn_loading) return;

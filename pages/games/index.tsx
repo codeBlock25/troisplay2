@@ -278,6 +278,7 @@ export default function GamesScreen() {
         game={getGameSelect(asPath)}
         isOpen={p2}
         close={() => push("/games")}
+        asPath={asPath}
       />
       <ToastContainer />
       <div
