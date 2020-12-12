@@ -103,43 +103,18 @@ const HeadFunc = memo(function ({
       setApp_loading(true);
       return;
     }
-    if (
-      isSuccess &&
-      rooms &&
-      my_games &&
-      record &&
-      spins &&
-      defaults
-    ) {
+    if (isSuccess && rooms && my_games && record && spins && defaults) {
       setApp_loading(false);
     }
-  }, [
-    isError,
-    isLoading,
-    isSuccess,
-    rooms,
-    my_games,
-    record,
-    spins,
-    defaults,
-  ]);
+  }, [isError, isLoading, isSuccess, rooms, my_games, record, spins, defaults]);
 
   useEffect(() => {
     checker();
   }, [checker]);
 
-
-
   const dispatch = useDispatch();
   useEffect(() => {
-    if (
-      rooms &&
-      my_games &&
-      record &&
-      spins &&
-      defaults &&
-      notifications
-    ) {
+    if (rooms && my_games && record && spins && defaults && notifications) {
       initReduceGameState.init({
         dispatch,
         payload: {
@@ -214,7 +189,9 @@ const HeadFunc = memo(function ({
             className="me_pic"
             title="Account"
             style={{
-              backgroundImage: `url(${url_media}${record?.data?.player?.playerpic})`,
+              backgroundImage: `url(${url_media}${
+                record?.data?.player?.playerpic ?? "media/icon.png"
+              })`,
             }}
           />
         </Link>
