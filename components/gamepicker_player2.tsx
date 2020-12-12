@@ -55,7 +55,7 @@ export default function PickerPlayer2({
   const [loading, setLoading] = useState<boolean>(false);
   const [btn_loading, setBtnLoading] = useState<boolean>(false);
   const [loadingL, setLoadingL] = useState<boolean>(false);
-  const { push, asPath } = useRouter();
+  const { push } = useRouter();
   const [popState, setPopState] = useState<{
     msg: string;
     func?: () => void | boolean | Promise<void> | Promise<boolean>;
@@ -214,7 +214,7 @@ export default function PickerPlayer2({
       referRating: number;
     };
   }> = useQueryCache().getQueryData("defaults");
-
+  const { asPath } = useRouter();
   const playOne = async (playWith: PayType, id: string, game: Games) => {
     let token = getToken();
     if (btn_loading) return;
@@ -387,11 +387,12 @@ export default function PickerPlayer2({
         });
     }
   }, [luckyDrawGame, asPath]);
-  console.log(asPath, getGameSelect(asPath));
   useEffect(() => {
     luckyDrawGettter();
   }, [luckyDrawGettter, asPath]);
   const theme = "dark-mode";
+
+  console.log(asPath, getGameSelect(asPath));
   return (
     <div
       className={`game_picker2 theme ${
