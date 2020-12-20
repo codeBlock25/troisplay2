@@ -44,6 +44,7 @@ export function getGamePlay(path: string): Games {
       return Games.non;
   }
 }
+
 export function getGameSelect(path: string): Games {
   switch (path) {
     case "/games#roshambo-select":
@@ -161,7 +162,7 @@ export async function PlayLuckyGeogeGame(
   setLoader(true);
   await Axios({
     method: "POST",
-    url: `${url}/games/lucky-geoge/play`,
+    url: `${url}/games/lucky-draw/play`,
     headers: {
       Authorization: `Bearer ${token}`,
     },
