@@ -160,17 +160,18 @@ export async function PlayLuckyGeogeGame(
   let token = getToken();
   if (loader) return;
   setLoader(true);
-  return await Axios({
-    method: "POST",
-    url: `${url}/games/lucky-draw/play`,
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-    data: {
+  return await Axios.post(
+    `${url}/games/lucky-draw/play`,
+    {
       id: gameID,
       payWith,
     },
-  });
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
 }
 
 export async function PlayGame(
