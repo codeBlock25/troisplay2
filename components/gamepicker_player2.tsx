@@ -60,7 +60,12 @@ export default function PickerPlayer2({
   const { push } = useRouter();
   const [popState, setPopState] = useState<{
     msg: string;
-    func?: () => void | boolean | Promise<void> | Promise<boolean>;
+    func?: () =>
+      | void
+      | boolean
+      | Promise<void>
+      | Promise<boolean>
+      | Promise<AxiosResponse<{ price: number }>>;
     game: Games;
     lucky?: {
       battleScore: {
@@ -497,17 +502,34 @@ export default function PickerPlayer2({
                               dispatch,
                               game.battleScore.player1.title,
                               push
-                            ).finally(() => {
-                              setPopState((prev) => {
-                                return { ...prev, func: null, game: Games.non };
-                              });
-                              close();
-                              setGameDetails(dispatch, {
-                                player: PlayerType.first,
-                                id: undefined,
-                                price: 0,
-                              });
-                            }),
+                            )
+                              .then(({ data: { price } }) => {
+                                push("/games");
+                                toast(dispatch, {
+                                  msg: `You have successfully joined ${game.battleScore.player1.title} with $ ${price}`,
+                                }).success();
+                              })
+                              .catch(() => {
+                                toast(dispatch, {
+                                  msg: `An Error occured could not connect to troisplay game server please check you interner connection and Try Again.`,
+                                }).error();
+                              })
+                              .finally(() => {
+                                setBtnLoading(false);
+                                setPopState((prev) => {
+                                  return {
+                                    ...prev,
+                                    func: null,
+                                    game: Games.non,
+                                  };
+                                });
+                                close();
+                                setGameDetails(dispatch, {
+                                  player: PlayerType.first,
+                                  id: undefined,
+                                  price: 0,
+                                });
+                              }),
                         };
                       });
                     }}
@@ -526,17 +548,34 @@ export default function PickerPlayer2({
                               dispatch,
                               game.battleScore.player1.title,
                               push
-                            ).finally(() => {
-                              setPopState((prev) => {
-                                return { ...prev, func: null, game: Games.non };
-                              });
-                              close();
-                              setGameDetails(dispatch, {
-                                player: PlayerType.first,
-                                id: undefined,
-                                price: 0,
-                              });
-                            }),
+                            )
+                              .then(({ data: { price } }) => {
+                                push("/games");
+                                toast(dispatch, {
+                                  msg: `You have successfully joined ${game.battleScore.player1.title} with $ ${price}`,
+                                }).success();
+                              })
+                              .catch(() => {
+                                toast(dispatch, {
+                                  msg: `An Error occured could not connect to troisplay game server please check you interner connection and Try Again.`,
+                                }).error();
+                              })
+                              .finally(() => {
+                                setBtnLoading(false);
+                                setPopState((prev) => {
+                                  return {
+                                    ...prev,
+                                    func: null,
+                                    game: Games.non,
+                                  };
+                                });
+                                close();
+                                setGameDetails(dispatch, {
+                                  player: PlayerType.first,
+                                  id: undefined,
+                                  price: 0,
+                                });
+                              }),
                         };
                       });
                     }}

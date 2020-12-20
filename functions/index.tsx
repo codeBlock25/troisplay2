@@ -156,11 +156,11 @@ export async function PlayLuckyGeogeGame(
   dispatch: (ActionType) => void,
   title: string,
   push: (url: Url, as?: Url, options?: TransitionOptions) => Promise<boolean>
-) {
+): Promise<AxiosResponse<{ price: number }>> {
   let token = getToken();
   if (loader) return;
   setLoader(true);
-  await Axios({
+  return await Axios({
     method: "POST",
     url: `${url}/games/lucky-draw/play`,
     headers: {
@@ -170,21 +170,7 @@ export async function PlayLuckyGeogeGame(
       id: gameID,
       payWith,
     },
-  })
-    .then(({ data: { price } }: AxiosResponse<{ price: number }>) => {
-      push("/games");
-      toast(dispatch, {
-        msg: `You have successfully joined ${title} with $ ${price}`,
-      }).success();
-    })
-    .catch((err) => {
-      toast(dispatch, {
-        msg: `An Error occured could not connect to troisplay game server please check you interner connection and Try Again.`,
-      }).error();
-    })
-    .finally(() => {
-      setLoader(false);
-    });
+  });
 }
 
 export async function PlayGame(
