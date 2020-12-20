@@ -454,8 +454,8 @@ export default function PickerPlayer2({
           </p>
           <Button
             className="btn"
-            onClick={() => {
-              popState.func();
+            onClick={async () => {
+              await popState.func();
             }}
           >
             play
