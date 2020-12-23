@@ -275,6 +275,7 @@ export default function HistoryScreen() {
         winnings += record.winnings;
         playedGame += record.winnings;
         playedGame += record.losses;
+        playedGame += record.draws;
         losses += record.losses;
         draws += record.draws;
       });
