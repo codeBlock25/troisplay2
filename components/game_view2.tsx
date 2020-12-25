@@ -13,11 +13,13 @@ const GameView2 = memo(function ({
   type,
   btn1func,
   btn2func,
+  ticketCount,
 }: {
   title?: string;
   type?: "picker" | "normal";
   cash: number;
   coin: number;
+  ticketCount: number;
   winnings: number;
   description: string;
   playerNeeded: number;
@@ -41,6 +43,7 @@ const GameView2 = memo(function ({
       <span className="date">{description}</span>
       <span style={{ color: "white" }}>Players Needed: {playerNeeded}</span>
       <span style={{ color: "white" }}>Players Joined: {playerJoined}</span>
+      <span style={{ color: "white" }}>Ticket Count : {ticketCount}</span>
       <div className="viewee">
         <span className="stake">
           <NAIRA /> {cash}

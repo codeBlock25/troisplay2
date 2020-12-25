@@ -6,7 +6,7 @@ import { CloseIcon, MenuIcon } from "../icon";
 import Axios from "axios";
 import { useRouter } from "next/router";
 import { PUBLIC_KEY, SECRET_KEY, url } from "../constant";
-import { SyncLoader } from "react-spinners";
+import { MoonLoader } from "react-spinners";
 import ToastContainer from "../components/toast";
 import { errorType, modalType } from "../typescript/enum";
 import { toast } from "../store/action";
@@ -16,7 +16,7 @@ import { Facebook, Instagram, Twitter, WhatsApp } from "@material-ui/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faApple, faGooglePlay } from "@fortawesome/free-brands-svg-icons";
 import Footer from "../components/footer";
- 
+
 export default function Index() {
   const dispatch = useDispatch();
   const [nav_bar, setNarBar] = useState<boolean>(false);
@@ -72,7 +72,7 @@ export default function Index() {
         }).success();
       })
       .catch((err) => {
-        push("/")
+        push("/");
         if (err.message === "Request failed with status code 400") {
           setPhone_number_error2(errorType.used);
           return;
@@ -135,15 +135,14 @@ export default function Index() {
   useEffect(() => {
     if (asPath === "/#signup") {
       setLoginState(false);
-      setSignUpState(true)
+      setSignUpState(true);
     } else if (asPath === "/#login") {
       setLoginState(true);
-      setSignUpState(false)
-    }
-    else {
+      setSignUpState(false);
+    } else {
       setLoginState(false);
-      setSignUpState(false)
-    };
+      setSignUpState(false);
+    }
   }, [asPath, pathname]);
   return (
     <>
@@ -254,7 +253,7 @@ export default function Index() {
             )
           )}
           <button type="submit" className="submit_btn">
-            {loading ? <SyncLoader size="10px" color="white" /> : "login"}
+            {loading ? <MoonLoader size="10px" color="white" /> : "login"}
           </button>
           <p className="link">
             forget password
@@ -352,7 +351,7 @@ export default function Index() {
           )}
           <button type="submit" className="submit_btn">
             {loading ? (
-              <SyncLoader size="10px" color="white" />
+              <MoonLoader size="10px" color="white" />
             ) : (
               "create Account"
             )}

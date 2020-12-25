@@ -24,7 +24,7 @@ import Head from "next/head";
 import FormMake from "form-data";
 import Axios from "axios";
 import { banks, url } from "../constant";
-import { ScaleLoader } from "react-spinners";
+import { MoonLoader } from "react-spinners";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import { getToken } from "../functions";
@@ -288,7 +288,7 @@ export default function Launch() {
             label="By filling this you here by confirm the terms & conditions set by Troisplay"
           />
           <Button className="btn_ dark-mode" type="submit">
-            {loading ? <ScaleLoader color="white" /> : "save"}
+            {loading ? <MoonLoader color="white" /> : "save"}
           </Button>
         </form>
       </div>

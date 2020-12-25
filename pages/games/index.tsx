@@ -66,7 +66,7 @@ import AccountF from "../../components/account_f";
 import { faGamepad } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { reducerType } from "../../typescript/interface";
-import { filter, isEmpty, reverse, sortBy } from "lodash";
+import { filter, find, isEmpty, reverse, sortBy } from "lodash";
 import GameView2 from "../../components/game_view2";
 import NotificationDisplay from "../../components/notification_display";
 
@@ -103,6 +103,14 @@ export default function GamesScreen() {
         playCount: number;
         price_in_coin: number;
         price_in_value: number;
+        players: {
+          date: Date;
+          id: string;
+          phone_number: string;
+          player_name: string;
+          ticket: string;
+          winner: boolean;
+        }[];
         battleScore: {
           player1: {
             endDate: Date;
@@ -820,6 +828,10 @@ export default function GamesScreen() {
                             description={game.battleScore?.player1?.description}
                             winnings={
                               game.battleScore?.player1?.winnerPrice ?? 0
+                            }
+                            ticketCount={
+                              filter(game.players, { id: notifications.userID })
+                                .length
                             }
                             playerJoined={game.members.length}
                             playerNeeded={game.gameMemberCount}

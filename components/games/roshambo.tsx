@@ -17,7 +17,7 @@ import {
   ScissorIcon,
 } from "../../icon";
 import { isEmpty } from "lodash";
-import { SyncLoader } from "react-spinners";
+import { MoonLoader } from "react-spinners";
 import {
   CheckerType,
   GameRec,
@@ -1080,12 +1080,12 @@ export default function Roshambo() {
               >
                 {isEmpty(details.id) ? (
                   loading === TwoButtonLoader.first_loading ? (
-                    <SyncLoader size="10px" color={`white`} />
+                    <MoonLoader size="10px" color={`white`} />
                   ) : (
                     "Play All"
                   )
                 ) : loading === TwoButtonLoader.first_loading ? (
-                  <SyncLoader size="10px" color={`white`} />
+                  <MoonLoader size="10px" color={`white`} />
                 ) : (
                   "Challange All"
                 )}
@@ -1101,7 +1101,7 @@ export default function Roshambo() {
                   }}
                 >
                   {loading === TwoButtonLoader.first_loading ? (
-                    <SyncLoader size="10px" color={`white`} />
+                    <MoonLoader size="10px" color={`white`} />
                   ) : (
                     `stake ₦  ${details.price}`
                   )}
@@ -1113,7 +1113,7 @@ export default function Roshambo() {
                   }}
                 >
                   {loading === TwoButtonLoader.second_loading ? (
-                    <SyncLoader size="10px" color={`white`} />
+                    <MoonLoader size="10px" color={`white`} />
                   ) : (
                     <>
                       stake <GameCoin />{" "}

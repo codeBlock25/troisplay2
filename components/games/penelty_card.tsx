@@ -2,7 +2,7 @@ import Axios, { AxiosResponse } from "axios";
 import { isEmpty } from "lodash";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { SyncLoader } from "react-spinners";
+import { MoonLoader } from "react-spinners";
 import { url } from "../../constant";
 import { CloseIcon, ForwardIcon, GameCoin, GoalPostIcon } from "../../icon";
 import { getGamePlay, getPrice, getToken } from "../../functions";
@@ -1107,7 +1107,7 @@ export default function Penalty_card() {
                   }}
                 >
                   {loading === TwoButtonLoader.first_loading ? (
-                    <SyncLoader size="10px" color={`white`} />
+                    <MoonLoader size="10px" color={`white`} />
                   ) : (
                     `stake ₦ ${details.price}`
                   )}
@@ -1120,12 +1120,12 @@ export default function Penalty_card() {
               >
                 {isEmpty(details.id) ? (
                   loading === TwoButtonLoader.first_loading ? (
-                    <SyncLoader size="10px" color={`white`} />
+                    <MoonLoader size="10px" color={`white`} />
                   ) : (
                     "Play"
                   )
                 ) : loading === TwoButtonLoader.second_loading ? (
-                  <SyncLoader size="10px" color={`white`} />
+                  <MoonLoader size="10px" color={`white`} />
                 ) : (
                   "challange"
                 )}

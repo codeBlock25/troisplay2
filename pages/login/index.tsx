@@ -7,7 +7,7 @@ import { CloseIcon } from "../../icon";
 import Axios from "axios";
 import { useRouter } from "next/router";
 import { url } from "../../constant";
-import { SyncLoader } from "react-spinners";
+import { MoonLoader } from "react-spinners";
 import { errorType, modalType } from "../../typescript/enum";
 import { useDispatch } from "react-redux";
 import { toast } from "../../store/action";
@@ -167,7 +167,7 @@ export default function Login() {
             <p className="error">Betting key should 6 digits long.</p>
           )}
           <button type="submit" className="submit_btn">
-            {loading ? <SyncLoader size="10px" color="white" /> : "login"}
+            {loading ? <MoonLoader size="10px" color="white" /> : "login"}
           </button>
           <p className="link">
             forget password

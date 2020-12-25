@@ -11,7 +11,7 @@ import {
 } from "../../store/action";
 import Link from "next/link";
 import { isEmpty } from "lodash";
-import { SyncLoader } from "react-spinners";
+import { MoonLoader } from "react-spinners";
 import {
   Games,
   modalType,
@@ -429,7 +429,7 @@ const GuessMaster = memo(function () {
           {!isEmpty(details.id) ? (
             <div className={`btn_ theme ${theme}`} onClick={() => matchPlay()}>
               {loading === TwoButtonLoader.first_loading ? (
-                <SyncLoader size="10px" color={`white`} />
+                <MoonLoader size="10px" color={`white`} />
               ) : (
                 <>{played.length >= 1 ? "Retry" : "Play"}</>
               )}
@@ -441,7 +441,7 @@ const GuessMaster = memo(function () {
                 onClick={() => matchPlay(PayType.cash)}
               >
                 {loading === TwoButtonLoader.first_loading ? (
-                  <SyncLoader size="10px" color={`white`} />
+                  <MoonLoader size="10px" color={`white`} />
                 ) : (
                   <>stake ₦ {details.price}</>
                 )}
@@ -451,7 +451,7 @@ const GuessMaster = memo(function () {
                 onClick={() => matchPlay(PayType.coin)}
               >
                 {loading === TwoButtonLoader.second_loading ? (
-                  <SyncLoader size="10px" color={`white`} />
+                  <MoonLoader size="10px" color={`white`} />
                 ) : (
                   <>
                     {" "}

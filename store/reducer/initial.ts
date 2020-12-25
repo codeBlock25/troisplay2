@@ -52,6 +52,14 @@ export interface initReducerType {
     price_in_coin: number;
     price_in_value: number;
     _id: string;
+    players: {
+      date: Date;
+      id: string;
+      phone_number: string;
+      player_name: string;
+      ticket: string;
+      winner: boolean;
+    }[];
     battleScore: {
       player1: {
         endDate: Date;
