@@ -19,8 +19,8 @@ const GameView2 = memo(function ({
   type?: "picker" | "normal";
   cash: number;
   coin: number;
-  ticketCount: number;
   winnings: number;
+  ticketCount: number;
   description: string;
   playerNeeded: number;
   playerJoined: number;
