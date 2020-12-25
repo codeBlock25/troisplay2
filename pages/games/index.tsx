@@ -287,6 +287,7 @@ export default function GamesScreen() {
         isOpen={p2}
         close={() => push("/games")}
         asPath={asPath}
+        userID={notifications.userID ?? ""}
       />
       <ToastContainer />
       <div

@@ -39,14 +39,17 @@ import { useQueryCache } from "react-query";
 import GameView from "./game_view";
 import { useRouter } from "next/router";
 import GameView2 from "./game_view2";
+import { filter } from "lodash";
 
 export default function PickerPlayer2({
   game: game_to_play,
   isOpen,
   close,
+  userID,
   asPath,
 }: {
   close: () => void;
+  userID: string;
   game: Games;
   isOpen: boolean;
   asPath: string;
@@ -173,6 +176,14 @@ export default function PickerPlayer2({
       gameType: string;
       isComplete: boolean;
       members: string[];
+      players: {
+        date: Date;
+        id: string;
+        phone_number: string;
+        player_name: string;
+        ticket: string;
+        winner: boolean;
+      }[];
       playCount: number;
       played: boolean;
       price_in_coin: number;
@@ -485,6 +496,7 @@ export default function PickerPlayer2({
                     description={game.battleScore.player1.description}
                     winnings={game.battleScore.player1.winnerPrice}
                     playerJoined={game.members.length}
+                    ticketCount={filter(game.players, { id: userID }).length}
                     playerNeeded={game.gameMemberCount}
                     key={game._id}
                     btn1func={() => {
