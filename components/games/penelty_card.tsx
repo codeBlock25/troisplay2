@@ -546,9 +546,7 @@ export default function Penalty_card() {
             </p>
             <div className="content">
               <div className="round">
-                <span className={`name theme ${theme}`}>
-                  First Penalty Take:
-                </span>
+                <span className={`name theme ${theme}`}>1st Penalty Take:</span>
                 <span
                   className={`value ${
                     round1.value === PenaltyOption.left ? "left" : ""
@@ -606,7 +604,7 @@ export default function Penalty_card() {
                       round1knowState === CheckerType.unknown
                         ? "play"
                         : round1knowState === CheckerType.won
-                        ? "win"
+                        ? "won"
                         : round1knowState === CheckerType.lost
                         ? "lost"
                         : ""
@@ -645,9 +643,7 @@ export default function Penalty_card() {
                 )}
               </div>
               <div className="round">
-                <span className={`name theme ${theme}`}>
-                  Second Penalty Take:
-                </span>
+                <span className={`name theme ${theme}`}>2nd Penalty Take:</span>
                 <span
                   className={`value ${
                     round2.value === PenaltyOption.left ? "left" : ""
@@ -705,7 +701,7 @@ export default function Penalty_card() {
                       round2knowState === CheckerType.unknown
                         ? "play"
                         : round2knowState === CheckerType.won
-                        ? "win"
+                        ? "won"
                         : round2knowState === CheckerType.lost
                         ? "lost"
                         : ""
@@ -745,9 +741,7 @@ export default function Penalty_card() {
                 )}
               </div>
               <div className="round">
-                <span className={`name theme ${theme}`}>
-                  Thrid Penalty Take:
-                </span>
+                <span className={`name theme ${theme}`}>3rd Penalty Take:</span>
                 <span
                   className={`value ${
                     round3.value === PenaltyOption.left ? "left" : ""
@@ -805,7 +799,7 @@ export default function Penalty_card() {
                       round3knowState === CheckerType.unknown
                         ? "play"
                         : round3knowState === CheckerType.won
-                        ? "win"
+                        ? "won"
                         : round3knowState === CheckerType.lost
                         ? "lost"
                         : ""
@@ -844,9 +838,7 @@ export default function Penalty_card() {
                 )}
               </div>
               <div className="round">
-                <span className={`name theme ${theme}`}>
-                  Fouth Penalty Take:
-                </span>
+                <span className={`name theme ${theme}`}>4th Penalty Take:</span>
                 <span
                   className={`value ${
                     round4.value === PenaltyOption.left ? "left" : ""
@@ -904,7 +896,7 @@ export default function Penalty_card() {
                       round4knowState === CheckerType.unknown
                         ? "play"
                         : round4knowState === CheckerType.won
-                        ? "win"
+                        ? "won"
                         : round4knowState === CheckerType.lost
                         ? "lost"
                         : ""
@@ -943,9 +935,7 @@ export default function Penalty_card() {
                 )}
               </div>
               <div className="round">
-                <span className={`name theme ${theme}`}>
-                  Fifth Penalty Take:
-                </span>
+                <span className={`name theme ${theme}`}>5th Penalty Take:</span>
                 <span
                   className={`value ${
                     round5.value === PenaltyOption.left ? "left" : ""
@@ -1003,7 +993,7 @@ export default function Penalty_card() {
                       round5knowState === CheckerType.unknown
                         ? "play"
                         : round5knowState === CheckerType.won
-                        ? "win"
+                        ? "won"
                         : round5knowState === CheckerType.lost
                         ? "lost"
                         : ""

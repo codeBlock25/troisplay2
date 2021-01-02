@@ -326,7 +326,7 @@ export default function GamesScreen() {
                 toast(dispatch, {
                   msg: `Can't play ${
                     asPath === "/games#roshambo"
-                      ? "Roshambo"
+                      ? "Rock, paper and Scissor"
                       : asPath === "/games#penalty-card"
                       ? "Penalty Card"
                       : asPath === "/games#guess-master"
@@ -543,7 +543,7 @@ export default function GamesScreen() {
               setSpec({
                 isOpen: true,
                 manual:
-                  "A player who decides to play rock will beat another player who has chosen scissors (rock crushes scissors), but will lose to one who has played paper (paper covers rock); a play of paper will lose to a play of scissors (scissors cuts paper). If both players choose the same shape, the game is tied and is usually immediately replayed to break the tie.",
+                  "A player who decides to play rock will beat another player who has chosen scissors (rock crushes scissors), but will lose to one who has played paper (paper covers rock); a play of paper will lose to a play of scissors (scissors cuts paper). If both players choose the same shape it is a draw.",
                 price: 100,
               });
             }}
@@ -553,7 +553,7 @@ export default function GamesScreen() {
               style={{ backgroundImage: `url(/images/roshambo.png)` }}
             />
             <div className="details">
-              <span className="name">Roshambo</span>
+              <span className="name">Rock, paper and Scissor</span>
               <span className="info">
                 <b>min stake:</b> $10
               </span>
@@ -595,7 +595,7 @@ export default function GamesScreen() {
               setSpec({
                 isOpen: true,
                 manual:
-                  "Player two has three chances to guess the number player 1 choose from number one to seven.",
+                  "Player two has three chances to guess the number player one choose from number 1 one to 5. Player two wins only 50% of the stake value if he get the attempt right at the third trial.",
                 price: 100,
               });
             }}
@@ -621,7 +621,7 @@ export default function GamesScreen() {
               setSpec({
                 isOpen: true,
                 manual:
-                  "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor non, enim accusantium officiis laborum hic asperiores a corporis illum quis.",
+                  "A draw game that is only set by Admin and winner is determined by automatically selection at end of the draw.",
                 price: 100,
               });
             }}
@@ -631,7 +631,7 @@ export default function GamesScreen() {
               style={{ backgroundImage: `url(/images/lucky-geoge.png)` }}
             />
             <div className="details">
-              <span className="name">lucky draw</span>
+              <span className="name">lucky judge</span>
               <span className="info">
                 <b>min stake:</b>judge based
               </span>
@@ -843,7 +843,7 @@ export default function GamesScreen() {
                           type={game.gameID === Games.rooms ? "room" : "normal"}
                           name={
                             game.gameID === Games.roshambo
-                              ? "Roshambo"
+                              ? "Rock,Paper and Scissors"
                               : game.gameID === Games.penalth_card
                               ? "Penalty Card"
                               : game.gameID === Games.matcher
