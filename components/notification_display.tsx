@@ -36,7 +36,7 @@ const NotificationDisplay = memo(function ({
             type === notificationHintType.win
               ? "green"
               : type === notificationHintType.lost
-              ? "red"
+              ? "blue"
               : type === notificationHintType.draw
               ? "yellow"
               : type === notificationHintType.withdraw
