@@ -161,7 +161,9 @@ export default function DetailScreen() {
         <div className="container">
           <div className="sw">
             <span className="time">Next Spin {dateintime}</span>
-            <h3 className="title">Cash</h3>
+            <h3 className="title">
+              {swRef1.current.scrollLeft > 270 ? "Cash" : "GET free cash"}
+            </h3>
             <span className="price">
               <NAIRA />{" "}
               {record?.data?.cashwallet?.currentCash.toLocaleString() ?? 0}
