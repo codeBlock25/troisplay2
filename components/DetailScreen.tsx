@@ -23,6 +23,7 @@ export default function DetailScreen() {
   const [dateintime, setDateintime] = useState("");
   const swRef: MutableRefObject<HTMLDivElement | null> = useRef();
   const [playLoader, setPlayerLoader] = useState<boolean>(false);
+  const [p, sp] = useState<boolean>(false);
   const [fundTp, setFund] = useState<number>(0);
   const { push } = useRouter();
   const defaults: AxiosResponse<{
@@ -149,6 +150,7 @@ export default function DetailScreen() {
         <span
           className="sw_btn"
           onClick={() => {
+            sp(false);
             swRef1.current.scrollTo(swRef1.current.scrollLeft - 270, 0);
           }}
         >
@@ -157,11 +159,7 @@ export default function DetailScreen() {
         <div className="container">
           <div className="sw">
             <span className="time">Next Spin {dateintime}</span>
-            <h3 className="title">
-              {(swRef1?.current?.scrollLeft ?? 0) > 300
-                ? "Cash"
-                : "GET free cash"}
-            </h3>
+            <h3 className="title">{!p ? "Cash" : "GET free cash"}</h3>
             <span className="price">
               <NAIRA />{" "}
               {record?.data?.cashwallet?.currentCash.toLocaleString() ?? 0}
@@ -333,6 +331,7 @@ export default function DetailScreen() {
         <span
           className="sw_btn"
           onClick={() => {
+            sp(true);
             swRef1.current.scrollTo(swRef1.current.scrollLeft + 270, 0);
           }}
         >
