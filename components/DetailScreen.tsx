@@ -158,7 +158,7 @@ export default function DetailScreen() {
           <div className="sw">
             <span className="time">Next Spin {dateintime}</span>
             <h3 className="title">
-              {(swRef1?.current?.scrollLeft ?? 0) > 270
+              {(swRef1?.current?.scrollLeft ?? 0) > 300
                 ? "Cash"
                 : "GET free cash"}
             </h3>
