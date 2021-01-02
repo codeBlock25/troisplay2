@@ -15,11 +15,7 @@ import { Games, PlayerType, ReasonType } from "../typescript/enum";
 import { useRouter } from "next/router";
 import { setAction, setGameDetails, toast } from "../store/action";
 import { useDispatch } from "react-redux";
-import { SyncLoader } from "react-spinners";
-import { useFlutterwave } from "flutterwave-react-v3";
-import { config, NAIRA } from "../constant";
-import { faCoins } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { NAIRA } from "../constant";
 
 export default function DetailScreen() {
   const dispatch = useDispatch();
@@ -162,7 +158,9 @@ export default function DetailScreen() {
           <div className="sw">
             <span className="time">Next Spin {dateintime}</span>
             <h3 className="title">
-              {swRef1.current.scrollLeft > 270 ? "Cash" : "GET free cash"}
+              {(swRef1?.current?.scrollLeft ?? 0) > 270
+                ? "Cash"
+                : "GET free cash"}
             </h3>
             <span className="price">
               <NAIRA />{" "}
